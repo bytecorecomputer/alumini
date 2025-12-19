@@ -1,144 +1,188 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Users, Calendar, Award, ExternalLink } from 'lucide-react';
+import { ArrowRight, Users, Calendar, Award, Zap, Target, Heart, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import bcc from '../assets/BANNER.jpg'
 
 export default function Home() {
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: { duration: 0.5, ease: "easeOut" }
+        }
+    };
+
     return (
-        <div className="bg-white">
-            {/* Hero Section */}
-            <div className="relative isolate overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute inset-0 -z-10 bg-[radial-gradient(45rem_50rem_at_top,theme(colors.primary.100),white)] opacity-20" />
-                <div className="absolute inset-y-0 right-1/2 -z-10 mr-16 w-[200%] origin-bottom-left skew-x-[-30deg] bg-white shadow-xl shadow-primary-600/10 ring-1 ring-primary-50 sm:mr-28 lg:mr-0 xl:mr-16 xl:origin-center" />
+        <div className="bg-white overflow-hidden">
+            {/* --- HERO SECTION --- */}
+            <div className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6">
+                {/* Dynamic Background Elements */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] -z-10 opacity-40">
+                    <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-200 rounded-full blur-[120px] animate-pulse"></div>
+                    <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-100 rounded-full blur-[120px] animate-pulse delay-700"></div>
+                </div>
 
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 pt-20 pb-24 sm:pb-32 lg:flex lg:py-40 lg:items-center">
-                    <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            <div className="mt-24 sm:mt-32 lg:mt-16">
-                                <a href="#" className="inline-flex space-x-6">
-                                    <span className="rounded-full bg-primary-600/10 px-3 py-1 text-sm font-semibold leading-6 text-primary-600 ring-1 ring-inset ring-primary-600/10">
-                                        Latest News
-                                    </span>
-                                    <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-600">
-                                        <span>Convocation 2025 Announced</span>
-                                        <ArrowRight className="h-4 w-4 text-gray-400" />
-                                    </span>
-                                </a>
-                            </div>
-                            <h1 className="mt-10 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                                Alumni<span className="text-primary-600">Connect</span> Universe
-                            </h1>
-                            <p className="mt-6 text-lg leading-8 text-gray-600">
-                                Bridge the gap between past and future. Use this advanced platform to connect with peers, find mentors, and exploring career opportunities. Secure, Real-time, and Premium.
-                            </p>
-                            <div className="mt-10 flex items-center gap-x-6">
-                                <Link
-                                    to="/register"
-                                    className="rounded-full bg-primary-600 px-8 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 transition-all hover:scale-105"
-                                >
-                                    Join the Network
-                                </Link>
-                                <Link to="/directory" className="text-sm font-semibold leading-6 text-gray-900 flex items-center gap-1 group">
-                                    Find Alumni <span aria-hidden="true" className="group-hover:translate-x-1 transition-transform">→</span>
-                                </Link>
-                            </div>
-                        </motion.div>
-                    </div>
-
-                    {/* Hero Image/Graphic */}
+                <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2, duration: 0.5 }}
-                        className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mt-0 lg:mr-0 lg:max-w-none lg:flex-none xl:ml-32"
+                        initial="hidden"
+                        animate="visible"
+                        variants={containerVariants}
+                        className="flex-1 text-center lg:text-left"
                     >
-                        <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
-                            <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-                                <img
-                                    src={bcc}
-                                    alt="University Campus"
-                                    className="w-[76rem] rounded-md shadow-2xl ring-1 ring-gray-900/10 opacity-90 hover:opacity-100 transition-opacity"
-                                    width={2432}
-                                    height={1442}
-                                />
-                            </div>
+                        <motion.div variants={itemVariants} className="inline-block px-4 py-1.5 mb-8 rounded-full bg-slate-100/80 backdrop-blur-md border border-slate-200/50">
+                            <span className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                                Ecosystem is LIVE
+                            </span>
+                        </motion.div>
+
+                        <motion.h1 variants={itemVariants} className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-[0.9] mb-8">
+                            Legacy <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600">Redefined.</span>
+                        </motion.h1>
+
+                        <motion.p variants={itemVariants} className="text-xl md:text-2xl text-slate-500 font-bold max-w-2xl mx-auto lg:mx-0 mb-12 leading-relaxed">
+                            The next generation of alumni networking. Bridging the gap between historic excellence and future innovation.
+                        </motion.p>
+
+                        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6">
+                            <Link to="/register" className="btn-premium px-10 py-5 group shadow-2xl shadow-purple-200">
+                                Join the Elite
+                                <Zap className="ml-2 group-hover:scale-125 transition-transform" size={18} fill="currentColor" />
+                            </Link>
+                            <Link to="/directory" className="flex items-center gap-3 px-8 py-5 rounded-3xl bg-white border-2 border-slate-100 text-slate-900 font-black uppercase tracking-widest text-sm hover:border-blue-100 hover:bg-slate-50 transition-all shadow-sm group">
+                                Browse Network
+                                <ArrowRight className="group-hover:translate-x-1.5 transition-transform" size={20} />
+                            </Link>
+                        </motion.div>
+                    </motion.div>
+
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, x: 50 }}
+                        animate={{ opacity: 1, scale: 1, x: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="flex-1 relative"
+                    >
+                        <div className="relative z-10 p-4 rounded-[3rem] bg-white/30 backdrop-blur-3xl border border-white/40 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)]">
+                            <img
+                                src={bcc}
+                                alt="Platform Hub"
+                                className="rounded-[2.5rem] shadow-2xl w-full h-[500px] object-cover"
+                            />
+                            {/* Visual Floaties */}
+                            <motion.div
+                                animate={{ y: [0, -15, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute -top-10 -right-10 p-6 rounded-3xl bg-white shadow-2xl border border-slate-50 hidden md:block"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className="p-3 bg-emerald-50 rounded-2xl text-emerald-600"><Users size={24} /></div>
+                                    <div>
+                                        <div className="text-xs font-black text-slate-400 uppercase tracking-widest">Active Fellows</div>
+                                        <div className="text-2xl font-black text-slate-900">12,400+</div>
+                                    </div>
+                                </div>
+                            </motion.div>
                         </div>
                     </motion.div>
                 </div>
             </div>
 
-            {/* Stats Section */}
-            <div className="bg-primary-900 py-24 sm:py-32">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto max-w-2xl lg:max-w-none">
-                        <div className="text-center">
-                            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Trusted by the University Community</h2>
-                            <p className="mt-4 text-lg leading-8 text-primary-200">
-                                Data stored securely on Firebase Realtime infrastructure.
-                            </p>
-                        </div>
-                        <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
-                            {[
-                                { id: 1, name: 'Active Alumni', value: '15,000+' },
-                                { id: 2, name: 'Countries Represented', value: '45' },
-                                { id: 3, name: 'Yearly Events', value: '120+' },
-                                { id: 4, name: 'Mentorships', value: '500+' },
-                            ].map((stat) => (
-                                <div key={stat.id} className="flex flex-col bg-white/5 p-8 hover:bg-white/10 transition-colors cursor-pointer">
-                                    <dt className="text-sm font-semibold leading-6 text-gray-300">{stat.name}</dt>
-                                    <dd className="order-first text-3xl font-semibold tracking-tight text-white">{stat.value}</dd>
+            {/* --- STATS STRIP --- */}
+            <div className="py-24 border-y border-slate-100">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left">
+                        {[
+                            { label: "Partner Institutions", val: "45+", icon: <Target className="text-blue-600" /> },
+                            { label: "Career Transitions", val: "2.4k", icon: <Zap className="text-amber-600" /> },
+                            { label: "Community Grants", val: "$1.2M", icon: <Heart className="text-rose-600" /> },
+                            { label: "System Uptime", val: "99.9%", icon: <Shield className="text-emerald-600" /> }
+                        ].map((s, i) => (
+                            <div key={i} className="space-y-4 group">
+                                <div className="p-3 w-fit bg-slate-50 rounded-2xl group-hover:scale-110 group-hover:bg-white group-hover:shadow-xl transition-all duration-500">
+                                    {s.icon}
                                 </div>
-                            ))}
-                        </dl>
+                                <div>
+                                    <div className="text-4xl font-black text-slate-900">{s.val}</div>
+                                    <div className="text-xs font-black text-slate-400 uppercase tracking-widest mt-1">{s.label}</div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
 
-            {/* Feature Highlights */}
-            <div className="py-24 sm:py-32">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="mx-auto max-w-2xl lg:text-center">
-                        <h2 className="text-base font-semibold leading-7 text-primary-600">Advanced Features</h2>
-                        <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                            Everything you need to stay connected
-                        </p>
+            {/* --- CORE CAPABILITIES --- */}
+            <div className="py-32 bg-slate-50">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="max-w-3xl mb-24">
+                        <div className="text-blue-600 text-xs font-black uppercase tracking-[0.3em] mb-4">Core Capabilities</div>
+                        <h2 className="text-5xl font-black text-slate-900 tracking-tighter leading-none mb-8">
+                            High-Performance <br /><span className="text-slate-400">Networking Engine.</span>
+                        </h2>
                     </div>
 
-                    <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
-                        <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
-                            {[
-                                {
-                                    name: 'Realtime Directory',
-                                    description: 'Instantly find batchmates and seniors. Advanced filtering by year, course, and industry.',
-                                    icon: Users,
-                                },
-                                {
-                                    name: 'Event Management',
-                                    description: 'Register for reunions, webinars, and meetups happening on campus and virtually.',
-                                    icon: Calendar,
-                                },
-                                {
-                                    name: 'Verified Profiles',
-                                    description: 'All alumni profiles are verified against university records for a secure environment.',
-                                    icon: Award,
-                                }
-                            ].map((feature) => (
-                                <div key={feature.name} className="flex flex-col">
-                                    <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                                        <feature.icon className="h-5 w-5 flex-none text-primary-600" aria-hidden="true" />
-                                        {feature.name}
-                                    </dt>
-                                    <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
-                                        <p className="flex-auto">{feature.description}</p>
-                                    </dd>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        {[
+                            {
+                                title: "Smart Directory",
+                                desc: "Proprietary search algorithm to locate precise alumni connections across years and industries.",
+                                color: "bg-blue-600",
+                                icon: <Users size={32} />
+                            },
+                            {
+                                title: "Verified Governance",
+                                desc: "Advanced verification protocols ensure authentic alumni profiles and secure data integrity.",
+                                color: "bg-purple-600",
+                                icon: <Shield size={32} />
+                            },
+                            {
+                                title: "Opportunity Hub",
+                                desc: "Curated high-tier job listings and mentor sessions exclusive to our registered network.",
+                                color: "bg-amber-600",
+                                icon: <Target size={32} />
+                            }
+                        ].map((c, i) => (
+                            <motion.div
+                                key={i}
+                                whileHover={{ y: -10 }}
+                                className="p-10 rounded-[3rem] bg-white shadow-xl shadow-slate-200/50 border border-slate-100 group transition-all"
+                            >
+                                <div className={`w-16 h-16 rounded-2xl ${c.color} text-white flex items-center justify-center mb-10 shadow-xl group-hover:rotate-6 transition-transform`}>
+                                    {c.icon}
                                 </div>
-                            ))}
-                        </dl>
+                                <h3 className="text-2xl font-black text-slate-900 mb-4">{c.title}</h3>
+                                <p className="text-slate-500 font-bold leading-relaxed">{c.desc}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* --- CTA BANNER --- */}
+            <div className="py-20 px-6">
+                <div className="max-w-7xl mx-auto">
+                    <div className="relative rounded-[4rem] bg-slate-900 overflow-hidden p-12 md:p-24 text-center">
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-blue-600/20 to-transparent"></div>
+                        <div className="relative z-10 max-w-2xl mx-auto">
+                            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-8 italic uppercase">Ready to join the network?</h2>
+                            <p className="text-slate-400 font-bold text-lg mb-12">Registration takes less than 60 seconds. Start your journey today.</p>
+                            <Link to="/register" className="btn-premium px-12 py-5 shadow-2xl shadow-blue-500/20">
+                                Create Your Account
+                                <ArrowRight className="ml-2" size={20} />
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,11 +1,11 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"; // Import updateProfile
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { auth } from "../../firebase/auth";
 import { db } from "../../firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, User, Loader2, GraduationCap } from "lucide-react";
+import { Mail, Lock, User, Loader2, GraduationCap, ArrowRight, ShieldCheck, Zap } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 export default function Register() {
@@ -24,30 +24,23 @@ export default function Register() {
     const role = e.target.role.value;
 
     if (!name || !email || !password) {
-      setError("Please fill in all fields");
+      setError("Identity formation requires all parameters");
       setLoading(false);
       return;
     }
 
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError("Security protocol requires 6+ characters");
       setLoading(false);
       return;
     }
 
     try {
-      // 1. Create Auth User
       const res = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(res.user, { displayName: name });
 
-      // 2. Update Display Name
-      await updateProfile(res.user, {
-        displayName: name
-      });
-
-      // Special check for owner
       const finalRole = email === "coderafroj@gmail.com" ? "super_admin" : role;
 
-      // 3. Create Firestore Document
       await setDoc(doc(db, "users", res.user.uid), {
         uid: res.user.uid,
         displayName: name,
@@ -56,7 +49,6 @@ export default function Register() {
         photoURL: null,
         headline: role === 'student' ? 'Student' : 'Alumni',
         createdAt: Date.now(),
-        // Add placeholder fields for profile
         course: "",
         batch: "",
         company: "",
@@ -65,17 +57,14 @@ export default function Register() {
         skills: []
       });
 
-      // 4. Redirect
-      navigate("/profile"); // Send to profile to complete setup
+      navigate("/profile");
 
     } catch (err) {
       console.error(err);
       if (err.code === 'auth/email-already-in-use') {
-        setError("Email already in use");
-      } else if (err.code === 'permission-denied') {
-        setError("Database Locked! Please enable 'Test Mode' in Firebase Console -> Firestore -> Rules.");
+        setError("Identifier already registered in network");
       } else {
-        setError("Registration failed: " + err.message);
+        setError("Network initialization failure: " + err.message);
       }
     } finally {
       setLoading(false);
@@ -83,122 +72,142 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-20 px-4 bg-slate-50 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-30">
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-purple-100 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-50 rounded-full blur-[120px] animate-pulse delay-500"></div>
+      </div>
+
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-gray-100"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-xl w-full"
       >
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 bg-primary-100 rounded-xl flex items-center justify-center text-primary-600 mb-4">
-            <GraduationCap size={28} />
+        <div className="premium-card bg-white p-10 md:p-14">
+          <div className="text-center mb-12">
+            <motion.div
+              initial={{ rotate: 10, scale: 0.9 }}
+              animate={{ rotate: 0, scale: 1 }}
+              className="mx-auto h-16 w-16 bg-slate-900 rounded-2xl flex items-center justify-center text-white mb-6 shadow-2xl"
+            >
+              <Zap size={32} />
+            </motion.div>
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-2">Create Identity</h2>
+            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Initialize your network presence</p>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Join the Network</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Create your account to connect with verified alumni
-          </p>
-        </div>
 
-        <form className="mt-8 space-y-6" onSubmit={register}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="name" className="sr-only">Full Name</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
+          <form className="space-y-8" onSubmit={register}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="group">
+                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Full Identity</label>
+                <div className="relative group-focus-within:scale-[1.01] transition-transform">
+                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                    <User className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                  </div>
+                  <input
+                    name="name"
+                    type="text"
+                    required
+                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                    placeholder="Full Name"
+                  />
                 </div>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent sm:text-sm transition-all"
-                  placeholder="Full Name"
-                />
+              </div>
+
+              <div className="group">
+                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Network UID</label>
+                <div className="relative group-focus-within:scale-[1.01] transition-transform">
+                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                    <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                  </div>
+                  <input
+                    name="email"
+                    type="email"
+                    required
+                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                    placeholder="name@alumni.edu"
+                  />
+                </div>
+              </div>
+
+              <div className="group md:col-span-2">
+                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Secure Protocol</label>
+                <div className="relative group-focus-within:scale-[1.01] transition-transform">
+                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                  </div>
+                  <input
+                    name="password"
+                    type="password"
+                    required
+                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                    placeholder="Min. 6 strong characters"
+                  />
+                </div>
               </div>
             </div>
 
-            <div>
-              <label htmlFor="email" className="sr-only">Email address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent sm:text-sm transition-all"
-                  placeholder="Email address"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="sr-only">Password</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  required
-                  className="appearance-none relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent sm:text-sm transition-all"
-                  placeholder="Password (min. 6 chars)"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">I am a...</label>
+            <div className="space-y-4">
+              <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Network Role</label>
               <div className="grid grid-cols-2 gap-4">
-                <label className="cursor-pointer">
+                <label className="cursor-pointer group">
                   <input type="radio" name="role" value="student" className="peer sr-only" defaultChecked />
-                  <div className="rounded-lg border border-gray-200 p-3 text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 peer-checked:text-primary-700 hover:bg-gray-50 transition-all">
-                    Student
+                  <div className="rounded-2xl border-2 border-slate-50 p-5 text-center font-black uppercase tracking-widest text-xs peer-checked:border-purple-100 peer-checked:bg-purple-50/50 peer-checked:text-purple-700 hover:bg-slate-50 transition-all shadow-sm">
+                    Current Fellow
                   </div>
                 </label>
-                <label className="cursor-pointer">
+                <label className="cursor-pointer group">
                   <input type="radio" name="role" value="alumni" className="peer sr-only" />
-                  <div className="rounded-lg border border-gray-200 p-3 text-center peer-checked:border-primary-500 peer-checked:bg-primary-50 peer-checked:text-primary-700 hover:bg-gray-50 transition-all">
-                    Alumni
+                  <div className="rounded-2xl border-2 border-slate-50 p-5 text-center font-black uppercase tracking-widest text-xs peer-checked:border-blue-100 peer-checked:bg-blue-50/50 peer-checked:text-blue-700 hover:bg-slate-50 transition-all shadow-sm">
+                    Verified Alumni
                   </div>
                 </label>
               </div>
             </div>
-          </div>
 
-          {error && (
-            <div className="text-red-500 text-sm text-center bg-red-50 p-2 rounded-lg">
-              {error}
-            </div>
-          )}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-600 text-[11px] font-black uppercase tracking-wider text-center bg-red-50 p-4 rounded-2xl border border-red-100"
+              >
+                {error}
+              </motion.div>
+            )}
 
-          <div>
             <button
               type="submit"
               disabled={loading}
               className={cn(
-                "group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-900 hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all",
-                loading && "opacity-70 cursor-not-allowed"
+                "btn-premium w-full flex items-center justify-center py-5 group disabled:opacity-50 shadow-2xl shadow-purple-100",
+                loading && "animate-pulse"
               )}
             >
-              {loading ? <Loader2 className="animate-spin h-5 w-5" /> : "Create Account"}
+              {loading ? (
+                <Loader2 className="animate-spin h-5 w-5" />
+              ) : (
+                <>
+                  Initialize Account
+                  <ArrowRight className="ml-3 group-hover:translate-x-1.5 transition-transform" size={20} />
+                </>
+              )}
             </button>
-          </div>
 
-          <div className="text-sm text-center">
-            <span className="text-gray-600">Already a member? </span>
-            <Link to="/login" className="font-medium text-primary-600 hover:text-primary-500">
-              Sign in
-            </Link>
-          </div>
-        </form>
+            <div className="pt-10 border-t border-slate-50 text-center space-y-4">
+              <p className="text-xs font-bold text-slate-500">
+                Already established?{" "}
+                <Link to="/login" className="text-purple-600 font-black hover:underline underline-offset-4">
+                  Log In
+                </Link>
+              </p>
+              <div className="flex items-center justify-center gap-2 text-slate-300">
+                <ShieldCheck size={14} />
+                <span className="text-[10px] uppercase font-black tracking-widest leading-none">Global Privacy Standards Compliant</span>
+              </div>
+            </div>
+          </form>
+        </div>
       </motion.div>
     </div>
   );

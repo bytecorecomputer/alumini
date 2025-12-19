@@ -3,7 +3,8 @@ import { useAuth } from '../app/common/AuthContext';
 import { db } from '../firebase/firestore';
 import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, where } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Briefcase, MapPin, Building, Plus, Trash2, X, Search, Filter } from 'lucide-react';
+import { Briefcase, MapPin, Building, Plus, Trash2, X, Search, Filter, ArrowRight, Zap, Target, ExternalLink } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 export default function Jobs() {
     const { user, role, userData } = useAuth();
@@ -46,12 +47,12 @@ export default function Jobs() {
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm("Delete this job posting?")) return;
+        if (!window.confirm("Archive this opportunity? This action is irreversible.")) return;
         try {
             await deleteDoc(doc(db, "jobs", id));
             setJobs(jobs.filter(j => j.id !== id));
         } catch (error) {
-            alert("Error deleting job");
+            alert("Database integrity check failed. Deletion aborted.");
         }
     };
 
@@ -61,7 +62,7 @@ export default function Jobs() {
             const docRef = await addDoc(collection(db, "jobs"), {
                 ...formData,
                 postedBy: user.uid,
-                posterName: userData?.displayName || 'Alumni Member',
+                posterName: userData?.displayName || 'Network Fellow',
                 posterRole: role,
                 createdAt: Date.now()
             });
@@ -69,10 +70,9 @@ export default function Jobs() {
 
             setIsModalOpen(false);
             setFormData({ title: '', company: '', location: '', type: 'Full-time', link: '', description: '' });
-            alert("Job Posted Successfully!");
         } catch (error) {
             console.error(error);
-            alert("Failed to post job");
+            alert("Opportunity broadcast failed.");
         }
     };
 
@@ -84,105 +84,141 @@ export default function Jobs() {
     });
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-5xl mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
-                    <div>
-                        <h1 className="text-4xl font-bold text-gray-900">Career Center</h1>
-                        <p className="text-gray-600 mt-2">Find your next opportunity or hire talent from your network.</p>
-                    </div>
+        <div className="min-h-screen pt-24 pb-20 px-4 md:px-8">
+            <div className="max-w-6xl mx-auto">
+                {/* Premium Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                    >
+                        <div className="inline-block px-4 py-1.5 mb-6 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-[0.2em] border border-emerald-100/50">
+                            Career Trajectory
+                        </div>
+                        <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+                            Opportunity <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Hub.</span>
+                        </h1>
+                    </motion.div>
+
                     {isAlumni && (
-                        <button
+                        <motion.button
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
                             onClick={() => setIsModalOpen(true)}
-                            className="bg-primary-900 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-primary-800 transition shadow-lg active:scale-95"
+                            className="btn-premium px-10 py-5 bg-slate-900 text-white shadow-2xl shadow-emerald-900/10 group active:scale-95"
                         >
-                            <Plus size={20} /> Post a Job
-                        </button>
+                            <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
+                            <span className="uppercase tracking-[0.2em] font-black text-sm">Post Opportunity</span>
+                        </motion.button>
                     )}
                 </div>
 
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-4">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-3 top-3 text-gray-400 h-5 w-5" />
+                {/* Filter & Search Bar */}
+                <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-6 rounded-[2.5rem] bg-white border-2 border-slate-50 shadow-2xl shadow-slate-200/50 mb-12 flex flex-col md:flex-row gap-6"
+                >
+                    <div className="relative flex-1 group">
+                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-600 transition-colors" size={20} />
                         <input
-                            placeholder="Search by role or company..."
+                            placeholder="Filter by designation, company, or stack..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 w-full p-2.5 rounded-lg border border-gray-200 outline-none focus:ring-2 focus:ring-primary-500"
+                            className="w-full pl-16 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-emerald-100 outline-none transition-all text-slate-800 font-bold"
                         />
                     </div>
-                    <div className="md:w-48">
+                    <div className="md:w-64 relative group">
+                        <Filter className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-600 transition-colors" size={20} />
                         <select
                             value={filterType}
                             onChange={(e) => setFilterType(e.target.value)}
-                            className="w-full p-2.5 rounded-lg border border-gray-200 outline-none focus:ring-2 focus:ring-primary-500 bg-white"
+                            className="w-full pl-16 pr-10 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-emerald-100 outline-none transition-all text-slate-800 font-bold appearance-none cursor-pointer"
                         >
-                            <option value="all">All Types</option>
-                            <option value="Full-time">Full-time</option>
-                            <option value="Internship">Internship</option>
-                            <option value="Freelance">Freelance</option>
+                            <option value="all">All Ecosystems</option>
+                            <option value="Full-time">Full-time Roles</option>
+                            <option value="Internship">Internship Tracks</option>
+                            <option value="Freelance">Freelance PIVOTs</option>
                         </select>
                     </div>
-                </div>
+                </motion.div>
 
                 {loading ? (
-                    <div className="text-center py-20 text-gray-500">Loading opportunities...</div>
-                ) : filteredJobs.length === 0 ? (
-                    <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
-                        <Briefcase size={48} className="mx-auto text-gray-300 mb-4" />
-                        <h3 className="text-xl font-semibold text-gray-900">No jobs found</h3>
-                        <p className="text-gray-500">Be the first to post an opportunity!</p>
+                    <div className="space-y-6">
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="h-32 rounded-[2rem] bg-slate-100 animate-pulse"></div>
+                        ))}
                     </div>
+                ) : filteredJobs.length === 0 ? (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="text-center py-32 rounded-[3.5rem] border-4 border-dashed border-slate-100"
+                    >
+                        <div className="p-8 bg-slate-50 rounded-full w-fit mx-auto mb-8 text-slate-300">
+                            <Briefcase size={64} />
+                        </div>
+                        <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Marketplace Empty</h2>
+                        <p className="text-slate-500 font-bold">No career trajectores currently logged in the database.</p>
+                    </motion.div>
                 ) : (
-                    <div className="space-y-4">
-                        {filteredJobs.map((job) => (
+                    <div className="grid grid-cols-1 gap-8">
+                        {filteredJobs.map((job, idx) => (
                             <motion.div
                                 key={job.id}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="premium-card group bg-white border-2 border-slate-50 shadow-2xl shadow-slate-200/50 p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8"
                             >
-                                <div className="flex-1">
-                                    <div className="flex items-start justify-between">
-                                        <div>
-                                            <h3 className="text-xl font-bold text-gray-900">{job.title}</h3>
-                                            <div className="flex items-center gap-2 text-primary-600 font-medium mt-1">
-                                                <Building size={16} /> {job.company}
-                                            </div>
+                                <div className="flex-1 space-y-4 text-center md:text-left">
+                                    <div className="flex flex-col md:flex-row items-center gap-4 mb-2">
+                                        <div className="p-4 bg-slate-900 rounded-[1.5rem] text-white shadow-xl group-hover:bg-emerald-600 transition-colors duration-500">
+                                            <Building size={24} />
                                         </div>
-                                        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${job.type === 'Internship' ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                                                job.type === 'Freelance' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                                                    'bg-green-50 text-green-700 border-green-200'
+                                        <div>
+                                            <h3 className="text-2xl font-black text-slate-900 tracking-tighter group-hover:text-emerald-600 transition-colors">{job.title}</h3>
+                                            <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">{job.company}</div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-wrap justify-center md:justify-start items-center gap-6">
+                                        <div className="flex items-center gap-2 text-slate-500 font-bold text-xs">
+                                            <MapPin size={16} className="text-slate-300" /> {job.location}
+                                        </div>
+                                        <div className="flex items-center gap-2 text-slate-500 font-bold text-xs">
+                                            <Target size={16} className="text-slate-300" /> {job.type}
+                                        </div>
+                                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${job.type === 'Internship' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                                job.type === 'Freelance' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                                                    'bg-emerald-50 text-emerald-600 border-emerald-100'
                                             }`}>
-                                            {job.type}
-                                        </span>
+                                            Active Link
+                                        </div>
                                     </div>
 
-                                    <div className="flex items-center gap-4 text-gray-500 text-sm mt-3">
-                                        <span className="flex items-center gap-1"><MapPin size={14} /> {job.location}</span>
-                                        <span>• Posted by {job.posterName}</span>
-                                        <span>• {new Date(job.createdAt).toLocaleDateString()}</span>
-                                    </div>
-
-                                    <p className="mt-3 text-gray-600 line-clamp-2 text-sm">{job.description}</p>
+                                    <p className="text-slate-500 font-bold text-sm leading-relaxed max-w-2xl">
+                                        {job.description}
+                                    </p>
                                 </div>
 
-                                <div className="flex flex-col gap-2 w-full md:w-auto">
+                                <div className="flex flex-col gap-4 w-full md:w-auto min-w-[200px]">
                                     <a
                                         href={job.link.startsWith('http') ? job.link : `https://${job.link}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="px-6 py-2 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 text-center transition"
+                                        className="btn-premium py-4 bg-slate-900 text-white shadow-xl shadow-slate-200 active:scale-95 group/btn"
                                     >
-                                        Apply Now
+                                        Establish Connection
+                                        <ExternalLink size={16} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                                     </a>
 
                                     {(isSuperAdmin || user.uid === job.postedBy) && (
                                         <button
                                             onClick={() => handleDelete(job.id)}
-                                            className="px-6 py-2 bg-red-50 text-red-600 font-semibold rounded-lg hover:bg-red-100 border border-red-200 flex items-center justify-center gap-2 transition"
+                                            className="px-6 py-3 rounded-2xl bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 transition-all font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2"
                                         >
-                                            <Trash2 size={16} /> Delete
+                                            <Trash2 size={14} /> Sever Protocol
                                         </button>
                                     )}
                                 </div>
@@ -192,97 +228,102 @@ export default function Jobs() {
                 )}
             </div>
 
-            {/* Create Job Modal */}
+            {/* Premium Job Modal */}
             <AnimatePresence>
                 {isModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
+                            initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden"
+                            className="bg-white rounded-[3rem] w-full max-w-2xl shadow-2xl overflow-hidden border border-slate-100"
                         >
-                            <div className="flex justify-between items-center p-6 border-b border-gray-100">
-                                <h2 className="text-xl font-bold text-gray-900">Post Opportunity</h2>
-                                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+                            <div className="flex justify-between items-center p-10 bg-slate-50/50 border-b border-slate-100">
+                                <div>
+                                    <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Broadcast Opportunity</h2>
+                                    <p className="text-slate-500 text-xs font-black uppercase tracking-widest mt-1">Initialize Network Career Deployment</p>
+                                </div>
+                                <button onClick={() => setIsModalOpen(false)} className="p-4 bg-white rounded-2xl text-slate-400 hover:text-slate-950 transition-all shadow-sm">
                                     <X size={24} />
                                 </button>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+                            <form onSubmit={handleSubmit} className="p-10 space-y-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Designation Label</label>
                                     <input
                                         required
                                         value={formData.title}
                                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                        className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                        placeholder="e.g. Frontend Developer"
+                                        className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-emerald-100 outline-none text-slate-800 font-bold transition-all"
+                                        placeholder="e.g. Lead Systems Architect"
                                     />
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Corporate Entity</label>
                                         <input
                                             required
                                             value={formData.company}
                                             onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                                            className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
+                                            className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-emerald-100 outline-none text-slate-800 font-bold transition-all"
+                                            placeholder="Company ID"
                                         />
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Contract Ecosystem</label>
                                         <select
                                             value={formData.type}
                                             onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                                            className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
+                                            className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-emerald-100 outline-none text-slate-800 font-bold transition-all appearance-none cursor-pointer"
                                         >
-                                            <option value="Full-time">Full-time</option>
-                                            <option value="Internship">Internship</option>
-                                            <option value="Freelance">Freelance</option>
+                                            <option value="Full-time">Full-time Roles</option>
+                                            <option value="Internship">Internship Tracks</option>
+                                            <option value="Freelance">Freelance PIVOTs</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Spatial Coordinates</label>
                                     <input
                                         required
                                         value={formData.location}
                                         onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                                        className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                        placeholder="City, Remote, etc."
+                                        className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-emerald-100 outline-none text-slate-800 font-bold transition-all"
+                                        placeholder="Remote / HQ Location"
                                     />
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Application Link / Email</label>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Application Gateway (URI)</label>
                                     <input
                                         required
                                         value={formData.link}
                                         onChange={(e) => setFormData({ ...formData, link: e.target.value })}
-                                        className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                        placeholder="https://... or mailto:..."
+                                        className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-emerald-100 outline-none text-slate-800 font-bold transition-all"
+                                        placeholder="https://career-portal..."
                                     />
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Mission Parameter Manifest</label>
                                     <textarea
                                         rows={4}
                                         value={formData.description}
                                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                        className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                        placeholder="Job details, requirements..."
+                                        className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-emerald-100 outline-none text-slate-800 font-bold transition-all resize-none"
+                                        placeholder="Detailed role specification..."
                                     />
                                 </div>
 
                                 <button
                                     type="submit"
-                                    className="w-full bg-primary-900 text-white py-3 rounded-xl font-bold hover:bg-primary-800 transition shadow-lg active:scale-95 flex justify-center items-center gap-2"
+                                    className="w-full btn-premium py-5 bg-slate-900 text-white shadow-2xl shadow-emerald-900/20 uppercase tracking-[0.3em] font-black text-sm active:scale-95"
                                 >
-                                    <Plus size={20} /> Post Opportunity
+                                    <Zap size={20} />
+                                    Broadcast Opportunity
                                 </button>
                             </form>
                         </motion.div>

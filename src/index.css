@@ -3,7 +3,60 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply antialiased text-gray-900 bg-gray-50;
+  :root {
+    --primary-glow: conic-gradient(from 180deg at 50% 50%,
+        #164e63 0deg,
+        #0e7490 55deg,
+        #0891b2 120deg,
+        #06b6d4 160deg,
+        transparent 360deg);
   }
+
+  body {
+    @apply antialiased text-slate-900 bg-[#f8fafc];
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-slate-900/80 backdrop-blur-lg border border-slate-700/30 shadow-2xl;
+  }
+
+  .premium-card {
+    @apply bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0, 0, 0, 0.04)] hover:shadow-[0_20px_50px_rgba(8, _112, _184, _0.07)] transition-all duration-500 overflow-hidden;
+  }
+
+  .premium-gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-slate-900 via-slate-800 to-primary-600;
+  }
+
+  .btn-premium {
+    @apply relative overflow-hidden px-6 py-3 rounded-2xl font-bold transition-all duration-300 active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .btn-premium-primary {
+    @apply btn-premium bg-slate-900 text-white hover:bg-slate-800 shadow-lg shadow-slate-200 hover:shadow-slate-300;
+  }
+
+  .btn-premium-secondary {
+    @apply btn-premium bg-white text-slate-900 border border-slate-200 hover:bg-slate-50 shadow-sm;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
 }

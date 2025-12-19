@@ -126,248 +126,308 @@ export default function Profile() {
     const profileImage = userData?.photoURL || null;
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-12">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100"
-            >
-                {/* Header/Cover */}
-                <div className="bg-primary-900 h-32 md:h-48 relative">
-                    <div className="absolute -bottom-16 left-8 group">
-                        <div className="h-32 w-32 rounded-full border-4 border-white bg-primary-100 flex items-center justify-center text-primary-700 text-4xl font-bold shadow-lg overflow-hidden relative">
-                            {profileImage ? (
-                                <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
-                            ) : (
-                                formData.displayName.charAt(0).toUpperCase()
+        <div className="min-h-screen pt-24 pb-20 px-4">
+            <div className="max-w-5xl mx-auto">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="premium-card bg-white overflow-hidden"
+                >
+                    {/* Premium Header/Cover */}
+                    <div className="h-48 md:h-64 relative bg-gradient-to-br from-purple-600 via-blue-600 to-slate-900 overflow-hidden">
+                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+
+                        <div className="absolute -bottom-16 left-8 md:left-12 group">
+                            <div className="h-32 w-32 md:h-40 md:w-40 rounded-3xl border-4 border-white bg-slate-50 flex items-center justify-center text-slate-400 text-5xl font-black shadow-2xl overflow-hidden relative group-hover:scale-[1.02] transition-transform duration-500">
+                                {profileImage ? (
+                                    <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
+                                ) : (
+                                    formData.displayName.charAt(0).toUpperCase()
+                                )}
+
+                                {/* Upload Overlay */}
+                                <label className="absolute inset-0 bg-slate-900/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer backdrop-blur-sm">
+                                    {uploading ? (
+                                        <Loader2 className="animate-spin text-white h-8 w-8" />
+                                    ) : (
+                                        <>
+                                            <Camera className="text-white mb-2" size={28} />
+                                            <span className="text-white text-xs font-black uppercase tracking-widest">Update</span>
+                                        </>
+                                    )}
+                                    <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="pt-24 pb-12 px-8 md:px-12">
+                        <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-12">
+                            <div>
+                                <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-2">
+                                    {formData.displayName || user?.displayName || 'New Member'}
+                                </h1>
+                                <div className="flex flex-wrap items-center gap-3">
+                                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-black uppercase tracking-wider border border-slate-200">
+                                        <User size={12} /> {displayRole}
+                                    </div>
+                                    <p className="text-slate-500 font-bold">{formData.headline || 'Add a professional headline'}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-wrap gap-3">
+                                {displayRole === 'alumni' && (
+                                    <span className="px-4 py-2 rounded-2xl bg-amber-50 text-amber-700 text-sm font-black flex items-center gap-2 border border-amber-100 shadow-sm">
+                                        <Award size={18} className="text-amber-500" /> Verified Alumni
+                                    </span>
+                                )}
+                                {(displayRole === 'admin' || displayRole === 'super_admin') && (
+                                    <span className="px-4 py-2 rounded-2xl bg-purple-50 text-purple-700 text-sm font-black flex items-center gap-2 border border-purple-100 shadow-sm">
+                                        <Shield className="text-purple-500" size={18} /> Administrative Access
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-12">
+                            {/* Super Admin Shield Fix */}
+                            {user?.email === "coderafroj@gmail.com" && role !== 'super_admin' && (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="bg-red-50 p-6 rounded-[2rem] border border-red-100 flex flex-col md:flex-row items-center justify-between gap-6"
+                                >
+                                    <div className="flex items-center gap-4 text-center md:text-left">
+                                        <div className="p-3 bg-red-100 rounded-2xl text-red-600">
+                                            <ShieldAlert size={32} />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-red-900 font-black text-lg">System Permissions Out of Sync</h3>
+                                            <p className="text-red-600 font-bold">Your account requires Super Admin elevation for full network governance.</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={async (e) => {
+                                            e.preventDefault();
+                                            if (!window.confirm("Initialize Super Admin status? This will grant full system control.")) return;
+                                            try {
+                                                await updateDoc(doc(db, "users", user.uid), { role: "super_admin" });
+                                                alert("System permissions updated. Re-initializing...");
+                                                window.location.reload();
+                                            } catch (err) {
+                                                alert("Protocol failure: " + err.message);
+                                            }
+                                        }}
+                                        className="w-full md:w-auto px-8 py-4 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-200 active:scale-95"
+                                    >
+                                        Calibrate Role
+                                    </button>
+                                </motion.div>
                             )}
 
-                            {/* Upload Overlay */}
-                            <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                {uploading ? <Loader2 className="animate-spin text-white" /> : <Camera className="text-white" />}
-                                <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-                            </label>
-                        </div>
-                    </div>
-                </div>
+                            {/* Section: Identity */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="p-2 bg-blue-50 rounded-xl text-blue-600">
+                                        <User size={20} />
+                                    </div>
+                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Identity & Status</h2>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Full Identity</label>
+                                        <input
+                                            name="displayName"
+                                            value={formData.displayName}
+                                            onChange={handleChange}
+                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-blue-100 focus:bg-white focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
+                                            placeholder="Your full name"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Professional Headline</label>
+                                        <input
+                                            name="headline"
+                                            value={formData.headline}
+                                            onChange={handleChange}
+                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-blue-100 focus:bg-white focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
+                                            placeholder="e.g. Senior Product Designer"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
 
-                <div className="pt-20 pb-8 px-8">
-                    <div className="flex justify-between items-start mb-8">
-                        <div>
-                            <h1 className="text-3xl font-bold text-gray-900">{formData.displayName || user?.displayName || 'New Member'}</h1>
-                            <p className="text-gray-500 font-medium capitalize">{displayRole} • {formData.headline || 'No headline'}</p>
-                        </div>
-                        {displayRole === 'alumni' && (
-                            <span className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 border border-amber-200">
-                                <Award size={14} /> Verified Alumni
-                            </span>
-                        )}
-                        {displayRole === 'admin' && (
-                            <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 border border-purple-200">
-                                <Shield size={14} /> Admin
-                            </span>
-                        )}
-                    </div>
+                            {/* Section: Connectivity */}
+                            <div className="p-8 md:p-10 rounded-[2.5rem] bg-slate-50/50 border border-slate-100 space-y-8">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-purple-50 rounded-xl text-purple-600">
+                                        <Phone size={20} />
+                                    </div>
+                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Connectivity & Socials</h2>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Direct Contact</label>
+                                        <input
+                                            name="phoneNumber"
+                                            value={formData.phoneNumber}
+                                            onChange={handleChange}
+                                            className="w-full px-6 py-4 rounded-2xl bg-white border-2 border-transparent focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold shadow-sm"
+                                            placeholder="+1 (555) 000-0000"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">LinkedIn Network</label>
+                                        <div className="relative">
+                                            <Linkedin className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                            <input
+                                                name="linkedin"
+                                                value={formData.linkedin}
+                                                onChange={handleChange}
+                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white border-2 border-transparent focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold shadow-sm"
+                                                placeholder="linkedin.com/in/handle"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">GitHub Portfolio</label>
+                                        <div className="relative">
+                                            <Github className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                            <input
+                                                name="github"
+                                                value={formData.github}
+                                                onChange={handleChange}
+                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white border-2 border-transparent focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold shadow-sm"
+                                                placeholder="github.com/handle"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-8">
+                            {/* Section: Academic & Professional */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600">
+                                        <BookOpen size={20} />
+                                    </div>
+                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Career & Education</h2>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Academic Path</label>
+                                        <input
+                                            name="course"
+                                            value={formData.course}
+                                            onChange={handleChange}
+                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-100 focus:bg-white focus:ring-4 focus:ring-emerald-50 outline-none transition-all text-slate-800 font-bold"
+                                            placeholder="e.g. B.Tech Computer Science"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Graduation Class</label>
+                                        <input
+                                            name="batch"
+                                            value={formData.batch}
+                                            onChange={handleChange}
+                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-100 focus:bg-white focus:ring-4 focus:ring-emerald-50 outline-none transition-all text-slate-800 font-bold"
+                                            placeholder="Batch of 2024"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Current Organization</label>
+                                        <div className="relative">
+                                            <Briefcase className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                            <input
+                                                name="company"
+                                                value={formData.company}
+                                                onChange={handleChange}
+                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-100 focus:bg-white focus:ring-4 focus:ring-emerald-50 outline-none transition-all text-slate-800 font-bold"
+                                                placeholder="e.g. Google India"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Base Location</label>
+                                        <div className="relative">
+                                            <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                            <input
+                                                name="location"
+                                                value={formData.location}
+                                                onChange={handleChange}
+                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-100 focus:bg-white focus:ring-4 focus:ring-emerald-50 outline-none transition-all text-slate-800 font-bold"
+                                                placeholder="City, Country"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        {/* Owner Admin Fix */}
-                        {user?.email === "coderafroj@gmail.com" && role !== 'super_admin' && (
-                            <div className="bg-red-50 p-4 rounded-xl border border-red-200 flex items-center justify-between col-span-full mb-6 relative z-10">
-                                <div>
-                                    <h3 className="text-red-800 font-bold">Admin Access Missing?</h3>
-                                    <p className="text-red-600 text-sm">Click here to force update your role to Super Admin.</p>
+                            {/* Section: Narrative & Expertise */}
+                            <div className="space-y-8">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Personal Narrative</label>
+                                    <textarea
+                                        name="bio"
+                                        value={formData.bio}
+                                        onChange={handleChange}
+                                        rows={4}
+                                        className="w-full px-8 py-6 rounded-[2rem] bg-slate-50 border-2 border-transparent focus:border-blue-100 focus:bg-white focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold resize-none"
+                                        placeholder="Compose your professional bio..."
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Expertise & Stack (Comma Separated)</label>
+                                    <input
+                                        name="skills"
+                                        value={formData.skills}
+                                        onChange={handleChange}
+                                        className="w-full px-8 py-6 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-blue-100 focus:bg-white focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
+                                        placeholder="React, Node.js, System Architecture, UI/UX..."
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Final Actions */}
+                            <div className="sticky bottom-8 left-0 right-0 flex items-center justify-between p-6 px-10 rounded-[2.5rem] bg-white/80 backdrop-blur-xl border border-slate-100 shadow-2xl z-40 transform translate-y-4">
+                                <div className="flex items-center gap-3">
+                                    <AnimatePresence>
+                                        {success && (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.9 }}
+                                                className="flex items-center gap-2 text-emerald-600 font-black"
+                                            >
+                                                <div className="p-1.5 bg-emerald-100 rounded-full">
+                                                    <Save size={14} />
+                                                </div>
+                                                <span className="text-sm uppercase tracking-tighter">Sync Successful</span>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                                 <button
-                                    onClick={async (e) => {
-                                        e.preventDefault();
-                                        if (!window.confirm("Force update to Super Admin?")) return;
-                                        try {
-                                            await updateDoc(doc(db, "users", user.uid), { role: "super_admin" });
-                                            alert("Success! Please refresh the page.");
-                                            window.location.reload();
-                                        } catch (err) {
-                                            alert("Error: " + err.message);
-                                        }
-                                    }}
-                                    className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 shadow-sm"
+                                    type="submit"
+                                    disabled={loading}
+                                    className={cn(
+                                        "btn-premium px-12 py-4 flex items-center gap-3 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed",
+                                        loading && "animate-pulse"
+                                    )}
                                 >
-                                    Fix My Role
+                                    {loading ? (
+                                        <Loader2 className="animate-spin h-5 w-5" />
+                                    ) : (
+                                        <Save size={20} className="group-hover:rotate-12 transition-transform" />
+                                    )}
+                                    <span className="text-lg font-black uppercase tracking-widest">Commit Updates</span>
                                 </button>
                             </div>
-                        )}
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Display Name</label>
-                                <div className="relative">
-                                    <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                                    <input
-                                        name="displayName"
-                                        value={formData.displayName}
-                                        onChange={handleChange}
-                                        className="pl-10 w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Headline</label>
-                                <input
-                                    name="headline"
-                                    value={formData.headline}
-                                    onChange={handleChange}
-                                    placeholder="e.g. Software Engineer at Google"
-                                    className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Contact Info */}
-                        <div className="bg-blue-50 p-6 rounded-xl space-y-6">
-                            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                                <Phone size={20} className="text-primary-600" /> Contact & Socials
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                                    <input
-                                        name="phoneNumber"
-                                        value={formData.phoneNumber}
-                                        onChange={handleChange}
-                                        placeholder="+91 9876543210"
-                                        className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">LinkedIn URL</label>
-                                    <div className="relative">
-                                        <Linkedin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                                        <input
-                                            name="linkedin"
-                                            value={formData.linkedin}
-                                            onChange={handleChange}
-                                            placeholder="linkedin.com/in/you"
-                                            className="pl-10 w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">GitHub URL</label>
-                                    <div className="relative">
-                                        <Github className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                                        <input
-                                            name="github"
-                                            value={formData.github}
-                                            onChange={handleChange}
-                                            placeholder="github.com/you"
-                                            className="pl-10 w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Academic & Work */}
-                        <div className="bg-gray-50 p-6 rounded-xl space-y-6">
-                            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                                <BookOpen size={20} className="text-primary-600" /> Academic & Professional
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Course / Degree</label>
-                                    <input
-                                        name="course"
-                                        value={formData.course}
-                                        onChange={handleChange}
-                                        placeholder="e.g. B.Tech Computer Science"
-                                        className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Batch / Year</label>
-                                    <input
-                                        name="batch"
-                                        value={formData.batch}
-                                        onChange={handleChange}
-                                        placeholder="e.g. 2024"
-                                        className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Current Company</label>
-                                    <div className="relative">
-                                        <Briefcase className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                                        <input
-                                            name="company"
-                                            value={formData.company}
-                                            onChange={handleChange}
-                                            placeholder="e.g. Microsoft"
-                                            className="pl-10 w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                        />
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                                    <div className="relative">
-                                        <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                                        <input
-                                            name="location"
-                                            value={formData.location}
-                                            onChange={handleChange}
-                                            placeholder="e.g. New York, USA"
-                                            className="pl-10 w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Bio & Skills */}
-                        <div className="space-y-6">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
-                                <textarea
-                                    name="bio"
-                                    value={formData.bio}
-                                    onChange={handleChange}
-                                    rows={4}
-                                    className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                    placeholder="Tell us about yourself..."
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Skills (comma separated)</label>
-                                <input
-                                    name="skills"
-                                    value={formData.skills}
-                                    onChange={handleChange}
-                                    placeholder="Java, React, Leadership, Public Speaking"
-                                    className="w-full p-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex items-center justify-between pt-6 border-t border-gray-100">
-                            <div className="text-green-600 font-medium h-6">
-                                {success}
-                            </div>
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className={cn(
-                                    "flex items-center gap-2 bg-primary-900 text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-800 transition-all shadow-lg active:scale-95",
-                                    loading && "opacity-70 cursor-not-allowed"
-                                )}
-                            >
-                                {loading ? <Loader2 className="animate-spin h-5 w-5" /> : <Save size={20} />}
-                                Save Changes
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </motion.div>
+                        </form>
+                    </div>
+                </motion.div>
+            </div>
         </div>
     );
 }

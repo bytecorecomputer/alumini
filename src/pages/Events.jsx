@@ -3,7 +3,7 @@ import { useAuth } from '../app/common/AuthContext';
 import { db } from '../firebase/firestore';
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, Clock, Plus, Trash2, Edit2, X, Save, Users, Video } from 'lucide-react';
+import { Calendar, MapPin, Clock, Plus, Trash2, Edit2, X, Save, Users, Video, ArrowRight, Zap, Target } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export default function Events() {
@@ -21,7 +21,7 @@ export default function Events() {
         location: '',
         type: 'offline', // offline, online
         description: '',
-        image: '' // Optional URL for now
+        image: '' // Optional URL
     });
 
     const isSuperAdmin = role === 'super_admin' || role === 'admin';
@@ -47,12 +47,12 @@ export default function Events() {
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this event?")) return;
+        if (!window.confirm("Permanent deletion protocol required. Continue?")) return;
         try {
             await deleteDoc(doc(db, "events", id));
             setEvents(events.filter(e => e.id !== id));
         } catch (error) {
-            alert("Error deleting event");
+            alert("Protocol failure: deletion aborted.");
         }
     };
 
@@ -74,12 +74,10 @@ export default function Events() {
         e.preventDefault();
         try {
             if (editingEvent) {
-                // Update
                 const eventRef = doc(db, "events", editingEvent.id);
                 await updateDoc(eventRef, { ...formData });
                 setEvents(events.map(ev => ev.id === editingEvent.id ? { ...ev, ...formData } : ev));
             } else {
-                // Create
                 const docRef = await addDoc(collection(db, "events"), {
                     ...formData,
                     createdBy: user.uid,
@@ -91,7 +89,7 @@ export default function Events() {
             closeModal();
         } catch (error) {
             console.error(error);
-            alert("Failed to save event");
+            alert("Database synchronization failed.");
         }
     };
 
@@ -102,203 +100,236 @@ export default function Events() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex justify-between items-center mb-10">
-                    <div>
-                        <h1 className="text-4xl font-bold text-gray-900">Alumni Events</h1>
-                        <p className="text-gray-600 mt-2">Connect, network, and grow with your community.</p>
-                    </div>
-                    {isSuperAdmin && (
-                        <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="bg-primary-900 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-primary-800 transition shadow-lg active:scale-95"
-                        >
-                            <Plus size={20} /> Create Event
-                        </button>
-                    )}
-                </div>
+        <div className="min-h-screen pt-24 pb-20 px-4 md:px-8">
+            <div className="max-w-7xl mx-auto">
+                {/* Premium Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                    >
+                        <div className="inline-block px-4 py-1.5 mb-6 rounded-full bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] border border-blue-100/50">
+                            Community Convergence
+                    </motion.div>
+                    <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-none">
+                        Global <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Events.</span>
+                    </h1>
+                </motion.div>
 
-                {loading ? (
-                    <div className="text-center py-20 text-gray-500">Loading events...</div>
-                ) : events.length === 0 ? (
-                    <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
-                        <Calendar size={48} className="mx-auto text-gray-300 mb-4" />
-                        <h3 className="text-xl font-semibold text-gray-900">No events scheduled</h3>
-                        <p className="text-gray-500">Check back later for upcoming meetups.</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {events.map((event) => (
-                            <motion.div
-                                key={event.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col"
-                            >
-                                <div className="h-48 bg-gray-200 relative overflow-hidden">
-                                    {event.image ? (
-                                        <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full bg-gradient-to-br from-primary-900 to-primary-700 flex items-center justify-center">
-                                            <Calendar className="text-white/20 h-20 w-20" />
-                                        </div>
-                                    )}
-                                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-primary-900 shadow-sm">
-                                        {event.type}
-                                    </div>
-                                </div>
-
-                                <div className="p-6 flex-1 flex flex-col">
-                                    <div className="flex items-start justify-between mb-4">
-                                        <div>
-                                            <p className="text-primary-600 font-semibold text-sm mb-1">{event.date}</p>
-                                            <h3 className="text-xl font-bold text-gray-900 leading-tight">{event.title}</h3>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-3 mb-6 flex-1">
-                                        <div className="flex items-center gap-2 text-gray-600 text-sm">
-                                            <Clock size={16} className="text-gray-400" />
-                                            {event.time}
-                                        </div>
-                                        <div className="flex items-center gap-2 text-gray-600 text-sm">
-                                            {event.type === 'online' ? <Video size={16} className="text-gray-400" /> : <MapPin size={16} className="text-gray-400" />}
-                                            {event.location}
-                                        </div>
-                                        <p className="text-gray-500 text-sm line-clamp-3">{event.description}</p>
-                                    </div>
-
-                                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                                        <button className="text-primary-900 font-semibold text-sm hover:underline">
-                                            View Details
-                                        </button>
-
-                                        {isSuperAdmin && (
-                                            <div className="flex gap-2">
-                                                <button
-                                                    onClick={() => handleEdit(event)}
-                                                    className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-600 transition"
-                                                >
-                                                    <Edit2 size={16} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(event.id)}
-                                                    className="p-2 bg-red-50 hover:bg-red-100 rounded-lg text-red-500 transition"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
+                {isSuperAdmin && (
+                    <motion.button
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        onClick={() => setIsModalOpen(true)}
+                        className="btn-premium px-10 py-5 bg-slate-900 text-white shadow-2xl shadow-blue-900/10 group active:scale-95"
+                    >
+                        <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
+                        <span className="uppercase tracking-[0.2em] font-black text-sm">Initialize Event</span>
+                    </motion.button>
                 )}
             </div>
 
-            {/* Create/Edit Modal */}
-            <AnimatePresence>
-                {isModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="h-96 rounded-[2.5rem] bg-slate-100 animate-pulse"></div>
+                    ))}
+                </div>
+            ) : events.length === 0 ? (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-32 rounded-[3.5rem] border-4 border-dashed border-slate-100"
+                >
+                    <div className="p-8 bg-slate-50 rounded-full w-fit mx-auto mb-8 text-slate-300">
+                        <Calendar size={64} />
+                    </div>
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Network Quiet Mode</h2>
+                    <p className="text-slate-500 font-bold">No synchronization points found on the horizon.</p>
+                </motion.div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    {events.map((event, idx) => (
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden"
+                            key={event.id}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.1 }}
+                            className="premium-card group bg-white border-2 border-slate-50 shadow-2xl shadow-slate-200/50"
                         >
-                            <div className="flex justify-between items-center p-6 border-b border-gray-100">
-                                <h2 className="text-xl font-bold text-gray-900">
-                                    {editingEvent ? "Edit Event" : "Create New Event"}
-                                </h2>
-                                <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
-                                    <X size={24} />
-                                </button>
+                            <div className="h-56 relative overflow-hidden">
+                                {event.image ? (
+                                    <img src={event.image} alt={event.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                ) : (
+                                    <div className="w-full h-full bg-gradient-to-br from-slate-900 to-indigo-950 flex items-center justify-center relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                                        <Zap className="text-white/10 h-32 w-32" />
+                                    </div>
+                                )}
+                                <div className="absolute top-6 right-6">
+                                    <div className="px-4 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-slate-900 shadow-xl border border-white/50">
+                                        {event.type}
+                                    </div>
+                                </div>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Event Title</label>
-                                    <input
-                                        required
-                                        value={formData.title}
-                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                        className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                        placeholder="e.g. Annual Alumni Meetup 2025"
-                                    />
+                            <div className="p-8">
+                                <div className="mb-6">
+                                    <div className="flex items-center gap-2 text-blue-600 text-xs font-black uppercase tracking-[0.2em] mb-3">
+                                        <Target size={14} /> {event.date}
+                                    </div>
+                                    <h3 className="text-2xl font-black text-slate-900 leading-[1.1] tracking-tighter group-hover:text-blue-600 transition-colors">
+                                        {event.title}
+                                    </h3>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                                        <input
-                                            type="date"
-                                            required
-                                            value={formData.date}
-                                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                            className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                        />
+                                <div className="space-y-4 mb-8">
+                                    <div className="flex items-center gap-3 text-slate-500 font-bold text-sm">
+                                        <div className="p-2 bg-slate-50 rounded-xl"><Clock size={16} className="text-slate-400" /></div>
+                                        {event.time}
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                                        <input
-                                            type="time"
-                                            required
-                                            value={formData.time}
-                                            onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                                            className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                        />
+                                    <div className="flex items-center gap-3 text-slate-500 font-bold text-sm">
+                                        <div className="p-2 bg-slate-50 rounded-xl">
+                                            {event.type === 'online' ? <Video size={16} className="text-slate-400" /> : <MapPin size={16} className="text-slate-400" />}
+                                        </div>
+                                        <span className="truncate">{event.location}</span>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                                        <select
-                                            value={formData.type}
-                                            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                                            className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                        >
-                                            <option value="offline">In-Person</option>
-                                            <option value="online">Online / Webinar</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Location / Link</label>
-                                        <input
-                                            required
-                                            value={formData.location}
-                                            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                                            className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                            placeholder={formData.type === 'online' ? "Meeting Link" : "Venue Address"}
-                                        />
-                                    </div>
-                                </div>
+                                <div className="flex items-center justify-between pt-6 border-t border-slate-50">
+                                    <button className="flex items-center gap-2 text-slate-900 font-black uppercase tracking-widest text-[10px] group/btn">
+                                        View Sync Points
+                                        <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                                    </button>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                                    <textarea
-                                        rows={3}
-                                        value={formData.description}
-                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                        className="w-full p-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 outline-none"
-                                        placeholder="Event details..."
-                                    />
+                                    {isSuperAdmin && (
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => handleEdit(event)}
+                                                className="p-3 bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 rounded-2xl text-slate-400 hover:text-blue-600 transition-all shadow-sm"
+                                            >
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(event.id)}
+                                                className="p-3 bg-slate-50 hover:bg-red-50 border border-transparent hover:border-red-100 rounded-2xl text-slate-400 hover:text-red-500 transition-all shadow-sm"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
-
-                                <button
-                                    type="submit"
-                                    className="w-full bg-primary-900 text-white py-3 rounded-xl font-bold hover:bg-primary-800 transition shadow-lg active:scale-95 flex justify-center items-center gap-2"
-                                >
-                                    <Save size={20} />
-                                    {editingEvent ? "Save Changes" : "Create Event"}
-                                </button>
-                            </form>
+                            </div>
                         </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
+                    ))}
+                </div>
+            )}
         </div>
+
+            {/* Premium Modal */ }
+    <AnimatePresence>
+        {isModalOpen && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="bg-white rounded-[3rem] w-full max-w-2xl shadow-2xl overflow-hidden border border-slate-100"
+                >
+                    <div className="flex justify-between items-center p-10 bg-slate-50/50 border-b border-slate-100">
+                        <div>
+                            <h2 className="text-3xl font-black text-slate-900 tracking-tighter">
+                                {editingEvent ? "Calibrate Event" : "Define New Pivot"}
+                            </h2>
+                            <p className="text-slate-500 text-xs font-black uppercase tracking-widest mt-1">Network Synchronization Protocol</p>
+                        </div>
+                        <button onClick={closeModal} className="p-4 bg-white rounded-2xl text-slate-400 hover:text-slate-950 transition-all shadow-sm">
+                            <X size={24} />
+                        </button>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="p-10 space-y-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Event Designation</label>
+                            <input
+                                required
+                                value={formData.title}
+                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 outline-none text-slate-800 font-bold transition-all"
+                                placeholder="e.g. Genesis Alumni Convergence"
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Temporal Date</label>
+                                <input
+                                    type="date"
+                                    required
+                                    value={formData.date}
+                                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                    className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 outline-none text-slate-800 font-bold transition-all"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sync Time (UTC)</label>
+                                <input
+                                    type="time"
+                                    required
+                                    value={formData.time}
+                                    onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                                    className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 outline-none text-slate-800 font-bold transition-all"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Engagement Type</label>
+                                <select
+                                    value={formData.type}
+                                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                                    className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 outline-none text-slate-800 font-bold transition-all appearance-none"
+                                >
+                                    <option value="offline">In-Person Convergence</option>
+                                    <option value="online">Virtual Projection</option>
+                                </select>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Spatial Location</label>
+                                <input
+                                    required
+                                    value={formData.location}
+                                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                                    className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 outline-none text-slate-800 font-bold transition-all"
+                                    placeholder={formData.type === 'online' ? "Digital Link" : "Physical Address"}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Briefing Dossier</label>
+                            <textarea
+                                rows={4}
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 outline-none text-slate-800 font-bold transition-all resize-none"
+                                placeholder="Outline the mission parameters..."
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className="w-full btn-premium py-5 bg-slate-900 text-white shadow-2xl shadow-blue-900/20 uppercase tracking-[0.3em] font-black text-sm active:scale-95"
+                        >
+                            <Save size={20} />
+                            {editingEvent ? "Commit Calibration" : "Initialize Event"}
+                        </button>
+                    </form>
+                </motion.div>
+            </div>
+        )}
+    </AnimatePresence>
+        </div >
     );
 }
