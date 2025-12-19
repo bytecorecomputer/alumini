@@ -47,58 +47,47 @@ export default function Profile() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const compressImage = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 500; // Resize to max 500px width
-                    const scaleSize = MAX_WIDTH / img.width;
-                    const finalWidth = img.width > MAX_WIDTH ? MAX_WIDTH : img.width;
-                    const finalHeight = img.width > MAX_WIDTH ? img.height * scaleSize : img.height;
-
-                    canvas.width = finalWidth;
-                    canvas.height = finalHeight;
-
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, finalWidth, finalHeight);
-
-                    // Compress to JPEG with 0.7 quality to keep string size low
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                    resolve(dataUrl);
-                };
-                img.onerror = (err) => reject(err);
-            };
-            reader.onerror = (err) => reject(err);
-        });
-    };
-
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
+        // Basic validation
+        if (!file.type.startsWith('image/')) {
+            alert("Please upload an image file.");
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) { // 2MB limit
+            alert("Image is too large. Please upload something under 2MB.");
+            return;
+        }
+
         setUploading(true);
 
         try {
-            // 1. Compress image to Base64 string
-            const base64Image = await compressImage(file);
+            const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
+            const { storage } = await import("../firebase/storage");
 
-            // 2. Save directly to Firestore user document
+            // 1. Create storage reference
+            const fileRef = ref(storage, `profile_images/${user.uid}_${Date.now()}`);
+
+            // 2. Upload file
+            const snapshot = await uploadBytes(fileRef, file);
+
+            // 3. Get URL
+            const downloadURL = await getDownloadURL(snapshot.ref);
+
+            // 4. Update Firestore user document
             await updateDoc(doc(db, "users", user.uid), {
-                photoURL: base64Image
+                photoURL: downloadURL
             });
 
-            // Fast feedback and reload to show new image
-            alert("Image Uploaded! Refreshing...");
+            alert("Profile picture updated!");
             window.location.reload();
 
         } catch (err) {
-            console.error("Error upload:", err);
-            alert("Failed to upload image. Please try a smaller file.");
+            console.error("Upload error:", err);
+            alert("Failed to upload image: " + err.message);
         } finally {
             setUploading(false);
         }
