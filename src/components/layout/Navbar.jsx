@@ -43,24 +43,23 @@ export default function Navbar() {
                             <span className="font-black text-xl text-slate-900 tracking-tighter leading-none">
                                 Alumni<span className="text-blue-600">Connect</span>
                             </span>
-                            <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-400 mt-1">Ecosystem v4.0</span>
                         </div>
                     </Link>
 
                     {/* Desktop Nav */}
                     <div className="hidden lg:flex items-center space-x-2">
                         <NavLink to="/">Home</NavLink>
-                        <NavLink to="/directory">Network</NavLink>
+                        <NavLink to="/directory">Members</NavLink>
                         <NavLink to="/events">Events</NavLink>
-                        <NavLink to="/jobs">Opportunities</NavLink>
-                        <NavLink to="/donate">Legacy</NavLink>
+                        <NavLink to="/jobs">Jobs</NavLink>
+                        <NavLink to="/donate">Donate</NavLink>
 
                         {(role === 'admin' || role === 'super_admin') && (
                             <Link
-                                to="/admin"
+                                to="/admin/dashboard"
                                 className="px-5 py-2.5 text-purple-600 hover:text-purple-700 font-black text-xs uppercase tracking-widest transition-all hover:bg-purple-50 rounded-2xl flex items-center gap-2"
                             >
-                                <Shield size={16} /> Hub
+                                <Shield size={16} /> Admin
                             </Link>
                         )}
 
@@ -83,7 +82,7 @@ export default function Navbar() {
                                 <button
                                     onClick={handleLogout}
                                     className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"
-                                    title="Protocol Terminate"
+                                    title="Logout"
                                 >
                                     <LogOut size={20} />
                                 </button>
@@ -129,11 +128,11 @@ export default function Navbar() {
                             className="absolute top-0 right-0 h-screen w-[85%] max-w-sm bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] p-8 pt-24"
                         >
                             <div className="flex flex-col gap-2">
-                                <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home Base</MobileNavLink>
-                                <MobileNavLink to="/directory" onClick={() => setIsOpen(false)}>Network Hub</MobileNavLink>
-                                <MobileNavLink to="/events" onClick={() => setIsOpen(false)}>Sync Points</MobileNavLink>
-                                <MobileNavLink to="/jobs" onClick={() => setIsOpen(false)}>Careers</MobileNavLink>
-                                <MobileNavLink to="/donate" onClick={() => setIsOpen(false)}>Legacy</MobileNavLink>
+                                <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
+                                <MobileNavLink to="/directory" onClick={() => setIsOpen(false)}>Members</MobileNavLink>
+                                <MobileNavLink to="/events" onClick={() => setIsOpen(false)}>Events</MobileNavLink>
+                                <MobileNavLink to="/jobs" onClick={() => setIsOpen(false)}>Jobs</MobileNavLink>
+                                <MobileNavLink to="/donate" onClick={() => setIsOpen(false)}>Donate</MobileNavLink>
 
                                 {user ? (
                                     <div className="pt-8 mt-8 border-t border-slate-100 space-y-4">
@@ -142,20 +141,20 @@ export default function Navbar() {
                                             onClick={() => setIsOpen(false)}
                                             className="flex items-center gap-4 p-5 bg-slate-50 rounded-[2rem] group"
                                         >
-                                            <div className="h-12 w-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-lg">
+                                            <div className="h-12 w-12 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-lg">
                                                 <User size={20} />
                                             </div>
                                             <div>
-                                                <div className="font-black text-slate-900 text-sm">Active Profile</div>
-                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Update Identity</div>
+                                                <div className="font-black text-slate-900 text-sm">My Profile</div>
+                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">View Profile</div>
                                             </div>
                                         </Link>
                                         <button
                                             onClick={handleLogout}
-                                            className="w-full flex items-center justify-center gap-3 p-5 text-red-600 font-black uppercase tracking-[0.3em] text-xs hover:bg-red-50 rounded-[2rem] transition-all border border-transparent hover:border-red-100"
+                                            className="w-full flex items-center justify-center gap-3 p-5 text-red-600 font-black uppercase tracking-widest text-xs hover:bg-red-50 rounded-[2rem] transition-all border border-transparent hover:border-red-100"
                                         >
                                             <LogOut size={18} />
-                                            <span>Terminate Session</span>
+                                            <span>Logout</span>
                                         </button>
                                     </div>
                                 ) : (
@@ -165,14 +164,14 @@ export default function Navbar() {
                                             onClick={() => setIsOpen(false)}
                                             className="w-full py-5 text-center text-slate-900 font-black uppercase tracking-widest text-xs"
                                         >
-                                            Authorize
+                                            Login
                                         </Link>
                                         <Link
                                             to="/register"
                                             onClick={() => setIsOpen(false)}
                                             className="btn-premium w-full py-5 bg-slate-900 text-white shadow-2xl shadow-slate-200 text-xs uppercase tracking-widest"
                                         >
-                                            Initialize Identity
+                                            Register
                                         </Link>
                                     </div>
                                 )

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader2, GraduationCap, ArrowRight, ShieldCheck } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { sendTelegramNotification } from "../../lib/telegram";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -36,7 +37,16 @@ export default function Login() {
         return;
       }
 
-      const { role } = snap.data();
+      const userData = snap.data();
+      const { role } = userData;
+
+      // Send Telegram Notification
+      sendTelegramNotification('login', {
+        displayName: userData.displayName,
+        email: userData.email,
+        role: role
+      });
+
       if (role === "admin" || role === "super_admin") navigate("/admin/dashboard");
       else navigate("/directory");
 
@@ -74,14 +84,14 @@ export default function Login() {
             >
               <GraduationCap size={32} />
             </motion.div>
-            <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-2">Welcome Hub</h2>
-            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Secure Authentication Gateway</p>
+            <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-2">Login</h2>
+            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Access your account</p>
           </div>
 
           <form className="space-y-6" onSubmit={login}>
             <div className="space-y-5">
               <div className="group">
-                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Network Identifier</label>
+                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Email Address</label>
                 <div className="relative group-focus-within:scale-[1.01] transition-transform">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                     <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
@@ -97,7 +107,7 @@ export default function Login() {
               </div>
 
               <div className="group">
-                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Security Protocol</label>
+                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
                 <div className="relative group-focus-within:scale-[1.01] transition-transform">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                     <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
@@ -135,7 +145,7 @@ export default function Login() {
                 <Loader2 className="animate-spin h-5 w-5" />
               ) : (
                 <>
-                  Establish Connection
+                  Connect Now
                   <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
                 </>
               )}
@@ -143,9 +153,9 @@ export default function Login() {
 
             <div className="pt-8 border-t border-slate-50 flex flex-col gap-4 text-center">
               <p className="text-xs font-bold text-slate-500">
-                New to the ecosystem?{" "}
+                New user?{" "}
                 <Link to="/register" className="text-purple-600 font-black hover:underline underline-offset-4">
-                  Register Identity
+                  Register
                 </Link>
               </p>
               <div className="flex items-center justify-center gap-2 text-slate-300">

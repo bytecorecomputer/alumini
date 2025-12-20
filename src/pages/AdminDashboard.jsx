@@ -197,7 +197,7 @@ export default function AdminDashboard() {
                                         <tr key={u.id} className="hover:bg-slate-50/50 transition-colors group">
                                             <td className="px-8 py-6">
                                                 <div className="flex items-center gap-4">
-                                                    <div className="h-12 w-12 rounded-xl bg-slate-100 overflow-hidden ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform">
+                                                    <div className="h-12 w-12 rounded-full bg-slate-100 overflow-hidden ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform">
                                                         {u.photoURL ? (
                                                             <img src={u.photoURL} alt="" className="h-full w-full object-cover" />
                                                         ) : (
@@ -259,7 +259,7 @@ export default function AdminDashboard() {
                             <div key={u.id} className="p-6">
                                 <div className="flex items-center justify-between mb-6">
                                     <div className="flex items-center gap-4">
-                                        <div className="h-14 w-14 rounded-2xl bg-slate-100 overflow-hidden ring-4 ring-slate-50">
+                                        <div className="h-14 w-14 rounded-full bg-slate-100 overflow-hidden ring-4 ring-slate-50">
                                             {u.photoURL ? (
                                                 <img src={u.photoURL} alt="" className="h-full w-full object-cover" />
                                             ) : (

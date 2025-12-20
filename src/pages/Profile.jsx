@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../app/common/AuthContext';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
-import { motion } from 'framer-motion';
-import { User, Briefcase, BookOpen, MapPin, Save, Loader2, Award, Camera, Upload, Phone, Linkedin, Github } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { User, Briefcase, BookOpen, MapPin, Save, Loader2, Award, Camera, Phone, Linkedin, Github, Shield, ShieldAlert } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export default function Profile() {
@@ -57,37 +57,32 @@ export default function Profile() {
             return;
         }
 
-        if (file.size > 2 * 1024 * 1024) { // 2MB limit
-            alert("Image is too large. Please upload something under 2MB.");
+        // Base64 logic might handle slightly larger files but let's keep it reasonable for Firestore
+        if (file.size > 800 * 1024) {
+            alert("Image is too large. Please upload something under 800KB for better performance.");
             return;
         }
 
         setUploading(true);
 
         try {
-            const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
-            const { storage } = await import("../firebase/storage");
+            // Read file as Base64 (Jugaad to bypass Firebase Storage CORS)
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64String = reader.result;
 
-            // 1. Create storage reference
-            const fileRef = ref(storage, `profile_images/${user.uid}_${Date.now()}`);
+                // Update Firestore user document directly
+                await updateDoc(doc(db, "users", user.uid), {
+                    photoURL: base64String
+                });
 
-            // 2. Upload file
-            const snapshot = await uploadBytes(fileRef, file);
-
-            // 3. Get URL
-            const downloadURL = await getDownloadURL(snapshot.ref);
-
-            // 4. Update Firestore user document
-            await updateDoc(doc(db, "users", user.uid), {
-                photoURL: downloadURL
-            });
-
-            alert("Profile picture updated!");
-            window.location.reload();
-
+                alert("Profile picture updated (Simplified Upload)!");
+                window.location.reload();
+            };
         } catch (err) {
             console.error("Upload error:", err);
-            alert("Failed to upload image: " + err.message);
+            alert("Failed to update image: " + err.message);
         } finally {
             setUploading(false);
         }
@@ -134,12 +129,12 @@ export default function Profile() {
                     className="premium-card bg-white overflow-hidden"
                 >
                     {/* Premium Header/Cover */}
-                    <div className="h-48 md:h-64 relative bg-gradient-to-br from-purple-600 via-blue-600 to-slate-900 overflow-hidden">
+                    <div className="h-48 md:h-64 relative bg-gradient-to-br from-purple-600 via-blue-600 to-slate-900">
                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
                         <div className="absolute -bottom-16 left-8 md:left-12 group">
-                            <div className="h-32 w-32 md:h-40 md:w-40 rounded-3xl border-4 border-white bg-slate-50 flex items-center justify-center text-slate-400 text-5xl font-black shadow-2xl overflow-hidden relative group-hover:scale-[1.02] transition-transform duration-500">
+                            <div className="h-32 w-32 md:h-40 md:w-40 rounded-full border-4 border-white bg-slate-50 flex items-center justify-center text-slate-400 text-5xl font-black shadow-2xl overflow-hidden relative group-hover:scale-[1.02] transition-transform duration-500">
                                 {profileImage ? (
                                     <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
                                 ) : (
@@ -165,7 +160,7 @@ export default function Profile() {
                     <div className="pt-24 pb-12 px-8 md:px-12">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-12">
                             <div>
-                                <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-2">
+                                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-2 break-words">
                                     {formData.displayName || user?.displayName || 'New Member'}
                                 </h1>
                                 <div className="flex flex-wrap items-center gap-3">
@@ -203,25 +198,25 @@ export default function Profile() {
                                             <ShieldAlert size={32} />
                                         </div>
                                         <div>
-                                            <h3 className="text-red-900 font-black text-lg">System Permissions Out of Sync</h3>
-                                            <p className="text-red-600 font-bold">Your account requires Super Admin elevation for full network governance.</p>
+                                            <h3 className="text-red-900 font-black text-lg">Admin Access Needed</h3>
+                                            <p className="text-red-600 font-bold">Your account needs to be set as Admin to manage the portal.</p>
                                         </div>
                                     </div>
                                     <button
                                         onClick={async (e) => {
                                             e.preventDefault();
-                                            if (!window.confirm("Initialize Super Admin status? This will grant full system control.")) return;
+                                            if (!window.confirm("Make this account an Admin?")) return;
                                             try {
                                                 await updateDoc(doc(db, "users", user.uid), { role: "super_admin" });
-                                                alert("System permissions updated. Re-initializing...");
+                                                alert("Role updated. Reloading...");
                                                 window.location.reload();
                                             } catch (err) {
-                                                alert("Protocol failure: " + err.message);
+                                                alert("Failed: " + err.message);
                                             }
                                         }}
                                         className="w-full md:w-auto px-8 py-4 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-200 active:scale-95"
                                     >
-                                        Calibrate Role
+                                        Fix My Role
                                     </button>
                                 </motion.div>
                             )}
@@ -232,7 +227,7 @@ export default function Profile() {
                                     <div className="p-2 bg-blue-50 rounded-xl text-blue-600">
                                         <User size={20} />
                                     </div>
-                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Identity & Status</h2>
+                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Basic Info</h2>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-2">
@@ -264,7 +259,7 @@ export default function Profile() {
                                     <div className="p-2 bg-purple-50 rounded-xl text-purple-600">
                                         <Phone size={20} />
                                     </div>
-                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Connectivity & Socials</h2>
+                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Social Links</h2>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                     <div className="space-y-2">
@@ -312,7 +307,7 @@ export default function Profile() {
                                     <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600">
                                         <BookOpen size={20} />
                                     </div>
-                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Career & Education</h2>
+                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Work & School</h2>
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div className="space-y-2">
@@ -367,18 +362,18 @@ export default function Profile() {
                             {/* Section: Narrative & Expertise */}
                             <div className="space-y-8">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Personal Narrative</label>
+                                    <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Bio</label>
                                     <textarea
                                         name="bio"
                                         value={formData.bio}
                                         onChange={handleChange}
                                         rows={4}
                                         className="w-full px-8 py-6 rounded-[2rem] bg-slate-50 border-2 border-transparent focus:border-blue-100 focus:bg-white focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold resize-none"
-                                        placeholder="Compose your professional bio..."
+                                        placeholder="Write something about yourself..."
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Expertise & Stack (Comma Separated)</label>
+                                    <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Skills (Comma Separated)</label>
                                     <input
                                         name="skills"
                                         value={formData.skills}
@@ -403,7 +398,7 @@ export default function Profile() {
                                                 <div className="p-1.5 bg-emerald-100 rounded-full">
                                                     <Save size={14} />
                                                 </div>
-                                                <span className="text-sm uppercase tracking-tighter">Sync Successful</span>
+                                                <span className="text-sm uppercase tracking-tighter">Changes Saved</span>
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
@@ -421,7 +416,7 @@ export default function Profile() {
                                     ) : (
                                         <Save size={20} className="group-hover:rotate-12 transition-transform" />
                                     )}
-                                    <span className="text-lg font-black uppercase tracking-widest">Commit Updates</span>
+                                    <span className="text-lg font-black uppercase tracking-widest">Save Changes</span>
                                 </button>
                             </div>
                         </form>

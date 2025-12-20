@@ -145,11 +145,11 @@ export default function Directory() {
 
                                         <div className="flex justify-between items-start mb-8">
                                             <div className="relative">
-                                                <div className="h-28 w-28 rounded-[2.5rem] bg-slate-50 p-2 shadow-inner ring-4 ring-white group-hover:scale-105 transition-transform duration-500 overflow-hidden">
+                                                <div className="h-28 w-28 rounded-full bg-slate-50 p-2 shadow-inner ring-4 ring-white group-hover:scale-105 transition-transform duration-500 overflow-hidden">
                                                     {profile.photoURL ? (
-                                                        <img src={profile.photoURL} alt={profile.displayName} className="h-full w-full object-cover rounded-[2rem]" />
+                                                        <img src={profile.photoURL} alt={profile.displayName} className="h-full w-full object-cover rounded-full" />
                                                     ) : (
-                                                        <div className="h-full w-full bg-slate-900 rounded-[2rem] flex items-center justify-center text-3xl font-black text-white italic">
+                                                        <div className="h-full w-full bg-slate-900 rounded-full flex items-center justify-center text-3xl font-black text-white italic">
                                                             {profile.displayName?.[0]?.toUpperCase()}
                                                         </div>
                                                     )}
@@ -198,7 +198,7 @@ export default function Directory() {
                                                 </button>
                                             ) : (['admin', 'super_admin'].includes(currentUser?.role)) ? (
                                                 <button
-                                                    onClick={() => navigate('/admin')}
+                                                    onClick={() => navigate('/admin/dashboard')}
                                                     className="flex-1 btn-premium px-6 py-4 bg-purple-600 text-white shadow-xl shadow-purple-100 text-xs uppercase tracking-widest active:scale-95"
                                                 >
                                                     <Shield size={16} /> Governance

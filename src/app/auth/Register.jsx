@@ -7,6 +7,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Loader2, GraduationCap, ArrowRight, ShieldCheck, Zap } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { sendTelegramNotification } from "../../lib/telegram";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -57,6 +58,13 @@ export default function Register() {
         skills: []
       });
 
+      // Send Telegram Notification
+      sendTelegramNotification('register', {
+        displayName: name,
+        email: email,
+        role: finalRole
+      });
+
       navigate("/profile");
 
     } catch (err) {
@@ -93,14 +101,14 @@ export default function Register() {
             >
               <Zap size={32} />
             </motion.div>
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-2">Create Identity</h2>
-            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Initialize your network presence</p>
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-2">Register</h2>
+            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Join the alumni network</p>
           </div>
 
           <form className="space-y-8" onSubmit={register}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="group">
-                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Full Identity</label>
+                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Full Name</label>
                 <div className="relative group-focus-within:scale-[1.01] transition-transform">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                     <User className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
@@ -110,13 +118,13 @@ export default function Register() {
                     type="text"
                     required
                     className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
-                    placeholder="Full Name"
+                    placeholder="Your Name"
                   />
                 </div>
               </div>
 
               <div className="group">
-                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Network UID</label>
+                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Email Address</label>
                 <div className="relative group-focus-within:scale-[1.01] transition-transform">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                     <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
@@ -132,7 +140,7 @@ export default function Register() {
               </div>
 
               <div className="group md:col-span-2">
-                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Secure Protocol</label>
+                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
                 <div className="relative group-focus-within:scale-[1.01] transition-transform">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                     <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
@@ -142,25 +150,25 @@ export default function Register() {
                     type="password"
                     required
                     className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
-                    placeholder="Min. 6 strong characters"
+                    placeholder="Min. 6 characters"
                   />
                 </div>
               </div>
             </div>
 
             <div className="space-y-4">
-              <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Network Role</label>
+              <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Role</label>
               <div className="grid grid-cols-2 gap-4">
                 <label className="cursor-pointer group">
                   <input type="radio" name="role" value="student" className="peer sr-only" defaultChecked />
                   <div className="rounded-2xl border-2 border-slate-50 p-5 text-center font-black uppercase tracking-widest text-xs peer-checked:border-purple-100 peer-checked:bg-purple-50/50 peer-checked:text-purple-700 hover:bg-slate-50 transition-all shadow-sm">
-                    Current Fellow
+                    Fellow
                   </div>
                 </label>
                 <label className="cursor-pointer group">
                   <input type="radio" name="role" value="alumni" className="peer sr-only" />
                   <div className="rounded-2xl border-2 border-slate-50 p-5 text-center font-black uppercase tracking-widest text-xs peer-checked:border-blue-100 peer-checked:bg-blue-50/50 peer-checked:text-blue-700 hover:bg-slate-50 transition-all shadow-sm">
-                    Verified Alumni
+                    Alumni
                   </div>
                 </label>
               </div>
@@ -188,7 +196,7 @@ export default function Register() {
                 <Loader2 className="animate-spin h-5 w-5" />
               ) : (
                 <>
-                  Initialize Account
+                  Create Account
                   <ArrowRight className="ml-3 group-hover:translate-x-1.5 transition-transform" size={20} />
                 </>
               )}
@@ -196,9 +204,9 @@ export default function Register() {
 
             <div className="pt-10 border-t border-slate-50 text-center space-y-4">
               <p className="text-xs font-bold text-slate-500">
-                Already established?{" "}
+                Already have an account?{" "}
                 <Link to="/login" className="text-purple-600 font-black hover:underline underline-offset-4">
-                  Log In
+                  Login
                 </Link>
               </p>
               <div className="flex items-center justify-center gap-2 text-slate-300">
