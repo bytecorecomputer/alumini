@@ -3,13 +3,15 @@ import { useAuth } from '../app/common/AuthContext';
 import { db } from '../firebase/firestore';
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, Clock, Plus, Trash2, Edit2, X, Save, Users, Video, ArrowRight, Zap, Target } from 'lucide-react';
+import { Calendar, MapPin, Clock, Plus, Trash2, Edit2, X, Save, Users, Video, ArrowRight, Zap, Target, Camera, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { sendTelegramNotification } from '../lib/telegram';
 
 export default function Events() {
     const { user, role } = useAuth();
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [uploading, setUploading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingEvent, setEditingEvent] = useState(null);
 
@@ -56,6 +58,21 @@ export default function Events() {
         }
     };
 
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) return alert("Upload an image file.");
+        if (file.size > 800 * 1024) return alert("Image too large. Under 800KB please.");
+
+        setUploading(true);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            setFormData({ ...formData, image: reader.result });
+            setUploading(false);
+        };
+    };
+
     const handleEdit = (event) => {
         setEditingEvent(event);
         setFormData({
@@ -78,13 +95,19 @@ export default function Events() {
                 await updateDoc(eventRef, { ...formData });
                 setEvents(events.map(ev => ev.id === editingEvent.id ? { ...ev, ...formData } : ev));
             } else {
-                const docRef = await addDoc(collection(db, "events"), {
+                const finalData = {
                     ...formData,
                     createdBy: user.uid,
+                    creatorName: userData?.displayName || 'Administrator',
                     createdAt: Date.now(),
                     attendees: []
-                });
-                setEvents([...events, { id: docRef.id, ...formData, attendees: [] }]);
+                };
+                const docRef = await addDoc(collection(db, "events"), finalData);
+
+                // Broadcast to Telegram
+                sendTelegramNotification('event', finalData);
+
+                setEvents([...events, { id: docRef.id, ...finalData }]);
             }
             closeModal();
         } catch (error) {
@@ -281,6 +304,34 @@ export default function Events() {
                                             onChange={(e) => setFormData({ ...formData, time: e.target.value })}
                                             className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 outline-none text-slate-800 font-bold transition-all"
                                         />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Event Visual (Optional)</label>
+                                    <div className="flex items-center gap-6">
+                                        <label className="flex-1 flex flex-col items-center justify-center h-40 border-2 border-dashed border-slate-100 rounded-[2rem] bg-slate-50 hover:bg-white hover:border-blue-100 transition-all cursor-pointer group/upload text-center">
+                                            {uploading ? (
+                                                <Loader2 className="animate-spin text-blue-600" />
+                                            ) : formData.image ? (
+                                                <img src={formData.image} className="h-full w-full object-cover rounded-[1.8rem]" />
+                                            ) : (
+                                                <>
+                                                    <Camera size={24} className="text-slate-300 group-hover/upload:text-blue-500 transition-colors mb-2" />
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-4">Initialize High-Res Graphic</span>
+                                                </>
+                                            )}
+                                            <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+                                        </label>
+                                        {formData.image && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setFormData({ ...formData, image: '' })}
+                                                className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all"
+                                            >
+                                                <Trash2 size={20} />
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
 

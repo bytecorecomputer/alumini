@@ -3,13 +3,15 @@ import { useAuth } from '../app/common/AuthContext';
 import { db } from '../firebase/firestore';
 import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, where } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Briefcase, MapPin, Building, Plus, Trash2, X, Search, Filter, ArrowRight, Zap, Target, ExternalLink } from 'lucide-react';
+import { Briefcase, MapPin, Building, Plus, Trash2, X, Search, Filter, ArrowRight, Zap, Target, ExternalLink, Camera, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { sendTelegramNotification } from '../lib/telegram';
 
 export default function Jobs() {
     const { user, role, userData } = useAuth();
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [uploading, setUploading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [filterType, setFilterType] = useState("all");
@@ -20,7 +22,8 @@ export default function Jobs() {
         location: '',
         type: 'Full-time', // Full-time, Internship, Freelance
         link: '',
-        description: ''
+        description: '',
+        image: ''
     });
 
     const isAlumni = role === 'alumni' || role === 'admin' || role === 'super_admin';
@@ -56,20 +59,41 @@ export default function Jobs() {
         }
     };
 
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) return alert("Upload an image file.");
+        if (file.size > 800 * 1024) return alert("Image too large. Under 800KB please.");
+
+        setUploading(true);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            setFormData({ ...formData, image: reader.result });
+            setUploading(false);
+        };
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const docRef = await addDoc(collection(db, "jobs"), {
+            const finalData = {
                 ...formData,
                 postedBy: user.uid,
                 posterName: userData?.displayName || 'Network Fellow',
                 posterRole: role,
                 createdAt: Date.now()
-            });
-            setJobs([{ id: docRef.id, ...formData, postedBy: user.uid, posterName: userData?.displayName, createdAt: Date.now() }, ...jobs]);
+            };
+
+            const docRef = await addDoc(collection(db, "jobs"), finalData);
+
+            // Broadcast to Telegram
+            sendTelegramNotification('job', finalData);
+
+            setJobs([{ id: docRef.id, ...finalData }, ...jobs]);
 
             setIsModalOpen(false);
-            setFormData({ title: '', company: '', location: '', type: 'Full-time', link: '', description: '' });
+            setFormData({ title: '', company: '', location: '', type: 'Full-time', link: '', description: '', image: '' });
         } catch (error) {
             console.error(error);
             alert("Opportunity broadcast failed.");
@@ -171,35 +195,42 @@ export default function Jobs() {
                                 transition={{ delay: idx * 0.05 }}
                                 className="premium-card group bg-white border-2 border-slate-50 shadow-2xl shadow-slate-200/50 p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8"
                             >
-                                <div className="flex-1 space-y-4 text-center md:text-left">
-                                    <div className="flex flex-col md:flex-row items-center gap-4 mb-2">
-                                        <div className="p-4 bg-slate-900 rounded-[1.5rem] text-white shadow-xl group-hover:bg-emerald-600 transition-colors duration-500">
-                                            <Building size={24} />
+                                <div className="flex-1 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+                                    {job.image && (
+                                        <div className="w-24 h-24 md:w-32 md:h-32 rounded-3xl overflow-hidden shadow-xl border-4 border-slate-50 flex-shrink-0">
+                                            <img src={job.image} alt={job.title} className="w-full h-full object-cover" />
                                         </div>
-                                        <div>
-                                            <h3 className="text-2xl font-black text-slate-900 tracking-tighter group-hover:text-emerald-600 transition-colors">{job.title}</h3>
-                                            <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">{job.company}</div>
+                                    )}
+                                    <div className="space-y-4">
+                                        <div className="flex flex-col md:flex-row items-center gap-4 mb-2">
+                                            <div className="p-4 bg-slate-900 rounded-[1.5rem] text-white shadow-xl group-hover:bg-emerald-600 transition-colors duration-500">
+                                                <Building size={24} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-2xl font-black text-slate-900 tracking-tighter group-hover:text-emerald-600 transition-colors">{job.title}</h3>
+                                                <div className="text-sm font-bold text-slate-400 uppercase tracking-widest">{job.company}</div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="flex flex-wrap justify-center md:justify-start items-center gap-6">
-                                        <div className="flex items-center gap-2 text-slate-500 font-bold text-xs">
-                                            <MapPin size={16} className="text-slate-300" /> {job.location}
-                                        </div>
-                                        <div className="flex items-center gap-2 text-slate-500 font-bold text-xs">
-                                            <Target size={16} className="text-slate-300" /> {job.type}
-                                        </div>
-                                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${job.type === 'Internship' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                                        <div className="flex flex-wrap justify-center md:justify-start items-center gap-6">
+                                            <div className="flex items-center gap-2 text-slate-500 font-bold text-xs">
+                                                <MapPin size={16} className="text-slate-300" /> {job.location}
+                                            </div>
+                                            <div className="flex items-center gap-2 text-slate-500 font-bold text-xs">
+                                                <Target size={16} className="text-slate-300" /> {job.type}
+                                            </div>
+                                            <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${job.type === 'Internship' ? 'bg-blue-50 text-blue-600 border-blue-100' :
                                                 job.type === 'Freelance' ? 'bg-amber-50 text-amber-600 border-amber-100' :
                                                     'bg-emerald-50 text-emerald-600 border-emerald-100'
-                                            }`}>
-                                            Active Link
+                                                }`}>
+                                                Active Link
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <p className="text-slate-500 font-bold text-sm leading-relaxed max-w-2xl">
-                                        {job.description}
-                                    </p>
+                                        <p className="text-slate-500 font-bold text-sm leading-relaxed max-w-2xl">
+                                            {job.description}
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <div className="flex flex-col gap-4 w-full md:w-auto min-w-[200px]">
@@ -305,6 +336,34 @@ export default function Jobs() {
                                         className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-emerald-100 outline-none text-slate-800 font-bold transition-all"
                                         placeholder="https://career-portal..."
                                     />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Visual Branding (Optional)</label>
+                                    <div className="flex items-center gap-6">
+                                        <label className="flex-1 flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-100 rounded-[2rem] bg-slate-50 hover:bg-white hover:border-emerald-100 transition-all cursor-pointer group/upload">
+                                            {uploading ? (
+                                                <Loader2 className="animate-spin text-emerald-600" />
+                                            ) : formData.image ? (
+                                                <img src={formData.image} className="h-full w-full object-cover rounded-[1.8rem]" />
+                                            ) : (
+                                                <>
+                                                    <Camera size={24} className="text-slate-300 group-hover/upload:text-emerald-500 transition-colors mb-2" />
+                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Select Logo / Preview</span>
+                                                </>
+                                            )}
+                                            <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
+                                        </label>
+                                        {formData.image && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setFormData({ ...formData, image: '' })}
+                                                className="p-3 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all"
+                                            >
+                                                <Trash2 size={20} />
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="space-y-2">

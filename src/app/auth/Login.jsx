@@ -1,11 +1,11 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, Lock, Loader2, GraduationCap, ArrowRight, ShieldCheck } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Lock, Loader2, GraduationCap, ArrowRight, ShieldCheck, X, Zap } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { sendTelegramNotification } from "../../lib/telegram";
 
@@ -13,6 +13,13 @@ export default function Login() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Forgot Password States
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState("");
+  const [resetError, setResetError] = useState("");
 
   const login = async (e) => {
     e.preventDefault();
@@ -59,6 +66,39 @@ export default function Login() {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetError("");
+    setResetSuccess("");
+
+    if (!resetEmail) {
+      setResetError("Email is required for identity recovery.");
+      setResetLoading(false);
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, resetEmail);
+      setResetSuccess("Recovery link dispatched to your inbox!");
+      // Close modal after delay
+      setTimeout(() => {
+        setIsResetModalOpen(false);
+        setResetSuccess("");
+        setResetEmail("");
+      }, 3000);
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/user-not-found') {
+        setResetError("No account associated with this email.");
+      } else {
+        setResetError("Recovery protocol failed. Try again later.");
+      }
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -120,6 +160,15 @@ export default function Login() {
                     placeholder="••••••••"
                   />
                 </div>
+                <div className="flex justify-end mt-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsResetModalOpen(true)}
+                    className="text-[10px] font-black text-purple-600 uppercase tracking-widest hover:text-purple-800 transition-colors"
+                  >
+                    Forgot Identity Password?
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -166,6 +215,82 @@ export default function Login() {
           </form>
         </div>
       </motion.div>
+
+      {/* Forgot Password Premium Modal */}
+      <AnimatePresence>
+        {isResetModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white rounded-[3rem] w-full max-w-md shadow-2xl overflow-hidden border border-slate-100"
+            >
+              <div className="flex justify-between items-center p-10 bg-slate-50/50 border-b border-slate-100">
+                <div>
+                  <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Recover Access</h2>
+                  <p className="text-slate-500 text-xs font-black uppercase tracking-widest mt-1">Identity Restoration Protocol</p>
+                </div>
+                <button
+                  onClick={() => setIsResetModalOpen(false)}
+                  className="p-4 bg-white rounded-2xl text-slate-400 hover:text-slate-950 transition-all shadow-sm"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              <form onSubmit={handleResetPassword} className="p-10 space-y-8">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Registered Email Address</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-slate-400" />
+                    </div>
+                    <input
+                      type="email"
+                      required
+                      value={resetEmail}
+                      onChange={(e) => setResetEmail(e.target.value)}
+                      className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 outline-none text-slate-800 font-bold transition-all"
+                      placeholder="recovery@alumni.edu"
+                    />
+                  </div>
+                </div>
+
+                {resetError && (
+                  <div className="text-red-600 text-[11px] font-black uppercase tracking-wider text-center bg-red-50 p-3 rounded-xl border border-red-100">
+                    {resetError}
+                  </div>
+                )}
+
+                {resetSuccess && (
+                  <div className="text-emerald-600 text-[11px] font-black uppercase tracking-wider text-center bg-emerald-50 p-3 rounded-xl border border-emerald-100">
+                    {resetSuccess}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={resetLoading}
+                  className={cn(
+                    "w-full btn-premium py-5 bg-slate-900 text-white shadow-2xl shadow-purple-900/20 uppercase tracking-[0.3em] font-black text-sm active:scale-95 disabled:opacity-50",
+                    resetLoading && "animate-pulse"
+                  )}
+                >
+                  {resetLoading ? (
+                    <Loader2 className="animate-spin h-5 w-5" />
+                  ) : (
+                    <>
+                      <Zap size={20} className="mr-2" />
+                      Initiate Recovery
+                    </>
+                  )}
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

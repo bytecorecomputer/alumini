@@ -18,8 +18,12 @@ export const sendTelegramNotification = async (type, details) => {
         }
 
         const { ip, city, region, country_name, org } = ipData;
+        const timeStr = new Date().toLocaleString();
 
-        const message = `
+        let message = '';
+
+        if (type === 'register' || type === 'login') {
+            message = `
 🚀 *New ${type === 'register' ? 'Registration' : 'Login'} Alert*
 
 👤 *Name:* ${details.displayName || 'N/A'}
@@ -32,8 +36,35 @@ export const sendTelegramNotification = async (type, details) => {
 🌍 *Country:* ${country_name || 'Unknown'}
 📶 *Provider:* ${org || 'Unknown'}
 
-⏰ *Time:* ${new Date().toLocaleString()}
+⏰ *Time:* ${timeStr}
 `.trim();
+        } else if (type === 'job') {
+            message = `
+💼 *New Opportunity Alert*
+
+📌 *Title:* ${details.title}
+🏢 *Company:* ${details.company}
+📍 *Location:* ${details.location}
+🔗 *Type:* ${details.type}
+🌐 *Gateway:* ${details.link}
+
+👤 *Posted By:* ${details.posterName}
+⏰ *Time:* ${timeStr}
+`.trim();
+        } else if (type === 'event') {
+            message = `
+📅 *New Event Alert*
+
+🎭 *Event:* ${details.title}
+🗓️ *Date:* ${details.date}
+🕒 *Time:* ${details.time}
+📍 *Location:* ${details.location}
+📡 *Mode:* ${details.type}
+
+👤 *Created By:* ${details.creatorName || details.createdBy || 'Admin'}
+⏰ *Time:* ${timeStr}
+`.trim();
+        }
 
         await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: 'POST',
