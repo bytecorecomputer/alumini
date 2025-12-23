@@ -13,6 +13,7 @@ import { AuthProvider } from "./app/common/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import AdminDashboard from "./pages/AdminDashboard";
+import Resume from "./pages/Resume";
 
 export default function App() {
   return (
@@ -52,6 +53,11 @@ export default function App() {
             <Route path="/jobs" element={
               <ProtectedRoute>
                 <Jobs />
+              </ProtectedRoute>
+            } />
+            <Route path="/resume" element={
+              <ProtectedRoute>
+                <Resume />
               </ProtectedRoute>
             } />
           </Routes>

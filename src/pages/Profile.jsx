@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../app/common/AuthContext';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Briefcase, BookOpen, MapPin, Save, Loader2, Award, Camera, Phone, Linkedin, Github, Shield, ShieldAlert } from 'lucide-react';
+import { User, Briefcase, BookOpen, MapPin, Save, Loader2, Award, Camera, Phone, Linkedin, Github, Shield, ShieldAlert, FileText } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export default function Profile() {
@@ -403,21 +404,30 @@ export default function Profile() {
                                         )}
                                     </AnimatePresence>
                                 </div>
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className={cn(
-                                        "btn-premium px-12 py-4 flex items-center gap-3 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed",
-                                        loading && "animate-pulse"
-                                    )}
-                                >
-                                    {loading ? (
-                                        <Loader2 className="animate-spin h-5 w-5" />
-                                    ) : (
-                                        <Save size={20} className="group-hover:rotate-12 transition-transform" />
-                                    )}
-                                    <span className="text-lg font-black uppercase tracking-widest">Save Changes</span>
-                                </button>
+                                <div className="flex items-center gap-6">
+                                    <Link
+                                        to="/resume"
+                                        className="hidden md:flex items-center gap-2 text-slate-400 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all group/resume"
+                                    >
+                                        <FileText size={18} className="group-hover/resume:scale-110 transition-transform" />
+                                        Professional Dossier
+                                    </Link>
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className={cn(
+                                            "btn-premium px-12 py-4 flex items-center gap-3 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed",
+                                            loading && "animate-pulse"
+                                        )}
+                                    >
+                                        {loading ? (
+                                            <Loader2 className="animate-spin h-5 w-5" />
+                                        ) : (
+                                            <Save size={20} className="group-hover:rotate-12 transition-transform" />
+                                        )}
+                                        <span className="text-lg font-black uppercase tracking-widest">Save Changes</span>
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </div>

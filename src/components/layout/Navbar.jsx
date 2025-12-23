@@ -134,6 +134,14 @@ export default function Navbar() {
                                 <MobileNavLink to="/jobs" onClick={() => setIsOpen(false)}>Jobs</MobileNavLink>
                                 <MobileNavLink to="/donate" onClick={() => setIsOpen(false)}>Donate</MobileNavLink>
 
+                                {(role === 'admin' || role === 'super_admin') && (
+                                    <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
+                                        <div className="flex items-center gap-2 text-purple-600">
+                                            <Shield size={16} /> Admin Panel
+                                        </div>
+                                    </MobileNavLink>
+                                )}
+
                                 {user ? (
                                     <div className="pt-8 mt-8 border-t border-slate-100 space-y-4">
                                         <Link
