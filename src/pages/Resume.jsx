@@ -145,9 +145,16 @@ export default function Resume() {
                 __html: `
                 @media print {
                     @page { 
-                        size: A4; 
-                        margin: 0mm; 
+                        size: A4 portrait; 
+                        margin: 0;
                     }
+                    
+                    * {
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                        color-adjust: exact !important;
+                    }
+                    
                     html, body {
                         width: 210mm !important;
                         height: 297mm !important;
@@ -156,18 +163,23 @@ export default function Resume() {
                         overflow: hidden !important;
                         background: white !important;
                     }
-                    /* Hide EVERYTHING except the resume preview */
+                    
+                    /* Hide EVERYTHING except the resume */
                     body > *:not(#root),
                     #root > *:not(main),
                     main > *:not(.print-active-resume),
-                    nav, header, footer, .control-bar, .no-print {
+                    nav, header, footer, .control-bar, .no-print,
+                    .print\\:hidden {
                         display: none !important;
+                        visibility: hidden !important;
                     }
                     
                     main {
                         display: block !important;
                         padding: 0 !important;
                         margin: 0 !important;
+                        width: 210mm !important;
+                        height: 297mm !important;
                     }
 
                     .print-active-resume {
@@ -176,23 +188,35 @@ export default function Resume() {
                         top: 0 !important;
                         width: 210mm !important;
                         height: 297mm !important;
+                        min-height: 297mm !important;
+                        max-height: 297mm !important;
                         margin: 0 !important;
                         padding: 0 !important;
-                        display: block !important;
+                        display: flex !important;
                         visibility: visible !important;
                         z-index: 9999 !important;
                         transform: none !important;
                         box-shadow: none !important;
+                        border: none !important;
+                        page-break-after: avoid !important;
+                        page-break-before: avoid !important;
+                        page-break-inside: avoid !important;
                     }
 
                     .print-active-resume * {
                         visibility: visible !important;
                     }
-
-                    body { 
-                        -webkit-print-color-adjust: exact !important; 
-                        print-color-adjust: exact !important; 
-                        color-adjust: exact !important; 
+                    
+                    /* Optimize fonts for print */
+                    .print-active-resume {
+                        font-size: 10pt !important;
+                        line-height: 1.4 !important;
+                    }
+                    
+                    /* Ensure full height coverage */
+                    .print-active-resume > div {
+                        min-height: 297mm !important;
+                        height: 297mm !important;
                     }
                 }
             `}} />
@@ -523,38 +547,38 @@ function AddButton({ onClick, label }) {
 function ModernTemplate({ data }) {
     const { personal, experience, education, skills, projects, certifications } = data;
     return (
-        <div className="w-[210mm] min-h-[297mm] bg-white flex flex-col md:flex-row shadow-none overflow-hidden text-slate-800 font-inter print:w-[210mm] print:min-h-[297mm]">
+        <div className="w-[210mm] min-h-[297mm] h-[297mm] bg-white flex flex-col md:flex-row shadow-none overflow-hidden text-slate-800 font-inter print:w-[210mm] print:h-[297mm]">
             {/* Left Sidebar */}
-            <div className="w-full md:w-[35%] bg-slate-900 text-white p-10 flex flex-col gap-10 print:w-[35%] print:min-h-screen print:h-full">
-                <div className="space-y-6">
+            <div className="w-full md:w-[30%] bg-slate-900 text-white p-6 flex flex-col gap-6 print:w-[30%] print:h-[297mm]">
+                <div className="space-y-4">
                     {personal.photoURL && (
-                        <div className="w-36 h-36 rounded-[2.5rem] overflow-hidden border-4 border-slate-800 shadow-2xl bg-slate-800">
+                        <div className="w-28 h-28 rounded-[2rem] overflow-hidden border-4 border-slate-800 shadow-2xl bg-slate-800">
                             <img src={getOptimizedUrl(personal.photoURL, 'w_400,h_400,c_fill,g_face,f_auto,q_auto')} alt="" className="w-full h-full object-cover" />
                         </div>
                     )}
                     <div>
-                        <h1 className="text-3xl font-black tracking-tighter leading-none mb-2 uppercase">{personal.fullName || 'Full Name'}</h1>
-                        <p className="text-blue-400 font-bold text-sm uppercase tracking-[0.2em]">{personal.title || 'Professional Title'}</p>
+                        <h1 className="text-2xl font-black tracking-tighter leading-none mb-2 uppercase">{personal.fullName || 'Full Name'}</h1>
+                        <p className="text-blue-400 font-bold text-xs uppercase tracking-[0.2em]">{personal.title || 'Professional Title'}</p>
                     </div>
                 </div>
 
-                <div className="space-y-8">
+                <div className="space-y-6">
                     <div>
-                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-4 border-b border-slate-800 pb-2">Connect</h3>
-                        <div className="space-y-3">
-                            <ContactRow icon={<Mail size={14} />} text={personal.email} />
-                            <ContactRow icon={<Phone size={14} />} text={personal.phone} />
-                            <ContactRow icon={<MapPin size={14} />} text={personal.location} />
-                            <ContactRow icon={<Linkedin size={14} />} text={personal.linkedin} />
-                            <ContactRow icon={<Globe size={14} />} text={personal.website} />
+                        <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 mb-3 border-b border-slate-800 pb-2">Connect</h3>
+                        <div className="space-y-2">
+                            <ContactRow icon={<Mail size={12} />} text={personal.email} />
+                            <ContactRow icon={<Phone size={12} />} text={personal.phone} />
+                            <ContactRow icon={<MapPin size={12} />} text={personal.location} />
+                            <ContactRow icon={<Linkedin size={12} />} text={personal.linkedin} />
+                            <ContactRow icon={<Globe size={12} />} text={personal.website} />
                         </div>
                     </div>
 
                     <div>
-                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-4 border-b border-slate-800 pb-2">Expertise</h3>
-                        <div className="flex flex-wrap gap-2">
+                        <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-500 mb-3 border-b border-slate-800 pb-2">Expertise</h3>
+                        <div className="flex flex-wrap gap-1.5">
                             {skills.map((s, i) => (
-                                <span key={i} className="px-3 py-1 bg-slate-800 text-[10px] font-bold uppercase tracking-wider rounded-lg border border-slate-700">
+                                <span key={i} className="px-2 py-1 bg-slate-800 text-[9px] font-bold uppercase tracking-wider rounded-lg border border-slate-700">
                                     {s}
                                 </span>
                             ))}
@@ -564,29 +588,29 @@ function ModernTemplate({ data }) {
             </div>
 
             {/* Right Side */}
-            <div className="flex-1 p-12 space-y-10">
-                <div className="space-y-4">
+            <div className="flex-1 p-8 space-y-6 print:p-8">
+                <div className="space-y-3">
                     <TemplateSectionHeader title="About Me" />
-                    <p className="text-slate-600 text-sm leading-relaxed font-medium">
+                    <p className="text-slate-600 text-xs leading-relaxed font-medium">
                         {personal.bio || 'Enter your bio in the editor to see it here...'}
                     </p>
                 </div>
 
                 {experience.length > 0 && (
-                    <div className="space-y-8">
-                        <TemplateSectionHeader title="Professional path" />
-                        <div className="space-y-8 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-100">
+                    <div className="space-y-5">
+                        <TemplateSectionHeader title="Professional Path" />
+                        <div className="space-y-5 relative before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-100">
                             {experience.map((exp, i) => (
-                                <div key={i} className="pl-10 relative">
+                                <div key={i} className="pl-8 relative">
                                     <div className="absolute left-0 top-1 w-6 h-6 bg-white border-2 border-slate-900 rounded-full flex items-center justify-center p-1 text-slate-900">
                                         <div className="w-1.5 h-1.5 bg-slate-900 rounded-full" />
                                     </div>
                                     <div className="flex justify-between items-start mb-1">
-                                        <h4 className="font-black text-slate-900 text-lg tracking-tight uppercase">{exp.role}</h4>
-                                        <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest mt-1.5">{exp.duration}</span>
+                                        <h4 className="font-black text-slate-900 text-sm tracking-tight uppercase">{exp.role}</h4>
+                                        <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest mt-0.5">{exp.duration}</span>
                                     </div>
-                                    <div className="text-slate-500 font-black text-[10px] uppercase tracking-widest mb-3">{exp.company}</div>
-                                    <p className="text-slate-600 text-[13px] leading-relaxed font-medium whitespace-pre-wrap">{exp.description}</p>
+                                    <div className="text-slate-500 font-black text-[9px] uppercase tracking-widest mb-2">{exp.company}</div>
+                                    <p className="text-slate-600 text-[11px] leading-relaxed font-medium whitespace-pre-wrap">{exp.description}</p>
                                 </div>
                             ))}
                         </div>
@@ -594,17 +618,17 @@ function ModernTemplate({ data }) {
                 )}
 
                 {education.length > 0 && (
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                         <TemplateSectionHeader title="Academic Foundation" />
-                        <div className="grid grid-cols-1 gap-6">
+                        <div className="grid grid-cols-1 gap-3">
                             {education.map((edu, i) => (
-                                <div key={i} className="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                                <div key={i} className="p-3 bg-slate-50 rounded-xl border border-slate-100">
                                     <div className="flex justify-between items-start mb-1">
-                                        <h4 className="font-black text-slate-800 text-base tracking-tight uppercase">{edu.degree}</h4>
-                                        <span className="text-[10px] font-black text-slate-400 uppercase">{edu.year}</span>
+                                        <h4 className="font-black text-slate-800 text-xs tracking-tight uppercase">{edu.degree}</h4>
+                                        <span className="text-[9px] font-black text-slate-400 uppercase">{edu.year}</span>
                                     </div>
-                                    <div className="text-blue-600 font-bold text-xs">{edu.school}</div>
-                                    {edu.grade && <div className="text-[10px] font-black text-slate-400 uppercase mt-1">Grade: {edu.grade}</div>}
+                                    <div className="text-blue-600 font-bold text-[10px]">{edu.school}</div>
+                                    {edu.grade && <div className="text-[9px] font-black text-slate-400 uppercase mt-1">Grade: {edu.grade}</div>}
                                 </div>
                             ))}
                         </div>
@@ -612,16 +636,16 @@ function ModernTemplate({ data }) {
                 )}
 
                 {projects.length > 0 && (
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                         <TemplateSectionHeader title="Key Projects" />
-                        <div className="grid grid-cols-1 gap-4">
+                        <div className="grid grid-cols-1 gap-3">
                             {projects.map((p, i) => (
                                 <div key={i} className="space-y-1">
                                     <div className="flex justify-between items-center">
-                                        <h5 className="font-black text-slate-900 text-sm uppercase tracking-tight">{p.name}</h5>
-                                        {p.link && <span className="text-[9px] font-bold text-blue-500 uppercase">{p.link.replace(/^https?:\/\//, '')}</span>}
+                                        <h5 className="font-black text-slate-900 text-xs uppercase tracking-tight">{p.name}</h5>
+                                        {p.link && <span className="text-[8px] font-bold text-blue-500 uppercase">{p.link.replace(/^https?:\/\//, '')}</span>}
                                     </div>
-                                    <p className="text-slate-600 text-[12px] leading-relaxed">{p.description}</p>
+                                    <p className="text-slate-600 text-[10px] leading-relaxed">{p.description}</p>
                                 </div>
                             ))}
                         </div>
@@ -629,15 +653,15 @@ function ModernTemplate({ data }) {
                 )}
 
                 {certifications.length > 0 && (
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                         <TemplateSectionHeader title="Achievements" />
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-3">
                             {certifications.map((c, i) => (
-                                <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                                    <div className="p-1.5 bg-white rounded-lg shadow-sm text-amber-500"><Award size={14} /></div>
+                                <div key={i} className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg border border-slate-100">
+                                    <div className="p-1 bg-white rounded-lg shadow-sm text-amber-500"><Award size={12} /></div>
                                     <div>
-                                        <h6 className="text-[11px] font-black text-slate-900 uppercase leading-none mb-1">{c.name}</h6>
-                                        <p className="text-[9px] font-bold text-slate-400 uppercase leading-none">{c.issuer}</p>
+                                        <h6 className="text-[10px] font-black text-slate-900 uppercase leading-none mb-0.5">{c.name}</h6>
+                                        <p className="text-[8px] font-bold text-slate-400 uppercase leading-none">{c.issuer}</p>
                                     </div>
                                 </div>
                             ))}
