@@ -34,7 +34,7 @@ const INITIAL_DATA = {
 };
 
 export default function Resume() {
-    const { user, userData } = useAuth();
+    const { user, userData, refreshUserData } = useAuth();
     const resumeRef = useRef();
     const [selectedTemplate, setSelectedTemplate] = useState('modern');
     const [isEditMode, setIsEditMode] = useState(true);
@@ -42,6 +42,7 @@ export default function Resume() {
     const [resumeData, setResumeData] = useState(INITIAL_DATA);
     const [isSaving, setIsSaving] = useState(false);
     const [lastSaved, setLastSaved] = useState(null);
+    const [saveStatus, setSaveStatus] = useState(''); // 'saving', 'success', 'error'
 
     // Load data from Firebase on mount
     useEffect(() => {
@@ -69,14 +70,27 @@ export default function Resume() {
     const handleSave = async () => {
         if (!user) return;
         setIsSaving(true);
+        setSaveStatus('saving');
         try {
             await updateDoc(doc(db, "users", user.uid), {
                 resumeData: resumeData,
                 resumeLastUpdated: Date.now()
             });
-            setLastSaved(new Date().toLocaleTimeString());
+
+            // Refresh the AuthContext userData to sync changes
+            if (refreshUserData) {
+                await refreshUserData();
+            }
+
+            const now = new Date();
+            setLastSaved(now.toLocaleTimeString());
+            setSaveStatus('success');
+
+            // Clear success message after 3 seconds
+            setTimeout(() => setSaveStatus(''), 3000);
         } catch (error) {
             console.error("Save error:", error);
+            setSaveStatus('error');
             alert("Failed to save resume data. Please try again.");
         } finally {
             setIsSaving(false);
@@ -235,7 +249,10 @@ export default function Resume() {
                             <h1 className="text-xl font-black text-slate-900 leading-tight tracking-tight uppercase">Resume Architect</h1>
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 Premium AI Builder
-                                {lastSaved && <span className="text-emerald-500 font-black">• {lastSaved}</span>}
+                                {saveStatus === 'saving' && <span className="text-blue-500 font-black animate-pulse">• Saving...</span>}
+                                {saveStatus === 'success' && <span className="text-emerald-500 font-black">• Saved ✓</span>}
+                                {saveStatus === 'error' && <span className="text-red-500 font-black">• Error!</span>}
+                                {!saveStatus && lastSaved && <span className="text-slate-400 font-black">• {lastSaved}</span>}
                             </p>
                         </div>
                     </div>
