@@ -12,6 +12,23 @@ export function AuthProvider({ children }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Function to refresh user data from Firestore
+  const refreshUserData = async () => {
+    if (!user) return;
+    try {
+      const userRef = doc(db, "users", user.uid);
+      const snap = await getDoc(userRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        setRole(data?.role);
+        setUserData(data);
+        console.log("User data refreshed successfully");
+      }
+    } catch (error) {
+      console.error("Error refreshing user data:", error);
+    }
+  };
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
       try {
@@ -57,7 +74,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, role, userData, loading }}>
+    <AuthContext.Provider value={{ user, role, userData, loading, refreshUserData }}>
       {children}
     </AuthContext.Provider>
   );
