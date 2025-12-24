@@ -9,6 +9,7 @@ import {
     ChevronRight, ExternalLink, Mail, Edit3
 } from "lucide-react";
 import { cn } from "../lib/utils";
+import { getOptimizedUrl } from "../lib/cloudinary";
 
 export default function AdminDashboard() {
     const { user, role } = useAuth();
@@ -199,7 +200,7 @@ export default function AdminDashboard() {
                                                 <div className="flex items-center gap-4">
                                                     <div className="h-12 w-12 rounded-full bg-slate-100 overflow-hidden ring-2 ring-white shadow-sm group-hover:scale-105 transition-transform">
                                                         {u.photoURL ? (
-                                                            <img src={u.photoURL} alt="" className="h-full w-full object-cover" />
+                                                            <img src={getOptimizedUrl(u.photoURL, 'w_100,h_100,c_fill,g_face,f_auto,q_auto')} alt="" className="h-full w-full object-cover" />
                                                         ) : (
                                                             <div className="h-full w-full flex items-center justify-center bg-slate-800 text-white font-bold text-xs uppercase">
                                                                 {u.displayName?.[0]}
@@ -261,7 +262,7 @@ export default function AdminDashboard() {
                                     <div className="flex items-center gap-4">
                                         <div className="h-14 w-14 rounded-full bg-slate-100 overflow-hidden ring-4 ring-slate-50">
                                             {u.photoURL ? (
-                                                <img src={u.photoURL} alt="" className="h-full w-full object-cover" />
+                                                <img src={getOptimizedUrl(u.photoURL, 'w_150,h_150,c_fill,g_face,f_auto,q_auto')} alt="" className="h-full w-full object-cover" />
                                             ) : (
                                                 <div className="h-full w-full flex items-center justify-center bg-slate-800 text-white font-black text-lg">
                                                     {u.displayName?.[0]}

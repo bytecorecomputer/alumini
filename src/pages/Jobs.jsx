@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, MapPin, Building, Plus, Trash2, X, Search, Filter, ArrowRight, Zap, Target, ExternalLink, Camera, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { sendTelegramNotification } from '../lib/telegram';
+import { uploadToCloudinary, getOptimizedUrl } from '../lib/cloudinary';
 
 export default function Jobs() {
     const { user, role, userData } = useAuth();
@@ -62,16 +63,16 @@ export default function Jobs() {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        if (!file.type.startsWith('image/')) return alert("Upload an image file.");
-        if (file.size > 800 * 1024) return alert("Image too large. Under 800KB please.");
 
         setUploading(true);
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            setFormData({ ...formData, image: reader.result });
+        try {
+            const imageUrl = await uploadToCloudinary(file);
+            setFormData({ ...formData, image: imageUrl });
+        } catch (error) {
+            alert(error.message || "Visual sync failed.");
+        } finally {
             setUploading(false);
-        };
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -198,7 +199,7 @@ export default function Jobs() {
                                 <div className="flex-1 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
                                     {job.image && (
                                         <div className="w-24 h-24 md:w-32 md:h-32 rounded-3xl overflow-hidden shadow-xl border-4 border-slate-50 flex-shrink-0">
-                                            <img src={job.image} alt={job.title} className="w-full h-full object-cover" />
+                                            <img src={getOptimizedUrl(job.image, 'w_300,h_300,c_pad,b_white,f_auto,q_auto')} alt={job.title} className="w-full h-full object-cover" />
                                         </div>
                                     )}
                                     <div className="space-y-4">

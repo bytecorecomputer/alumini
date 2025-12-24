@@ -6,6 +6,7 @@ import { useAuth } from '../../app/common/AuthContext';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../firebase/auth';
 import { cn } from '../../lib/utils';
+import { getOptimizedUrl } from '../../lib/cloudinary';
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -70,7 +71,7 @@ export default function Navbar() {
                                 <Link to="/profile" className="flex items-center gap-3 p-1 pr-4 bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 rounded-full transition-all group shadow-sm">
                                     <div className="h-9 w-9 rounded-full bg-slate-200 overflow-hidden border-2 border-white shadow-sm ring-1 ring-slate-100">
                                         {userData?.photoURL ? (
-                                            <img src={userData.photoURL} alt="" className="h-full w-full object-cover" />
+                                            <img src={getOptimizedUrl(userData.photoURL, 'w_100,h_100,c_fill,g_face,f_auto,q_auto')} alt="" className="h-full w-full object-cover" />
                                         ) : (
                                             <div className="h-full w-full flex items-center justify-center bg-slate-900 text-white text-[10px] font-black">
                                                 {user.displayName?.[0]?.toUpperCase()}

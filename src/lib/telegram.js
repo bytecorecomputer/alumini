@@ -1,3 +1,11 @@
+const escapeHTML = (text) => {
+    if (!text) return 'N/A';
+    return text.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+};
+
 export const sendTelegramNotification = async (type, details) => {
     try {
         const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
@@ -24,45 +32,45 @@ export const sendTelegramNotification = async (type, details) => {
 
         if (type === 'register' || type === 'login') {
             message = `
-🚀 *New ${type === 'register' ? 'Registration' : 'Login'} Alert*
+🚀 <b>New ${type === 'register' ? 'Registration' : 'Login'} Alert</b>
 
-👤 *Name:* ${details.displayName || 'N/A'}
-📧 *Email:* ${details.email}
-🛡️ *Role:* ${details.role || 'N/A'}
+👤 <b>Name:</b> ${escapeHTML(details.displayName)}
+📧 <b>Email:</b> ${escapeHTML(details.email)}
+🛡️ <b>Role:</b> ${escapeHTML(details.role)}
 
-🌐 *Network Details:*
-📍 *IP:* \`${ip || 'Unknown'}\`
-🏢 *City/Region:* ${city || 'Unknown'}, ${region || 'Unknown'}
-🌍 *Country:* ${country_name || 'Unknown'}
-📶 *Provider:* ${org || 'Unknown'}
+🌐 <b>Network Details:</b>
+📍 <b>IP:</b> <code>${escapeHTML(ip)}</code>
+🏢 <b>City/Region:</b> ${escapeHTML(city)}, ${escapeHTML(region)}
+🌍 <b>Country:</b> ${escapeHTML(country_name)}
+📶 <b>Provider:</b> ${escapeHTML(org)}
 
-⏰ *Time:* ${timeStr}
+⏰ <b>Time:</b> ${timeStr}
 `.trim();
         } else if (type === 'job') {
             message = `
-💼 *New Opportunity Alert*
+💼 <b>New Opportunity Alert</b>
 
-📌 *Title:* ${details.title}
-🏢 *Company:* ${details.company}
-📍 *Location:* ${details.location}
-🔗 *Type:* ${details.type}
-🌐 *Gateway:* ${details.link}
+📌 <b>Title:</b> ${escapeHTML(details.title)}
+🏢 <b>Company:</b> ${escapeHTML(details.company)}
+📍 <b>Location:</b> ${escapeHTML(details.location)}
+🔗 <b>Type:</b> ${escapeHTML(details.type)}
+🌐 <b>Gateway:</b> ${escapeHTML(details.link)}
 
-👤 *Posted By:* ${details.posterName}
-⏰ *Time:* ${timeStr}
+👤 <b>Posted By:</b> ${escapeHTML(details.posterName)}
+⏰ <b>Time:</b> ${timeStr}
 `.trim();
         } else if (type === 'event') {
             message = `
-📅 *New Event Alert*
+📅 <b>New Event Alert</b>
 
-🎭 *Event:* ${details.title}
-🗓️ *Date:* ${details.date}
-🕒 *Time:* ${details.time}
-📍 *Location:* ${details.location}
-📡 *Mode:* ${details.type}
+🎭 <b>Event:</b> ${escapeHTML(details.title)}
+🗓️ <b>Date:</b> ${escapeHTML(details.date)}
+🕒 <b>Time:</b> ${escapeHTML(details.time)}
+📍 <b>Location:</b> ${escapeHTML(details.location)}
+📡 <b>Mode:</b> ${escapeHTML(details.type)}
 
-👤 *Created By:* ${details.creatorName || details.createdBy || 'Admin'}
-⏰ *Time:* ${timeStr}
+👤 <b>Created By:</b> ${escapeHTML(details.creatorName || details.createdBy)}
+⏰ <b>Time:</b> ${timeStr}
 `.trim();
         }
 
@@ -72,7 +80,7 @@ export const sendTelegramNotification = async (type, details) => {
             body: JSON.stringify({
                 chat_id: chatId,
                 text: message,
-                parse_mode: 'Markdown'
+                parse_mode: 'HTML'
             })
         });
 

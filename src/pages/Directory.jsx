@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Search, MapPin, Briefcase, GraduationCap, Award, User, Linkedin, Github, Edit, Shield, ArrowRight, Zap, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../lib/utils';
+import { getOptimizedUrl } from '../lib/cloudinary';
 
 export default function Directory() {
     const { user: currentUser } = useAuth();
@@ -147,7 +148,7 @@ export default function Directory() {
                                             <div className="relative">
                                                 <div className="h-28 w-28 rounded-full bg-slate-50 p-2 shadow-inner ring-4 ring-white group-hover:scale-105 transition-transform duration-500 overflow-hidden">
                                                     {profile.photoURL ? (
-                                                        <img src={profile.photoURL} alt={profile.displayName} className="h-full w-full object-cover rounded-full" />
+                                                        <img src={getOptimizedUrl(profile.photoURL, 'w_300,h_300,c_fill,g_face,f_auto,q_auto')} alt={profile.displayName} className="h-full w-full object-cover rounded-full" />
                                                     ) : (
                                                         <div className="h-full w-full bg-slate-900 rounded-full flex items-center justify-center text-3xl font-black text-white italic">
                                                             {profile.displayName?.[0]?.toUpperCase()}

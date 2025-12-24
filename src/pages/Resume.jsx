@@ -11,6 +11,7 @@ import { cn } from '../lib/utils';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { Link } from 'react-router-dom';
+import { getOptimizedUrl } from '../lib/cloudinary';
 
 // --- DATA STRUCTURE ---
 const INITIAL_DATA = {
@@ -528,7 +529,7 @@ function ModernTemplate({ data }) {
                 <div className="space-y-6">
                     {personal.photoURL && (
                         <div className="w-36 h-36 rounded-[2.5rem] overflow-hidden border-4 border-slate-800 shadow-2xl bg-slate-800">
-                            <img src={personal.photoURL} alt="" className="w-full h-full object-cover" />
+                            <img src={getOptimizedUrl(personal.photoURL, 'w_400,h_400,c_fill,g_face,f_auto,q_auto')} alt="" className="w-full h-full object-cover" />
                         </div>
                     )}
                     <div>

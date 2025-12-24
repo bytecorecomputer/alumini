@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, MapPin, Clock, Plus, Trash2, Edit2, X, Save, Users, Video, ArrowRight, Zap, Target, Camera, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { sendTelegramNotification } from '../lib/telegram';
+import { uploadToCloudinary, getOptimizedUrl } from '../lib/cloudinary';
 
 export default function Events() {
     const { user, role } = useAuth();
@@ -61,16 +62,16 @@ export default function Events() {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        if (!file.type.startsWith('image/')) return alert("Upload an image file.");
-        if (file.size > 800 * 1024) return alert("Image too large. Under 800KB please.");
 
         setUploading(true);
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            setFormData({ ...formData, image: reader.result });
+        try {
+            const imageUrl = await uploadToCloudinary(file);
+            setFormData({ ...formData, image: imageUrl });
+        } catch (error) {
+            alert(error.message || "Event graphic sync failed.");
+        } finally {
             setUploading(false);
-        };
+        }
     };
 
     const handleEdit = (event) => {
@@ -183,7 +184,7 @@ export default function Events() {
                             >
                                 <div className="h-56 relative overflow-hidden">
                                     {event.image ? (
-                                        <img src={event.image} alt={event.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                        <img src={getOptimizedUrl(event.image, 'w_800,h_500,c_fill,f_auto,q_auto')} alt={event.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                     ) : (
                                         <div className="w-full h-full bg-gradient-to-br from-slate-900 to-indigo-950 flex items-center justify-center relative overflow-hidden">
                                             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>

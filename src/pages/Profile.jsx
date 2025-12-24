@@ -6,6 +6,7 @@ import { db } from '../firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Briefcase, BookOpen, MapPin, Save, Loader2, Award, Camera, Phone, Linkedin, Github, Shield, ShieldAlert, FileText } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { uploadToCloudinary, getOptimizedUrl } from '../lib/cloudinary';
 
 export default function Profile() {
     const { user, userData, role } = useAuth();
@@ -52,38 +53,26 @@ export default function Profile() {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Basic validation
-        if (!file.type.startsWith('image/')) {
-            alert("Please upload an image file.");
-            return;
-        }
-
-        // Base64 logic might handle slightly larger files but let's keep it reasonable for Firestore
-        if (file.size > 800 * 1024) {
-            alert("Image is too large. Please upload something under 800KB for better performance.");
-            return;
-        }
-
         setUploading(true);
 
         try {
-            // Read file as Base64 (Jugaad to bypass Firebase Storage CORS)
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64String = reader.result;
+            // Advanced Cloudinary Upload (Bypasses Firestore size limits)
+            const imageUrl = await uploadToCloudinary(file);
 
-                // Update Firestore user document directly
+            if (imageUrl) {
+                // Update Firestore user document with the public URL
                 await updateDoc(doc(db, "users", user.uid), {
-                    photoURL: base64String
+                    photoURL: imageUrl
                 });
 
-                alert("Profile picture updated (Simplified Upload)!");
+                alert("Profile identity graphic updated successfully!");
+                // No need to reload, the state should eventually update if using hooks
+                // but window.location.reload() ensures all components get the new URL
                 window.location.reload();
-            };
+            }
         } catch (err) {
             console.error("Upload error:", err);
-            alert("Failed to update image: " + err.message);
+            alert(err.message || "Failed to sync image with Cloudinary.");
         } finally {
             setUploading(false);
         }
@@ -137,7 +126,7 @@ export default function Profile() {
                         <div className="absolute -bottom-16 left-8 md:left-12 group">
                             <div className="h-32 w-32 md:h-40 md:w-40 rounded-full border-4 border-white bg-slate-50 flex items-center justify-center text-slate-400 text-5xl font-black shadow-2xl overflow-hidden relative group-hover:scale-[1.02] transition-transform duration-500">
                                 {profileImage ? (
-                                    <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
+                                    <img src={getOptimizedUrl(profileImage, 'w_400,h_400,c_fill,g_face,f_auto,q_auto')} alt="Profile" className="h-full w-full object-cover" />
                                 ) : (
                                     formData.displayName.charAt(0).toUpperCase()
                                 )}
