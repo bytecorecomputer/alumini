@@ -396,10 +396,11 @@ export default function Profile() {
                                 <div className="flex items-center gap-6">
                                     <Link
                                         to="/resume"
-                                        className="hidden md:flex items-center gap-2 text-slate-400 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all group/resume"
+                                        className="flex items-center gap-2 text-slate-400 hover:text-slate-900 font-black uppercase tracking-widest text-[10px] transition-all group/resume"
                                     >
                                         <FileText size={18} className="group-hover/resume:scale-110 transition-transform" />
-                                        Professional Dossier
+                                        <span className="hidden md:inline">Professional Dossier</span>
+                                        <span className="md:hidden">Resume</span>
                                     </Link>
                                     <button
                                         type="submit"

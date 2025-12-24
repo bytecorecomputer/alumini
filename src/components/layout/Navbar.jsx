@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, GraduationCap, LogOut, User, Shield, Zap } from 'lucide-react';
+import { Menu, X, GraduationCap, LogOut, User, Shield, Zap, FileText } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../app/common/AuthContext';
@@ -142,6 +142,20 @@ export default function Navbar() {
                                         </div>
                                     </MobileNavLink>
                                 )}
+
+                                {(role === 'admin' || role === 'super_admin') && (
+                                    <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
+                                        <div className="flex items-center gap-2 text-purple-600">
+                                            <Shield size={16} /> Admin Panel
+                                        </div>
+                                    </MobileNavLink>
+                                )}
+
+                                <MobileNavLink to="/resume" onClick={() => setIsOpen(false)}>
+                                    <div className="flex items-center gap-2 text-blue-600">
+                                        <FileText size={16} /> Resume Architect
+                                    </div>
+                                </MobileNavLink>
 
                                 {user ? (
                                     <div className="pt-8 mt-8 border-t border-slate-100 space-y-4">
