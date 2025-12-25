@@ -17,6 +17,7 @@ import Resume from "./pages/Resume";
 import StudentLogin from "./pages/StudentLogin";
 import StudentPortal from "./pages/StudentPortal";
 import CoachingAdmin from "./pages/CoachingAdmin";
+import StudentDetails from "./pages/StudentDetails";
 
 export default function App() {
   return (
@@ -70,6 +71,11 @@ export default function App() {
             <Route path="/admin/coaching" element={
               <AdminRoute>
                 <CoachingAdmin />
+              </AdminRoute>
+            } />
+            <Route path="/admin/coaching/student/:id" element={
+              <AdminRoute>
+                <StudentDetails />
               </AdminRoute>
             } />
           </Routes>

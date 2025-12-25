@@ -216,22 +216,27 @@ export default function StudentPortal() {
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: i * 0.1 }}
                                             key={i}
-                                            className="flex items-center justify-between p-5 bg-slate-50/50 hover:bg-slate-50 rounded-[1.5rem] border border-transparent hover:border-slate-100 transition-all group"
+                                            className="flex justify-between items-start p-6 bg-white/40 backdrop-blur-md rounded-3xl border border-white/40 hover:bg-white/60 transition-all group"
                                         >
-                                            <div className="flex items-center gap-4">
-                                                <div className="h-10 w-10 bg-white rounded-lg border border-slate-100 flex items-center justify-center text-emerald-500 shadow-sm group-hover:scale-110 transition-transform">
-                                                    <CreditCard size={18} />
+                                            <div className="flex items-start gap-4">
+                                                <div className="h-10 w-10 bg-slate-900 text-white rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform shrink-0">
+                                                    <Wallet size={18} />
                                                 </div>
                                                 <div>
-                                                    <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Installment {i + 1}</p>
-                                                    <p className="text-sm font-black text-slate-900">{inst.date}</p>
+                                                    <div className="flex items-center gap-2 mb-1">
+                                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Receipt Confirmed</p>
+                                                        {inst.installmentNo && (
+                                                            <span className="px-2 py-0.5 bg-blue-100/50 text-blue-600 text-[8px] font-black rounded-lg uppercase tracking-tighter">Inst. #{inst.installmentNo}</span>
+                                                        )}
+                                                    </div>
+                                                    <p className="font-black text-slate-900 leading-none mb-2">{inst.date}</p>
+                                                    {inst.note && (
+                                                        <p className="text-[10px] text-slate-500 italic font-medium max-w-xs">{inst.note}</p>
+                                                    )}
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <p className="text-lg font-black text-slate-900 tracking-tight">₹{inst.amount}</p>
-                                                <div className="flex items-center justify-end gap-1.5 text-xs font-black text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 mt-1">
-                                                    <CheckCircle2 size={12} /> Confirmed
-                                                </div>
+                                                <p className="text-xl font-black text-slate-900 tracking-tighter">₹{inst.amount}</p>
                                             </div>
                                         </motion.div>
                                     ))

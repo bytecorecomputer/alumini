@@ -56,19 +56,26 @@ export default function Navbar() {
                         <NavLink to="/donate">Donate</NavLink>
 
                         {(role === 'admin' || role === 'super_admin') && (
-                            <div className="flex items-center gap-1">
-                                <Link
-                                    to="/admin/dashboard"
-                                    className="px-5 py-2.5 text-purple-600 hover:text-purple-700 font-black text-xs uppercase tracking-widest transition-all hover:bg-purple-50 rounded-2xl flex items-center gap-2"
-                                >
-                                    <Shield size={16} /> Admin
-                                </Link>
-                                <Link
-                                    to="/admin/coaching"
-                                    className="px-5 py-2.5 text-blue-600 hover:text-blue-700 font-black text-xs uppercase tracking-widest transition-all hover:bg-blue-50 rounded-2xl flex items-center gap-2"
-                                >
-                                    <Database size={16} /> Students
-                                </Link>
+                            <div className="relative group/mgmt">
+                                <button className="px-5 py-2.5 text-slate-500 hover:text-slate-900 font-black text-xs uppercase tracking-widest transition-all hover:bg-slate-50 rounded-2xl flex items-center gap-2">
+                                    <Shield size={16} className="text-blue-600" /> Management
+                                </button>
+                                <div className="absolute top-full left-0 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover/mgmt:opacity-100 group-hover/mgmt:translate-y-0 group-hover/mgmt:pointer-events-auto transition-all duration-300">
+                                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 min-w-[200px]">
+                                        <Link to="/admin/dashboard" className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-all group/item">
+                                            <div className="bg-purple-50 text-purple-600 p-2 rounded-lg group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors">
+                                                <Shield size={14} />
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Admin Panel</span>
+                                        </Link>
+                                        <Link to="/admin/coaching" className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-all group/item">
+                                            <div className="bg-blue-50 text-blue-600 p-2 rounded-lg group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors">
+                                                <Database size={14} />
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Students</span>
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
                         )}
 

@@ -1,0 +1,420 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { doc, getDoc, updateDoc, arrayUnion, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase/firestore";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+    ChevronLeft, CreditCard, Calendar, MapPin, Phone,
+    GraduationCap, CheckCircle2, AlertCircle, Wallet,
+    BookOpen, History, User, Edit3, Trash2, Save, X,
+    ArrowRight, TrendingUp, ShieldCheck
+} from "lucide-react";
+import { cn } from "../lib/utils";
+
+export default function StudentDetails() {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [student, setStudent] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editForm, setEditForm] = useState({});
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [paymentAmount, setPaymentAmount] = useState('');
+    const [installmentNo, setInstallmentNo] = useState('1');
+    const [paymentNote, setPaymentNote] = useState('');
+    const [isFeeModalOpen, setIsFeeModalOpen] = useState(false);
+
+    useEffect(() => {
+        if (!id) return;
+
+        // Use onSnapshot for real-time updates on this specific student
+        const unsub = onSnapshot(doc(db, "students", id), (doc) => {
+            if (doc.exists()) {
+                const data = doc.data();
+                setStudent({ id: doc.id, ...data });
+                setEditForm(data);
+            } else {
+                navigate('/admin/coaching');
+            }
+            setLoading(false);
+        });
+
+        return () => unsub();
+    }, [id, navigate]);
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        setIsUpdating(true);
+        try {
+            await updateDoc(doc(db, "students", id), {
+                ...editForm,
+                updatedAt: Date.now()
+            });
+            setIsEditing(false);
+        } catch (err) {
+            alert("Failed to update profile.");
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    const handleAddFee = async () => {
+        if (!paymentAmount) return;
+        setIsUpdating(true);
+        try {
+            const amount = parseInt(paymentAmount);
+            const date = new Date().toLocaleDateString('en-GB');
+            await updateDoc(doc(db, "students", id), {
+                paidFees: (student.paidFees || 0) + amount,
+                installments: arrayUnion({
+                    amount,
+                    date,
+                    installmentNo: installmentNo,
+                    note: paymentNote
+                }),
+                updatedAt: Date.now()
+            });
+            setIsFeeModalOpen(false);
+            setPaymentAmount('');
+            setPaymentNote('');
+        } catch (err) {
+            alert("Fee update failed.");
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="text-blue-600">
+                    <TrendingUp size={40} />
+                </motion.div>
+            </div>
+        );
+    }
+
+    const remainingFees = (student.totalFees || 0) - (student.paidFees || 0);
+    const feePercentage = Math.round(((student.paidFees || 0) / (student.totalFees || 1)) * 100);
+
+    return (
+        <div className="min-h-screen bg-[#f8fafc] pt-28 pb-20 font-inter">
+            <div className="max-w-6xl mx-auto px-4 md:px-8">
+
+                {/* Back & Actions */}
+                <div className="flex justify-between items-center mb-10">
+                    <button
+                        onClick={() => navigate('/admin/coaching')}
+                        className="flex items-center gap-2 text-slate-400 hover:text-slate-900 font-black text-[10px] uppercase tracking-[0.2em] transition-all group"
+                    >
+                        <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+                        Back to Directory
+                    </button>
+
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => setIsEditing(!isEditing)}
+                            className={cn(
+                                "p-4 rounded-2xl transition-all shadow-xl",
+                                isEditing ? "bg-red-50 text-red-600 shadow-red-100" : "bg-white text-slate-900 shadow-slate-200 border border-slate-100"
+                            )}
+                        >
+                            {isEditing ? <X size={20} /> : <Edit3 size={20} />}
+                        </button>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+
+                    {/* Left Panel: Identity & Stats */}
+                    <div className="lg:col-span-4 space-y-8">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="premium-card bg-slate-900 p-10 text-white relative overflow-hidden"
+                        >
+                            <div className="absolute -top-10 -right-10 opacity-10 blur-2xl">
+                                <GraduationCap size={200} />
+                            </div>
+
+                            <div className="relative z-10 flex flex-col items-center text-center">
+                                <div className="h-24 w-24 bg-blue-600 rounded-[2rem] flex items-center justify-center mb-6 shadow-2xl shadow-blue-900/50 ring-4 ring-white/10">
+                                    <User size={48} />
+                                </div>
+                                <h2 className="text-3xl font-black tracking-tighter mb-1">{student.fullName}</h2>
+                                <p className="text-blue-400 font-black text-[10px] uppercase tracking-[0.3em] mb-8">Registration: {student.registration}</p>
+
+                                <div className="w-full space-y-4 text-left">
+                                    <DetailRow label="Primary Course" value={student.course} isDark />
+                                    <DetailRow label="Identity Contact" value={student.mobile} isDark />
+                                    <DetailRow label="Admission Data" value={student.admissionDate} isDark />
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        <div className="premium-card bg-white p-6 border border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Account Status</p>
+                                <div className="flex items-center gap-2">
+                                    <div className={cn("h-2 w-2 rounded-full", student.status === 'pass' ? "bg-emerald-500" : "bg-amber-500")} />
+                                    <span className="font-black text-slate-900 uppercase tracking-tight">{student.status}</span>
+                                </div>
+                            </div>
+                            <ShieldCheck size={24} className="text-blue-600" />
+                        </div>
+                    </div>
+
+                    {/* Right Panel: Detailed Management */}
+                    <div className="lg:col-span-8 space-y-8">
+
+                        {/* Financial Overview Card */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="premium-card bg-white p-8 md:p-10 border border-slate-100"
+                        >
+                            <div className="flex justify-between items-center mb-10">
+                                <div>
+                                    <h3 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Financial <span className="text-blue-600">Ledger</span></h3>
+                                    <p className="text-slate-400 font-bold text-xs">Real-time revenue synchronization.</p>
+                                </div>
+                                <button
+                                    onClick={() => setIsFeeModalOpen(true)}
+                                    className="px-6 py-4 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-200 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+                                >
+                                    <Wallet size={16} /> Collect Fee
+                                </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-center">
+                                <LedgerStat label="Total Payable" value={`₹${student.totalFees}`} color="slate" />
+                                <LedgerStat label="Total Received" value={`₹${student.paidFees}`} color="blue" />
+                                <LedgerStat label="Current Arrears" value={`₹${remainingFees}`} color="amber" />
+                            </div>
+
+                            <div className="relative">
+                                <div className="flex justify-between items-center mb-4">
+                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Revenue Realization</span>
+                                    <span className="text-xl font-black text-blue-600">{feePercentage}%</span>
+                                </div>
+                                <div className="h-5 w-full bg-slate-50 rounded-full overflow-hidden p-1 shadow-inner border border-slate-100">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${feePercentage}%` }}
+                                        className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full"
+                                    />
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* Profile Edit / Display Section */}
+                        <AnimatePresence mode="wait">
+                            {isEditing ? (
+                                <motion.form
+                                    key="edit"
+                                    initial={{ opacity: 0, scale: 0.98 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.98 }}
+                                    onSubmit={handleUpdate}
+                                    className="premium-card bg-white p-10 border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-8"
+                                >
+                                    <div className="md:col-span-2 flex justify-between items-center border-b border-slate-50 pb-6 mb-2">
+                                        <h4 className="text-xl font-black text-slate-900 tracking-tight">Modify Student Profile</h4>
+                                        <div className="flex gap-2">
+                                            <button type="submit" disabled={isUpdating} className="px-6 py-3 bg-slate-900 text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-2">
+                                                <Save size={16} /> Save Changes
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <EditField label="Full Name" value={editForm.fullName} onChange={v => setEditForm({ ...editForm, fullName: v })} />
+                                    <EditField label="Mobile Number" value={editForm.mobile} onChange={v => setEditForm({ ...editForm, mobile: v })} />
+                                    <EditField label="Course" value={editForm.course} onChange={v => setEditForm({ ...editForm, course: v })} />
+                                    <EditField label="Status" value={editForm.status} type="select" options={['unpaid', 'pass']} onChange={v => setEditForm({ ...editForm, status: v })} />
+                                    <EditField label="Total Fee" value={editForm.totalFees} type="number" onChange={v => setEditForm({ ...editForm, totalFees: parseInt(v) })} />
+                                    <EditField label="Father's Name" value={editForm.fatherName} onChange={v => setEditForm({ ...editForm, fatherName: v })} />
+                                    <div className="md:col-span-2">
+                                        <EditField label="Home Address" value={editForm.address} type="textarea" onChange={v => setEditForm({ ...editForm, address: v })} />
+                                    </div>
+                                </motion.form>
+                            ) : (
+                                <motion.div
+                                    key="view"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    className="premium-card bg-white p-10 border border-slate-100"
+                                >
+                                    <div className="flex items-center gap-4 mb-10">
+                                        <div className="h-10 w-10 bg-slate-900 text-white rounded-xl flex items-center justify-center shadow-lg">
+                                            <History size={20} />
+                                        </div>
+                                        <h3 className="text-xl font-black text-slate-900 tracking-tight">Transaction Timeline</h3>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {student.installments?.map((inst, i) => (
+                                            <div key={i} className="flex justify-between items-start p-6 bg-slate-50/50 rounded-3xl border border-transparent hover:border-slate-100 transition-all">
+                                                <div className="flex items-start gap-4">
+                                                    <div className="h-10 w-10 bg-white rounded-xl border border-slate-100 flex items-center justify-center text-emerald-500 shadow-sm shrink-0">
+                                                        <Wallet size={18} />
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Receipt Confirmed</p>
+                                                            {inst.installmentNo && (
+                                                                <span className="px-2 py-0.5 bg-blue-100 text-blue-600 text-[8px] font-black rounded-lg uppercase tracking-tighter">Inst. #{inst.installmentNo}</span>
+                                                            )}
+                                                        </div>
+                                                        <p className="font-black text-slate-900 leading-none mb-2">{inst.date}</p>
+                                                        {inst.note && (
+                                                            <p className="text-[10px] text-slate-500 italic font-medium max-w-xs">{inst.note}</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-xl font-black text-slate-900 tracking-tighter">₹{inst.amount}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {(!student.installments || student.installments.length === 0) && (
+                                            <div className="text-center py-10 text-slate-400 font-bold border-2 border-dashed border-slate-100 rounded-[2rem]">
+                                                No financial activity recorded.
+                                            </div>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                </div>
+            </div>
+
+            {/* Premium Fee Collection Modal */}
+            <AnimatePresence>
+                {isFeeModalOpen && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" onClick={() => setIsFeeModalOpen(false)} />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="bg-white w-full max-w-md p-10 rounded-[3.5rem] shadow-2xl relative z-10 border border-slate-100"
+                        >
+                            <div className="flex justify-between items-center mb-8">
+                                <h3 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Collect <span className="text-blue-600">Payment</span></h3>
+                                <button onClick={() => setIsFeeModalOpen(false)} className="p-3 bg-slate-50 text-slate-400 rounded-2xl hover:text-slate-900 transition-all"><X size={20} /></button>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 flex justify-between items-center">
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Balance Due</p>
+                                        <p className="text-3xl font-black text-slate-900 tracking-tighter leading-none">₹{remainingFees}</p>
+                                    </div>
+                                    <select
+                                        value={installmentNo}
+                                        onChange={e => setInstallmentNo(e.target.value)}
+                                        className="bg-white border border-slate-100 rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest outline-none shadow-sm"
+                                    >
+                                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(n => (
+                                            <option key={n} value={n}>Installment #{n}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 text-center block">Receipt Amount (₹)</label>
+                                    <input
+                                        type="number"
+                                        value={paymentAmount}
+                                        onChange={e => setPaymentAmount(e.target.value)}
+                                        className="w-full bg-slate-50 border-2 border-transparent rounded-[1.5rem] py-5 px-8 text-2xl font-black text-center text-slate-900 focus:bg-white focus:border-blue-100 focus:ring-4 ring-blue-50 outline-none transition-all placeholder:text-slate-200"
+                                        placeholder="0000"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Payment Notes (Optional)</label>
+                                    <textarea
+                                        value={paymentNote}
+                                        onChange={e => setPaymentNote(e.target.value)}
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all"
+                                        rows="2"
+                                        placeholder="e.g. Paid via UPI / Partial payment"
+                                    />
+                                </div>
+
+                                <button
+                                    disabled={isUpdating || !paymentAmount}
+                                    onClick={handleAddFee}
+                                    className="w-full py-5 bg-blue-600 text-white rounded-[1.5rem] font-black uppercase tracking-[0.3em] shadow-xl shadow-blue-200 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+                                >
+                                    {isUpdating ? <TrendingUp className="animate-pulse" /> : <Save size={20} />}
+                                    Finalize Receipt
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+}
+
+function DetailRow({ label, value, isDark }) {
+    return (
+        <div className="flex items-center gap-4">
+            <div className={cn("h-8 w-8 rounded-xl flex items-center justify-center", isDark ? "bg-white/10 text-white/50" : "bg-slate-50 text-slate-400")}>
+                <ArrowRight size={14} />
+            </div>
+            <div>
+                <p className={cn("text-[8px] font-black uppercase tracking-widest leading-none mb-1", isDark ? "text-white/30" : "text-slate-400")}>{label}</p>
+                <p className={cn("text-xs font-black tracking-tight", isDark ? "text-white" : "text-slate-900")}>{value || 'N/A'}</p>
+            </div>
+        </div>
+    );
+}
+
+function LedgerStat({ label, value, color }) {
+    const colors = {
+        slate: "bg-slate-50 border-slate-100 text-slate-900",
+        blue: "bg-blue-50 border-blue-100 text-blue-600",
+        amber: "bg-amber-50 border-amber-100 text-amber-600"
+    };
+    return (
+        <div className={cn("p-6 rounded-3xl border shadow-sm", colors[color])}>
+            <p className="text-[9px] font-black uppercase tracking-widest opacity-60 mb-2">{label}</p>
+            <p className="text-2xl font-black tracking-tighter">{value}</p>
+        </div>
+    );
+}
+
+function EditField({ label, value, onChange, type = "text", options }) {
+    return (
+        <div className="space-y-2">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{label}</label>
+            {type === 'select' ? (
+                <select
+                    value={value}
+                    onChange={e => onChange(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all appearance-none"
+                >
+                    {options.map(opt => <option key={opt} value={opt}>{opt.toUpperCase()}</option>)}
+                </select>
+            ) : type === 'textarea' ? (
+                <textarea
+                    value={value}
+                    onChange={e => onChange(e.target.value)}
+                    rows="3"
+                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all"
+                />
+            ) : (
+                <input
+                    type={type}
+                    value={value}
+                    onChange={e => onChange(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all"
+                />
+            )}
+        </div>
+    );
+}
