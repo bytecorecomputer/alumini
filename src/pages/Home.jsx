@@ -2,6 +2,11 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Users, Calendar, Award, Zap, Target, Heart, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import bcc from '../assets/BANNER.jpg'
+import { useAuth } from '../app/common/AuthContext';
+import { runMigration } from '../lib/migrateStudents';
+import { useState } from 'react';
+import { Database, Loader2, CheckCircle } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 export default function Home() {
     const containerVariants = {
@@ -24,15 +29,37 @@ export default function Home() {
         }
     };
 
+    const { user } = useAuth();
+    const [isMigrating, setIsMigrating] = useState(false);
+    const [migrationDone, setMigrationDone] = useState(false);
+
+    const isOwner = user?.email === 'coderafroj@gmail.com';
+
+    const handleDataMigration = async () => {
+        try {
+            setIsMigrating(true);
+            const response = await fetch('/src/assets/student data.csv');
+            const csvText = await response.text();
+            const count = await runMigration(csvText);
+            setMigrationDone(true);
+            alert(`Success! ${count} students migrated to database.`);
+        } catch (err) {
+            console.error("Migration failed:", err);
+            alert("Migration failed. Check console.");
+        } finally {
+            setIsMigrating(false);
+        }
+    };
+
     return (
-        <div className="bg-white overflow-hidden">
+        <div className="bg-white overflow-hidden" >
             {/* --- HERO SECTION --- */}
-            <div className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6">
+            < div className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6" >
                 {/* Dynamic Background Elements */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] -z-10 opacity-40">
+                < div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] -z-10 opacity-40" >
                     <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-200 rounded-full blur-[120px] animate-pulse"></div>
                     <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-100 rounded-full blur-[120px] animate-pulse delay-700"></div>
-                </div>
+                </div >
 
                 <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-20">
                     <motion.div
@@ -97,10 +124,10 @@ export default function Home() {
                         </div>
                     </motion.div>
                 </div>
-            </div>
+            </div >
 
             {/* --- STATS STRIP --- */}
-            <div className="py-24 border-y border-slate-100">
+            < div className="py-24 border-y border-slate-100" >
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center md:text-left">
                         {[
@@ -121,10 +148,10 @@ export default function Home() {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div >
 
             {/* --- CORE CAPABILITIES --- */}
-            <div className="py-32 bg-slate-50">
+            < div className="py-32 bg-slate-50" >
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="max-w-3xl mb-24">
                         <div className="text-blue-600 text-xs font-black uppercase tracking-[0.3em] mb-4">Core Capabilities</div>
@@ -168,10 +195,10 @@ export default function Home() {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div >
 
             {/* --- CTA BANNER --- */}
-            <div className="py-20 px-6">
+            < div className="py-20 px-6" >
                 <div className="max-w-7xl mx-auto">
                     <div className="relative rounded-[4rem] bg-slate-900 overflow-hidden p-12 md:p-24 text-center">
                         <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 via-blue-600/20 to-transparent"></div>
@@ -185,7 +212,39 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+
+            {/* --- SECRET ADMIN MIGRATION TOOL --- */}
+            {
+                isOwner && (
+                    <div className="fixed bottom-10 left-10 z-[100]">
+                        <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="bg-white p-6 rounded-[2rem] shadow-2xl border border-slate-100 flex items-center gap-4"
+                        >
+                            <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl">
+                                <Database size={24} />
+                            </div>
+                            <div>
+                                <div className="text-[10px] font-black uppercase tracking-widest text-slate-400">Owner Tool</div>
+                                <h4 className="text-xs font-black text-slate-900 uppercase">Data Migration</h4>
+                            </div>
+                            <button
+                                disabled={isMigrating || migrationDone}
+                                onClick={handleDataMigration}
+                                className={cn(
+                                    "btn-premium py-3 px-6 text-xs uppercase tracking-widest flex items-center gap-2",
+                                    migrationDone ? "bg-emerald-500 shadow-emerald-200" : "bg-blue-600 shadow-blue-200"
+                                )}
+                            >
+                                {isMigrating ? <Loader2 className="animate-spin" size={16} /> : (migrationDone ? <CheckCircle size={16} /> : <Zap size={16} />)}
+                                {migrationDone ? 'Done' : 'Migrate'}
+                            </button>
+                        </motion.div>
+                    </div>
+                )
+            }
+        </div >
     );
 }

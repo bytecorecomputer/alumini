@@ -14,6 +14,9 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import AdminDashboard from "./pages/AdminDashboard";
 import Resume from "./pages/Resume";
+import StudentLogin from "./pages/StudentLogin";
+import StudentPortal from "./pages/StudentPortal";
+import CoachingAdmin from "./pages/CoachingAdmin";
 
 export default function App() {
   return (
@@ -59,6 +62,15 @@ export default function App() {
               <ProtectedRoute>
                 <Resume />
               </ProtectedRoute>
+            } />
+
+            {/* Coaching Management Routes */}
+            <Route path="/student-login" element={<StudentLogin />} />
+            <Route path="/student-portal" element={<StudentPortal />} />
+            <Route path="/admin/coaching" element={
+              <AdminRoute>
+                <CoachingAdmin />
+              </AdminRoute>
             } />
           </Routes>
         </Layout>
