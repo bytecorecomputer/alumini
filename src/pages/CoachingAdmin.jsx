@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Search, Plus, User, CreditCard, Calendar, MapPin, Phone,
     Filter, Download, ChevronRight, X, Check, AlertCircle,
-    TrendingUp, Users, Wallet, Loader2, Edit3, Trash2
+    TrendingUp, Users, Wallet, Loader2, Edit3, Trash2, Database
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -179,12 +179,70 @@ export default function CoachingAdmin() {
                             <StatCard icon={<Wallet size={16} />} label="Total Collections" value={`₹${students.reduce((acc, s) => acc + (s.paidFees || 0), 0)}`} color="emerald" />
                             <StatCard icon={<AlertCircle size={16} />} label="Pending" value={students.filter(s => s.status !== 'pass').length} color="amber" />
                         </div>
-                        <button
-                            onClick={openAddModal}
-                            className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-slate-200 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
-                        >
-                            <Plus size={16} /> New Admission
-                        </button>
+                        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                            <button
+                                onClick={async () => {
+                                    if (!window.confirm("This will sync ALL data from the local 'student data.csv' to the database. Continue?")) return;
+                                    setIsUpdating(true);
+                                    try {
+                                        // Fetch the local CSV file
+                                        const response = await fetch('/src/assets/student data.csv');
+                                        const text = await response.text();
+                                        const { runMigration } = await import('../lib/migrateStudents');
+                                        const count = await runMigration(text);
+                                        alert(`Sync Complete! ${count} students migrated/updated.`);
+                                        await fetchStudents();
+                                    } catch (err) {
+                                        alert("Sync failed. Make sure the CSV file exists in src/assets/");
+                                        console.error(err);
+                                    } finally {
+                                        setIsUpdating(false);
+                                    }
+                                }}
+                                disabled={isUpdating}
+                                className="bg-indigo-600 text-white px-6 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-indigo-200 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
+                            >
+                                <Database size={16} /> {isUpdating ? 'Syncing...' : 'One-Click Sync'}
+                            </button>
+                            <label className="cursor-pointer bg-white text-slate-900 px-6 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-slate-200 flex items-center gap-3 hover:bg-slate-50 transition-all border border-slate-100">
+                                <Download size={16} className="rotate-180" />
+                                {isUpdating ? 'Importing...' : 'Import CSV'}
+                                <input
+                                    type="file"
+                                    accept=".csv"
+                                    className="hidden"
+                                    onChange={async (e) => {
+                                        const file = e.target.files[0];
+                                        if (file) {
+                                            setIsUpdating(true);
+                                            try {
+                                                const reader = new FileReader();
+                                                reader.onload = async (event) => {
+                                                    const text = event.target.result;
+                                                    const { runMigration } = await import('../lib/migrateStudents');
+                                                    const count = await runMigration(text);
+                                                    alert(`Successfully imported ${count} students!`);
+                                                    await fetchStudents();
+                                                };
+                                                reader.readAsText(file);
+                                            } catch (err) {
+                                                alert("Failed to import CSV data.");
+                                                console.error(err);
+                                            } finally {
+                                                setIsUpdating(false);
+                                            }
+                                        }
+                                    }}
+                                    disabled={isUpdating}
+                                />
+                            </label>
+                            <button
+                                onClick={openAddModal}
+                                className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-slate-200 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all w-full sm:w-auto"
+                            >
+                                <Plus size={16} /> New Admission
+                            </button>
+                        </div>
                     </div>
                 </div>
 

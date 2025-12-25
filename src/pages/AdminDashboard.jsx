@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     Users, GraduationCap, Briefcase, Shield, Trash2, Search,
     Award, ShieldAlert, ShieldOff, X, MapPin, Linkedin, Github,
-    ChevronRight, ExternalLink, Mail, Edit3
+    ChevronRight, ExternalLink, Mail, Edit3, Database
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { getOptimizedUrl } from "../lib/cloudinary";
@@ -153,6 +153,22 @@ export default function AdminDashboard() {
                         icon={<Shield className="text-purple-600" />}
                         color="purple"
                     />
+                    <motion.button
+                        whileHover={{ y: -5 }}
+                        onClick={() => window.location.href = '/admin/coaching'}
+                        className="premium-card p-8 bg-blue-600 text-white shadow-xl shadow-blue-200 flex flex-col justify-between group"
+                    >
+                        <div className="flex justify-between items-start mb-6">
+                            <div className="p-4 rounded-2xl bg-white/20 ring-1 ring-white/30">
+                                <Database size={24} strokeWidth={2.5} />
+                            </div>
+                            <ExternalLink size={20} className="opacity-50 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black text-blue-100 uppercase tracking-[0.2em] mb-1">Coaching System</p>
+                            <h3 className="text-2xl font-black tracking-tight">Manage Students</h3>
+                        </div>
+                    </motion.button>
                 </div>
 
                 {/* User Management Section */}

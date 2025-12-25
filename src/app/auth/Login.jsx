@@ -21,51 +21,88 @@ export default function Login() {
   const [resetSuccess, setResetSuccess] = useState("");
   const [resetError, setResetError] = useState("");
 
+  const [loginMode, setLoginMode] = useState("alumni"); // "alumni" or "student"
+  const [studentReg, setStudentReg] = useState("");
+  const [studentMobile, setStudentMobile] = useState("");
+
   const login = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const email = e.target.email.value.trim();
-    const password = e.target.password.value.trim();
+    if (loginMode === "alumni") {
+      const email = e.target.email.value.trim();
+      const password = e.target.password.value.trim();
 
-    if (!email || !password) {
-      setError("Credentials required for system access");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const res = await signInWithEmailAndPassword(auth, email, password);
-      const snap = await getDoc(doc(db, "users", res.user.uid));
-
-      if (!snap.exists()) {
-        navigate("/");
+      if (!email || !password) {
+        setError("Credentials required for system access");
+        setLoading(false);
         return;
       }
 
-      const userData = snap.data();
-      const { role } = userData;
+      try {
+        const res = await signInWithEmailAndPassword(auth, email, password);
+        const snap = await getDoc(doc(db, "users", res.user.uid));
 
-      // Send Telegram Notification
-      sendTelegramNotification('login', {
-        displayName: userData.displayName,
-        email: userData.email,
-        role: role
-      });
+        if (!snap.exists()) {
+          navigate("/");
+          return;
+        }
 
-      if (role === "admin" || role === "super_admin") navigate("/admin/dashboard");
-      else navigate("/directory");
+        const userData = snap.data();
+        const { role } = userData;
 
-    } catch (err) {
-      console.error(err);
-      if (err.code === 'auth/invalid-credential') {
-        setError("Identity verification failed. check your credentials.");
-      } else {
-        setError("Secure link established, but authentication failed.");
+        sendTelegramNotification('login', {
+          displayName: userData.displayName,
+          email: userData.email,
+          role: role
+        });
+
+        if (role === "admin" || role === "super_admin") navigate("/admin/dashboard");
+        else navigate("/directory");
+      } catch (err) {
+        setError(err.code === 'auth/invalid-credential' ? "Identity verification failed." : "Authentication failed.");
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
+    } else {
+      // Student Login Mode
+      if (!studentReg || !studentMobile) {
+        setError("Registration and Mobile number required.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { query, collection, where, getDocs } = await import("firebase/firestore");
+        const q = query(
+          collection(db, "students"),
+          where("registration", "==", studentReg.trim()),
+          where("mobile", "==", studentMobile.trim())
+        );
+
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          const studentData = querySnapshot.docs[0].data();
+          localStorage.setItem('student_session', JSON.stringify(studentData));
+
+          sendTelegramNotification('login', {
+            displayName: studentData.fullName,
+            email: `Reg: ${studentData.registration}`,
+            role: 'student_portal'
+          });
+
+          navigate('/student-portal');
+        } else {
+          setError('Invalid Registration or Mobile Number.');
+        }
+      } catch (err) {
+        console.error(err);
+        setError('System connectivity error.');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -103,7 +140,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-20 px-4 bg-slate-50 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center py-20 px-4 bg-slate-50 relative overflow-hidden font-inter">
       {/* Background Orbs */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-30">
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-200 rounded-full blur-[120px] animate-pulse"></div>
@@ -115,8 +152,8 @@ export default function Login() {
         animate={{ opacity: 1, scale: 1 }}
         className="max-w-md w-full"
       >
-        <div className="premium-card bg-white p-10 md:p-12">
-          <div className="text-center mb-10">
+        <div className="premium-card bg-white p-8 md:p-10">
+          <div className="text-center mb-8">
             <motion.div
               initial={{ rotate: -10, scale: 0.9 }}
               animate={{ rotate: 0, scale: 1 }}
@@ -124,59 +161,142 @@ export default function Login() {
             >
               <GraduationCap size={32} />
             </motion.div>
-            <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-2">Login</h2>
-            <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px]">Access your account</p>
+            <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-2">
+              {loginMode === "alumni" ? "Identity Login" : "Student Portal"}
+            </h2>
+            <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px]">Bytecore Computer Centre</p>
+          </div>
+
+          {/* Login Mode Toggle */}
+          <div className="flex p-1 bg-slate-100 rounded-2xl mb-8 relative">
+            <motion.div
+              className="absolute inset-y-1 bg-white rounded-xl shadow-sm z-0"
+              initial={false}
+              animate={{
+                x: loginMode === "alumni" ? 0 : "100%",
+                width: "50%"
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            />
+            <button
+              onClick={() => { setLoginMode("alumni"); setError(""); }}
+              className={cn(
+                "flex-1 py-3 text-[10px] font-black uppercase tracking-widest relative z-10 transition-colors",
+                loginMode === "alumni" ? "text-slate-900" : "text-slate-400"
+              )}
+            >
+              Network
+            </button>
+            <button
+              onClick={() => { setLoginMode("student"); setError(""); }}
+              className={cn(
+                "flex-1 py-3 text-[10px] font-black uppercase tracking-widest relative z-10 transition-colors",
+                loginMode === "student" ? "text-slate-900" : "text-slate-400"
+              )}
+            >
+              Student
+            </button>
           </div>
 
           <form className="space-y-6" onSubmit={login}>
-            <div className="space-y-5">
-              <div className="group">
-                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Email Address</label>
-                <div className="relative group-focus-within:scale-[1.01] transition-transform">
-                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+            <AnimatePresence mode="wait">
+              {loginMode === "alumni" ? (
+                <motion.div
+                  key="alumni-fields"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                  className="space-y-5"
+                >
+                  <div className="group">
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Email Address</label>
+                    <div className="relative group-focus-within:scale-[1.01] transition-transform">
+                      <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                        <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                      </div>
+                      <input
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                        placeholder="name@alumni.edu"
+                      />
+                    </div>
                   </div>
-                  <input
-                    name="email"
-                    type="email"
-                    required
-                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
-                    placeholder="name@alumni.edu"
-                  />
-                </div>
-              </div>
 
-              <div className="group">
-                <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
-                <div className="relative group-focus-within:scale-[1.01] transition-transform">
-                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                  <div className="group">
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
+                    <div className="relative group-focus-within:scale-[1.01] transition-transform">
+                      <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                        <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                      </div>
+                      <input
+                        name="password"
+                        type="password"
+                        autoComplete="current-password"
+                        className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                        placeholder="••••••••"
+                      />
+                    </div>
+                    <div className="flex justify-end mt-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsResetModalOpen(true)}
+                        className="text-[9px] font-black text-purple-600 uppercase tracking-widest hover:text-purple-800 transition-colors"
+                      >
+                        Forgot Identity Password?
+                      </button>
+                    </div>
                   </div>
-                  <input
-                    name="password"
-                    type="password"
-                    required
-                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
-                    placeholder="••••••••"
-                  />
-                </div>
-                <div className="flex justify-end mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setIsResetModalOpen(true)}
-                    className="text-[10px] font-black text-purple-600 uppercase tracking-widest hover:text-purple-800 transition-colors"
-                  >
-                    Forgot Identity Password?
-                  </button>
-                </div>
-              </div>
-            </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="student-fields"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="space-y-5"
+                >
+                  <div className="group">
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Registration ID</label>
+                    <div className="relative group-focus-within:scale-[1.01] transition-transform">
+                      <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                        <Zap className="h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+                      </div>
+                      <input
+                        value={studentReg}
+                        onChange={(e) => setStudentReg(e.target.value)}
+                        type="text"
+                        className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
+                        placeholder="e.g. 1001"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="group">
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Mobile Number</label>
+                    <div className="relative group-focus-within:scale-[1.01] transition-transform">
+                      <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                        <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+                      </div>
+                      <input
+                        value={studentMobile}
+                        onChange={(e) => setStudentMobile(e.target.value)}
+                        type="tel"
+                        className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
+                        placeholder="e.g. 8864880351"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {error && (
               <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="text-red-600 text-[11px] font-black uppercase tracking-wider text-center bg-red-50 p-3 rounded-xl border border-red-100 mb-4"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-600 text-[10px] font-black uppercase tracking-wider text-center bg-red-50 p-3 rounded-xl border border-red-100 mb-4"
               >
                 {error}
               </motion.div>
@@ -186,7 +306,8 @@ export default function Login() {
               type="submit"
               disabled={loading}
               className={cn(
-                "btn-premium w-full flex items-center justify-center py-4 group disabled:opacity-50 shadow-xl shadow-purple-100",
+                "btn-premium w-full flex items-center justify-center py-4 group disabled:opacity-50 shadow-xl transition-all",
+                loginMode === "alumni" ? "shadow-purple-100" : "shadow-blue-100 bg-blue-600 hover:bg-blue-700",
                 loading && "animate-pulse"
               )}
             >

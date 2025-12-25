@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, GraduationCap, LogOut, User, Shield, Zap, FileText } from 'lucide-react';
+import { Menu, X, GraduationCap, LogOut, User, Shield, Zap, FileText, Database } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../app/common/AuthContext';
@@ -56,12 +56,20 @@ export default function Navbar() {
                         <NavLink to="/donate">Donate</NavLink>
 
                         {(role === 'admin' || role === 'super_admin') && (
-                            <Link
-                                to="/admin/dashboard"
-                                className="px-5 py-2.5 text-purple-600 hover:text-purple-700 font-black text-xs uppercase tracking-widest transition-all hover:bg-purple-50 rounded-2xl flex items-center gap-2"
-                            >
-                                <Shield size={16} /> Admin
-                            </Link>
+                            <div className="flex items-center gap-1">
+                                <Link
+                                    to="/admin/dashboard"
+                                    className="px-5 py-2.5 text-purple-600 hover:text-purple-700 font-black text-xs uppercase tracking-widest transition-all hover:bg-purple-50 rounded-2xl flex items-center gap-2"
+                                >
+                                    <Shield size={16} /> Admin
+                                </Link>
+                                <Link
+                                    to="/admin/coaching"
+                                    className="px-5 py-2.5 text-blue-600 hover:text-blue-700 font-black text-xs uppercase tracking-widest transition-all hover:bg-blue-50 rounded-2xl flex items-center gap-2"
+                                >
+                                    <Database size={16} /> Students
+                                </Link>
+                            </div>
                         )}
 
                         <div className="h-6 w-px bg-slate-200/60 mx-4" />
@@ -136,19 +144,18 @@ export default function Navbar() {
                                 <MobileNavLink to="/donate" onClick={() => setIsOpen(false)}>Donate</MobileNavLink>
 
                                 {(role === 'admin' || role === 'super_admin') && (
-                                    <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
-                                        <div className="flex items-center gap-2 text-purple-600">
-                                            <Shield size={16} /> Admin Panel
-                                        </div>
-                                    </MobileNavLink>
-                                )}
-
-                                {(role === 'admin' || role === 'super_admin') && (
-                                    <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
-                                        <div className="flex items-center gap-2 text-purple-600">
-                                            <Shield size={16} /> Admin Panel
-                                        </div>
-                                    </MobileNavLink>
+                                    <>
+                                        <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
+                                            <div className="flex items-center gap-2 text-purple-600">
+                                                <Shield size={16} /> Admin Panel
+                                            </div>
+                                        </MobileNavLink>
+                                        <MobileNavLink to="/admin/coaching" onClick={() => setIsOpen(false)}>
+                                            <div className="flex items-center gap-2 text-blue-600">
+                                                <Database size={16} /> Student Management
+                                            </div>
+                                        </MobileNavLink>
+                                    </>
                                 )}
 
                                 <MobileNavLink to="/resume" onClick={() => setIsOpen(false)}>
