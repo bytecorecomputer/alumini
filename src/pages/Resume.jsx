@@ -123,7 +123,25 @@ export default function Resume() {
     };
 
     const handlePrint = () => {
-        window.print();
+        // Viewport trick for mobile browsers to ensure they use a wider layout for print
+        const viewport = document.querySelector('meta[name="viewport"]');
+        const originalContent = viewport ? viewport.content : '';
+
+        if (viewport && window.innerWidth < 768) {
+            viewport.content = 'width=1024';
+        }
+
+        window.scrollTo(0, 0);
+
+        // Small delay to let the viewport change take effect if any
+        setTimeout(() => {
+            window.print();
+            if (viewport && window.innerWidth < 768) {
+                setTimeout(() => {
+                    viewport.content = originalContent;
+                }, 1000);
+            }
+        }, 100);
     };
 
     const updatePersonal = (field, value) => {
@@ -185,7 +203,7 @@ export default function Resume() {
                 @media print {
                     @page { 
                         size: A4 portrait; 
-                        margin: 0;
+                        margin: 0mm;
                     }
                     
                     * {
@@ -195,70 +213,89 @@ export default function Resume() {
                     }
                     
                     html, body {
-                        width: 210mm;
-                        height: auto;
-                        min-height: 297mm;
+                        width: 210mm !important;
+                        height: auto !important;
+                        min-height: 297mm !important;
                         margin: 0 !important;
                         padding: 0 !important;
                         overflow: visible !important;
                         background: white !important;
+                        position: relative !important;
                     }
                     
-                    /* Hide known UI elements - explicit targeting is safer */
-                    nav, header, footer, .control-bar, .no-print, 
-                    .print\\:hidden {
+                    /* Hide everything except the resume container */
+                    #root > div > nav, 
+                    #root > div > header, 
+                    #root > div > footer,
+                    .control-bar, 
+                    .no-print, 
+                    .print\\:hidden,
+                    button.fixed {
                         display: none !important;
+                        opacity: 0 !important;
+                        visibility: hidden !important;
                     }
                     
-                    /* Ensure parent containers are visible */
+                    /* Reset parent containers for clean print */
                     #root, #root > div, main {
                         display: block !important;
                         visibility: visible !important;
-                        width: 100% !important;
+                        width: 210mm !important;
                         height: auto !important;
-                        overflow: visible !important;
+                        min-height: 297mm !important;
                         margin: 0 !important;
                         padding: 0 !important;
+                        overflow: visible !important;
+                        position: static !important;
+                        transform: none !important;
                     }
 
-                    /* Ensure Resume Container is Positioned Correctly */
+                    /* Ensure Resume Container is the only thing visible */
                     .print-active-resume {
-                        position: relative !important;
-                        left: 0 !important;
-                        top: 0 !important;
-                        width: 210mm !important;
-                        min-height: 297mm !important;
-                        margin: 0 auto !important; /* Center it */
-                        padding: 0 !important;
                         display: block !important;
                         visibility: visible !important;
-                        z-index: 9999 !important;
+                        position: absolute !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        width: 210mm !important;
+                        min-height: 297mm !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        z-index: 1000 !important;
                         background: white !important;
+                        transform: none !important;
+                        box-shadow: none !important;
                     }
                     
-                    /* Reset any transform or fixed positioning on parents that might interfere */
-                    .print-active-resume * {
-                        visibility: visible !important;
-                    }
-                    
-                    /* Allow multi-page if content overflows */
+                    /* Allow natural multi-page flow inside the container */
                     .print-active-resume > div {
+                        width: 210mm !important;
                         min-height: 297mm !important;
                         height: auto !important;
+                        display: block !important;
                     }
                     
                     /* Page Break Protection */
-                    p, h1, h2, h3, h4, h5, h6, li, span, .group {
+                    p, h1, h2, h3, h4, h5, h6, li, span, .group, .flex, .grid, img {
                         page-break-inside: avoid;
                         break-inside: avoid;
                     }
+
+                    img {
+                        max-width: 100% !important;
+                    }
+
+                    /* Force colors for templates */
+                    .bg-\\[\\#1a1c2e\\] { background-color: #1a1c2e !important; }
+                    .bg-blue-600 { background-color: #2563eb !important; }
+                    .text-white { color: white !important; }
                 }
             `}} />
 
             {/* Premium Control Bar */}
             <div className="max-w-7xl mx-auto mb-8 flex flex-col lg:flex-row justify-between items-center gap-6 print:hidden control-bar">
-                <div className="flex flex-col md:flex-row items-center gap-4 w-full lg:w-auto">
-                    <Link to="/profile" className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-slate-600 font-black uppercase text-[10px] hover:bg-slate-50 transition-all active:scale-95">
+                <div className="flex flex-col md:flex-row items-center gap-4 w-full lg:w-auto no-print">
+                    <Link to="/profile" className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-slate-600 font-black uppercase text-[10px] hover:bg-slate-50 transition-all active:scale-95 no-print print:hidden">
                         <ArrowLeft size={14} /> Back
                     </Link>
                     <div className="flex items-center gap-4">
@@ -278,9 +315,9 @@ export default function Resume() {
                     </div>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-center gap-3 w-full lg:w-auto">
+                <div className="flex flex-wrap items-center justify-center gap-3 w-full lg:w-auto no-print print:hidden">
                     {!isEditMode && (
-                        <div className="flex items-center gap-2 bg-white p-1 rounded-2xl border border-slate-200 overflow-x-auto max-w-[100vw] scrollbar-hide">
+                        <div className="flex items-center gap-2 bg-white p-1 rounded-2xl border border-slate-200 overflow-x-auto max-w-[100vw] scrollbar-hide no-print print:hidden">
                             {['modern', 'minimal', 'creative'].map(t => (
                                 <button
                                     key={t}
@@ -295,7 +332,7 @@ export default function Resume() {
                             ))}
                         </div>
                     )}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 no-print print:hidden">
                         <button
                             onClick={handleSave}
                             disabled={isSaving}
@@ -533,7 +570,7 @@ export default function Resume() {
             {isEditMode && (
                 <button
                     onClick={() => setIsEditMode(false)}
-                    className="fixed bottom-10 right-10 p-5 bg-blue-600 text-white rounded-full shadow-[0_20px_40px_rgba(37,99,235,0.3)] hover:scale-110 active:scale-95 transition-all z-50 group lg:hidden"
+                    className="fixed bottom-10 right-10 p-5 bg-blue-600 text-white rounded-full shadow-[0_20px_40px_rgba(37,99,235,0.3)] hover:scale-110 active:scale-95 transition-all z-50 group lg:hidden no-print print:hidden"
                 >
                     <Eye size={24} />
                 </button>
@@ -587,7 +624,7 @@ function AddButton({ onClick, label }) {
 function ModernTemplate({ data }) {
     const { personal, experience, education, skills, projects, certifications } = data;
     return (
-        <div className="w-[210mm] min-h-[297mm] bg-white flex flex-col md:flex-row shadow-none text-slate-800 font-inter print:w-[210mm] print:min-h-[297mm]">
+        <div className="w-[210mm] min-h-[297mm] bg-white flex flex-col md:flex-row print:flex-row shadow-none text-slate-800 font-inter print:w-[210mm] print:min-h-[297mm]">
             {/* Left Sidebar - Refined Dark Mode */}
             <div className="w-full md:w-[32%] bg-[#1a1c2e] text-white p-8 flex flex-col gap-8 print:w-[32%] print:min-h-full">
                 <div className="space-y-6">
@@ -630,7 +667,7 @@ function ModernTemplate({ data }) {
             </div>
 
             {/* Right Side - Refined Clean Look */}
-            <div className="flex-1 p-10 space-y-8 print:p-10">
+            <div className="flex-1 p-10 space-y-8 print:p-10 print:w-[68%]">
                 <div className="space-y-4">
                     <TemplateSectionHeader title="About Me" />
                     <p className="text-slate-600 text-[13px] leading-7 font-medium text-justify">
@@ -793,7 +830,7 @@ function CreativeTemplate({ data }) {
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-t from-violet-600/20 to-transparent blur-[120px] rounded-full pointer-events-none" />
 
             <div className="relative z-10 p-14 h-full flex flex-col">
-                <header className="flex flex-col md:flex-row justify-between items-start border-b border-white/10 pb-12 mb-12 gap-8">
+                <header className="flex flex-col md:flex-row print:flex-row justify-between items-start border-b border-white/10 pb-12 mb-12 gap-8">
                     <div className="space-y-4 max-w-lg">
                         <h1 className="text-6xl font-black tracking-tighter italic uppercase text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-violet-400 to-white leading-none">
                             {personal.fullName || 'Name'}
