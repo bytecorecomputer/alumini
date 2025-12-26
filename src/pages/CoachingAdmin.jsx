@@ -204,7 +204,7 @@ export default function CoachingAdmin() {
                                 if (!window.confirm("Initiate Global Database Sync?")) return;
                                 setIsUpdating(true);
                                 try {
-                                    const response = await fetch('/src/assets/student data.csv');
+                                    const response = await fetch('/src/assets/ByteCore%20%20(1).csv');
                                     const text = await response.text();
                                     const { runMigration } = await import('../lib/migrateStudents');
                                     await runMigration(text);
