@@ -94,8 +94,9 @@ export default function StudentDetails() {
         );
     }
 
-    const remainingFees = (student.totalFees || 0) - (student.paidFees || 0);
-    const feePercentage = Math.round(((student.paidFees || 0) / (student.totalFees || 1)) * 100);
+    const totalReceived = (student.paidFees || 0) + (student.oldPaidFees || 0);
+    const remainingFees = (student.totalFees || 0) - totalReceived;
+    const feePercentage = Math.round((totalReceived / (student.totalFees || 1)) * 100);
 
     return (
         <div className="min-h-screen bg-[#f8fafc] pt-28 pb-20 font-inter">
@@ -188,7 +189,7 @@ export default function StudentDetails() {
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-center">
                                 <LedgerStat label="Total Payable" value={`₹${student.totalFees}`} color="slate" />
-                                <LedgerStat label="Total Received" value={`₹${student.paidFees}`} color="blue" />
+                                <LedgerStat label="Total Received" value={`₹${totalReceived}`} color="emerald" tooltip={`Inst: ₹${student.paidFees || 0} + Old: ₹${student.oldPaidFees || 0}`} />
                                 <LedgerStat label="Current Arrears" value={`₹${remainingFees}`} color="amber" />
                             </div>
 
@@ -231,6 +232,7 @@ export default function StudentDetails() {
                                     <EditField label="Course" value={editForm.course} onChange={v => setEditForm({ ...editForm, course: v })} />
                                     <EditField label="Status" value={editForm.status} type="select" options={['unpaid', 'pass']} onChange={v => setEditForm({ ...editForm, status: v })} />
                                     <EditField label="Total Fee" value={editForm.totalFees} type="number" onChange={v => setEditForm({ ...editForm, totalFees: parseInt(v) })} />
+                                    <EditField label="Old Fees Received" value={editForm.oldPaidFees} type="number" onChange={v => setEditForm({ ...editForm, oldPaidFees: parseInt(v) })} />
                                     <EditField label="Father's Name" value={editForm.fatherName} onChange={v => setEditForm({ ...editForm, fatherName: v })} />
                                     <div className="md:col-span-2">
                                         <EditField label="Home Address" value={editForm.address} type="textarea" onChange={v => setEditForm({ ...editForm, address: v })} />
@@ -377,11 +379,11 @@ function DetailRow({ label, value, isDark }) {
 function LedgerStat({ label, value, color }) {
     const colors = {
         slate: "bg-slate-50 border-slate-100 text-slate-900",
-        blue: "bg-blue-50 border-blue-100 text-blue-600",
-        amber: "bg-amber-50 border-amber-100 text-amber-600"
+        amber: "bg-amber-50 border-amber-100 text-amber-600",
+        emerald: "bg-emerald-50 border-emerald-100 text-emerald-600"
     };
     return (
-        <div className={cn("p-6 rounded-3xl border shadow-sm", colors[color])}>
+        <div className={cn("p-6 rounded-3xl border shadow-sm", colors[color])} title={arguments[0].tooltip}>
             <p className="text-[9px] font-black uppercase tracking-widest opacity-60 mb-2">{label}</p>
             <p className="text-2xl font-black tracking-tighter">{value}</p>
         </div>

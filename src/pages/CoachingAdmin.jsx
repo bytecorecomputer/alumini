@@ -31,7 +31,7 @@ export default function CoachingAdmin() {
     const [isEditing, setIsEditing] = useState(false);
     const [studentForm, setStudentForm] = useState({
         registration: '', fullName: '', course: '', mobile: '',
-        status: 'unpaid', totalFees: '', admissionDate: new Date().toLocaleDateString('en-GB'),
+        status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toLocaleDateString('en-GB'),
         fatherName: '', address: ''
     });
 
@@ -66,6 +66,7 @@ export default function CoachingAdmin() {
                 ...studentForm,
                 updatedAt: Date.now(),
                 totalFees: parseInt(studentForm.totalFees) || 0,
+                oldPaidFees: parseInt(studentForm.oldPaidFees) || 0,
                 registration: studentForm.registration.trim()
             };
 
@@ -116,7 +117,7 @@ export default function CoachingAdmin() {
         const nextId = students.length > 0 ? (Math.max(...students.map(s => parseInt(s.registration) || 0)) + 1).toString() : "1001";
         setStudentForm({
             registration: nextId, fullName: '', course: '', mobile: '',
-            status: 'unpaid', totalFees: '', admissionDate: new Date().toLocaleDateString('en-GB'),
+            status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toLocaleDateString('en-GB'),
             fatherName: '', address: ''
         });
         setIsAddEditModalOpen(true);
@@ -139,8 +140,8 @@ export default function CoachingAdmin() {
 
     const stats = {
         total: students.length,
-        collected: students.reduce((acc, s) => acc + (s.paidFees || 0), 0),
-        pending: students.reduce((acc, s) => acc + ((s.totalFees || 0) - (s.paidFees || 0)), 0),
+        collected: students.reduce((acc, s) => acc + (s.paidFees || 0) + (s.oldPaidFees || 0), 0),
+        pending: students.reduce((acc, s) => acc + ((s.totalFees || 0) - ((s.paidFees || 0) + (s.oldPaidFees || 0))), 0),
         active: students.filter(s => s.status !== 'pass').length
     };
 
@@ -279,13 +280,13 @@ export default function CoachingAdmin() {
                                         <td className="px-4 md:px-10 py-6">
                                             <div className="space-y-2 min-w-[80px]">
                                                 <div className="flex justify-between text-[8px] md:text-[10px] font-black text-slate-400">
-                                                    <span>₹{student.paidFees || 0}</span>
+                                                    <span>₹{(student.paidFees || 0) + (student.oldPaidFees || 0)}</span>
                                                     <span className="opacity-40">/ {student.totalFees || 0}</span>
                                                 </div>
                                                 <div className="h-1.5 md:h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
                                                     <motion.div
                                                         initial={{ width: 0 }}
-                                                        animate={{ width: `${Math.min(100, ((student.paidFees || 0) / (student.totalFees || 1)) * 100)}%` }}
+                                                        animate={{ width: `${Math.min(100, (((student.paidFees || 0) + (student.oldPaidFees || 0)) / (student.totalFees || 1)) * 100)}%` }}
                                                         className="h-full bg-blue-500 rounded-full"
                                                     />
                                                 </div>
@@ -382,7 +383,8 @@ export default function CoachingAdmin() {
 
                                 <Input label="Contact Mobile" value={studentForm.mobile} onChange={v => setStudentForm({ ...studentForm, mobile: v })} />
                                 <Input label="Admission Date" value={studentForm.admissionDate} onChange={v => setStudentForm({ ...studentForm, admissionDate: v })} />
-                                <Input label="Investment Amount (₹)" type="number" value={studentForm.totalFees} onChange={v => setStudentForm({ ...studentForm, totalFees: v })} />
+                                <Input label="Invested Course Fee (₹)" type="number" value={studentForm.totalFees} onChange={v => setStudentForm({ ...studentForm, totalFees: v })} />
+                                <Input label="Old Paid Fees (Subtracted)" type="number" value={studentForm.oldPaidFees} onChange={v => setStudentForm({ ...studentForm, oldPaidFees: v })} />
 
                                 <div className="md:col-span-2 pt-6">
                                     <button
