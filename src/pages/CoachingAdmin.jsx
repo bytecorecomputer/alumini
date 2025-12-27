@@ -8,7 +8,7 @@ import {
     Search, Plus, User, CreditCard, Calendar, MapPin, Phone,
     Filter, Download, ChevronRight, X, Check, AlertCircle,
     TrendingUp, Users, Wallet, Loader2, Edit3, Trash2, Database,
-    BookOpen, Settings, BarChart3, ArrowUpRight, GraduationCap
+    BookOpen, Settings, BarChart3, ArrowUpRight, GraduationCap, CheckCircle
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -379,7 +379,7 @@ export default function CoachingAdmin() {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
-                            className="bg-white w-full max-w-2xl p-10 md:p-14 rounded-[4rem] shadow-2xl relative z-10 m-auto"
+                            className="bg-white w-full max-w-2xl p-8 md:p-14 rounded-[3rem] md:rounded-[4rem] shadow-2xl relative z-10 m-auto max-h-[90vh] overflow-y-auto custom-scrollbar"
                         >
                             <div className="flex justify-between items-center mb-12">
                                 <h3 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">New <span className="text-blue-600">Enrolment</span></h3>
@@ -387,7 +387,11 @@ export default function CoachingAdmin() {
                             </div>
 
                             <form onSubmit={handleSaveStudent} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <Input label="Registration" value={studentForm.registration} disabled />
+                                <Input
+                                    label="Registration"
+                                    value={studentForm.registration}
+                                    onChange={v => setStudentForm({ ...studentForm, registration: v })}
+                                />
                                 <Input label="Full Identity Name" value={studentForm.fullName} onChange={v => setStudentForm({ ...studentForm, fullName: v })} />
 
                                 <div className="space-y-2">
@@ -412,7 +416,7 @@ export default function CoachingAdmin() {
                                         disabled={isUpdating}
                                         className="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.4em] text-sm shadow-2xl shadow-slate-300 flex items-center justify-center gap-4 active:scale-98 disabled:opacity-50"
                                     >
-                                        {isUpdating ? <Loader2 className="animate-spin" size={20} /> : <CheckCircle2 size={24} />}
+                                        {isUpdating ? <Loader2 className="animate-spin" size={20} /> : <CheckCircle size={24} />}
                                         Complete Entry
                                     </button>
                                 </div>
