@@ -11,23 +11,53 @@ const FEE_MAPPING = {
     'MDCA': 9600,
     'C': 6000,
     'ADCA': 6000,
-    'ADCA+': 12000
+    'ADCA+': 12000,
+    'DCA': 3600,
+    'Typing': 2100,
+    'Accounting': 3600,
+    'CSC': 3500
 };
 
 const parseCSV = (csvText) => {
-    const lines = csvText.split(/\r?\n/);
-    if (lines.length < 2) return [];
+    const rawLines = csvText.split(/\r?\n/);
+    const reconstructedLines = [];
+    let currentLine = "";
 
-    const results = [];
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
+    // Step 1: Reconstruct rows that span multiple lines
+    for (let i = 0; i < rawLines.length; i++) {
+        const line = rawLines[i].trim();
         if (!line) continue;
 
+        // If line starts with "Number,Number," it's likely a new record (SrNo, Registration)
+        // e.g. "249,1159,"
+        if (/^\d+,\d+,/.test(line)) {
+            if (currentLine) reconstructedLines.push(currentLine);
+            currentLine = line;
+        } else if (i === 0 && (line.toLowerCase().includes("sr. no.") || line.toLowerCase().includes("registration"))) {
+            // Keep header as is
+            reconstructedLines.push(line);
+        } else if (currentLine) {
+            // Continuation of previous row - join with a space to avoid merging words
+            currentLine += " " + line;
+        } else {
+            // First data line if header check fails
+            currentLine = line;
+        }
+    }
+    if (currentLine) reconstructedLines.push(currentLine);
+
+    const results = [];
+    for (let i = 1; i < reconstructedLines.length; i++) {
+        const line = reconstructedLines[i];
         const row = line.split(',');
-        if (row.length < 12) continue;
+        if (row.length < 10) continue;
 
         const registration = row[1]?.trim();
-        const fullName = row[2]?.trim();
+        let fullName = row[2]?.trim();
+
+        // Clean up name (remove " (Change)" or other suffixes)
+        fullName = fullName.split('(')[0].trim();
+
         if (!registration || registration === '-' || !fullName) continue;
 
         const csvRegistrationFee = row[10]?.trim();
@@ -39,12 +69,16 @@ const parseCSV = (csvText) => {
         // Installments start from index 12
         for (let j = 12; j < row.length; j++) {
             let cell = row[j]?.trim();
-            if (!cell || cell === '-') continue;
+            if (!cell || cell === '-' || cell.toLowerCase() === 'unpaid' || cell.toLowerCase() === 'free') continue;
 
-            const match = cell.match(/(\d+)\s*\((.*?)\)/);
+            // Robust regex to capture: "500 (24-05)", "200 (07-07)", "700(28-10)", "350 10-11-2025"
+            // Captures amount and anything that looks like a date/note in parentheses or after
+            const match = cell.match(/(\d+)\s*[\(\-\s]*([0-9\-/ABC]+.*?)\)?$/i);
             if (match) {
                 const amount = parseInt(match[1]);
-                const date = match[2];
+                let date = match[2].trim();
+
+                // If date is short like "24-05", append current year or keep as is
                 if (!isNaN(amount)) {
                     installments.push({
                         amount,
@@ -57,13 +91,13 @@ const parseCSV = (csvText) => {
             }
         }
 
-        const course = row[4]?.trim() || 'N/A';
+        const course = row[4]?.split('(')[0].trim() || 'N/A';
         const defaultFee = FEE_MAPPING[course] || parseInt(row[11]) || 0;
 
-        results.push({
+        const studentData = {
             registration,
             fullName,
-            status: row[3]?.trim().toLowerCase() || 'unpaid',
+            status: row[3]?.split('(')[0].trim().toLowerCase() || 'unpaid',
             course,
             fatherName: row[5]?.trim() || 'N/A',
             mobile: row[6]?.trim() || 'N/A',
@@ -74,7 +108,14 @@ const parseCSV = (csvText) => {
             paidFees: csvPaidFeesSum,
             installments,
             updatedAt: Date.now()
-        });
+        };
+
+        // Specialized debugging for reported issues
+        if (fullName.includes("Ramlakha")) {
+            console.log("DEBUG [Ramlakhan Found]:", studentData);
+        }
+
+        results.push(studentData);
     }
     return results;
 };

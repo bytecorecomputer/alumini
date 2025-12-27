@@ -201,21 +201,41 @@ export default function CoachingAdmin() {
                     <div className="flex gap-4 w-full md:w-auto">
                         <button
                             onClick={async () => {
-                                if (!window.confirm("Initiate Global Database Sync?")) return;
+                                if (!window.confirm("Initiate Global Database Sync? \nThis will merge CSV installments and enforce standard fees.")) return;
                                 setIsUpdating(true);
                                 try {
+                                    // Small delay for UI feel
+                                    await new Promise(r => setTimeout(r, 500));
+
                                     const response = await fetch('/src/assets/ByteCore%20%20(1).csv');
+                                    if (!response.ok) throw new Error("CSV file not found");
                                     const text = await response.text();
+
                                     const { runMigration, applyStandardFees } = await import('../lib/migrateStudents');
-                                    await runMigration(text);
-                                    await applyStandardFees();
-                                    alert("Sync & Fee Standardization success.");
-                                } catch (err) { alert("Sync failed."); } finally { setIsUpdating(false); }
+
+                                    console.log("Starting Migration...");
+                                    const migratedCount = await runMigration(text);
+
+                                    console.log("Applying Standard Fees...");
+                                    const standardizedCount = await applyStandardFees();
+
+                                    alert(`Sync Complete!\n- Processed: ${migratedCount} students\n- Fees Standardized: ${standardizedCount} students`);
+                                } catch (err) {
+                                    console.error(err);
+                                    alert(`Sync failed: ${err.message}`);
+                                } finally {
+                                    setIsUpdating(false);
+                                }
                             }}
-                            className="flex-1 md:flex-none p-4 bg-blue-50 text-blue-600 rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-sm"
-                            title="Cloud Sync"
+                            disabled={isUpdating}
+                            className={cn(
+                                "flex-1 md:flex-none p-4 rounded-2xl transition-all shadow-sm flex items-center gap-2",
+                                isUpdating ? "bg-blue-100 text-blue-400 cursor-not-allowed" : "bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white"
+                            )}
+                            title="Global Database Sync"
                         >
-                            <Database size={20} />
+                            {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
+                            <span className="md:hidden font-black text-[10px] uppercase">Sync Database</span>
                         </button>
                         <div className="relative flex-grow md:w-80 group">
                             <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors" size={20} />
