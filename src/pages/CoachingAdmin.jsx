@@ -206,9 +206,10 @@ export default function CoachingAdmin() {
                                 try {
                                     const response = await fetch('/src/assets/ByteCore%20%20(1).csv');
                                     const text = await response.text();
-                                    const { runMigration } = await import('../lib/migrateStudents');
+                                    const { runMigration, applyStandardFees } = await import('../lib/migrateStudents');
                                     await runMigration(text);
-                                    alert("Sync success.");
+                                    await applyStandardFees();
+                                    alert("Sync & Fee Standardization success.");
                                 } catch (err) { alert("Sync failed."); } finally { setIsUpdating(false); }
                             }}
                             className="flex-1 md:flex-none p-4 bg-blue-50 text-blue-600 rounded-2xl hover:bg-blue-600 hover:text-white transition-all shadow-sm"
