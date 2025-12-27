@@ -9,7 +9,7 @@ import { sendTelegramNotification } from '../lib/telegram';
 import { uploadToCloudinary, getOptimizedUrl } from '../lib/cloudinary';
 
 export default function Events() {
-    const { user, role } = useAuth();
+    const { user, role, userData } = useAuth();
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
