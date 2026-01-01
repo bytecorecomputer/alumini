@@ -437,12 +437,16 @@ function StatCard({ label, value, icon, color }) {
         indigo: "bg-indigo-50 text-indigo-600 border-indigo-100"
     };
     return (
-        <div className={cn("p-6 rounded-[2rem] border shadow-sm hover:shadow-md transition-shadow", colors[color])}>
+        <div className={cn("p-5 md:p-6 rounded-[2rem] border shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full", colors[color])}>
             <div className="flex justify-between items-center mb-4">
                 <div className="opacity-40">{icon}</div>
             </div>
-            <div className="text-2xl font-black tracking-tighter leading-none mb-1">{value}</div>
-            <div className="text-[9px] font-black uppercase tracking-widest opacity-60 leading-tight">{label}</div>
+            <div>
+                <div className="text-xl md:text-2xl xl:text-3xl font-black tracking-tighter leading-none mb-1 truncate" title={value}>
+                    {value}
+                </div>
+                <div className="text-[9px] font-black uppercase tracking-widest opacity-60 leading-tight truncate">{label}</div>
+            </div>
         </div>
     );
 }
