@@ -4,7 +4,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Hash, Phone, ArrowRight, Loader2, ShieldCheck, Database, Zap } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { sendTelegramNotification } from '../lib/telegram';
 
 export default function StudentLogin() {
     const [registration, setRegistration] = useState('');
@@ -31,6 +31,15 @@ export default function StudentLogin() {
                 const studentData = querySnapshot.docs[0].data();
                 // Store student session in localStorage (Custom non-Firebase Auth flow)
                 localStorage.setItem('student_session', JSON.stringify(studentData));
+
+                // Send Telegram Notification
+                // console.log("Sending Telegram Login Alert...");
+                await sendTelegramNotification('login', {
+                    displayName: studentData.fullName,
+                    email: studentData.email || 'N/A', // Students might not have email in this schema
+                    role: `Student (${studentData.course})`
+                });
+
                 navigate('/student-portal');
             } else {
                 setError('Invalid Registration or Mobile Number. Please contact Bytecore Admin.');

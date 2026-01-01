@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { doc, getDoc, updateDoc, arrayUnion, onSnapshot } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, onSnapshot, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-    ChevronLeft, CreditCard, Calendar, MapPin, Phone,
-    GraduationCap, CheckCircle2, AlertCircle, Wallet,
-    BookOpen, History, User, Edit3, Trash2, Save, X,
-    ArrowRight, TrendingUp, ShieldCheck
+    ChevronLeft, Calendar, User, Edit3, Trash2, Save, X,
+    ArrowRight, TrendingUp, ShieldCheck, Wallet, History,
+    GraduationCap
 } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -22,6 +21,7 @@ export default function StudentDetails() {
     const [paymentAmount, setPaymentAmount] = useState('');
     const [installmentNo, setInstallmentNo] = useState('1');
     const [paymentNote, setPaymentNote] = useState('');
+    const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split('T')[0]);
     const [isFeeModalOpen, setIsFeeModalOpen] = useState(false);
 
     useEffect(() => {
@@ -63,12 +63,15 @@ export default function StudentDetails() {
         setIsUpdating(true);
         try {
             const amount = parseInt(paymentAmount);
-            const date = new Date().toLocaleDateString('en-GB');
+            // Format YYYY-MM-DD to DD/MM/YYYY for consistency
+            const [y, m, d] = paymentDate.split('-');
+            const formattedDate = `${d}/${m}/${y}`;
+
             await updateDoc(doc(db, "students", id), {
                 paidFees: (student.paidFees || 0) + amount,
                 installments: arrayUnion({
                     amount,
-                    date,
+                    date: formattedDate,
                     installmentNo: installmentNo,
                     note: paymentNote
                 }),
@@ -79,6 +82,40 @@ export default function StudentDetails() {
             setPaymentNote('');
         } catch (err) {
             alert("Fee update failed.");
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    const handleDeleteInstallment = async (instToDelete, index) => {
+        if (!window.confirm("Are you sure you want to delete this payment record? This will reduce the total fees received.")) return;
+        setIsUpdating(true);
+        try {
+            const newPaidFees = (student.paidFees || 0) - parseInt(instToDelete.amount);
+            // Filter out the item at the specific index
+            const newInstallments = student.installments.filter((_, i) => i !== index);
+
+            await updateDoc(doc(db, "students", id), {
+                paidFees: newPaidFees,
+                installments: newInstallments,
+                updatedAt: Date.now()
+            });
+        } catch (err) {
+            alert("Failed to delete installment.");
+            console.error(err);
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    const handleDeleteStudent = async () => {
+        if (!window.confirm("CRITICAL WARNING: Are you sure you want to PERMANENTLY DELETE this student? This action cannot be undone.")) return;
+        setIsUpdating(true);
+        try {
+            await deleteDoc(doc(db, "students", id));
+            navigate('/admin/coaching');
+        } catch (err) {
+            alert("Failed to delete student.");
         } finally {
             setIsUpdating(false);
         }
@@ -95,8 +132,9 @@ export default function StudentDetails() {
     }
 
     const totalReceived = (student.paidFees || 0) + (student.oldPaidFees || 0);
-    const remainingFees = (student.totalFees || 0) - totalReceived;
-    const feePercentage = Math.round((totalReceived / (student.totalFees || 1)) * 100);
+    const remainingFees = Math.max(0, (student.totalFees || 0) - totalReceived);
+    const rawPercentage = (totalReceived / (student.totalFees || 1)) * 100;
+    const feePercentage = Math.min(100, Math.round(rawPercentage));
 
     return (
         <div className="min-h-screen bg-[#f8fafc] pt-28 pb-20 font-inter">
@@ -237,6 +275,21 @@ export default function StudentDetails() {
                                     <div className="md:col-span-2">
                                         <EditField label="Home Address" value={editForm.address} type="textarea" onChange={v => setEditForm({ ...editForm, address: v })} />
                                     </div>
+
+                                    {/* Danger Zone */}
+                                    <div className="md:col-span-2 mt-8 p-6 bg-red-50 rounded-3xl border border-red-100 flex justify-between items-center">
+                                        <div>
+                                            <h5 className="text-red-800 font-bold uppercase tracking-widest text-xs mb-1">Danger Zone</h5>
+                                            <p className="text-red-600/60 text-xs">Permanently remove this student and all associated data.</p>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={handleDeleteStudent}
+                                            className="px-6 py-3 bg-white text-red-600 border border-red-200 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                                        >
+                                            Delete Student
+                                        </button>
+                                    </div>
                                 </motion.form>
                             ) : (
                                 <motion.div
@@ -273,6 +326,12 @@ export default function StudentDetails() {
                                                 </div>
                                                 <div className="text-right">
                                                     <p className="text-xl font-black text-slate-900 tracking-tighter">₹{inst.amount}</p>
+                                                    <button
+                                                        onClick={() => handleDeleteInstallment(inst, i)}
+                                                        className="mt-2 text-[10px] font-black text-red-400 uppercase tracking-widest hover:text-red-600 flex items-center justify-end gap-1 ml-auto"
+                                                    >
+                                                        <Trash2 size={12} /> Delete
+                                                    </button>
                                                 </div>
                                             </div>
                                         ))}
@@ -321,6 +380,16 @@ export default function StudentDetails() {
                                             <option key={n} value={n}>Installment #{n}</option>
                                         ))}
                                     </select>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 text-center block">Transaction Date</label>
+                                    <input
+                                        type="date"
+                                        value={paymentDate}
+                                        onChange={e => setPaymentDate(e.target.value)}
+                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none text-center"
+                                    />
                                 </div>
 
                                 <div className="space-y-2">

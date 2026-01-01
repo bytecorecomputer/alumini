@@ -2,41 +2,41 @@ import { useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-    CreditCard, Calendar, MapPin, Phone, GraduationCap,
-    CheckCircle2, AlertCircle, ArrowRight, Wallet,
-    BookOpen, History, User, LogOut, ChevronRight
+    Calendar, MapPin, Phone, GraduationCap,
+    CheckCircle2, AlertCircle,
+    BookOpen, History, User, LogOut, Wallet
 } from "lucide-react";
 import { cn } from "../lib/utils";
 
 export default function StudentPortal() {
-    const [student, setStudent] = useState(null);
+    const [student, setStudent] = useState(() => {
+        const session = localStorage.getItem('student_session');
+        return session ? JSON.parse(session) : null;
+    });
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const session = localStorage.getItem('student_session');
-        if (!session) {
+        if (!student) {
             navigate('/login');
             return;
         }
 
-        const initialData = JSON.parse(session);
-        setStudent(initialData);
-
         // Listen for real-time updates from Firestore
-        const unsub = onSnapshot(doc(db, "students", initialData.registration), (doc) => {
-            if (doc.exists()) {
-                const data = doc.data();
-                setStudent(data);
+        const unsub = onSnapshot(doc(db, "students", student.registration), (docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const data = docSnapshot.data();
+                setStudent(prev => ({ ...prev, ...data }));
                 localStorage.setItem('student_session', JSON.stringify(data));
             }
             setLoading(false);
         });
 
         return () => unsub();
-    }, [navigate]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [navigate, student?.registration]);
 
     const handleLogout = () => {
         localStorage.removeItem('student_session');
