@@ -30,12 +30,12 @@ export default function Footer() {
 
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-4">Connect</h4>
-                        <p className="text-sm text-gray-500">contact@university.edu</p>
-                        <p className="text-sm text-gray-500">+1 (555) 123-4567</p>
+                        <p className="text-sm text-gray-500">coderafroj@gmail.com</p>
+                        <p className="text-sm text-gray-500">+91 7017733805</p>
                     </div>
                 </div>
                 <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-400">
-                    © {new Date().getFullYear()} University Alumni Association. All rights reserved.
+                    © {new Date().getFullYear()} Alumni Association. Developed by <span className="text-primary-600 font-bold">CoderAfroj</span>. All rights reserved.
                 </div>
             </div>
         </footer>

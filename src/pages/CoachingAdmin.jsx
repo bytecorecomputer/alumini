@@ -442,7 +442,7 @@ export default function CoachingAdmin() {
                                             <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-black text-xs">A</div>
                                             <div>
                                                 <p className="font-black text-slate-900">{course.name}</p>
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Fee: ₹{course.fee}</p>
+                                                <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest text-center mt-6">Bytecore Management System x CoderAfroj</p>
                                             </div>
                                         </div>
                                         <button onClick={() => handleDeleteCourse(course.id)} className="p-2 text-red-200 hover:text-red-500 transition-colors"><Trash2 size={18} /></button>

@@ -55,9 +55,10 @@ export default function StudentLogin() {
     return (
         <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center p-4 relative overflow-hidden">
             {/* Background Aesthetics */}
-            <div className="absolute top-0 left-0 w-full h-full -z-10">
-                <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-100/50 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-100/50 rounded-full blur-[120px]" />
+            <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
+                <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-50/50 rounded-full blur-[150px] animate-pulse" />
+                <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-50/50 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '2s' }} />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.4]" />
             </div>
 
             <motion.div
