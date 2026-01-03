@@ -142,6 +142,50 @@ export default function CoachingAdmin() {
         }
     };
 
+    const handleExportCSV = () => {
+        if (!students.length) {
+            alert("No data to export.");
+            return;
+        }
+
+        const headers = ["Registration", "Full Name", "Course", "Mobile", "Status", "Admission Date", "Father Name", "Address", "Total Fees", "Old Paid Fees", "New Paid Fees", "Total Paid", "Balance"];
+
+        const csvRows = [
+            headers.join(','),
+            ...students.map(s => {
+                const totalPaid = (s.paidFees || 0) + (s.oldPaidFees || 0);
+                const balance = (s.totalFees || 0) - totalPaid;
+
+                return [
+                    s.registration || '',
+                    `"${s.fullName || ''}"`, // Wrap in quotes to handle commas in names
+                    s.course || '',
+                    s.mobile || '',
+                    s.status || 'unpaid',
+                    s.admissionDate || '',
+                    `"${s.fatherName || ''}"`,
+                    `"${s.address || ''}"`,
+                    s.totalFees || 0,
+                    s.oldPaidFees || 0,
+                    s.paidFees || 0,
+                    totalPaid,
+                    balance
+                ].join(',');
+            })
+        ];
+
+        const csvString = csvRows.join('\n');
+        const blob = new Blob([csvString], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bytecore_students_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
     const openAddModal = () => {
         setIsEditing(false);
         const nextId = students.length > 0 ? (Math.max(...students.map(s => parseInt(s.registration) || 0)) + 1).toString() : "1001";
@@ -226,6 +270,12 @@ export default function CoachingAdmin() {
                         >
                             <Settings size={18} /> Course Config
                         </button>
+                        <button
+                            onClick={handleExportCSV}
+                            className="bg-emerald-50 text-emerald-600 border border-emerald-100 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-50 flex items-center gap-3 hover:bg-emerald-100 transition-all"
+                        >
+                            <Download size={18} /> Export CSV
+                        </button>
                     </div>
 
                     <div className="flex gap-4 w-full md:w-auto">
@@ -286,10 +336,10 @@ export default function CoachingAdmin() {
                         <table className="w-full text-left">
                             <thead className="bg-slate-50/50 border-b border-slate-100">
                                 <tr>
-                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Student Identity</th>
-                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hidden sm:table-cell">Course & Progression</th>
-                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Financial Status</th>
-                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 text-right">Actions</th>
+                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Student Identity</th>
+                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 hidden sm:table-cell">Course & Progression</th>
+                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Financial Status</th>
+                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50">
@@ -308,7 +358,7 @@ export default function CoachingAdmin() {
                                                 </div>
                                                 <div className="min-w-0">
                                                     <h4 className="font-black text-slate-900 text-sm md:text-lg tracking-tight mb-0.5 truncate">{student.fullName}</h4>
-                                                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">{student.mobile}</p>
+                                                    <p className="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
                                                     <div className="sm:hidden mt-1 inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md">
                                                         <BookOpen size={8} />
                                                         <span className="text-[8px] font-black uppercase">{student.course}</span>
@@ -330,7 +380,7 @@ export default function CoachingAdmin() {
                                         </td>
                                         <td className="px-4 md:px-10 py-6">
                                             <div className="space-y-2 min-w-[80px]">
-                                                <div className="flex justify-between text-[8px] md:text-[10px] font-black text-slate-400">
+                                                <div className="flex justify-between text-[8px] md:text-[10px] font-black text-slate-500">
                                                     <span>₹{(student.paidFees || 0) + (student.oldPaidFees || 0)}</span>
                                                     <span className="opacity-40">/ {student.totalFees || 0}</span>
                                                 </div>
