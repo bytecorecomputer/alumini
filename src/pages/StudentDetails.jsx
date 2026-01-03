@@ -227,7 +227,7 @@ export default function StudentDetails() {
                                 <div className="h-24 w-24 bg-blue-600 rounded-[2rem] flex items-center justify-center mb-6 shadow-2xl shadow-blue-900/50 ring-4 ring-white/10">
                                     <User size={48} />
                                 </div>
-                                <h2 className="text-3xl font-black tracking-tighter mb-1">{student.fullName}</h2>
+                                <h2 className="text-3xl font-black tracking-tighter mb-1 capitalize">{student.fullName}</h2>
                                 <p className="text-blue-400 font-black text-[10px] uppercase tracking-[0.3em] mb-8">Registration: {student.registration}</p>
 
                                 <div className="w-full space-y-4 text-left">
@@ -243,7 +243,10 @@ export default function StudentDetails() {
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Account Status</p>
                                 <div className="flex items-center gap-2">
                                     <div className={cn("h-2 w-2 rounded-full", student.status === 'pass' ? "bg-emerald-500" : "bg-amber-500")} />
-                                    <span className="font-black text-slate-900 uppercase tracking-tight">{student.status}</span>
+                                    <span className={cn(
+                                        "font-black uppercase tracking-tight px-3 py-1 rounded-lg text-[10px]",
+                                        student.status === 'pass' ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
+                                    )}>{student.status}</span>
                                 </div>
                             </div>
                             <ShieldCheck size={24} className="text-blue-600" />
@@ -321,7 +324,7 @@ export default function StudentDetails() {
                                     <EditField label="Old Fees Received" value={editForm.oldPaidFees} type="number" onChange={v => setEditForm({ ...editForm, oldPaidFees: parseInt(v) })} />
                                     <EditField label="Father's Name" value={editForm.fatherName} onChange={v => setEditForm({ ...editForm, fatherName: v })} />
                                     <div className="md:col-span-2">
-                                        <EditField label="Home Address" value={editForm.address} type="textarea" onChange={v => setEditForm({ ...editForm, address: v })} />
+                                        <EditField label="Home Address" value={editForm.address || ''} type="textarea" onChange={v => setEditForm({ ...editForm, address: v })} />
                                     </div>
 
                                     {/* Danger Zone */}
@@ -436,7 +439,7 @@ export default function StudentDetails() {
                                         type="date"
                                         value={paymentDate}
                                         onChange={e => setPaymentDate(e.target.value)}
-                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none text-center"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 font-bold text-blue-600 outline-none text-center cursor-pointer shadow-sm hover:border-blue-200 focus:bg-white transition-all"
                                     />
                                 </div>
 
@@ -446,8 +449,8 @@ export default function StudentDetails() {
                                         type="number"
                                         value={paymentAmount}
                                         onChange={e => setPaymentAmount(e.target.value)}
-                                        className="w-full bg-slate-50 border-2 border-transparent rounded-[1.5rem] py-5 px-8 text-2xl font-black text-center text-slate-900 focus:bg-white focus:border-blue-100 focus:ring-4 ring-blue-50 outline-none transition-all placeholder:text-slate-200"
-                                        placeholder="0000"
+                                        className="w-full bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] py-5 px-8 text-2xl font-black text-center text-slate-900 focus:bg-white focus:border-blue-200 focus:ring-4 ring-blue-50 outline-none transition-all placeholder:text-slate-300"
+                                        placeholder="000.00"
                                     />
                                 </div>
 
@@ -524,7 +527,7 @@ function EditField({ label, value, onChange, type = "text", options }) {
                     value={value}
                     onChange={e => onChange(e.target.value)}
                     rows="3"
-                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-800 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all shadow-sm"
                 />
             ) : (
                 <input

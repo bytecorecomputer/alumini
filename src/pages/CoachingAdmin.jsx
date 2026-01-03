@@ -70,8 +70,7 @@ export default function CoachingAdmin() {
 
             const studentRef = doc(db, "students", trimmedReg);
 
-            // CHECK FOR DUPLICATES IF THIS IS A NEW ENTRY OR ID CHANGED (Though ID change logic isn't fully here yet, primarily for new admissions)
-            // Since we are using the ID as the document key, we must check if it exists.
+            // CHECK FOR DUPLICATES IF THIS IS A NEW ENTRY
             if (!isEditing) {
                 const docSnap = await getDoc(studentRef);
                 if (docSnap.exists()) {
@@ -98,11 +97,10 @@ export default function CoachingAdmin() {
             await setDoc(studentRef, data, { merge: true });
 
             setIsAddEditModalOpen(false);
-            // Reset form
             setStudentForm({
                 registration: '', fullName: '', course: '', mobile: '',
                 status: 'unpaid', totalFees: '', oldPaidFees: '',
-                admissionDate: new Date().toLocaleDateString('en-GB'),
+                admissionDate: new Date().toISOString().split('T')[0],
                 fatherName: '', address: ''
             });
             alert("Student saved successfully!");
@@ -357,7 +355,7 @@ export default function CoachingAdmin() {
                                                     {student.registration}
                                                 </div>
                                                 <div className="min-w-0">
-                                                    <h4 className="font-black text-slate-900 text-sm md:text-lg tracking-tight mb-0.5 truncate">{student.fullName}</h4>
+                                                    <h4 className="font-black text-slate-900 text-sm md:text-lg tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
                                                     <p className="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
                                                     <div className="sm:hidden mt-1 inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md">
                                                         <BookOpen size={8} />
@@ -477,7 +475,7 @@ export default function CoachingAdmin() {
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Academic Course</label>
                                     <select
-                                        className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-5 px-8 font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all appearance-none"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-5 px-8 font-bold text-slate-800 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all appearance-none shadow-sm"
                                         value={studentForm.course}
                                         onChange={e => onCourseChange(e.target.value)}
                                     >
@@ -516,10 +514,10 @@ export default function CoachingAdmin() {
 
 function StatCard({ label, value, icon, color }) {
     const colors = {
-        blue: "bg-blue-50 text-blue-600 border-blue-100",
-        emerald: "bg-emerald-50 text-emerald-600 border-emerald-100",
-        amber: "bg-amber-50 text-amber-600 border-amber-100",
-        indigo: "bg-indigo-50 text-indigo-600 border-indigo-100"
+        blue: "bg-blue-50 text-blue-700 border-blue-200 shadow-blue-100/50",
+        emerald: "bg-emerald-50 text-emerald-700 border-emerald-200 shadow-emerald-100/50",
+        amber: "bg-amber-50 text-amber-700 border-amber-200 shadow-amber-100/50",
+        indigo: "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-indigo-100/50"
     };
     return (
         <div className={cn("p-5 md:p-6 rounded-[2rem] border shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full", colors[color])}>
@@ -527,7 +525,7 @@ function StatCard({ label, value, icon, color }) {
                 <div className="opacity-40">{icon}</div>
             </div>
             <div>
-                <div className="text-xl md:text-2xl xl:text-3xl font-black tracking-tighter leading-none mb-1 truncate" title={value}>
+                <div className="text-xl md:text-2xl xl:text-3xl font-black tracking-tighter leading-none mb-1 break-all" title={value}>
                     {value}
                 </div>
                 <div className="text-[9px] font-black uppercase tracking-widest opacity-60 leading-tight truncate">{label}</div>
@@ -545,7 +543,10 @@ function Input({ label, value, onChange, type = "text", disabled }) {
                 value={value}
                 disabled={disabled}
                 onChange={e => onChange?.(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-5 px-8 font-bold text-slate-700 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all placeholder:text-slate-200 disabled:opacity-50"
+                className={cn(
+                    "w-full bg-slate-50 border border-slate-200 rounded-2xl py-5 px-8 font-bold text-slate-800 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all placeholder:text-slate-300 disabled:opacity-50",
+                    type === 'date' && "text-blue-600 cursor-pointer"
+                )}
                 placeholder="..."
             />
         </div>
