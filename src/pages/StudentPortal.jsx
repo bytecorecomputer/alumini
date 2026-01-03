@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { uploadToCloudinary } from "../lib/cloudinary";
+import { compressImage } from "../lib/imageCompression";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
     Calendar, MapPin, Phone, GraduationCap,
     CheckCircle2, AlertCircle,
-    BookOpen, History, User, LogOut, Wallet
+    BookOpen, History, User, LogOut, Wallet, Camera, Loader2
 } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -106,8 +108,38 @@ export default function StudentPortal() {
                             </div>
 
                             <div className="relative z-10">
-                                <div className="h-16 w-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 ring-1 ring-white/20">
-                                    <User size={32} className="text-blue-400" />
+                                <div className="h-20 w-20 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 ring-1 ring-white/20 overflow-hidden relative group">
+                                    {student.photoUrl ? (
+                                        <img src={student.photoUrl} alt="" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <User size={32} className="text-blue-400" />
+                                    )}
+                                    <label htmlFor="portal-photo" className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+                                        <Camera className="text-white" size={20} />
+                                    </label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        id="portal-photo"
+                                        className="hidden"
+                                        onChange={async (e) => {
+                                            const file = e.target.files?.[0];
+                                            if (!file) return;
+                                            setLoading(true);
+                                            try {
+                                                const compressed = await compressImage(file, 50);
+                                                const url = await uploadToCloudinary(compressed);
+                                                await updateDoc(doc(db, "students", student.registration), {
+                                                    photoUrl: url,
+                                                    updatedAt: Date.now()
+                                                });
+                                            } catch (err) {
+                                                alert("Update failed: " + err.message);
+                                            } finally {
+                                                setLoading(false);
+                                            }
+                                        }}
+                                    />
                                 </div>
                                 <h3 className="text-2xl font-black mb-1 tracking-tight">{student.fullName}</h3>
                                 <p className="text-white/50 text-xs font-black uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Registration: {student.registration}</p>

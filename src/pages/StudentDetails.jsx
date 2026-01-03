@@ -9,6 +9,8 @@ import {
     GraduationCap
 } from "lucide-react";
 import { cn } from "../lib/utils";
+import { uploadToCloudinary } from "../lib/cloudinary";
+import { compressImage } from "../lib/imageCompression";
 
 export default function StudentDetails() {
     const { id } = useParams();
@@ -224,8 +226,12 @@ export default function StudentDetails() {
                             </div>
 
                             <div className="relative z-10 flex flex-col items-center text-center">
-                                <div className="h-24 w-24 bg-blue-600 rounded-[2rem] flex items-center justify-center mb-6 shadow-2xl shadow-blue-900/50 ring-4 ring-white/10">
-                                    <User size={48} />
+                                <div className="h-24 w-24 bg-blue-600 rounded-[2rem] flex items-center justify-center mb-6 shadow-2xl shadow-blue-900/50 ring-4 ring-white/10 overflow-hidden">
+                                    {student.photoUrl ? (
+                                        <img src={student.photoUrl} alt="" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <User size={48} />
+                                    )}
                                 </div>
                                 <h2 className="text-3xl font-black tracking-tighter mb-1 capitalize">{student.fullName}</h2>
                                 <p className="text-blue-400 font-black text-[10px] uppercase tracking-[0.3em] mb-8">Registration: {student.registration}</p>
@@ -323,6 +329,53 @@ export default function StudentDetails() {
                                     <EditField label="Total Fee" value={editForm.totalFees} type="number" onChange={v => setEditForm({ ...editForm, totalFees: parseInt(v) })} />
                                     <EditField label="Old Fees Received" value={editForm.oldPaidFees} type="number" onChange={v => setEditForm({ ...editForm, oldPaidFees: parseInt(v) })} />
                                     <EditField label="Father's Name" value={editForm.fatherName} onChange={v => setEditForm({ ...editForm, fatherName: v })} />
+                                    <div className="md:col-span-2 space-y-2">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Identity Portrait</label>
+                                        <div className="flex items-center gap-6 p-6 bg-slate-50 border border-slate-200 rounded-[2.5rem]">
+                                            <div className="h-20 w-20 bg-white rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden shrink-0 shadow-sm relative group">
+                                                {editForm.photoUrl ? (
+                                                    <img src={editForm.photoUrl} alt="" className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <User className="text-slate-200" size={32} />
+                                                )}
+                                                {isUpdating && (
+                                                    <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
+                                                        <TrendingUp className="animate-spin text-blue-600" size={20} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className="flex-1 space-y-3">
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    id="edit-student-photo"
+                                                    className="hidden"
+                                                    onChange={async (e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (!file) return;
+                                                        setIsUpdating(true);
+                                                        try {
+                                                            const compressed = await compressImage(file, 50);
+                                                            const url = await uploadToCloudinary(compressed);
+                                                            setEditForm({ ...editForm, photoUrl: url });
+                                                        } catch (err) {
+                                                            alert("Photo upload failed: " + err.message);
+                                                        } finally {
+                                                            setIsUpdating(false);
+                                                        }
+                                                    }}
+                                                />
+                                                <label
+                                                    htmlFor="edit-student-photo"
+                                                    className="inline-flex py-3 px-6 bg-white border border-slate-200 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-600 hover:bg-slate-900 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                                                >
+                                                    Select New Aesthetic
+                                                </label>
+                                                <p className="text-[9px] font-bold text-slate-400">Target Weight: 50KB (Auto-optimized)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div className="md:col-span-2">
                                         <EditField label="Home Address" value={editForm.address || ''} type="textarea" onChange={v => setEditForm({ ...editForm, address: v })} />
                                     </div>

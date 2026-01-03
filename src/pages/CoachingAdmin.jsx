@@ -11,6 +11,8 @@ import {
     BookOpen, Settings, BarChart3, ArrowUpRight, GraduationCap, CheckCircle
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { uploadToCloudinary } from '../lib/cloudinary';
+import { compressImage } from '../lib/imageCompression';
 
 export default function CoachingAdmin() {
     const { user } = useAuth();
@@ -32,7 +34,7 @@ export default function CoachingAdmin() {
     const [studentForm, setStudentForm] = useState({
         registration: '', fullName: '', course: '', mobile: '',
         status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toISOString().split('T')[0],
-        fatherName: '', address: ''
+        fatherName: '', address: '', photoUrl: ''
     });
 
     const isOwner = user?.email === 'coderafroj@gmail.com';
@@ -101,7 +103,7 @@ export default function CoachingAdmin() {
                 registration: '', fullName: '', course: '', mobile: '',
                 status: 'unpaid', totalFees: '', oldPaidFees: '',
                 admissionDate: new Date().toISOString().split('T')[0],
-                fatherName: '', address: ''
+                fatherName: '', address: '', photoUrl: ''
             });
             alert("Student saved successfully!");
 
@@ -190,7 +192,7 @@ export default function CoachingAdmin() {
         setStudentForm({
             registration: nextId, fullName: '', course: '', mobile: '',
             status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toISOString().split('T')[0],
-            fatherName: '', address: ''
+            fatherName: '', address: '', photoUrl: ''
         });
         setIsAddEditModalOpen(true);
     };
@@ -351,8 +353,12 @@ export default function CoachingAdmin() {
                                     >
                                         <td className="px-4 md:px-10 py-6">
                                             <div className="flex items-center gap-3 md:gap-5">
-                                                <div className="h-10 w-10 md:h-14 md:w-14 bg-slate-900 text-white rounded-xl md:rounded-2xl flex items-center justify-center font-black text-[10px] md:text-xs shadow-lg group-hover:scale-110 transition-transform shrink-0">
-                                                    {student.registration}
+                                                <div className="h-10 w-10 md:h-14 md:w-14 bg-slate-900 text-white rounded-xl md:rounded-2xl flex items-center justify-center font-black text-[10px] md:text-xs shadow-lg group-hover:scale-110 transition-transform shrink-0 overflow-hidden border-2 border-white">
+                                                    {student.photoUrl ? (
+                                                        <img src={student.photoUrl} alt="" className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        student.registration
+                                                    )}
                                                 </div>
                                                 <div className="min-w-0">
                                                     <h4 className="font-black text-slate-900 text-sm md:text-lg tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
@@ -490,9 +496,49 @@ export default function CoachingAdmin() {
                                 <Input label="Old Paid Fees (Subtracted)" type="number" value={studentForm.oldPaidFees} onChange={v => setStudentForm({ ...studentForm, oldPaidFees: v })} />
 
                                 <Input label="Father's Name" value={studentForm.fatherName} onChange={v => setStudentForm({ ...studentForm, fatherName: v })} />
-                                <div className="md:col-span-2">
-                                    <Input label="Home Address" value={studentForm.address} onChange={v => setStudentForm({ ...studentForm, address: v })} />
+                                <div className="md:col-span-2 space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Student Portrait</label>
+                                    <div className="flex items-center gap-6 p-6 bg-slate-50 border border-slate-200 rounded-[2rem]">
+                                        <div className="h-20 w-20 bg-white rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+                                            {studentForm.photoUrl ? (
+                                                <img src={studentForm.photoUrl} alt="" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <User className="text-slate-200" size={32} />
+                                            )}
+                                        </div>
+                                        <div className="flex-1 space-y-3">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                id="student-photo"
+                                                className="hidden"
+                                                onChange={async (e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (!file) return;
+                                                    setIsUpdating(true);
+                                                    try {
+                                                        const compressed = await compressImage(file, 50); // Target 50KB
+                                                        const url = await uploadToCloudinary(compressed);
+                                                        setStudentForm({ ...studentForm, photoUrl: url });
+                                                    } catch (err) {
+                                                        alert("Photo upload failed: " + err.message);
+                                                    } finally {
+                                                        setIsUpdating(false);
+                                                    }
+                                                }}
+                                            />
+                                            <label
+                                                htmlFor="student-photo"
+                                                className="inline-flex py-3 px-6 bg-white border border-slate-200 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-600 hover:bg-slate-900 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                                            >
+                                                Select Identity Graphic
+                                            </label>
+                                            <p className="text-[9px] font-bold text-slate-400">Target Weight: 50KB (Auto-optimized)</p>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <Input label="Home Address" value={studentForm.address} onChange={v => setStudentForm({ ...studentForm, address: v })} />
 
                                 <div className="md:col-span-2 pt-6">
                                     <button
