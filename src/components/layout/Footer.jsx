@@ -3,11 +3,18 @@ export default function Footer() {
         <footer className="bg-gray-50 border-t border-gray-200 py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div className="space-y-4">
-                        <h3 className="text-lg font-bold text-primary-900">AlumniConnect</h3>
-                        <p className="text-gray-500 text-sm">
-                            Connecting generations of success. The official alumni network.
-                        </p>
+                    <div className="flex flex-col gap-6">
+                        <h4 className="font-semibold text-gray-900">Expert Support</h4>
+                        <div className="space-y-1">
+                            <p className="text-xs font-black text-slate-900 uppercase tracking-widest">CoderAfroj</p>
+                            <p className="text-sm text-gray-500">+91 7017733805</p>
+                        </div>
+                        <a
+                            href="/donate"
+                            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-slate-200 active:scale-95"
+                        >
+                            Donate Now
+                        </a>
                     </div>
 
                     <div>

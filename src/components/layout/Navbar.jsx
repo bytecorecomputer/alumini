@@ -13,6 +13,14 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const navigate = useNavigate();
     const { user, userData, role } = useAuth();
+    const [studentSession, setStudentSession] = useState(null);
+
+    useEffect(() => {
+        const session = localStorage.getItem('student_session');
+        if (session) {
+            setStudentSession(JSON.parse(session));
+        }
+    }, [user]);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -53,7 +61,6 @@ export default function Navbar() {
                         <NavLink to="/directory">Members</NavLink>
                         <NavLink to="/events">Events</NavLink>
                         <NavLink to="/jobs">Jobs</NavLink>
-                        <NavLink to="/donate">Donate</NavLink>
 
                         {(role === 'admin' || role === 'super_admin') && (
                             <div className="relative group/mgmt">
@@ -148,7 +155,6 @@ export default function Navbar() {
                                 <MobileNavLink to="/directory" onClick={() => setIsOpen(false)}>Members</MobileNavLink>
                                 <MobileNavLink to="/events" onClick={() => setIsOpen(false)}>Events</MobileNavLink>
                                 <MobileNavLink to="/jobs" onClick={() => setIsOpen(false)}>Jobs</MobileNavLink>
-                                <MobileNavLink to="/donate" onClick={() => setIsOpen(false)}>Donate</MobileNavLink>
 
                                 {(role === 'admin' || role === 'super_admin') && (
                                     <>
@@ -171,27 +177,41 @@ export default function Navbar() {
                                     </div>
                                 </MobileNavLink>
 
-                                {user ? (
+                                {user || studentSession ? (
                                     <div className="pt-8 mt-8 border-t border-slate-100 space-y-4">
                                         <Link
-                                            to="/profile"
+                                            to={user ? "/profile" : "/student-portal"}
                                             onClick={() => setIsOpen(false)}
                                             className="flex items-center gap-4 p-5 bg-slate-50 rounded-[2rem] group"
                                         >
-                                            <div className="h-12 w-12 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-lg">
-                                                <User size={20} />
+                                            <div className="h-12 w-12 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-lg overflow-hidden border-2 border-white">
+                                                {(userData?.photoURL || studentSession?.photoUrl) ? (
+                                                    <img src={userData?.photoURL || studentSession?.photoUrl} alt="" className="h-full w-full object-cover" />
+                                                ) : (
+                                                    <User size={20} />
+                                                )}
                                             </div>
                                             <div>
-                                                <div className="font-black text-slate-900 text-sm">My Profile</div>
-                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">View Profile</div>
+                                                <div className="font-black text-slate-900 text-sm truncate max-w-[150px]">
+                                                    {user?.displayName || studentSession?.fullName}
+                                                </div>
+                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                    {user ? "View Profile" : studentSession?.registration}
+                                                </div>
                                             </div>
                                         </Link>
                                         <button
-                                            onClick={handleLogout}
+                                            onClick={async () => {
+                                                if (user) await signOut(auth);
+                                                localStorage.removeItem('student_session');
+                                                setStudentSession(null);
+                                                setIsOpen(false);
+                                                navigate('/login');
+                                            }}
                                             className="w-full flex items-center justify-center gap-3 p-5 text-red-600 font-black uppercase tracking-widest text-xs hover:bg-red-50 rounded-[2rem] transition-all border border-transparent hover:border-red-100"
                                         >
                                             <LogOut size={18} />
-                                            <span>Logout</span>
+                                            <span>Logout System</span>
                                         </button>
                                     </div>
                                 ) : (
@@ -199,20 +219,12 @@ export default function Navbar() {
                                         <Link
                                             to="/login"
                                             onClick={() => setIsOpen(false)}
-                                            className="w-full py-5 text-center text-slate-900 font-black uppercase tracking-widest text-xs"
+                                            className="w-full py-5 text-center text-slate-900 font-black uppercase tracking-widest text-xs border border-slate-100 rounded-[2rem] hover:bg-slate-50 transition-all"
                                         >
-                                            Login
-                                        </Link>
-                                        <Link
-                                            to="/register"
-                                            onClick={() => setIsOpen(false)}
-                                            className="btn-premium w-full py-5 bg-slate-900 text-white shadow-2xl shadow-slate-200 text-xs uppercase tracking-widest"
-                                        >
-                                            Register
+                                            Login / Portal
                                         </Link>
                                     </div>
-                                )
-                                }
+                                )}
                             </div>
 
                             <div className="absolute bottom-10 left-8 right-8">
