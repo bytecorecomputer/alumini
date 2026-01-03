@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, getDocs, doc, updateDoc, arrayUnion, orderBy, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
+import { collection, query, getDocs, doc, updateDoc, arrayUnion, orderBy, setDoc, deleteDoc, onSnapshot, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { useAuth } from '../app/common/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,7 +31,7 @@ export default function CoachingAdmin() {
     const [isEditing, setIsEditing] = useState(false);
     const [studentForm, setStudentForm] = useState({
         registration: '', fullName: '', course: '', mobile: '',
-        status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toLocaleDateString('en-GB'),
+        status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toISOString().split('T')[0],
         fatherName: '', address: ''
     });
 
@@ -61,25 +61,55 @@ export default function CoachingAdmin() {
         e.preventDefault();
         setIsUpdating(true);
         try {
-            const studentRef = doc(db, "students", studentForm.registration.trim());
+            const trimmedReg = studentForm.registration.trim();
+            if (!trimmedReg) {
+                alert("Registration Number is required!");
+                setIsUpdating(false);
+                return;
+            }
+
+            const studentRef = doc(db, "students", trimmedReg);
+
+            // CHECK FOR DUPLICATES IF THIS IS A NEW ENTRY OR ID CHANGED (Though ID change logic isn't fully here yet, primarily for new admissions)
+            // Since we are using the ID as the document key, we must check if it exists.
+            if (!isEditing) {
+                const docSnap = await getDoc(studentRef);
+                if (docSnap.exists()) {
+                    alert(`DUPLICATE WARNING: A student with Registration ID "${trimmedReg}" already exists!\nPlease use a unique ID.`);
+                    setIsUpdating(false);
+                    return;
+                }
+            }
+
             const data = {
                 ...studentForm,
+                registration: trimmedReg,
                 updatedAt: Date.now(),
                 totalFees: parseInt(studentForm.totalFees) || 0,
                 oldPaidFees: parseInt(studentForm.oldPaidFees) || 0,
-                registration: studentForm.registration.trim()
             };
 
             if (!isEditing) {
+                // Initialize default fields for new students
                 data.paidFees = 0;
                 data.installments = [];
             }
 
             await setDoc(studentRef, data, { merge: true });
+
             setIsAddEditModalOpen(false);
-            setStudentForm({ registration: '', fullName: '', course: '', mobile: '', status: 'unpaid', totalFees: '', admissionDate: new Date().toLocaleDateString('en-GB'), fatherName: '', address: '' });
+            // Reset form
+            setStudentForm({
+                registration: '', fullName: '', course: '', mobile: '',
+                status: 'unpaid', totalFees: '', oldPaidFees: '',
+                admissionDate: new Date().toLocaleDateString('en-GB'),
+                fatherName: '', address: ''
+            });
+            alert("Student saved successfully!");
+
         } catch (err) {
-            alert("Failed to save student data!");
+            console.error("Save Error:", err);
+            alert("Failed to save student data! " + err.message);
         } finally {
             setIsUpdating(false);
         }
@@ -117,7 +147,7 @@ export default function CoachingAdmin() {
         const nextId = students.length > 0 ? (Math.max(...students.map(s => parseInt(s.registration) || 0)) + 1).toString() : "1001";
         setStudentForm({
             registration: nextId, fullName: '', course: '', mobile: '',
-            status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toLocaleDateString('en-GB'),
+            status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toISOString().split('T')[0],
             fatherName: '', address: ''
         });
         setIsAddEditModalOpen(true);
@@ -407,9 +437,14 @@ export default function CoachingAdmin() {
                                 </div>
 
                                 <Input label="Contact Mobile" value={studentForm.mobile} onChange={v => setStudentForm({ ...studentForm, mobile: v })} />
-                                <Input label="Admission Date" value={studentForm.admissionDate} onChange={v => setStudentForm({ ...studentForm, admissionDate: v })} />
+                                <Input label="Admission Date" type="date" value={studentForm.admissionDate} onChange={v => setStudentForm({ ...studentForm, admissionDate: v })} />
                                 <Input label="Invested Course Fee (₹)" type="number" value={studentForm.totalFees} onChange={v => setStudentForm({ ...studentForm, totalFees: v })} />
                                 <Input label="Old Paid Fees (Subtracted)" type="number" value={studentForm.oldPaidFees} onChange={v => setStudentForm({ ...studentForm, oldPaidFees: v })} />
+
+                                <Input label="Father's Name" value={studentForm.fatherName} onChange={v => setStudentForm({ ...studentForm, fatherName: v })} />
+                                <div className="md:col-span-2">
+                                    <Input label="Home Address" value={studentForm.address} onChange={v => setStudentForm({ ...studentForm, address: v })} />
+                                </div>
 
                                 <div className="md:col-span-2 pt-6">
                                     <button

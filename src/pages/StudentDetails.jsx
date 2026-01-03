@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { doc, updateDoc, arrayUnion, onSnapshot, deleteDoc } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, onSnapshot, deleteDoc, getDoc, setDoc, increment } from "firebase/firestore";
 import { db } from "../firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -46,13 +46,51 @@ export default function StudentDetails() {
         e.preventDefault();
         setIsUpdating(true);
         try {
+            const newReg = editForm.registration?.trim();
+            const currentReg = id;
+
+            // 1. If Registration Number (ID) is changed, we need to MOVE the document
+            if (newReg && newReg !== currentReg) {
+                // Check if new ID already exists
+                const newDocRef = doc(db, "students", newReg);
+                const newDocSnap = await getDoc(newDocRef);
+
+                if (newDocSnap.exists()) {
+                    alert(`Error: Registration Number "${newReg}" already exists. Please choose a unique one.`);
+                    setIsUpdating(false);
+                    return;
+                }
+
+                if (!window.confirm(`You are about to change the Registration Number from ${currentReg} to ${newReg}.\nThis will move all student data to a new record.\n\nProceed?`)) {
+                    setIsUpdating(false);
+                    return;
+                }
+
+                // Copy data to new doc
+                const newData = {
+                    ...editForm,
+                    registration: newReg,
+                    updatedAt: Date.now()
+                };
+
+                await setDoc(newDocRef, newData);
+                await deleteDoc(doc(db, "students", currentReg));
+
+                alert("Registration Number updated successfully! Redirecting...");
+                navigate(`/admin/coaching/student/${newReg}`, { replace: true });
+                return; // Navigation will unmount component
+            }
+
+            // 2. Normal Update (Same ID)
             await updateDoc(doc(db, "students", id), {
                 ...editForm,
                 updatedAt: Date.now()
             });
             setIsEditing(false);
+            alert("Profile updated successfully.");
         } catch (err) {
-            alert("Failed to update profile.");
+            console.error(err);
+            alert("Failed to update profile: " + err.message);
         } finally {
             setIsUpdating(false);
         }
@@ -68,8 +106,9 @@ export default function StudentDetails() {
             const formattedDate = `${d}/${m}/${y}`;
 
             await updateDoc(doc(db, "students", id), {
-                paidFees: (student.paidFees || 0) + amount,
+                paidFees: increment(amount), // Atomic increment
                 installments: arrayUnion({
+                    id: Date.now(), // Unique ID for this transaction
                     amount,
                     date: formattedDate,
                     installmentNo: installmentNo,
@@ -80,7 +119,9 @@ export default function StudentDetails() {
             setIsFeeModalOpen(false);
             setPaymentAmount('');
             setPaymentNote('');
+            alert("Fee collected successfully.");
         } catch (err) {
+            console.error(err);
             alert("Fee update failed.");
         } finally {
             setIsUpdating(false);
@@ -91,12 +132,18 @@ export default function StudentDetails() {
         if (!window.confirm("Are you sure you want to delete this payment record? This will reduce the total fees received.")) return;
         setIsUpdating(true);
         try {
-            const newPaidFees = (student.paidFees || 0) - parseInt(instToDelete.amount);
-            // Filter out the item at the specific index
-            const newInstallments = student.installments.filter((_, i) => i !== index);
+            // Safe filter approach: 
+            // If the installment has an ID, use it. If not (legacy), use index as fallback (risky but necessary for old data).
+            const newInstallments = student.installments.filter((inst, i) => {
+                if (instToDelete.id && inst.id) {
+                    return inst.id !== instToDelete.id;
+                }
+                // Fallback for old data without IDs
+                return i !== index;
+            });
 
             await updateDoc(doc(db, "students", id), {
-                paidFees: newPaidFees,
+                paidFees: increment(-Math.abs(parseInt(instToDelete.amount))), // Atomic decrement
                 installments: newInstallments,
                 updatedAt: Date.now()
             });
@@ -265,6 +312,7 @@ export default function StudentDetails() {
                                             </button>
                                         </div>
                                     </div>
+                                    <EditField label="Registration (Roll Number)" value={editForm.registration} onChange={v => setEditForm({ ...editForm, registration: v })} />
                                     <EditField label="Full Name" value={editForm.fullName} onChange={v => setEditForm({ ...editForm, fullName: v })} />
                                     <EditField label="Mobile Number" value={editForm.mobile} onChange={v => setEditForm({ ...editForm, mobile: v })} />
                                     <EditField label="Course" value={editForm.course} onChange={v => setEditForm({ ...editForm, course: v })} />
