@@ -107,6 +107,7 @@ const parseCSV = (csvText) => {
             oldPaidFees,
             paidFees: csvPaidFeesSum,
             installments,
+            center: "Nariyawal",
             updatedAt: Date.now()
         };
 

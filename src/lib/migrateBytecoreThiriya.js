@@ -75,6 +75,7 @@ export const runThiriyaMigration = async (csvText) => {
             paidFees: paidFeesSum,
             oldPaidFees: 0, // We treat all CSV data as new installments
             installments,
+            center: "Thiriya",
             updatedAt: Date.now()
         });
     }

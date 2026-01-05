@@ -23,6 +23,7 @@ export default function CoachingAdmin() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterStatus, setFilterStatus] = useState('all');
+    const [centerFilter, setCenterFilter] = useState('all');
     const [isUpdating, setIsUpdating] = useState(false);
 
     // Course Management States
@@ -35,7 +36,7 @@ export default function CoachingAdmin() {
     const [studentForm, setStudentForm] = useState({
         registration: '', fullName: '', course: '', mobile: '',
         status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toISOString().split('T')[0],
-        fatherName: '', address: '', photoUrl: ''
+        fatherName: '', address: '', photoUrl: '', center: 'Nariyawal'
     });
 
     const isOwner = user?.email === 'coderafroj@gmail.com';
@@ -104,7 +105,7 @@ export default function CoachingAdmin() {
                 registration: '', fullName: '', course: '', mobile: '',
                 status: 'unpaid', totalFees: '', oldPaidFees: '',
                 admissionDate: new Date().toISOString().split('T')[0],
-                fatherName: '', address: '', photoUrl: ''
+                fatherName: '', address: '', photoUrl: '', center: 'Nariyawal'
             });
             alert("Student saved successfully!");
 
@@ -193,7 +194,7 @@ export default function CoachingAdmin() {
         setStudentForm({
             registration: nextId, fullName: '', course: '', mobile: '',
             status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toISOString().split('T')[0],
-            fatherName: '', address: '', photoUrl: ''
+            fatherName: '', address: '', photoUrl: '', center: 'Nariyawal'
         });
         setIsAddEditModalOpen(true);
     };
@@ -210,14 +211,17 @@ export default function CoachingAdmin() {
     const filteredStudents = students.filter(s => {
         const matchesSearch = s.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) || s.registration?.includes(searchTerm);
         const matchesStatus = filterStatus === 'all' || s.status === filterStatus;
-        return matchesSearch && matchesStatus;
+        const matchesCenter = centerFilter === 'all' || s.center === centerFilter;
+        return matchesSearch && matchesStatus && matchesCenter;
     });
 
     const stats = {
         total: students.length,
         collected: students.reduce((acc, s) => acc + (s.paidFees || 0) + (s.oldPaidFees || 0), 0),
         pending: students.reduce((acc, s) => acc + ((s.totalFees || 0) - ((s.paidFees || 0) + (s.oldPaidFees || 0))), 0),
-        active: students.filter(s => s.status !== 'pass').length
+        active: students.filter(s => s.status !== 'pass').length,
+        thiriya: students.filter(s => s.center === 'Thiriya').length,
+        nariyawal: students.filter(s => s.center === 'Nariyawal').length
     };
 
     if (!isOwner) {
@@ -235,8 +239,8 @@ export default function CoachingAdmin() {
             <div className="max-w-7xl mx-auto">
 
                 {/* Advanced Header & Stats */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-end">
-                    <div className="lg:col-span-5">
+                <div className="flex flex-col gap-8 mb-12">
+                    <div>
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-3 bg-slate-900 rounded-2xl text-white shadow-xl">
                                 <TrendingUp size={24} />
@@ -246,13 +250,12 @@ export default function CoachingAdmin() {
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] ml-1">Advanced Administration Suite</p>
                     </div>
 
-                    <div className="lg:col-span-7">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <StatCard label="Enrollments" value={stats.total} icon={<Users size={16} />} color="blue" />
-                            <StatCard label="Revenue" value={`₹${stats.collected}`} icon={<Wallet size={16} />} color="emerald" />
-                            <StatCard label="Arrears" value={`₹${stats.pending}`} icon={<AlertCircle size={16} />} color="amber" />
-                            <StatCard label="Active" value={stats.active} icon={<ArrowUpRight size={16} />} color="indigo" />
-                        </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
+                        <StatCard label="Total Enroll" value={stats.total} icon={<Users size={16} />} color="blue" />
+                        <StatCard label="Thiriya Students" value={stats.thiriya} icon={<MapPin size={16} />} color="amber" />
+                        <StatCard label="Naryawal Students" value={stats.nariyawal} icon={<MapPin size={16} />} color="emerald" />
+                        <StatCard label="Revenue" value={`₹${stats.collected}`} icon={<Wallet size={16} />} color="emerald" />
+                        <StatCard label="Arrears" value={`₹${stats.pending}`} icon={<AlertCircle size={16} />} color="amber" />
                     </div>
                 </div>
 
@@ -347,6 +350,17 @@ export default function CoachingAdmin() {
                             {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
                             <span className="md:hidden font-black text-[10px] uppercase">Sync Thiriya</span>
                         </button>
+                        <div className="flex gap-2">
+                            <select
+                                value={centerFilter}
+                                onChange={e => setCenterFilter(e.target.value)}
+                                className="bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none focus:ring-4 ring-blue-50 focus:bg-white transition-all appearance-none cursor-pointer"
+                            >
+                                <option value="all">All Centers</option>
+                                <option value="Thiriya">Thiriya Center</option>
+                                <option value="Nariyawal">Nariyawal Center</option>
+                            </select>
+                        </div>
                         <div className="relative flex-grow md:w-80 group">
                             <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors" size={20} />
                             <input
@@ -392,7 +406,15 @@ export default function CoachingAdmin() {
                                                 </div>
                                                 <div className="min-w-0">
                                                     <h4 className="font-black text-slate-900 text-sm md:text-lg tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
-                                                    <p className="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
+                                                    <div className="flex items-center gap-2">
+                                                        <p className="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
+                                                        <span className={cn(
+                                                            "text-[8px] font-black uppercase px-2 py-0.5 rounded-full border",
+                                                            student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100"
+                                                        )}>
+                                                            {student.center || 'Nariyawal'}
+                                                        </span>
+                                                    </div>
                                                     <div className="sm:hidden mt-1 inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md">
                                                         <BookOpen size={8} />
                                                         <span className="text-[8px] font-black uppercase">{student.course}</span>
@@ -526,6 +548,19 @@ export default function CoachingAdmin() {
                                 <Input label="Old Paid Fees (Subtracted)" type="number" value={studentForm.oldPaidFees} onChange={v => setStudentForm({ ...studentForm, oldPaidFees: v })} />
 
                                 <Input label="Father's Name" value={studentForm.fatherName} onChange={v => setStudentForm({ ...studentForm, fatherName: v })} />
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Learning Center</label>
+                                    <select
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-5 px-8 font-bold text-slate-800 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all appearance-none shadow-sm"
+                                        value={studentForm.center}
+                                        onChange={e => setStudentForm({ ...studentForm, center: e.target.value })}
+                                    >
+                                        <option value="Nariyawal">Nariyawal Center</option>
+                                        <option value="Thiriya">Thiriya Center</option>
+                                    </select>
+                                </div>
+
                                 <div className="md:col-span-2 space-y-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Student Portrait</label>
                                     <div className="flex items-center gap-6 p-6 bg-slate-50 border border-slate-200 rounded-[2rem]">
