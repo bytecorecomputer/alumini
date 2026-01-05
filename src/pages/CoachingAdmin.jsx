@@ -13,6 +13,7 @@ import {
 import { cn } from '../lib/utils';
 import { uploadToCloudinary } from '../lib/cloudinary';
 import { compressImage } from '../lib/imageCompression';
+import { runThiriyaMigration } from '../lib/migrateBytecoreThiriya';
 
 export default function CoachingAdmin() {
     const { user } = useAuth();
@@ -316,6 +317,35 @@ export default function CoachingAdmin() {
                         >
                             {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
                             <span className="md:hidden font-black text-[10px] uppercase">Sync Database</span>
+                        </button>
+
+                        <button
+                            onClick={async () => {
+                                if (!window.confirm("Sync Student Data from 'bytecore thiriya.csv'?")) return;
+                                setIsUpdating(true);
+                                try {
+                                    const response = await fetch('/src/assets/bytecore%20thiriya.csv');
+                                    if (!response.ok) throw new Error("CSV file not found");
+                                    const text = await response.text();
+
+                                    const migratedCount = await runThiriyaMigration(text);
+                                    alert(`Thiriya Sync Complete!\n- Processed: ${migratedCount} students`);
+                                } catch (err) {
+                                    console.error(err);
+                                    alert(`Thiriya Sync failed: ${err.message}`);
+                                } finally {
+                                    setIsUpdating(false);
+                                }
+                            }}
+                            disabled={isUpdating}
+                            className={cn(
+                                "flex-1 md:flex-none p-4 rounded-2xl transition-all shadow-sm flex items-center gap-2",
+                                isUpdating ? "bg-amber-100 text-amber-400 cursor-not-allowed" : "bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white"
+                            )}
+                            title="Sync Thiriya CSV"
+                        >
+                            {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
+                            <span className="md:hidden font-black text-[10px] uppercase">Sync Thiriya</span>
                         </button>
                         <div className="relative flex-grow md:w-80 group">
                             <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors" size={20} />
