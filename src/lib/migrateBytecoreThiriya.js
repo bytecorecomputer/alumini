@@ -1,5 +1,6 @@
 import { db } from "../firebase/firestore";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { syncAggregateStats } from "./migrateStudents";
 
 /**
  * Specialized Migration Utility for "bytecore thiriya.csv" format.
@@ -121,6 +122,9 @@ export const runThiriyaMigration = async (csvText) => {
             console.error(`Failed to migrate student ${student.registration}:`, err);
         }
     }
+
+    // Auto-update global stats after migration
+    await syncAggregateStats();
 
     console.log(`Thiriya Migration Complete! ${count} students processed.`);
     return count;

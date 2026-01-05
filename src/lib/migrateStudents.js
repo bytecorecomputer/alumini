@@ -160,7 +160,40 @@ export const runMigration = async (csvText) => {
         }
     }
     console.log(`Migration Complete! ${count} students processed.`);
+
+    // Auto-update global stats after migration
+    await syncAggregateStats();
+
     return count;
+};
+
+export const syncAggregateStats = async () => {
+    console.log("Syncing Aggregate Stats...");
+    const snapshot = await getDocs(collection(db, "students"));
+    const stats = {
+        totalEnrollments: 0,
+        thiriyaCount: 0,
+        nariyawalCount: 0,
+        totalRevenue: 0,
+        totalArrears: 0,
+        updatedAt: Date.now()
+    };
+
+    snapshot.forEach((doc) => {
+        const data = doc.data();
+        stats.totalEnrollments++;
+        if (data.center === 'Thiriya') stats.thiriyaCount++;
+        else stats.nariyawalCount++; // Default to Nariyawal
+
+        const paid = (data.paidFees || 0) + (data.oldPaidFees || 0);
+        const total = (data.totalFees || 0);
+        stats.totalRevenue += paid;
+        stats.totalArrears += Math.max(0, total - paid);
+    });
+
+    await setDoc(doc(db, "metadata", "coaching_stats"), stats, { merge: true });
+    console.log("Stats Synced:", stats);
+    return stats;
 };
 
 /**

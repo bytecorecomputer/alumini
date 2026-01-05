@@ -14,6 +14,8 @@ import { cn } from '../lib/utils';
 import { uploadToCloudinary } from '../lib/cloudinary';
 import { compressImage } from '../lib/imageCompression';
 import { runThiriyaMigration } from '../lib/migrateBytecoreThiriya';
+import { syncAggregateStats } from '../lib/migrateStudents';
+import { limit, startAfter } from 'firebase/firestore';
 
 export default function CoachingAdmin() {
     const { user } = useAuth();
@@ -25,6 +27,10 @@ export default function CoachingAdmin() {
     const [filterStatus, setFilterStatus] = useState('all');
     const [centerFilter, setCenterFilter] = useState('all');
     const [isUpdating, setIsUpdating] = useState(false);
+    const [globalStats, setGlobalStats] = useState(null);
+    const [lastDoc, setLastDoc] = useState(null);
+    const [hasMore, setHasMore] = useState(true);
+    const PAGE_SIZE = 50;
 
     // Course Management States
     const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
@@ -44,11 +50,33 @@ export default function CoachingAdmin() {
     useEffect(() => {
         if (!isOwner) return;
 
-        // Real-time students listener
-        const unsubStudents = onSnapshot(query(collection(db, "students"), orderBy("updatedAt", "desc")), (snap) => {
-            setStudents(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-            setLoading(false);
+        // Instant Global Stats fetch
+        const unsubStats = onSnapshot(doc(db, "metadata", "coaching_stats"), (snap) => {
+            if (snap.exists()) setGlobalStats(snap.data());
         });
+
+        // Student listener - Switches between Paginated and Full (for search)
+        let unsubStudents;
+        if (searchTerm) {
+            // If searching, fetch all to ensure results are complete
+            const q = query(collection(db, "students"), orderBy("updatedAt", "desc"));
+            unsubStudents = onSnapshot(q, (snap) => {
+                const results = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setStudents(results);
+                setHasMore(false);
+                setLoading(false);
+            });
+        } else {
+            // Standard Paginated Load
+            const q = query(collection(db, "students"), orderBy("updatedAt", "desc"), limit(PAGE_SIZE));
+            unsubStudents = onSnapshot(q, (snap) => {
+                const newStudents = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setStudents(newStudents);
+                setLastDoc(snap.docs[snap.docs.length - 1]);
+                setHasMore(snap.docs.length === PAGE_SIZE);
+                setLoading(false);
+            });
+        }
 
         // Real-time courses listener
         const unsubCourses = onSnapshot(collection(db, "courses"), (snap) => {
@@ -56,10 +84,28 @@ export default function CoachingAdmin() {
         });
 
         return () => {
+            unsubStats();
             unsubStudents();
             unsubCourses();
         };
     }, [isOwner]);
+
+    const loadMoreStudents = async () => {
+        if (!lastDoc || !hasMore || isUpdating) return;
+        setIsUpdating(true);
+        try {
+            const q = query(collection(db, "students"), orderBy("updatedAt", "desc"), startAfter(lastDoc), limit(PAGE_SIZE));
+            const snap = await getDocs(q);
+            const moreStudents = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setStudents(prev => [...prev, ...moreStudents]);
+            setLastDoc(snap.docs[snap.docs.length - 1]);
+            setHasMore(snap.docs.length === PAGE_SIZE);
+        } catch (err) {
+            console.error("Load More Error:", err);
+        } finally {
+            setIsUpdating(false);
+        }
+    };
 
     const handleSaveStudent = async (e) => {
         e.preventDefault();
@@ -99,6 +145,9 @@ export default function CoachingAdmin() {
             }
 
             await setDoc(studentRef, data, { merge: true });
+
+            // Background sync stats
+            syncAggregateStats();
 
             setIsAddEditModalOpen(false);
             setStudentForm({
@@ -216,12 +265,11 @@ export default function CoachingAdmin() {
     });
 
     const stats = {
-        total: students.length,
-        collected: students.reduce((acc, s) => acc + (s.paidFees || 0) + (s.oldPaidFees || 0), 0),
-        pending: students.reduce((acc, s) => acc + ((s.totalFees || 0) - ((s.paidFees || 0) + (s.oldPaidFees || 0))), 0),
-        active: students.filter(s => s.status !== 'pass').length,
-        thiriya: students.filter(s => s.center === 'Thiriya').length,
-        nariyawal: students.filter(s => s.center === 'Nariyawal').length
+        thiriya: globalStats?.thiriyaCount || 0,
+        nariyawal: globalStats?.nariyawalCount || 0,
+        collected: globalStats?.totalRevenue || 0,
+        pending: globalStats?.totalArrears || 0,
+        total: globalStats?.totalEnrollments || 0
     };
 
     if (!isOwner) {
@@ -240,14 +288,27 @@ export default function CoachingAdmin() {
 
                 {/* Advanced Header & Stats */}
                 <div className="flex flex-col gap-8 mb-12">
-                    <div>
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="p-3 bg-slate-900 rounded-2xl text-white shadow-xl">
-                                <TrendingUp size={24} />
+                    <div className="flex justify-between items-end">
+                        <div>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-3 bg-slate-900 rounded-2xl text-white shadow-xl">
+                                    <TrendingUp size={24} />
+                                </div>
+                                <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Bytecore <span className="text-blue-600">Coaching</span></h1>
                             </div>
-                            <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Bytecore <span className="text-blue-600">Coaching</span></h1>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] ml-1">Advanced Administration Suite</p>
                         </div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] ml-1">Advanced Administration Suite</p>
+                        <button
+                            onClick={async () => {
+                                setIsUpdating(true);
+                                await syncAggregateStats();
+                                setIsUpdating(false);
+                            }}
+                            className="p-3 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-blue-600 hover:border-blue-100 transition-all shadow-sm"
+                            title="Recalculate Global Stats"
+                        >
+                            <Loader2 size={16} className={cn(isUpdating && "animate-spin")} />
+                        </button>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
@@ -313,7 +374,7 @@ export default function CoachingAdmin() {
                             }}
                             disabled={isUpdating}
                             className={cn(
-                                "flex-1 md:flex-none p-4 rounded-2xl transition-all shadow-sm flex items-center gap-2",
+                                "hidden md:flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
                                 isUpdating ? "bg-blue-100 text-blue-400 cursor-not-allowed" : "bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white"
                             )}
                             title="Global Database Sync"
@@ -342,7 +403,7 @@ export default function CoachingAdmin() {
                             }}
                             disabled={isUpdating}
                             className={cn(
-                                "flex-1 md:flex-none p-4 rounded-2xl transition-all shadow-sm flex items-center gap-2",
+                                "hidden md:flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
                                 isUpdating ? "bg-amber-100 text-amber-400 cursor-not-allowed" : "bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white"
                             )}
                             title="Sync Thiriya CSV"
@@ -462,6 +523,20 @@ export default function CoachingAdmin() {
                         </table>
                     </div>
                 </div>
+
+                {/* Load More Button */}
+                {hasMore && (
+                    <div className="mt-10 flex justify-center">
+                        <button
+                            onClick={loadMoreStudents}
+                            disabled={isUpdating}
+                            className="bg-white text-slate-900 border border-slate-200 px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-slate-50 transition-all flex items-center gap-3 disabled:opacity-50"
+                        >
+                            {isUpdating ? <Loader2 size={18} className="animate-spin" /> : <ChevronRight size={18} className="rotate-90" />}
+                            {isUpdating ? "Loading Intelligence..." : "Load More Students"}
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Course Config Modal */}

@@ -11,6 +11,7 @@ import {
 import { cn } from "../lib/utils";
 import { uploadToCloudinary } from "../lib/cloudinary";
 import { compressImage } from "../lib/imageCompression";
+import { syncAggregateStats } from "../lib/migrateStudents";
 
 export default function StudentDetails() {
     const { id } = useParams();
@@ -88,6 +89,7 @@ export default function StudentDetails() {
                 ...editForm,
                 updatedAt: Date.now()
             });
+            syncAggregateStats();
             setIsEditing(false);
             alert("Profile updated successfully.");
         } catch (err) {
@@ -118,6 +120,7 @@ export default function StudentDetails() {
                 }),
                 updatedAt: Date.now()
             });
+            syncAggregateStats();
             setIsFeeModalOpen(false);
             setPaymentAmount('');
             setPaymentNote('');
@@ -149,6 +152,7 @@ export default function StudentDetails() {
                 installments: newInstallments,
                 updatedAt: Date.now()
             });
+            syncAggregateStats();
         } catch (err) {
             alert("Failed to delete installment.");
             console.error(err);
@@ -162,6 +166,7 @@ export default function StudentDetails() {
         setIsUpdating(true);
         try {
             await deleteDoc(doc(db, "students", id));
+            syncAggregateStats();
             navigate('/admin/coaching');
         } catch (err) {
             alert("Failed to delete student.");
