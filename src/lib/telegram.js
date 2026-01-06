@@ -101,6 +101,18 @@ ${details.studentList}
 
 💳 <i>Check the Admin Dashboard for details.</i>
 `.trim();
+        } else if (type === 'donation') {
+            message = `
+💖 <b>New Donation Received</b>
+
+👤 <b>Donor:</b> ${escapeHTML(details.name)}
+📧 <b>Email:</b> ${escapeHTML(details.email)}
+💰 <b>Amount:</b> ₹${escapeHTML(details.amount)}
+💳 <b>Payment ID:</b> <code>${escapeHTML(details.paymentId)}</code>
+
+🌟 <i>Thank you for supporting the legacy!</i>
+⏰ <b>Time:</b> ${timeStr}
+`.trim();
         }
 
         await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {

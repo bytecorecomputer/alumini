@@ -1,8 +1,82 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Building, GraduationCap, ArrowRight, CreditCard, Gift, Target, Zap, ShieldCheck } from 'lucide-react';
+import { Heart, Building, GraduationCap, ArrowRight, CreditCard, Gift, Target, Zap, ShieldCheck, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { sendTelegramNotification } from '../lib/telegram';
 
 export default function Donate() {
+    const [amount, setAmount] = useState('100');
+    const [customAmount, setCustomAmount] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const loadScript = (src) => {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
+
+    const handlePayment = async (e) => {
+        e.preventDefault();
+
+        const finalAmount = amount === 'Custom' ? customAmount : amount.replace('$', '').replace('k', '000');
+        if (!finalAmount || isNaN(finalAmount) || parseFloat(finalAmount) <= 0) {
+            alert("Please enter a valid amount");
+            return;
+        }
+
+        setIsLoading(true);
+
+        const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+
+        if (!res) {
+            alert('Razorpay SDK failed to load. Are you online?');
+            setIsLoading(false);
+            return;
+        }
+
+        const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            amount: parseFloat(finalAmount) * 100, // amount in the smallest currency unit (paise)
+            currency: "INR",
+            name: "Alumni Association",
+            description: "Empowering the Legacy Donation",
+            image: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+            handler: async function (response) {
+                alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+
+                // Send Telegram Notification
+                await sendTelegramNotification('donation', {
+                    name,
+                    email,
+                    amount: finalAmount,
+                    paymentId: response.razorpay_payment_id
+                });
+            },
+            prefill: {
+                name: name,
+                email: email,
+            },
+            theme: {
+                color: "#E11D48", // Rose-600
+            },
+            modal: {
+                ondismiss: function () {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+        setIsLoading(false);
+    };
+
     return (
         <div className="min-h-screen pt-24 pb-20 px-4 md:px-8 bg-slate-50 relative overflow-hidden">
             {/* Background Orbs */}
@@ -84,36 +158,76 @@ export default function Donate() {
                                 {['$100', '$500', '$2.5k', 'Custom'].map((amt) => (
                                     <button
                                         key={amt}
-                                        className="p-6 rounded-2xl border-2 border-slate-50 font-black text-slate-400 uppercase tracking-widest text-xs hover:border-rose-600 hover:text-rose-600 hover:bg-rose-50 hover:shadow-xl hover:shadow-rose-100 transition-all active:scale-95"
+                                        onClick={() => setAmount(amt)}
+                                        className={cn(
+                                            "p-6 rounded-2xl border-2 font-black uppercase tracking-widest text-xs transition-all active:scale-95",
+                                            amount === amt
+                                                ? "border-rose-600 text-rose-600 bg-rose-50 shadow-xl shadow-rose-100"
+                                                : "border-slate-50 text-slate-400 hover:border-rose-200 hover:text-rose-400"
+                                        )}
                                     >
                                         {amt}
                                     </button>
                                 ))}
                             </div>
 
-                            <form className="space-y-10" onSubmit={(e) => { e.preventDefault(); alert("Redirecting to Secure Payment Gateway..."); }}>
+                            <form className="space-y-10" onSubmit={handlePayment}>
+                                {amount === 'Custom' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        className="space-y-2"
+                                    >
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Custom Amount (INR)</label>
+                                        <input
+                                            type="number"
+                                            value={customAmount}
+                                            onChange={(e) => setCustomAmount(e.target.value)}
+                                            className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-rose-100 outline-none text-slate-800 font-bold transition-all"
+                                            placeholder="Enter amount"
+                                            required
+                                        />
+                                    </motion.div>
+                                )}
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Identity Tag</label>
                                         <input
                                             type="text"
+                                            value={name}
+                                            onChange={(e) => setName(e.target.value)}
                                             className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-rose-100 outline-none text-slate-800 font-bold transition-all"
                                             placeholder="Full Name"
+                                            required
                                         />
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Network UID</label>
                                         <input
                                             type="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-rose-100 outline-none text-slate-800 font-bold transition-all"
                                             placeholder="Email Address"
+                                            required
                                         />
                                     </div>
                                 </div>
 
-                                <button className="btn-premium w-full py-6 bg-slate-900 text-white shadow-2xl shadow-rose-950/20 active:scale-95 group">
-                                    <CreditCard size={24} className="group-hover:rotate-12 transition-transform" />
-                                    <span className="uppercase tracking-[0.4em] font-black ml-4">Execute Connection</span>
+                                <button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="btn-premium w-full py-6 bg-slate-900 text-white shadow-2xl shadow-rose-950/20 active:scale-95 group disabled:opacity-70 disabled:cursor-not-allowed"
+                                >
+                                    {isLoading ? (
+                                        <Loader2 size={24} className="animate-spin mx-auto" />
+                                    ) : (
+                                        <>
+                                            <CreditCard size={24} className="group-hover:rotate-12 transition-transform" />
+                                            <span className="uppercase tracking-[0.4em] font-black ml-4">Execute Connection</span>
+                                        </>
+                                    )}
                                 </button>
 
                                 <div className="flex items-center justify-center gap-2 text-slate-300">
