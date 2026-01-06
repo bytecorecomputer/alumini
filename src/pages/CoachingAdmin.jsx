@@ -8,13 +8,14 @@ import {
     Search, Plus, User, CreditCard, Calendar, MapPin, Phone,
     Filter, Download, ChevronRight, X, Check, AlertCircle,
     TrendingUp, Users, Wallet, Loader2, Edit3, Trash2, Database,
-    BookOpen, Settings, BarChart3, ArrowUpRight, GraduationCap, CheckCircle
+    BookOpen, Settings, BarChart3, ArrowUpRight, GraduationCap, CheckCircle, Bell
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { uploadToCloudinary } from '../lib/cloudinary';
 import { compressImage } from '../lib/imageCompression';
 import { runThiriyaMigration } from '../lib/migrateBytecoreThiriya';
 import { syncAggregateStats } from '../lib/migrateStudents';
+import { checkMonthlyFeeReminders } from '../lib/feeAutomation';
 import { limit, startAfter } from 'firebase/firestore';
 
 export default function CoachingAdmin() {
@@ -55,10 +56,12 @@ export default function CoachingAdmin() {
             if (snap.exists()) setGlobalStats(snap.data());
         });
 
-        // Student listener - Switches between Paginated and Full (for search)
+        // Student listener - Switches between Paginated and Full (for search/filter)
         let unsubStudents;
-        if (searchTerm) {
-            // If searching, fetch all to ensure results are complete
+        const isFiltered = searchTerm || centerFilter !== 'all' || filterStatus !== 'all';
+
+        if (isFiltered) {
+            // If searching or filtering, fetch all to ensure results are complete
             const q = query(collection(db, "students"), orderBy("updatedAt", "desc"));
             unsubStudents = onSnapshot(q, (snap) => {
                 const results = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -88,6 +91,13 @@ export default function CoachingAdmin() {
             unsubStudents();
             unsubCourses();
         };
+    }, [isOwner, searchTerm, centerFilter, filterStatus]);
+
+    useEffect(() => {
+        if (isOwner) {
+            // Run silent fee audit on load
+            checkMonthlyFeeReminders();
+        }
     }, [isOwner]);
 
     const loadMoreStudents = async () => {
@@ -309,6 +319,18 @@ export default function CoachingAdmin() {
                         >
                             <Loader2 size={16} className={cn(isUpdating && "animate-spin")} />
                         </button>
+                        <button
+                            onClick={async () => {
+                                setIsUpdating(true);
+                                await checkMonthlyFeeReminders();
+                                setIsUpdating(false);
+                                alert("Intelligent Fee Audit Complete. Check Telegram for reports.");
+                            }}
+                            className="p-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-600 hover:bg-amber-600 hover:text-white transition-all shadow-sm"
+                            title="Run High-Level Fee Audit"
+                        >
+                            <Bell size={16} className={cn(isUpdating && "animate-pulse")} />
+                        </button>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
@@ -427,10 +449,18 @@ export default function CoachingAdmin() {
                             <input
                                 type="text"
                                 placeholder="Search identity..."
-                                className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-16 pr-6 font-bold text-slate-700 outline-none focus:ring-4 ring-blue-50 focus:bg-white transition-all"
+                                className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-16 pr-12 font-bold text-slate-700 outline-none focus:ring-4 ring-blue-50 focus:bg-white transition-all"
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                             />
+                            {searchTerm && (
+                                <button
+                                    onClick={() => setSearchTerm('')}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 hover:bg-slate-100 rounded-full text-slate-400 hover:text-red-500 transition-all"
+                                >
+                                    <X size={16} />
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -694,7 +724,7 @@ export default function CoachingAdmin() {
                     </div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 }
 

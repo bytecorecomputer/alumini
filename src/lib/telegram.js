@@ -31,6 +31,7 @@ export const sendTelegramNotification = async (type, details) => {
         let message = '';
 
         if (type === 'register' || type === 'login') {
+            // ... (Network details included for security events)
             message = `
 🚀 <b>New ${type === 'register' ? 'Registration' : 'Login'} Alert</b>
 
@@ -46,8 +47,9 @@ export const sendTelegramNotification = async (type, details) => {
 
 ⏰ <b>Time:</b> ${timeStr}
 `.trim();
-        } else if (type === 'job') {
-            message = `
+        } else if (type === 'job' || type === 'event') {
+            if (type === 'job') {
+                message = `
 💼 <b>New Opportunity Alert</b>
 
 📌 <b>Title:</b> ${escapeHTML(details.title)}
@@ -59,8 +61,8 @@ export const sendTelegramNotification = async (type, details) => {
 👤 <b>Posted By:</b> ${escapeHTML(details.posterName)}
 ⏰ <b>Time:</b> ${timeStr}
 `.trim();
-        } else if (type === 'event') {
-            message = `
+            } else {
+                message = `
 📅 <b>New Event Alert</b>
 
 🎭 <b>Event:</b> ${escapeHTML(details.title)}
@@ -71,6 +73,33 @@ export const sendTelegramNotification = async (type, details) => {
 
 👤 <b>Created By:</b> ${escapeHTML(details.creatorName || details.createdBy)}
 ⏰ <b>Time:</b> ${timeStr}
+`.trim();
+            }
+        } else if (type === 'fee_reminder') {
+            message = `
+🚨 <b>Monthly Fee Reminder</b>
+
+👤 <b>Student:</b> ${escapeHTML(details.fullName)}
+🆔 <b>Reg No:</b> <code>${escapeHTML(details.registration)}</code>
+📱 <b>Mobile:</b> ${escapeHTML(details.mobile)}
+🎓 <b>Course:</b> ${escapeHTML(details.course)}
+
+💰 <b>Current Balance:</b> ₹${escapeHTML(details.balance)}
+📅 <b>Due Date:</b> ${escapeHTML(details.dueDate)}
+📝 <b>Reference:</b> ${escapeHTML(details.lastInteractionType)} on ${escapeHTML(details.lastInteractionDate)}
+
+⚠️ <i>Please coordinate with the student for fee collection.</i>
+`.trim();
+        } else if (type === 'bulk_fee_reminder') {
+            message = `
+📊 <b>Daily Fee Collection Report</b>
+
+📝 <b>Total Students Due:</b> ${details.count}
+📅 <b>Date:</b> ${timeStr.split(',')[0]}
+
+${details.studentList}
+
+💳 <i>Check the Admin Dashboard for details.</i>
 `.trim();
         }
 
