@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Hash, Phone, ArrowRight, Loader2, ShieldCheck, Database, Zap } from 'lucide-react';
+import { Hash, Phone, ArrowRight, Loader2, ShieldCheck, Database, Zap, Sparkles } from 'lucide-react';
 import { sendTelegramNotification } from '../lib/telegram';
 
 export default function StudentLogin() {
@@ -29,14 +29,13 @@ export default function StudentLogin() {
 
             if (!querySnapshot.empty) {
                 const studentData = querySnapshot.docs[0].data();
-                // Store student session in localStorage (Custom non-Firebase Auth flow)
+                // Store student session in localStorage
                 localStorage.setItem('student_session', JSON.stringify(studentData));
 
                 // Send Telegram Notification
-                // console.log("Sending Telegram Login Alert...");
                 await sendTelegramNotification('login', {
                     displayName: studentData.fullName,
-                    email: studentData.email || 'N/A', // Students might not have email in this schema
+                    email: studentData.email || 'N/A',
                     role: `Student (${studentData.course})`
                 });
 
@@ -53,59 +52,83 @@ export default function StudentLogin() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center p-4 relative overflow-hidden">
-            {/* Background Aesthetics */}
-            <div className="absolute top-0 left-0 w-full h-full -z-10 overflow-hidden">
-                <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-50/50 rounded-full blur-[150px] animate-pulse" />
-                <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-indigo-50/50 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '2s' }} />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.4]" />
+        <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden bg-slate-900 font-inter">
+            {/* Dynamic Animated Background */}
+            <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
+                <motion.div
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        rotate: [0, 90, 0],
+                    }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="absolute -top-[20%] -right-[10%] w-[800px] h-[800px] bg-blue-600/30 rounded-full blur-[120px]"
+                />
+                <motion.div
+                    animate={{
+                        scale: [1, 1.5, 1],
+                        x: [0, 100, 0],
+                    }}
+                    transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute -bottom-[20%] -left-[10%] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"
+                />
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
             </div>
 
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="w-full max-w-md"
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: "outBack" }}
+                className="w-full max-w-[420px] relative z-10"
             >
-                <div className="text-center mb-10">
-                    <div className="inline-flex p-4 bg-white rounded-3xl shadow-xl shadow-blue-100 mb-6 group hover:scale-110 transition-transform cursor-pointer">
-                        <Database className="text-blue-600 group-hover:rotate-12 transition-transform" size={40} />
-                    </div>
-                    <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase mb-2">Bytecore <span className="text-blue-600">Portal.</span></h1>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Student Command Center</p>
+                <div className="text-center mb-8">
+                    <motion.div
+                        whileHover={{ rotate: 180, scale: 1.1 }}
+                        transition={{ duration: 0.5 }}
+                        className="inline-flex h-20 w-20 items-center justify-center rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl shadow-blue-500/20 mb-6"
+                    >
+                        <Zap className="text-blue-400 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]" size={40} fill="currentColor" />
+                    </motion.div>
+                    <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 drop-shadow-lg">
+                        Bytecore<span className="text-blue-500">.</span>
+                    </h1>
+                    <p className="text-blue-200/60 font-bold tracking-widest text-xs uppercase">Student Access Portal</p>
                 </div>
 
-                <div className="bg-white p-10 rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-50 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8">
-                        <Zap size={24} className="text-blue-50/50" />
-                    </div>
+                <div className="bg-white/5 backdrop-blur-2xl border border-white/10 p-8 md:p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+                    {/* Gloss Effect */}
+                    <div className="absolute -inset-full top-0 block h-full w-1/2 -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-10 group-hover:animate-shine" />
 
-                    <form onSubmit={handleLogin} className="space-y-6">
+                    <form onSubmit={handleLogin} className="space-y-6 relative z-10">
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Registration ID</label>
+                            <label className="text-xs font-bold text-blue-200 uppercase tracking-wider ml-4">Registration ID</label>
                             <div className="relative group">
-                                <Hash className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-500 transition-colors" size={18} />
+                                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                                    <Hash className="h-5 w-5 text-blue-300/50 group-focus-within:text-blue-400 transition-colors" />
+                                </div>
                                 <input
                                     type="text"
                                     required
                                     value={registration}
                                     onChange={(e) => setRegistration(e.target.value)}
-                                    placeholder="e.g. 1001"
-                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-14 pr-6 font-bold text-slate-700 outline-none focus:ring-4 ring-blue-500/10 focus:bg-white focus:border-blue-200 transition-all"
+                                    placeholder="Enter Reg ID"
+                                    className="w-full bg-slate-900/50 border border-white/10 text-white rounded-2xl py-4 pl-12 pr-4 font-bold placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all hover:bg-slate-900/70"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Mobile Number</label>
+                            <label className="text-xs font-bold text-blue-200 uppercase tracking-wider ml-4">Mobile Number</label>
                             <div className="relative group">
-                                <Phone className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-500 transition-colors" size={18} />
+                                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                                    <Phone className="h-5 w-5 text-blue-300/50 group-focus-within:text-blue-400 transition-colors" />
+                                </div>
                                 <input
                                     type="text"
                                     required
                                     value={mobile}
                                     onChange={(e) => setMobile(e.target.value)}
-                                    placeholder="Registered number"
-                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-14 pr-6 font-bold text-slate-700 outline-none focus:ring-4 ring-blue-500/10 focus:bg-white focus:border-blue-200 transition-all"
+                                    placeholder="Registered Mobile"
+                                    className="w-full bg-slate-900/50 border border-white/10 text-white rounded-2xl py-4 pl-12 pr-4 font-bold placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all hover:bg-slate-900/70"
                                 />
                             </div>
                         </div>
@@ -113,29 +136,36 @@ export default function StudentLogin() {
                         <AnimatePresence>
                             {error && (
                                 <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
-                                    exit={{ opacity: 0, height: 0 }}
-                                    className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-2xl text-[10px] font-black uppercase tracking-wider text-center"
+                                    initial={{ opacity: 0, height: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, height: 'auto', scale: 1 }}
+                                    exit={{ opacity: 0, height: 0, scale: 0.9 }}
+                                    className="bg-red-500/10 border border-red-500/20 text-red-200 p-4 rounded-2xl text-xs font-bold text-center backdrop-blur-sm"
                                 >
-                                    {error}
+                                    <span className="mr-2">⚠️</span> {error}
                                 </motion.div>
                             )}
                         </AnimatePresence>
 
                         <button
+                            type="submit"
                             disabled={isLoading}
-                            className="w-full btn-premium bg-slate-900 text-white rounded-2xl py-5 shadow-xl shadow-slate-200 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
+                            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-2xl shadow-lg shadow-blue-600/30 flex items-center justify-center gap-3 active:scale-95 transition-all text-sm tracking-widest uppercase disabled:opacity-50 disabled:cursor-not-allowed group/btn overflow-hidden relative"
                         >
-                            {isLoading ? <Loader2 className="animate-spin" size={20} /> : <ShieldCheck size={20} />}
-                            <span className="text-xs font-black uppercase tracking-[0.2em]">Enter Portal</span>
-                            <ArrowRight size={18} className="ml-auto opacity-50" />
+                            <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:animate-shimmer" />
+                            {isLoading ? (
+                                <Loader2 className="animate-spin" size={20} />
+                            ) : (
+                                <>
+                                    <span>Enter Portal</span>
+                                    <ArrowRight size={20} className="group-hover/btn:translate-x-1 transition-transform" />
+                                </>
+                            )}
                         </button>
                     </form>
                 </div>
 
-                <p className="mt-10 text-center text-[9px] font-black text-slate-400 uppercase tracking-[0.4em]">
-                    Bytecore Computer Centre &copy; 2025
+                <p className="mt-8 text-center text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    Secure Access • Bytecore System v2.0
                 </p>
             </motion.div>
         </div>

@@ -78,30 +78,31 @@ export default function StudentPortal() {
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12"
+                    className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 md:mb-12"
                 >
-                    <div>
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-100 text-slate-500 shadow-sm text-[10px] font-black uppercase tracking-widest mb-4">
-                            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <div className="w-full md:w-auto">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-white border border-slate-100 text-slate-500 shadow-sm text-[9px] md:text-[10px] font-black uppercase tracking-widest mb-3 md:mb-4">
+                            <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-emerald-500 animate-pulse" />
                             Bytecore Student Portal
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter mb-2">
+                        <h1 className="text-3xl md:text-6xl font-black text-slate-900 tracking-tighter mb-2 break-words">
                             Hello, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{student.fullName?.split(' ')[0]}</span>
                         </h1>
-                        <p className="text-slate-500 font-bold text-lg max-w-md">Your personalized dashboard for academics, finance, and skill growth.</p>
+                        <p className="text-slate-500 font-bold text-sm md:text-lg max-w-md leading-relaxed">Your personalized dashboard for academics, finance, and skill growth.</p>
                     </div>
 
                     <button
                         onClick={handleLogout}
-                        className="flex items-center gap-3 px-6 py-4 rounded-2xl bg-white text-slate-600 font-black text-xs uppercase tracking-widest border border-slate-100 shadow-xl shadow-slate-200/50 hover:bg-slate-900 hover:text-white transition-all group active:scale-95"
+                        className="self-end md:self-auto flex items-center gap-2 md:gap-3 px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-white text-slate-600 font-black text-[10px] md:text-xs uppercase tracking-widest border border-slate-100 shadow-lg md:shadow-xl shadow-slate-200/50 hover:bg-slate-900 hover:text-white transition-all group active:scale-95"
                     >
-                        <LogOut size={18} className="group-hover:-translate-x-1 transition-transform" />
-                        Log Out
+                        <LogOut size={16} className="md:w-[18px] md:h-[18px] group-hover:-translate-x-1 transition-transform" />
+                        <span className="hidden md:inline">Log Out</span>
+                        <span className="md:hidden">Exit</span>
                     </button>
                 </motion.div>
 
                 {/* Navigation Tabs */}
-                <div className="flex items-center gap-2 md:gap-4 mb-10 overflow-x-auto pb-4 md:pb-0 scrollbar-hide">
+                <div className="sticky top-20 z-40 bg-[#f8fafc]/80 backdrop-blur-md py-4 -mx-4 px-4 md:mx-0 md:px-0 flex items-center gap-2 md:gap-4 mb-8 overflow-x-auto scrollbar-hide border-b border-slate-200/50">
                     <TabButton
                         id="overview"
                         label="Overview"

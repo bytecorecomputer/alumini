@@ -154,7 +154,7 @@ export default function QuizModule({ student }) {
                     <p className="text-slate-500 font-bold">Your course curriculum modules. Unlock badges by scoring 80%+.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
                     {studentModules.map((modId) => {
                         const data = QUIZ_BANK[modId];
                         // Render placeholder if data doesn't exist yet, or skip
@@ -171,31 +171,33 @@ export default function QuizModule({ student }) {
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => startQuiz(modId)}
                                 className={cn(
-                                    "p-6 rounded-3xl border-2 transition-all cursor-pointer relative overflow-hidden group select-none",
+                                    "p-5 md:p-6 rounded-3xl border-2 transition-all cursor-pointer relative overflow-hidden group select-none flex flex-col justify-between h-full",
                                     isCompleted
                                         ? "bg-emerald-50 border-emerald-100"
                                         : "bg-white border-slate-100 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-50"
                                 )}
                             >
-                                <div className="flex justify-between items-start mb-4 relative z-10">
-                                    <div className={cn(
-                                        "h-12 w-12 rounded-xl flex items-center justify-center text-white shadow-lg",
-                                        isCompleted ? "bg-emerald-500" : `bg-${data.color || 'blue'}-500`
-                                    )}>
-                                        <Icon size={24} />
-                                    </div>
-                                    {progress && (
-                                        <div className="text-right">
-                                            <p className="text-2xl font-black text-slate-900">{progress.score}%</p>
-                                            <p className="text-[10px] font-bold uppercase text-slate-400">Best Score</p>
+                                <div>
+                                    <div className="flex justify-between items-start mb-4 relative z-10">
+                                        <div className={cn(
+                                            "h-10 w-10 md:h-12 md:w-12 rounded-xl flex items-center justify-center text-white shadow-lg",
+                                            isCompleted ? "bg-emerald-500" : `bg-${data.color || 'blue'}-500`
+                                        )}>
+                                            <Icon size={20} className="md:w-6 md:h-6" />
                                         </div>
-                                    )}
+                                        {progress && (
+                                            <div className="text-right">
+                                                <p className="text-xl md:text-2xl font-black text-slate-900">{progress.score}%</p>
+                                                <p className="text-[9px] md:text-[10px] font-bold uppercase text-slate-400">Best Score</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <h3 className="text-lg md:text-xl font-black text-slate-900 mb-1 relative z-10 line-clamp-1">{data.title}</h3>
+                                    <p className="text-slate-500 text-[10px] md:text-xs font-bold mb-4 relative z-10 line-clamp-2 min-h-[2.5em]">{data.description}</p>
                                 </div>
 
-                                <h3 className="text-xl font-black text-slate-900 mb-1 relative z-10">{data.title}</h3>
-                                <p className="text-slate-500 text-xs font-bold mb-4 relative z-10 line-clamp-2">{data.description}</p>
-
-                                <div className="flex items-center text-[10px] font-black uppercase tracking-widest text-slate-400 gap-2 relative z-10">
+                                <div className="flex items-center text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 gap-2 relative z-10 mt-auto">
                                     <span className="flex items-center gap-1"><Brain size={12} /> {data.questions.length} Qs</span>
                                     <span>•</span>
                                     <span>{progress?.attempts || 0} Attempts</span>
@@ -203,7 +205,7 @@ export default function QuizModule({ student }) {
 
                                 {isCompleted && (
                                     <div className="absolute -bottom-4 -right-4 text-emerald-500/10 rotate-12">
-                                        <Trophy size={120} />
+                                        <Trophy size={100} className="md:w-[120px] md:h-[120px]" />
                                     </div>
                                 )}
                             </motion.div>
