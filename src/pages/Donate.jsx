@@ -10,6 +10,8 @@ export default function Donate() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [paymentId, setPaymentId] = useState('');
 
     const loadScript = (src) => {
         return new Promise((resolve) => {
@@ -32,6 +34,12 @@ export default function Donate() {
 
         setIsLoading(true);
 
+        if (!import.meta.env.VITE_RAZORPAY_KEY_ID) {
+            alert("Razorpay Key is missing. Please check your environment configuration.");
+            setIsLoading(false);
+            return;
+        }
+
         const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
 
         if (!res) {
@@ -48,7 +56,8 @@ export default function Donate() {
             description: "Empowering the Legacy Donation",
             image: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
             handler: async function (response) {
-                alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+                setPaymentId(response.razorpay_payment_id);
+                setIsSuccess(true);
 
                 // Send Telegram Notification
                 await sendTelegramNotification('donation', {
@@ -76,6 +85,79 @@ export default function Donate() {
         paymentObject.open();
         setIsLoading(false);
     };
+
+    if (isSuccess) {
+        return (
+            <div className="min-h-screen pt-24 pb-20 px-4 md:px-8 bg-slate-50 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-30">
+                    <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-rose-100 rounded-full blur-[120px]"></div>
+                    <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-50 rounded-full blur-[120px]"></div>
+                </div>
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ type: "spring", stiffness: 100 }}
+                    className="max-w-2xl w-full premium-card bg-white p-12 text-center shadow-2xl relative overflow-hidden"
+                >
+                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rose-600 to-orange-600"></div>
+
+                    <div className="w-24 h-24 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-8 text-rose-600 border-2 border-rose-100 relative">
+                        <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: "spring", damping: 12, delay: 0.2 }}
+                        >
+                            <ShieldCheck size={48} />
+                        </motion.div>
+                        <motion.div
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ repeat: Infinity, duration: 2 }}
+                            className="absolute inset-0 rounded-full bg-rose-200/20"
+                        />
+                    </div>
+
+                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tighter italic">Connection <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-orange-600 font-black not-italic uppercase">Verified.</span></h1>
+                    <p className="text-slate-500 font-bold text-lg mb-10 max-w-md mx-auto">
+                        Your contribution has been successfully initialized and incorporated into the legacy network.
+                    </p>
+
+                    <div className="bg-slate-50 rounded-3xl p-8 mb-10 border border-slate-100 space-y-4 text-left">
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                            <span>Payment ID</span>
+                            <span className="text-slate-900 select-all font-mono">{paymentId}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                            <span>Status</span>
+                            <span className="text-emerald-600 flex items-center gap-1">
+                                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                                Success_Confirmed
+                            </span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+                            <span>Network Node</span>
+                            <span className="text-slate-900">{name}</span>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={() => {
+                            setIsSuccess(false);
+                            setAmount('100');
+                        }}
+                        className="btn-premium w-full py-6 bg-slate-900 text-white shadow-2xl shadow-rose-950/20 active:scale-95 group flex items-center justify-center gap-4 transition-all hover:bg-slate-800"
+                    >
+                        <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
+                        <span className="uppercase tracking-[0.4em] font-black">Return to Core</span>
+                    </button>
+
+                    <p className="mt-8 text-[10px] font-black uppercase tracking-widest text-slate-300">
+                        Thank you for empowering the next generation of excellence.
+                    </p>
+                </motion.div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen pt-24 pb-20 px-4 md:px-8 bg-slate-50 relative overflow-hidden">
