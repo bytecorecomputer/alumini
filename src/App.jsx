@@ -18,6 +18,7 @@ import StudentLogin from "./pages/StudentLogin";
 import StudentPortal from "./pages/StudentPortal";
 import CoachingAdmin from "./pages/CoachingAdmin";
 import StudentDetails from "./pages/StudentDetails";
+import CertificateGenerator from "./pages/CertificateGenerator";
 
 export default function App() {
   return (
@@ -76,6 +77,11 @@ export default function App() {
             <Route path="/admin/coaching/student/:id" element={
               <AdminRoute>
                 <StudentDetails />
+              </AdminRoute>
+            } />
+            <Route path="/admin/certificates" element={
+              <AdminRoute>
+                <CertificateGenerator />
               </AdminRoute>
             } />
           </Routes>

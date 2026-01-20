@@ -16,13 +16,23 @@ export const sendTelegramNotification = async (type, details) => {
             return;
         }
 
-        // Fetch IP and Location info
-        let ipData = {};
+        // Fetch IP and Location info (optional, fails silently on CORS)
+        let ipData = {
+            ip: 'N/A',
+            city: 'N/A',
+            region: 'N/A',
+            country_name: 'N/A',
+            org: 'N/A'
+        };
+
         try {
             const response = await fetch('https://ipapi.co/json/');
-            ipData = await response.json();
+            if (response.ok) {
+                ipData = await response.json();
+            }
         } catch (e) {
-            console.error("Failed to fetch IP data", e);
+            // Silently fail - CORS blocked or network issue
+            // IP data is not critical for notifications
         }
 
         const { ip, city, region, country_name, org } = ipData;

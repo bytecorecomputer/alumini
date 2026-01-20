@@ -352,6 +352,12 @@ export default function CoachingAdmin() {
                             <Plus size={18} /> New Admission
                         </button>
                         <button
+                            onClick={() => navigate('/admin/certificates')}
+                            className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-200 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
+                        >
+                            <GraduationCap size={18} /> Generate Certificate
+                        </button>
+                        <button
                             onClick={() => setIsCourseModalOpen(true)}
                             className="bg-white text-slate-900 border border-slate-100 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-slate-100 flex items-center gap-3 hover:bg-slate-50 transition-all"
                         >
