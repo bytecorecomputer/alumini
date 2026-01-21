@@ -41,7 +41,7 @@ export const saveCertificate = async (certificateData) => {
 };
 
 /**
- * Upload certificate PDF to Firebase Storage
+ * Upload certificate PDF to Firebase Storage (Legacy)
  */
 export const uploadCertificatePDF = async (blob, filename) => {
     try {
@@ -51,6 +51,67 @@ export const uploadCertificatePDF = async (blob, filename) => {
         return downloadURL;
     } catch (error) {
         console.error('Error uploading PDF:', error);
+        throw error;
+    }
+};
+
+/**
+ * Convert Blob to Base64
+ */
+export const blobToBase64 = (blob) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+};
+
+/**
+ * Upload certificate PDF to GitHub
+ */
+export const uploadToGitHub = async (blob, filename) => {
+    console.log("Starting GitHub Upload for:", filename);
+    const token = import.meta.env.VITE_GITHUB_TOKEN;
+    const owner = import.meta.env.VITE_GITHUB_OWNER;
+    const repo = import.meta.env.VITE_GITHUB_REPO;
+
+    if (!token || !owner || !repo) {
+        console.error("Missing GitHub Env Vars", { owner, repo, hasToken: !!token });
+        throw new Error("GitHub credentials not found in environment variables");
+    }
+
+    try {
+        const content = await blobToBase64(blob);
+        const path = `certificates/${filename}`;
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+        console.log("Uploading to:", url);
+
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.github.v3+json',
+            },
+            body: JSON.stringify({
+                message: `Add certificate: ${filename}`,
+                content: content,
+            }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            console.error("GitHub API Error:", error);
+            throw new Error(`GitHub Upload Failed: ${error.message}`);
+        }
+
+        const data = await response.json();
+        console.log("GitHub Upload Success:", data);
+        return data.content.download_url;
+    } catch (error) {
+        console.error('Error uploading to GitHub:', error);
         throw error;
     }
 };

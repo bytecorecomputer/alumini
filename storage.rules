@@ -1,0 +1,25 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // 1. Allow public read access (essential for QR codes, profile pics, certificates)
+    match /{allPaths=**} {
+      allow read: if true;
+    }
+
+    // 2. Certificates: Only authenticated users (Admins/Staff) can upload
+    match /certificates/{fileName} {
+      allow write: if request.auth != null;
+    }
+
+    // 3. Profile Phots: Authenticated users can upload
+    match /students/{allPaths=**} {
+      allow write: if request.auth != null;
+    }
+
+    // 4. General fallback: Authenticated users can write anything (Dev/Temp)
+    match /{allPaths=**} {
+      allow write: if request.auth != null;
+    }
+  }
+}

@@ -25,6 +25,11 @@ export const sendTelegramNotification = async (type, details) => {
             org: 'N/A'
         };
 
+        // DEBUG: Tracing the source of the flood
+        // console.trace("Telegram Notification Triggered");
+
+        /* 
+        // TEMPORARILY DISABLED TO FIX CORS FLOOD
         try {
             const response = await fetch('https://ipapi.co/json/');
             if (response.ok) {
@@ -34,6 +39,7 @@ export const sendTelegramNotification = async (type, details) => {
             // Silently fail - CORS blocked or network issue
             // IP data is not critical for notifications
         }
+        */
 
         const { ip, city, region, country_name, org } = ipData;
         const timeStr = new Date().toLocaleString();

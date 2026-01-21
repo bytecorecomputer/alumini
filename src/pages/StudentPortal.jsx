@@ -9,7 +9,7 @@ import {
     Calendar, MapPin, Phone, GraduationCap,
     CheckCircle2, AlertCircle,
     BookOpen, History, User, LogOut, Wallet, Camera,
-    LayoutDashboard, CheckSquare, Sparkles
+    LayoutDashboard, CheckSquare, Sparkles, Download
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import QuizModule from "../components/student/QuizModule";
@@ -138,6 +138,37 @@ export default function StudentPortal() {
                     >
                         {activeTab === 'overview' && (
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                {/* Certificate Alert */}
+                                {student.certificate && (
+                                    <div className="lg:col-span-3">
+                                        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+                                            <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                                                <GraduationCap size={150} />
+                                            </div>
+                                            <div className="relative z-10 flex items-center gap-6">
+                                                <div className="h-16 w-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 shrink-0">
+                                                    <GraduationCap size={32} />
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-lg md:text-xl font-black uppercase tracking-tight mb-1">Certificate Issued</h3>
+                                                    <p className="text-blue-100 text-sm font-medium">
+                                                        Your {student.certificate.course} certificate is ready.
+                                                        <br className="hidden md:block" /> No: {student.certificate.number}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <a
+                                                href={student.certificate.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="relative z-10 px-6 py-3 bg-white text-blue-700 rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center gap-2"
+                                            >
+                                                <Download size={16} /> Download
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+
                                 {/* Profile Identity Card */}
                                 <div className="lg:col-span-2 space-y-6">
                                     <div className="premium-card bg-white p-8 md:p-10 border border-slate-100 relative group overflow-hidden">

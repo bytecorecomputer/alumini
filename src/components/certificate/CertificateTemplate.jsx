@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
+import logo from '../../assets/format/logo.png';
 
 const CertificateTemplate = forwardRef(({ data }, ref) => {
     const {
@@ -32,8 +33,26 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                 fontFamily: "'Times New Roman', serif",
                 position: 'relative',
                 boxSizing: 'border-box',
+                overflow: 'hidden', // Prevent watermark overflow
             }}
         >
+            {/* Watermark */}
+            <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%) rotate(-30deg)',
+                width: '650px',
+                height: '650px',
+                backgroundImage: `url(${logo})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundSize: 'contain',
+                opacity: '0.1',
+                pointerEvents: 'none',
+                zIndex: 0,
+            }} />
+
             {/* Decorative Corners */}
             <div style={{
                 position: 'absolute',
@@ -44,6 +63,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                 borderTop: '5px solid #1e3a8a',
                 borderLeft: '5px solid #1e3a8a',
                 borderRadius: '8px 0 0 0',
+                zIndex: 1,
             }} />
             <div style={{
                 position: 'absolute',
@@ -54,6 +74,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                 borderTop: '5px solid #1e3a8a',
                 borderRight: '5px solid #1e3a8a',
                 borderRadius: '0 8px 0 0',
+                zIndex: 1,
             }} />
             <div style={{
                 position: 'absolute',
@@ -64,6 +85,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                 borderBottom: '5px solid #1e3a8a',
                 borderLeft: '5px solid #1e3a8a',
                 borderRadius: '0 0 0 8px',
+                zIndex: 1,
             }} />
             <div style={{
                 position: 'absolute',
@@ -74,6 +96,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                 borderBottom: '5px solid #1e3a8a',
                 borderRight: '5px solid #1e3a8a',
                 borderRadius: '0 0 8px 0',
+                zIndex: 1,
             }} />
 
             {/* Main Border */}
@@ -85,6 +108,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                 bottom: '9mm',
                 border: '3px solid #3b82f6',
                 borderRadius: '6px',
+                zIndex: 2,
             }}>
                 <div style={{
                     position: 'absolute',
@@ -104,51 +128,58 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '12px',
+                            gap: '15px',
                             marginBottom: '8px',
                         }}>
                             {/* Logo */}
-                            <div style={{
-                                width: '55px',
-                                height: '55px',
-                                background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                color: 'white',
-                                fontSize: '22px',
-                                fontWeight: 'bold',
-                                border: '3px solid #1e3a8a',
-                                boxShadow: '0 4px 15px rgba(30, 58, 138, 0.3)',
-                            }}>
-                                BC
-                            </div>
+                            <img
+                                src={logo}
+                                alt="ByteCore Logo"
+                                style={{
+                                    width: '80px',
+                                    height: '80px',
+                                    objectFit: 'contain',
+                                    filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))'
+                                }}
+                            />
+
                             <div>
                                 <h1 style={{
-                                    fontSize: '28px',
+                                    fontSize: '32px',
                                     fontWeight: 'bold',
                                     color: '#1e3a8a',
                                     margin: '0',
                                     letterSpacing: '2px',
                                     textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
+                                    fontFamily: "'Times New Roman', serif",
+                                    lineHeight: '1.1',
                                 }}>
                                     BYTECORE COMPUTER CENTRE
                                 </h1>
                                 <p style={{
-                                    fontSize: '13px',
+                                    fontSize: '14px',
                                     color: '#475569',
-                                    margin: '4px 0 0 0',
-                                    fontWeight: '600',
+                                    margin: '6px 0 0 0',
+                                    fontWeight: '700',
+                                    letterSpacing: '0.5px',
                                 }}>
                                     (BYTECORE EDUCATIONAL SOCIETY)
                                 </p>
                                 <p style={{
                                     fontSize: '11px',
                                     color: '#64748b',
-                                    margin: '3px 0 0 0',
+                                    margin: '4px 0 0 0',
                                 }}>
                                     Add.: Nariyawal, Bareilly | REGD. NO. BAR/07758
+                                </p>
+                                <p style={{
+                                    fontSize: '11px',
+                                    color: '#64748b',
+                                    margin: '3px 0 0 0',
+                                    fontWeight: 'bold',
+                                    letterSpacing: '0.5px',
+                                }}>
+                                    UDYAM REGISTRATION NO.: UDYAM-UP-XX-XXXXXXX
                                 </p>
                             </div>
                         </div>
@@ -161,6 +192,7 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                         gap: '15px',
                         marginBottom: '10px',
                         fontSize: '10.5px',
+                        alignItems: 'center',
                     }}>
                         <div style={{
                             display: 'flex',
@@ -169,36 +201,47 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                         }}>
                             <div style={{
                                 marginBottom: '4px',
-                                padding: '4px 8px',
+                                padding: '6px 12px',
                                 background: 'linear-gradient(to right, #eff6ff, transparent)',
                                 borderLeft: '3px solid #3b82f6',
                             }}>
                                 <strong style={{ color: '#1e3a8a' }}>Marksheet No:</strong> {marksheetNumber}
                             </div>
                             <div style={{
-                                padding: '4px 8px',
+                                padding: '6px 12px',
                                 background: 'linear-gradient(to right, #eff6ff, transparent)',
                                 borderLeft: '3px solid #3b82f6',
                             }}>
                                 <strong style={{ color: '#1e3a8a' }}>Certificate No:</strong> {certificateNumber}
                             </div>
                         </div>
+
+                        {/* Student Photo - Using img tag for better PDF capture */}
                         <div style={{
-                            width: '75px',
-                            height: '95px',
+                            width: '85px',
+                            height: '105px',
                             border: '3px solid #1e3a8a',
-                            background: studentPhoto ? `url(${studentPhoto})` : '#f1f5f9',
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
+                            background: '#f1f5f9',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            color: '#94a3b8',
-                            fontSize: '10px',
                             borderRadius: '4px',
                             boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                            overflow: 'hidden',
                         }}>
-                            {!studentPhoto && 'Photo'}
+                            {studentPhoto ? (
+                                <img
+                                    src={studentPhoto}
+                                    alt="Student"
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'cover',
+                                    }}
+                                />
+                            ) : (
+                                <span style={{ color: '#94a3b8', fontSize: '10px' }}>Photo</span>
+                            )}
                         </div>
                     </div>
 
@@ -375,112 +418,82 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                         </tbody>
                     </table>
 
-                    {/* Summary and QR Section */}
+                    {/* Summary and QR Section - Redesigned without boxes */}
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: '2.5fr 1fr',
                         gap: '15px',
                         fontSize: '11px',
-                        marginBottom: '12px',
+                        marginBottom: '10px',
                     }}>
                         <div>
+                            {/* Unified Summary Strip */}
                             <div style={{
-                                marginBottom: '8px',
-                                padding: '8px',
-                                background: 'linear-gradient(to right, #dbeafe, #e0e7ff)',
-                                borderRadius: '6px',
-                                borderLeft: '4px solid #3b82f6',
+                                marginTop: '10px',
+                                marginBottom: '15px',
+                                padding: '12px 16px',
+                                background: '#f0f9ff',
+                                borderRadius: '8px',
+                                border: '1px solid #bae6fd',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                                color: '#1e3a8a',
                             }}>
-                                <strong style={{ color: '#1e3a8a' }}>YOUR OBTAINED TOTAL MARKS:</strong>{' '}
-                                <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#dc2626' }}>{obtainedMarks}</span>
-                                {' '}<strong style={{ color: '#1e3a8a' }}>FROM</strong>{' '}
-                                <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#1e3a8a' }}>{totalMarks}</span>
-                            </div>
-                            <div style={{
-                                display: 'grid',
-                                gridTemplateColumns: '1fr 1fr 1fr',
-                                gap: '8px',
-                                marginBottom: '10px',
-                            }}>
-                                <div style={{
-                                    padding: '6px',
-                                    background: '#fef3c7',
-                                    borderRadius: '4px',
-                                    textAlign: 'center',
-                                    border: '2px solid #fbbf24',
-                                }}>
-                                    <div style={{ fontSize: '9px', color: '#78350f', marginBottom: '2px' }}>PERCENTAGE</div>
-                                    <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#92400e' }}>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '2px', textTransform: 'uppercase' }}>Total Marks</div>
+                                    <div style={{ fontSize: '14px', fontWeight: '800' }}>
+                                        <span style={{ color: '#dc2626' }}>{obtainedMarks}</span> / {totalMarks}
+                                    </div>
+                                </div>
+                                <div style={{ height: '30px', width: '1px', background: '#cbd5e1' }}></div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '2px', textTransform: 'uppercase' }}>Percentage</div>
+                                    <div style={{ fontSize: '14px', fontWeight: '800', color: '#92400e' }}>
                                         {percentage.toFixed(2)}%
                                     </div>
                                 </div>
-                                <div style={{
-                                    padding: '6px',
-                                    background: '#dcfce7',
-                                    borderRadius: '4px',
-                                    textAlign: 'center',
-                                    border: '2px solid #22c55e',
-                                }}>
-                                    <div style={{ fontSize: '9px', color: '#14532d', marginBottom: '2px' }}>DIVISION</div>
-                                    <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#166534' }}>
+                                <div style={{ height: '30px', width: '1px', background: '#cbd5e1' }}></div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '2px', textTransform: 'uppercase' }}>Division</div>
+                                    <div style={{ fontSize: '14px', fontWeight: '800', color: '#166534' }}>
                                         {division}
                                     </div>
                                 </div>
-                                <div style={{
-                                    padding: '6px',
-                                    background: '#e0e7ff',
-                                    borderRadius: '4px',
-                                    textAlign: 'center',
-                                    border: '2px solid #6366f1',
-                                }}>
-                                    <div style={{ fontSize: '9px', color: '#312e81', marginBottom: '2px' }}>GRADE</div>
-                                    <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#4338ca' }}>
+                                <div style={{ height: '30px', width: '1px', background: '#cbd5e1' }}></div>
+                                <div style={{ textAlign: 'center' }}>
+                                    <div style={{ fontSize: '10px', color: '#64748b', marginBottom: '2px', textTransform: 'uppercase' }}>Grade</div>
+                                    <div style={{ fontSize: '14px', fontWeight: '800', color: '#4338ca' }}>
                                         {grade}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Grade Table */}
-                            <div style={{ marginTop: '8px' }}>
-                                <table style={{ width: '100%', fontSize: '8.5px', borderCollapse: 'collapse' }}>
-                                    <thead>
-                                        <tr style={{ background: 'linear-gradient(to right, #f1f5f9, #e2e8f0)' }}>
-                                            <th style={{ border: '1px solid #cbd5e1', padding: '4px', fontWeight: 'bold', color: '#1e3a8a' }}>
-                                                CLASSIFICATION OF GRADES
-                                            </th>
-                                            <th style={{ border: '1px solid #cbd5e1', padding: '4px', color: '#334155' }}>90% ABOVE</th>
-                                            <th style={{ border: '1px solid #cbd5e1', padding: '4px', color: '#334155' }}>80% ABOVE</th>
-                                            <th style={{ border: '1px solid #cbd5e1', padding: '4px', color: '#334155' }}>70% ABOVE</th>
-                                            <th style={{ border: '1px solid #cbd5e1', padding: '4px', color: '#334155' }}>60% ABOVE</th>
-                                            <th style={{ border: '1px solid #cbd5e1', padding: '4px', color: '#334155' }}>50% ABOVE</th>
-                                            <th style={{ border: '1px solid #cbd5e1', padding: '4px', color: '#334155' }}>40% ABOVE</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style={{ background: '#ffffff' }}>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', fontWeight: 'bold', color: '#334155' }}>
-                                                GRADE OBTAIN
-                                            </td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontWeight: 'bold', color: '#059669' }}>A+</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontWeight: 'bold', color: '#059669' }}>A</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontWeight: 'bold', color: '#0891b2' }}>B+</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontWeight: 'bold', color: '#0891b2' }}>B</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontWeight: 'bold', color: '#d97706' }}>C</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontWeight: 'bold', color: '#dc2626' }}>D</td>
-                                        </tr>
-                                        <tr style={{ background: '#f8fafc' }}>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', fontWeight: 'bold', color: '#334155' }}>
-                                                DISTINCTION
-                                            </td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontSize: '8px' }}>A+</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontSize: '8px' }}>A+</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontSize: '7.5px' }}>1ST DIV.</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontSize: '7.5px' }}>1ST DIV.</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontSize: '7.5px' }}>2ND DIV.</td>
-                                            <td style={{ border: '1px solid #cbd5e1', padding: '4px', textAlign: 'center', fontSize: '7.5px' }}>3RD DIV.</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+
+                            {/* Grading System Legend - Simple & Clean */}
+                            <div style={{
+                                marginTop: '12px',
+                                padding: '8px',
+                                background: '#f8fafc',
+                                border: '1px dashed #cbd5e1',
+                                borderRadius: '4px',
+                                fontSize: '9px',
+                                color: '#475569',
+                                textAlign: 'center'
+                            }}>
+                                <strong style={{ color: '#1e3a8a' }}>GRADING SYSTEM:</strong>
+                                <span style={{ marginLeft: '8px' }}> <strong style={{ color: '#059669' }}>A+</strong> (90% & Above) </span>
+                                <span style={{ margin: '0 4px', color: '#cbd5e1' }}>|</span>
+                                <span> <strong style={{ color: '#059669' }}>A</strong> (80%-89%) </span>
+                                <span style={{ margin: '0 4px', color: '#cbd5e1' }}>|</span>
+                                <span> <strong style={{ color: '#0891b2' }}>B+</strong> (70%-79%) </span>
+                                <span style={{ margin: '0 4px', color: '#cbd5e1' }}>|</span>
+                                <span> <strong style={{ color: '#0891b2' }}>B</strong> (60%-69%) </span>
+                                <span style={{ margin: '0 4px', color: '#cbd5e1' }}>|</span>
+                                <span> <strong style={{ color: '#d97706' }}>C</strong> (50%-59%) </span>
+                                <span style={{ margin: '0 4px', color: '#cbd5e1' }}>|</span>
+                                <span> <strong style={{ color: '#dc2626' }}>D</strong> (40%-49%) </span>
                             </div>
                         </div>
 
@@ -491,23 +504,24 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
+                            marginTop: '10px',
                         }}>
                             <div style={{
-                                padding: '8px',
+                                padding: '6px',
                                 background: 'white',
                                 borderRadius: '8px',
-                                border: '3px solid #3b82f6',
-                                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                                border: '2px solid #3b82f6',
+                                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)',
                             }}>
                                 <QRCodeCanvas
-                                    value={`CERTIFICATE: ${certificateNumber}\nSTUDENT: ${studentName}\nCOURSE: ${courseName}`}
+                                    value={`STUDENT: ${studentName}\nFATHER: ${fatherName}\nCOURSE: ${courseName}\nMARKS: ${obtainedMarks}/${totalMarks} (${percentage.toFixed(2)}%)\nRESULT: ${division} (Grade ${grade})\nCERT NO: ${certificateNumber}`}
                                     size={90}
-                                    level="H"
+                                    level="M"
                                 />
                             </div>
                             <div style={{
-                                fontSize: '9px',
-                                marginTop: '6px',
+                                fontSize: '8px',
+                                marginTop: '4px',
                                 color: '#64748b',
                                 fontWeight: 'bold',
                             }}>
@@ -516,58 +530,20 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                         </div>
                     </div>
 
-                    {/* Footer - Signatures */}
+                    {/* Footer - Signatures REMOVED */}
                     <div style={{
+                        marginTop: '10px',
+                        paddingTop: '5px',
+                        height: '30px', /* Minimal Spacer */
                         display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'flex-end',
-                        marginTop: '18px',
-                        paddingTop: '10px',
-                        borderTop: '2px solid #e2e8f0',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        color: '#cbd5e1',
+                        fontSize: '9px',
+                        letterSpacing: '1px'
                     }}>
-                        <div style={{ textAlign: 'center', fontSize: '10px' }}>
-                            <div style={{
-                                width: '120px',
-                                borderTop: '2px solid #1e3a8a',
-                                paddingTop: '6px',
-                                marginTop: '35px',
-                            }}>
-                                <strong style={{ color: '#1e3a8a' }}>Director's Signature</strong>
-                            </div>
-                        </div>
-
-                        <div style={{
-                            width: '90px',
-                            height: '90px',
-                            border: '3px solid #1e40af',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
-                            color: 'white',
-                            fontSize: '10px',
-                            textAlign: 'center',
-                            fontWeight: 'bold',
-                            position: 'relative',
-                            boxShadow: '0 6px 20px rgba(30, 64, 175, 0.4)',
-                        }}>
-                            <div>
-                                OFFICIAL<br />SEAL<br />
-                                <span style={{ fontSize: '8px' }}>BYTECORE</span>
-                            </div>
-                        </div>
-
-                        <div style={{ textAlign: 'center', fontSize: '10px' }}>
-                            <div style={{
-                                width: '120px',
-                                borderTop: '2px solid #1e3a8a',
-                                paddingTop: '6px',
-                                marginTop: '35px',
-                            }}>
-                                <strong style={{ color: '#1e3a8a' }}>Principal's Signature</strong>
-                            </div>
-                        </div>
+                        {/* Optional: 'COMPUTER GENERATED CERTIFICATE' or keep empty */}
+                        <span style={{ opacity: 0.5 }}></span>
                     </div>
                 </div>
             </div>

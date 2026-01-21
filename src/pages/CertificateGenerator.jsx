@@ -7,18 +7,24 @@ import {
     generateCertificateNumber,
     generateMarksheetNumber,
     saveCertificate,
-    uploadCertificatePDF,
+    uploadToGitHub,
     calculateGrade,
     calculateDivision,
 } from '../lib/certificateService';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase/firestore';
+import { Search, Loader2 } from 'lucide-react';
 
 export default function CertificateGenerator() {
     const navigate = useNavigate();
     const certificateRef = useRef();
+    const printRef = useRef(); // Ref for the unscaled, hidden certificate
 
     const [loading, setLoading] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     const [studentPhoto, setStudentPhoto] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searching, setSearching] = useState(false);
 
     const [formData, setFormData] = useState({
         studentName: '',
@@ -65,6 +71,39 @@ export default function CertificateGenerator() {
         }
     };
 
+    const handleSearch = async () => {
+        if (!searchQuery.trim()) return;
+        setSearching(true);
+        try {
+            // Search by Registration Number (Roll Number)
+            const studentRef = doc(db, "students", searchQuery.trim());
+            const studentSnap = await getDoc(studentRef);
+
+            if (studentSnap.exists()) {
+                const data = studentSnap.data();
+                setFormData(prev => ({
+                    ...prev,
+                    studentName: data.fullName || '',
+                    fatherName: data.fatherName || '',
+                    courseName: data.course || prev.courseName,
+                    marksheetNumber: data.registration || prev.marksheetNumber, // Roll Number is Registration
+                    // Keep other fields or defaults
+                }));
+                if (data.photoUrl) {
+                    setStudentPhoto(data.photoUrl);
+                }
+                alert("Student data found and autofilled!");
+            } else {
+                alert("Student not found with this Registration ID.");
+            }
+        } catch (error) {
+            console.error("Search error:", error);
+            alert("Error searching for student.");
+        } finally {
+            setSearching(false);
+        }
+    };
+
     const calculateTotals = () => {
         const totalMarks = formData.subjects.reduce((sum, subj) => sum + subj.maxMarks, 0);
         const obtainedMarks = formData.subjects.reduce((sum, subj) => sum + subj.obtained, 0);
@@ -82,7 +121,7 @@ export default function CertificateGenerator() {
     const handleGeneratePDF = async () => {
         setLoading(true);
         try {
-            const element = certificateRef.current;
+            const element = printRef.current;
 
             // Generate high-quality canvas
             const canvas = await html2canvas(element, {
@@ -109,8 +148,19 @@ export default function CertificateGenerator() {
             const pdfBlob = pdf.output('blob');
             const filename = `certificate_${formData.certificateNumber.replace(/\//g, '_')}.pdf`;
 
-            // Upload to Firebase Storage
-            const pdfUrl = await uploadCertificatePDF(pdfBlob, filename);
+            // Download PDF IMMEDIATELY
+            pdf.save(filename);
+
+            // Upload to GitHub
+            let pdfUrl = '';
+            try {
+                pdfUrl = await uploadToGitHub(pdfBlob, filename);
+            } catch (githubError) {
+                console.error("GitHub upload failed but PDF was downloaded:", githubError);
+                // We might still want to save the record without URL or alert user?
+                // For now, let's proceed but maybe alert?
+                alert("Certificate downloaded, but cloud backup failed: " + githubError.message);
+            }
 
             // Save certificate data to Firestore
             const totals = calculateTotals();
@@ -121,8 +171,29 @@ export default function CertificateGenerator() {
                 ...totals,
             });
 
-            // Download PDF
-            pdf.save(filename);
+            // Link Certificate to Student Profile
+            if (formData.marksheetNumber) {
+                try {
+                    const studentRef = doc(db, "students", formData.marksheetNumber);
+                    const studentSnap = await getDoc(studentRef);
+
+                    if (studentSnap.exists()) {
+                        await updateDoc(studentRef, {
+                            certificate: {
+                                url: pdfUrl,
+                                number: formData.certificateNumber,
+                                issueDate: formData.issueDate,
+                                course: formData.courseName
+                            },
+                            status: 'pass' // Mark student as passed/alumni
+                        });
+                        console.log("Certificate linked to student profile");
+                    }
+                } catch (linkError) {
+                    console.error("Failed to link certificate to student:", linkError);
+                    // Non-blocking error
+                }
+            }
 
             alert('Certificate generated and saved successfully!');
             navigate('/admin/coaching');
@@ -160,6 +231,31 @@ export default function CertificateGenerator() {
                 <div className="grid lg:grid-cols-2 gap-8">
                     {/* Form Section */}
                     <div className="bg-white rounded-2xl shadow-xl p-8">
+                        {/* Student Search Section */}
+                        <div className="mb-8 p-6 bg-slate-50 border border-slate-200 rounded-xl">
+                            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4">Autofill from Database</h3>
+                            <div className="flex gap-4">
+                                <div className="relative flex-1">
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                                    <input
+                                        type="text"
+                                        placeholder="Enter Registration / Roll Number"
+                                        className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none font-bold text-slate-700"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                                    />
+                                </div>
+                                <button
+                                    onClick={handleSearch}
+                                    disabled={searching || !searchQuery}
+                                    className="px-6 py-3 bg-slate-900 text-white rounded-lg font-bold uppercase tracking-wider hover:bg-slate-800 disabled:opacity-50 flex items-center gap-2"
+                                >
+                                    {searching ? <Loader2 className="animate-spin" size={20} /> : 'Search'}
+                                </button>
+                            </div>
+                        </div>
+
                         <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
                             <span className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm">1</span>
                             Student Information
@@ -258,6 +354,21 @@ export default function CertificateGenerator() {
                                     onChange={handleInputChange}
                                     className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all"
                                     placeholder="e.g., 2024-25"
+                                    required
+                                />
+                            </div>
+
+                            {/* Marksheet Number (Roll Number) */}
+                            <div>
+                                <label className="block text-sm font-semibold text-slate-700 mb-2">
+                                    Roll No. / Marksheet No. *
+                                </label>
+                                <input
+                                    type="text"
+                                    name="marksheetNumber"
+                                    value={formData.marksheetNumber}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all font-mono"
                                     required
                                 />
                             </div>
@@ -391,6 +502,18 @@ export default function CertificateGenerator() {
                             </div>
                         )}
                     </div>
+                </div>
+
+                {/* Hidden Print Template - High Quality Capture Source */}
+                <div style={{ position: 'absolute', top: -10000, left: -10000 }}>
+                    <CertificateTemplate
+                        ref={printRef}
+                        data={{
+                            ...formData,
+                            studentPhoto,
+                            ...totals,
+                        }}
+                    />
                 </div>
             </div>
         </div>
