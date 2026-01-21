@@ -156,10 +156,13 @@ export const deleteCertificate = async (certificateId) => {
 /**
  * Calculate grade based on percentage
  */
-export const calculateGrade = (percentage) => {
-    if (percentage >= 90) return 'A+';
-    if (percentage >= 80) return 'A';
-    if (percentage >= 70) return 'B+';
+export const calculateGrade = (percentage, subjects = []) => {
+    // Check if any subject is failed based on minMarks (default 33)
+    const hasFailedSubject = subjects.some(s => s.obtained < (s.minMarks || 33));
+    if (hasFailedSubject) return 'F';
+
+    if (percentage >= 85) return 'A+';
+    if (percentage >= 75) return 'A';
     if (percentage >= 60) return 'B';
     if (percentage >= 50) return 'C';
     if (percentage >= 40) return 'D';
@@ -169,9 +172,13 @@ export const calculateGrade = (percentage) => {
 /**
  * Calculate division based on percentage
  */
-export const calculateDivision = (percentage) => {
-    if (percentage >= 60) return '1st';
-    if (percentage >= 45) return '2nd';
-    if (percentage >= 33) return '3rd';
+export const calculateDivision = (percentage, subjects = []) => {
+    // Check if any subject is failed based on minMarks (default 33)
+    const hasFailedSubject = subjects.some(s => s.obtained < (s.minMarks || 33));
+    if (hasFailedSubject || percentage < 33) return 'Fail';
+
+    if (percentage >= 60) return '1st Division';
+    if (percentage >= 45) return '2nd Division';
+    if (percentage >= 33) return '3rd Division';
     return 'Fail';
 };

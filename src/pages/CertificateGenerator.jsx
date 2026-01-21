@@ -13,7 +13,36 @@ import {
 } from '../lib/certificateService';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
-import { Search, Loader2 } from 'lucide-react';
+import { Search, Loader2, User, Users, BookOpen, Calendar, GraduationCap } from 'lucide-react';
+
+const COURSE_TEMPLATES = {
+    'MDCA': [
+        { name: 'COMPUTER FUNDAMENTAL', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'OPERATING SYSTEM', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'MS OFFICE (WORD, EXCEL, PPT)', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'INTERNET & HTML', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'PROGRAMMING IN C/C++', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'DTP (PHOTO SHOP, CORAL DRAW)', maxMarks: 100, minMarks: 33, obtained: 0 },
+    ],
+    'DCA': [
+        { name: 'COMPUTER FUNDAMENTAL', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'MS OFFICE', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'INTERNET', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'DTP', maxMarks: 100, minMarks: 33, obtained: 0 },
+    ],
+    'ADCA': [
+        { name: 'FUNDAMENTAL & OS', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'MS OFFICE', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'TALLY PRIME', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'DTP', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'INTERNET', maxMarks: 100, minMarks: 33, obtained: 0 },
+    ],
+    'PYTHON': [
+        { name: 'PYTHON CORE', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'GUI & DATABASE', maxMarks: 100, minMarks: 33, obtained: 0 },
+        { name: 'PROJECT WORK', maxMarks: 100, minMarks: 33, obtained: 0 },
+    ]
+};
 
 export default function CertificateGenerator() {
     const navigate = useNavigate();
@@ -30,17 +59,12 @@ export default function CertificateGenerator() {
         studentName: '',
         fatherName: '',
         motherName: '',
-        courseName: 'DIPLOMA IN COMPUTER SOFTWARE',
-        duration: 'THREE MONTH',
+        courseName: 'MDCA',
+        duration: 'ONE YEAR',
         marksheetNumber: generateMarksheetNumber(),
         certificateNumber: generateCertificateNumber(),
         issueDate: new Date().getFullYear().toString(),
-        subjects: [
-            { name: 'MS PAINT', type: 'PRACTICAL', maxMarks: 100, minMarks: 75, obtained: 0 },
-            { name: 'MS WORD', type: 'PRACTICAL', maxMarks: 100, minMarks: 71, obtained: 0 },
-            { name: 'MS EXCEL', type: 'WRITTEN', maxMarks: 100, minMarks: 70, obtained: 0 },
-            { name: 'MS POWER POINT', type: 'VIVA', maxMarks: 100, minMarks: 75, obtained: 0 },
-        ],
+        subjects: COURSE_TEMPLATES['MDCA'],
     });
 
     const handleInputChange = (e) => {
@@ -53,10 +77,40 @@ export default function CertificateGenerator() {
 
     const handleSubjectChange = (index, field, value) => {
         const newSubjects = [...formData.subjects];
-        newSubjects[index][field] = field === 'obtained' ? parseInt(value) || 0 : value;
+        if (field === 'maxMarks' || field === 'minMarks' || field === 'obtained') {
+            newSubjects[index][field] = parseInt(value) || 0;
+        } else {
+            newSubjects[index][field] = value;
+        }
         setFormData(prev => ({
             ...prev,
             subjects: newSubjects,
+        }));
+    };
+
+    const handleApplyTemplate = (course) => {
+        setFormData(prev => ({
+            ...prev,
+            courseName: course,
+            subjects: COURSE_TEMPLATES[course] || prev.subjects,
+            duration: course === 'MDCA' || course === 'ADCA' ? 'ONE YEAR' : 'SIX MONTH'
+        }));
+    };
+
+    const handleAddSubject = () => {
+        setFormData(prev => ({
+            ...prev,
+            subjects: [
+                ...prev.subjects,
+                { name: '', maxMarks: 100, minMarks: 33, obtained: 0 }
+            ]
+        }));
+    };
+
+    const handleRemoveSubject = (index) => {
+        setFormData(prev => ({
+            ...prev,
+            subjects: prev.subjects.filter((_, i) => i !== index)
         }));
     };
 
@@ -108,8 +162,8 @@ export default function CertificateGenerator() {
         const totalMarks = formData.subjects.reduce((sum, subj) => sum + subj.maxMarks, 0);
         const obtainedMarks = formData.subjects.reduce((sum, subj) => sum + subj.obtained, 0);
         const percentage = (obtainedMarks / totalMarks) * 100;
-        const grade = calculateGrade(percentage);
-        const division = calculateDivision(percentage);
+        const grade = calculateGrade(percentage, formData.subjects);
+        const division = calculateDivision(percentage, formData.subjects);
 
         return { totalMarks, obtainedMarks, percentage, grade, division };
     };
@@ -256,23 +310,25 @@ export default function CertificateGenerator() {
                             </div>
                         </div>
 
-                        <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                            <span className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center text-sm">1</span>
+                        <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
+                            <span className="w-10 h-10 bg-blue-600 text-white rounded-xl flex items-center justify-center shadow-lg">
+                                <User size={20} />
+                            </span>
                             Student Information
                         </h2>
 
-                        <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             {/* Student Name */}
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                    Student Name *
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                    <User size={16} className="text-blue-500" /> Student Name *
                                 </label>
                                 <input
                                     type="text"
                                     name="studentName"
                                     value={formData.studentName}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all"
+                                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all font-bold text-slate-800"
                                     placeholder="Enter full name"
                                     required
                                 />
@@ -280,8 +336,8 @@ export default function CertificateGenerator() {
 
                             {/* Father Name */}
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                    Father/Husband Name *
+                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                    <Users size={16} className="text-blue-500" /> Father/Husband Name *
                                 </label>
                                 <input
                                     type="text"
@@ -289,15 +345,15 @@ export default function CertificateGenerator() {
                                     value={formData.fatherName}
                                     onChange={handleInputChange}
                                     className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all"
-                                    placeholder="Enter father/husband name"
+                                    placeholder="Enter father name"
                                     required
                                 />
                             </div>
 
                             {/* Mother Name */}
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                    Mother Name *
+                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                    <Users size={16} className="text-pink-500" /> Mother Name *
                                 </label>
                                 <input
                                     type="text"
@@ -312,56 +368,58 @@ export default function CertificateGenerator() {
 
                             {/* Course Name */}
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                    Course Name *
+                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                    <BookOpen size={16} className="text-blue-500" /> Course Name *
                                 </label>
                                 <input
                                     type="text"
                                     name="courseName"
                                     value={formData.courseName}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all"
-                                    placeholder="e.g., DIPLOMA IN COMPUTER SOFTWARE"
+                                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all uppercase font-bold text-blue-700"
+                                    placeholder="e.g., MDCA"
                                     required
                                 />
                             </div>
 
-                            {/* Duration */}
+                            {/* Duration Selector */}
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                    Course Duration *
+                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                    <Calendar size={16} className="text-blue-500" /> Course Duration *
                                 </label>
-                                <input
-                                    type="text"
+                                <select
                                     name="duration"
                                     value={formData.duration}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all"
-                                    placeholder="e.g., THREE MONTH"
-                                    required
-                                />
+                                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all bg-white"
+                                >
+                                    <option value="THREE MONTH">THREE MONTH</option>
+                                    <option value="SIX MONTH">SIX MONTH</option>
+                                    <option value="ONE YEAR">ONE YEAR</option>
+                                    <option value="TWO YEAR">TWO YEAR</option>
+                                </select>
                             </div>
 
                             {/* Issue Date */}
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                    Issue Year *
+                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                    <Calendar size={16} className="text-blue-500" /> Issue Year *
                                 </label>
                                 <input
                                     type="text"
                                     name="issueDate"
                                     value={formData.issueDate}
                                     onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all"
+                                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-blue-500 focus:outline-none transition-all font-bold"
                                     placeholder="e.g., 2024-25"
                                     required
                                 />
                             </div>
 
-                            {/* Marksheet Number (Roll Number) */}
+                            {/* Marksheet Number */}
                             <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                    Roll No. / Marksheet No. *
+                                <label className="block text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
+                                    <GraduationCap size={16} className="text-blue-500" /> Roll No. / Marksheet No. *
                                 </label>
                                 <input
                                     type="text"
@@ -396,38 +454,79 @@ export default function CertificateGenerator() {
                             Marks Entry
                         </h2>
 
+                        {/* Course Preset Selector */}
+                        <div className="mb-6 flex flex-wrap gap-2">
+                            {Object.keys(COURSE_TEMPLATES).map(course => (
+                                <button
+                                    key={course}
+                                    onClick={() => handleApplyTemplate(course)}
+                                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${formData.courseName === course
+                                        ? 'bg-blue-600 text-white shadow-lg scale-105'
+                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                        }`}
+                                >
+                                    {course} Preset
+                                </button>
+                            ))}
+                        </div>
+
                         <div className="space-y-4">
                             {formData.subjects.map((subject, index) => (
-                                <div key={index} className="p-4 bg-slate-50 rounded-lg border-2 border-slate-100">
-                                    <div className="font-semibold text-slate-800 mb-2">{subject.name}</div>
-                                    <div className="grid grid-cols-2 gap-3">
+                                <div key={index} className="p-4 bg-slate-50 rounded-lg border-2 border-slate-100 relative group">
+                                    <button
+                                        onClick={() => handleRemoveSubject(index)}
+                                        className="absolute top-2 right-2 p-1 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        title="Remove Subject"
+                                    >
+                                        <div className="bg-white rounded-full p-1 shadow-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                                        </div>
+                                    </button>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div>
-                                            <label className="block text-xs text-slate-600 mb-1">Exam Type</label>
+                                            <label className="block text-xs text-slate-600 mb-1 font-bold">Subject Name</label>
                                             <input
                                                 type="text"
-                                                value={subject.type}
-                                                onChange={(e) => handleSubjectChange(index, 'type', e.target.value)}
-                                                className="w-full px-3 py-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none text-sm"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs text-slate-600 mb-1">Obtained Marks *</label>
-                                            <input
-                                                type="number"
-                                                value={subject.obtained}
-                                                onChange={(e) => handleSubjectChange(index, 'obtained', e.target.value)}
+                                                value={subject.name}
+                                                onChange={(e) => handleSubjectChange(index, 'name', e.target.value)}
                                                 className="w-full px-3 py-2 border border-slate-200 rounded focus:border-blue-500 focus:outline-none text-sm font-semibold"
-                                                min="0"
-                                                max={subject.maxMarks}
-                                                required
+                                                placeholder="e.g. CORE JAVA"
                                             />
                                         </div>
-                                    </div>
-                                    <div className="text-xs text-slate-500 mt-2">
-                                        Max: {subject.maxMarks} | Min: {subject.minMarks}
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div>
+                                                <label className="block text-xs text-slate-600 mb-1">Max Marks</label>
+                                                <input
+                                                    type="number"
+                                                    value={100}
+                                                    readOnly
+                                                    className="w-full px-3 py-2 border border-slate-200 rounded focus:outline-none text-sm bg-slate-100 text-slate-500 cursor-not-allowed"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs text-slate-600 mb-1 text-blue-600 font-bold">Marks Obtained *</label>
+                                                <input
+                                                    type="number"
+                                                    value={subject.obtained}
+                                                    onFocus={(e) => e.target.select()}
+                                                    onChange={(e) => handleSubjectChange(index, 'obtained', e.target.value)}
+                                                    className="w-full px-3 py-2 border-2 border-blue-100 rounded focus:border-blue-500 focus:outline-none text-sm font-bold text-blue-700 bg-blue-50"
+                                                    placeholder="0"
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
+
+                            <button
+                                onClick={handleAddSubject}
+                                className="w-full py-3 border-2 border-dashed border-slate-300 rounded-lg text-slate-500 font-semibold hover:border-blue-500 hover:text-blue-500 transition-colors flex items-center justify-center gap-2"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 12h8" /><path d="M12 8v8" /></svg>
+                                Add Subject
+                            </button>
                         </div>
 
                         {/* Summary */}
