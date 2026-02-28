@@ -139,44 +139,19 @@ export default function Home() {
                                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                                     className="relative z-10 p-4"
                                 >
-                                    {/* Responsive Storyset Graphics */}
+                                    {/* Responsive Storyset Graphics - Professional Tech */}
                                     <div className="relative group">
                                         <img
-                                            src="https://storyset.com/illustrations/programming-pana.svg"
-                                            alt="Coding Mastery"
+                                            src="https://edit.storyset.com/images/illustrations/software-engineer-pana.svg"
+                                            alt="Professional Tech Mastery"
                                             className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(37,99,235,0.15)] hidden md:block"
                                         />
                                         <img
-                                            src="https://storyset.com/illustrations/coding-amico.svg"
-                                            alt="Coding Mastery Mobile"
+                                            src="https://edit.storyset.com/images/illustrations/coding-amico.svg"
+                                            alt="Professional Tech Mastery Mobile"
                                             className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(37,99,235,0.15)] md:hidden"
                                         />
                                     </div>
-
-                                    {/* Floating Stats Badges - Repositioned for Storyset */}
-                                    <motion.div
-                                        animate={{ x: [0, 8, 0], y: [0, -4, 0] }}
-                                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                        className="absolute top-[10%] -right-2 p-3 md:p-5 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white flex items-center gap-3 group hover:scale-105 transition-transform z-20"
-                                    >
-                                        <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl text-white shadow-lg"><Zap size={20} /></div>
-                                        <div>
-                                            <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Performance</div>
-                                            <div className="text-xs md:text-sm font-black text-slate-900 leading-none">High-Speed Lab</div>
-                                        </div>
-                                    </motion.div>
-
-                                    <motion.div
-                                        animate={{ x: [0, -8, 0], y: [0, 4, 0] }}
-                                        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                        className="absolute bottom-[15%] -left-2 p-3 md:p-5 bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-700 flex items-center gap-3 group hover:scale-105 transition-transform z-20"
-                                    >
-                                        <div className="p-2 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl text-white shadow-lg"><Star size={20} /></div>
-                                        <div>
-                                            <div className="text-[9px] font-black text-indigo-300 uppercase tracking-widest leading-none mb-1">New Era</div>
-                                            <div className="text-xs md:text-sm font-black text-white leading-none">Learn The Best</div>
-                                        </div>
-                                    </motion.div>
                                 </motion.div>
 
                                 {/* Floating Partnership Indicator */}
@@ -322,7 +297,7 @@ export default function Home() {
                             >
                                 <div className="h-48 rounded-2xl bg-white mb-6 overflow-hidden relative shadow-sm border border-slate-100 flex items-center justify-center">
                                     <img
-                                        src={course.illustration || "https://storyset.com/illustrations/web-development-amico.svg"}
+                                        src={course.illustration || "https://edit.storyset.com/images/illustrations/web-development-amico.svg"}
                                         alt={course.title}
                                         className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700"
                                     />
@@ -400,24 +375,49 @@ export default function Home() {
                             }}
                         >
                             {[
-                                '/images/students/ADITYA (ADCA).jpg',
-                                '/images/students/MANJEET (ADCA).jpg',
-                                '/images/students/MANOJ (MDCA).jpg',
-                                '/images/students/SHIVAM (ADCA).jpg',
-                                '/images/students/PRINCE (ADCA).jpg',
-                                '/images/students/MOHIT (ADCA).jpg',
-                                '/images/students/KASIM (DCA).jpg'
-                            ].map((img, i) => (
-                                <SwiperSlide key={i} className="rounded-[3rem] shadow-2xl overflow-hidden border-4 border-slate-700 bg-slate-800 group">
-                                    <img src={img} alt={`Bytecore Student ${i}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent pointer-events-none"></div>
-                                    <div className="absolute bottom-10 left-10 text-left pointer-events-none">
-                                        <div className="text-white font-black text-2xl md:text-3xl tracking-tight flex items-center gap-3 mb-2">Bytecore Scholar <CheckCircle size={24} className="text-blue-400" /></div>
-                                        <div className="text-slate-400 text-[11px] uppercase tracking-[0.2em] font-black">Nariyawal Offline Campus</div>
-                                    </div>
-                                    <div className="absolute top-6 right-6 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-[10px] font-black uppercase tracking-widest text-white">#Success</div>
-                                </SwiperSlide>
-                            ))}
+                                "ABHISHEK (DCST).jpg", "ADIL (DCST).jpg", "ADITYA (ADCA).jpg", "ADITYA (DCST).jpg",
+                                "AJAY (DFA).jpg", "AMAN (DCST).jpg", "AMAR (TALLY).jpg", "AMIR (ADCA).jpg",
+                                "ANIKET (DCST).jpg", "ANISH (TALLY0.jpg", "ANUJ (DCST).jpg", "ARFAT (ADCA).jpg",
+                                "ARIF (DCST).jpg", "ARISH (DCA).jpg", "ARVIND (DCST).jpg", "AYAAN (ADCA).jpg",
+                                "AYAN (CCC).jpg", "AZHAR (TALLY).jpg", "DEEPAK (ADCA).jpg", "DHEERAJ (DCST).jpg",
+                                "DHRUV (DCST).jpg", "DIVYANSH (ADCA).jpg", "GAURAV (DCST).jpg", "GAURAV (TALLY).jpg",
+                                "GUNJIT (DCST).jpg", "HIMANSHU (DCA).jpg", "HIMANSHU (DCST).jpg", "IFRAJ (ADCA).jpg",
+                                "JABIR (TALLY).jpg", "JUNAID (CCC).jpg", "JUNAID (DCA).jpg", "KASIM (DCA).jpg",
+                                "KAUSHAL (DCA).jpg", "KRISHNA (DCA).jpg", "KUNAL (DCST).jpg", "LALIT (MDCA).jpg",
+                                "LALTA (CSC).jpg", "MANJEET (ADCA).jpg", "MANOJ (MDCA).jpg", "MOHIT (ADCA).jpg",
+                                "NAZIL (ADCA).jpg", "NITESH (ADCA).jpg", "NITIN (CCC).jpg", "PAWAN (DFA).jpg",
+                                "PRINCE (ADCA).jpg", "RACHIT (DCST).jpg", "RAGHAV (DCST).jpg", "RAHUL (DFA).jpg",
+                                "RAJ (DCA).jpg", "RAJESH (DCA).jpg", "RAMLAKHAN (DCA).jpg", "RISHAV (DCST).jpg",
+                                "RITESH (MDCA).jpg", "ROHIT (DCST).jpg", "RUPENDRA (ADCA).jpg", "SANJEEV (DCST).jpg",
+                                "SARHAN (ADCA).jpg", "SAURABH (DCA).jpg", "SAURAV (DCST).jpg", "SHAHIL (DCST).jpg",
+                                "SHIVAM (ADCA).jpg", "SHRIRAM (ADCA).jpg", "SHRIYANSH (DCST).jpg", "SURAJBHAN  (ADCA0.jpg",
+                                "SURAJPAL (MS EXCEL).jpg", "TARIQ (TALLY).jpg", "UMAR (MS EXCEL).jpg", "VIKAS (ADCA).jpg",
+                                "VIKRAM (DCST).jpg", "VINAY (MDCA).jpg", "VINOD (MS OFFICE).jpg", "VISHNU (ADCA).jpg"
+                            ].map((file, i) => {
+                                // Extract name and course from filename "NAME (COURSE).jpg"
+                                const match = file.match(/^(.+)\s\((.+)\)\.jpg$/);
+                                const name = match ? match[1] : file.replace('.jpg', '');
+                                const course = match ? match[2] : "Student";
+
+                                return (
+                                    <SwiperSlide key={i} className="rounded-[3rem] shadow-2xl overflow-hidden border-4 border-slate-700 bg-slate-800 group">
+                                        <img
+                                            src={`/images/students/${file}`}
+                                            alt={name}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent pointer-events-none"></div>
+                                        <div className="absolute bottom-10 left-10 text-left pointer-events-none">
+                                            <div className="text-white font-black text-2xl md:text-3xl tracking-tight flex items-center gap-3 mb-2">
+                                                {name}
+                                                <CheckCircle size={24} className="text-blue-400" />
+                                            </div>
+                                            <div className="text-slate-400 text-[11px] uppercase tracking-[0.2em] font-black">{course}</div>
+                                        </div>
+                                        <div className="absolute top-6 right-6 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-[10px] font-black uppercase tracking-widest text-white">#Success</div>
+                                    </SwiperSlide>
+                                );
+                            })}
                         </Swiper>
                     </div>
 
