@@ -20,6 +20,7 @@ export const courses = [
         color: "from-blue-600 to-indigo-700",
         image: "https://edit.storyset.com/images/illustrations/web-development-amico.svg",
         illustration: "https://edit.storyset.com/images/illustrations/web-development-amico.svg",
+        lottieUrl: "https://assets2.lottiefiles.com/packages/lf20_m6cu9at9.json",
         what_you_will_learn: [
             "Advanced JavaScript & ES6+ Mastery",
             "Single Page App development with React",
@@ -58,6 +59,7 @@ export const courses = [
         color: "from-purple-600 to-pink-700",
         image: "https://edit.storyset.com/images/illustrations/data-extraction-pana.svg",
         illustration: "https://edit.storyset.com/images/illustrations/data-extraction-pana.svg",
+        lottieUrl: "https://assets5.lottiefiles.com/packages/lf20_qw8p9fzp.json",
         what_you_will_learn: [
             "Statistical Analysis & Probability",
             "Data Visualization with Matplotlib & Seaborn",
@@ -96,6 +98,7 @@ export const courses = [
         color: "from-blue-500 to-indigo-600",
         image: "https://edit.storyset.com/images/illustrations/programming-amico.svg",
         illustration: "https://edit.storyset.com/images/illustrations/programming-amico.svg",
+        lottieUrl: "https://assets9.lottiefiles.com/packages/lf20_w51pcehl.json",
         what_you_will_learn: [
             "Object-Oriented Programming (OOP)",
             "Functional Programming in Python",

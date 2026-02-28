@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Lottie from 'lottie-react';
 import { motion } from 'framer-motion';
 import {
     ArrowRight, Users, CheckCircle, Database, Loader2, Zap,
@@ -15,6 +16,12 @@ import { Autoplay, EffectCards, FreeMode } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
 import 'swiper/css/free-mode';
+
+// Import Lottie Animations
+import heroLottie from '../assets/lottie/hero.json';
+import webLottie from '../assets/lottie/web.json';
+import dataLottie from '../assets/lottie/data.json';
+import pythonLottie from '../assets/lottie/python.json';
 
 
 export default function Home() {
@@ -139,18 +146,32 @@ export default function Home() {
                                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                                     className="relative z-10 p-4"
                                 >
-                                    {/* Responsive Storyset Graphics - Professional Tech */}
-                                    <div className="relative group">
-                                        <img
-                                            src="https://edit.storyset.com/images/illustrations/software-engineer-pana.svg"
-                                            alt="Professional Tech Mastery"
-                                            className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(37,99,235,0.15)] hidden md:block"
+                                    {/* Responsive Lottie Graphics - Professional Tech */}
+                                    <div className="relative group p-6 rounded-[2.5rem] bg-white/40 backdrop-blur-xl border border-white/50 shadow-2xl overflow-hidden">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 -z-10"></div>
+                                        <Lottie
+                                            animationData={heroLottie}
+                                            loop={true}
+                                            className="w-full h-auto max-w-[550px] mx-auto drop-shadow-2xl"
                                         />
-                                        <img
-                                            src="https://edit.storyset.com/images/illustrations/coding-amico.svg"
-                                            alt="Professional Tech Mastery Mobile"
-                                            className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(37,99,235,0.15)] md:hidden"
-                                        />
+
+                                        {/* Floating Elements inside Lottie Container */}
+                                        <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-white/60 backdrop-blur-md border border-white/80 shadow-lg flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white">
+                                                    <Laptop size={20} />
+                                                </div>
+                                                <div>
+                                                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active System</div>
+                                                    <div className="text-xs font-black text-slate-900 uppercase">Core Lab Access</div>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-1">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse delay-75"></div>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse delay-150"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </motion.div>
 
@@ -285,36 +306,56 @@ export default function Home() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {localCourses.slice(0, 3).map((course, i) => (
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                key={course.id}
-                                onClick={() => navigate(`/courses/${course.id || course.title.toLowerCase().replace(/\s+/g, '-')}`)}
-                                className="bg-[#f8fafc] rounded-[2rem] p-6 border border-slate-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full"
-                            >
-                                <div className="h-48 rounded-2xl bg-white mb-6 overflow-hidden relative shadow-sm border border-slate-100 flex items-center justify-center">
-                                    <img
-                                        src={course.illustration || "https://edit.storyset.com/images/illustrations/web-development-amico.svg"}
-                                        alt={course.title}
-                                        className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700"
-                                    />
-                                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white shadow-sm text-[10px] font-black uppercase tracking-widest text-slate-800">
-                                        {course.category}
+                        {localCourses.slice(0, 3).map((course, i) => {
+                            // Map local lotties
+                            const lottieMap = {
+                                'Full Stack Development': webLottie,
+                                'Data Science & AI': dataLottie,
+                                'Python Programming': pythonLottie
+                            };
+                            const animationData = lottieMap[course.title];
+
+                            return (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: i * 0.1 }}
+                                    key={course.id}
+                                    onClick={() => navigate(`/courses/${course.id || course.title.toLowerCase().replace(/\s+/g, '-')}`)}
+                                    className="bg-[#f8fafc] rounded-[2rem] p-6 border border-slate-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full"
+                                >
+                                    <div className="h-56 rounded-2xl bg-white mb-6 overflow-hidden relative shadow-sm border border-slate-100 flex items-center justify-center group-hover:shadow-lg transition-all">
+                                        {animationData ? (
+                                            <div className="w-full h-full p-4">
+                                                <Lottie
+                                                    animationData={animationData}
+                                                    loop={true}
+                                                    className="w-full h-full"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <img
+                                                src={course.illustration || "https://edit.storyset.com/images/illustrations/web-development-amico.svg"}
+                                                alt={course.title}
+                                                className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700"
+                                            />
+                                        )}
+                                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white shadow-sm text-[10px] font-black uppercase tracking-widest text-slate-800">
+                                            {course.category}
+                                        </div>
                                     </div>
-                                </div>
-                                <h3 className="text-xl font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors tracking-tight line-clamp-1">{course.title}</h3>
-                                <p className="text-slate-500 text-sm font-medium line-clamp-2 mb-6 flex-grow">{course.description}</p>
-                                <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-                                    <span className="text-emerald-600 font-black text-xs uppercase tracking-widest">Verify Fee Inside</span>
-                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-slate-200 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm">
-                                        <ArrowRight size={16} className="group-hover:-rotate-45 transition-transform" />
+                                    <h3 className="text-xl font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors tracking-tight line-clamp-1">{course.title}</h3>
+                                    <p className="text-slate-500 text-sm font-medium line-clamp-2 mb-6 flex-grow">{course.description}</p>
+                                    <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+                                        <span className="text-emerald-600 font-black text-xs uppercase tracking-widest">Verify Fee Inside</span>
+                                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-slate-200 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm">
+                                            <ArrowRight size={16} className="group-hover:-rotate-45 transition-transform" />
+                                        </div>
                                     </div>
-                                </div>
-                            </motion.div>
-                        ))}
+                                </motion.div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
