@@ -18,7 +18,8 @@ export const courses = [
         category: "Web Development",
         level: "Intermediate",
         color: "from-blue-600 to-indigo-700",
-        image: "assets/img/courses/fullstack_web.png",
+        image: "https://storyset.com/illustrations/web-development-amico.svg",
+        illustration: "https://storyset.com/illustrations/web-development-amico.svg",
         what_you_will_learn: [
             "Advanced JavaScript & ES6+ Mastery",
             "Single Page App development with React",
@@ -55,6 +56,8 @@ export const courses = [
         category: "Data Science",
         level: "Advanced",
         color: "from-purple-600 to-pink-700",
+        image: "https://storyset.com/illustrations/data-extraction-pana.svg",
+        illustration: "https://storyset.com/illustrations/data-extraction-pana.svg",
         what_you_will_learn: [
             "Statistical Analysis & Probability",
             "Data Visualization with Matplotlib & Seaborn",
@@ -91,6 +94,8 @@ export const courses = [
         category: "Programming",
         level: "Beginner",
         color: "from-blue-500 to-indigo-600",
+        image: "https://storyset.com/illustrations/programming-amico.svg",
+        illustration: "https://storyset.com/illustrations/programming-amico.svg",
         what_you_will_learn: [
             "Object-Oriented Programming (OOP)",
             "Functional Programming in Python",
@@ -123,6 +128,8 @@ export const courses = [
         category: "Programming",
         level: "Intermediate",
         color: "from-red-600 to-orange-700",
+        image: "https://storyset.com/illustrations/software-engineer-pana.svg",
+        illustration: "https://storyset.com/illustrations/software-engineer-pana.svg",
         what_you_will_learn: [
             "Solid Foundation in OOP Principles",
             "Java Collection Framework",
@@ -155,7 +162,8 @@ export const courses = [
         category: "Accounting",
         level: "Intermediate",
         color: "from-indigo-600 to-cyan-700",
-        image: "assets/img/courses/accounting_tally.png",
+        image: "https://storyset.com/illustrations/accounting-amico.svg",
+        illustration: "https://storyset.com/illustrations/accounting-amico.svg",
         what_you_will_learn: [
             "GST Returns & E-Way Bills",
             "Professional Voucher Entry",
@@ -188,7 +196,8 @@ export const courses = [
         category: "Certification",
         level: "Intermediate",
         color: "from-sky-500 to-blue-700",
-        image: "assets/img/courses/adca_mdca.png",
+        image: "https://storyset.com/illustrations/personal-settings-pana.svg",
+        illustration: "https://storyset.com/illustrations/personal-settings-pana.svg",
         what_you_will_learn: [
             "Expert Level MS-Office (Word/Excel/PowerPoint)",
             "Desktop Publishing (Photoshop & PageMaker)",
@@ -221,6 +230,8 @@ export const courses = [
         category: "Certification",
         level: "Beginner",
         color: "from-violet-600 to-fuchsia-700",
+        image: "https://storyset.com/illustrations/reading-a-book-amico.svg",
+        illustration: "https://storyset.com/illustrations/reading-a-book-amico.svg",
         what_you_will_learn: [
             "M1: IT Tools & Network Basics",
             "M2: Web Designing & Publishing",
@@ -252,6 +263,8 @@ export const courses = [
         category: "Design",
         level: "Intermediate",
         color: "from-pink-600 to-rose-700",
+        image: "https://storyset.com/illustrations/design-tools-pana.svg",
+        illustration: "https://storyset.com/illustrations/design-tools-pana.svg",
         what_you_will_learn: [
             "Advanced Image Manipulation (Photoshop)",
             "Logo & Branding Design (Illustrator)",
@@ -284,6 +297,8 @@ export const courses = [
         category: "Design",
         level: "Advanced",
         color: "from-amber-600 to-orange-700",
+        image: "https://storyset.com/illustrations/web-design-pana.svg",
+        illustration: "https://storyset.com/illustrations/web-design-pana.svg",
         what_you_will_learn: [
             "User Research & Personas",
             "Wireframing & Prototyping in Figma",
@@ -316,6 +331,8 @@ export const courses = [
         category: "Programming",
         level: "Advanced",
         color: "from-rose-600 to-red-700",
+        image: "https://storyset.com/illustrations/security-on-pana.svg",
+        illustration: "https://storyset.com/illustrations/security-on-pana.svg",
         what_you_will_learn: [
             "Network Penetration Testing",
             "Linux Server Security",
@@ -348,6 +365,8 @@ export const courses = [
         category: "Programming",
         level: "Intermediate",
         color: "from-blue-600 to-cyan-700",
+        image: "https://storyset.com/illustrations/cloud-hosting-amico.svg",
+        illustration: "https://storyset.com/illustrations/cloud-hosting-amico.svg",
         what_you_will_learn: [
             "Cloud Infrastructure Management",
             "Working with AWS EC2 & S3",
@@ -380,7 +399,8 @@ export const courses = [
         category: "Certification",
         level: "Advanced",
         color: "from-cyan-600 to-blue-700",
-        image: "assets/img/courses/adca_mdca.png",
+        image: "https://storyset.com/illustrations/developer-activity-pana.svg",
+        illustration: "https://storyset.com/illustrations/developer-activity-pana.svg",
         what_you_will_learn: [
             "Advanced Software System Analysis",
             "Relational Database Management (RDBMS)",
@@ -413,6 +433,8 @@ export const courses = [
         category: "Data Science",
         level: "Intermediate",
         color: "from-purple-600 to-pink-700",
+        image: "https://storyset.com/illustrations/artificial-intelligence-pana.svg",
+        illustration: "https://storyset.com/illustrations/artificial-intelligence-pana.svg",
         what_you_will_learn: [
             "Supervised vs Unsupervised Learning",
             "Regression & Classification logic",
@@ -445,6 +467,8 @@ export const courses = [
         category: "Business",
         level: "Beginner",
         color: "from-green-500 to-teal-700",
+        image: "https://storyset.com/illustrations/marketing-amico.svg",
+        illustration: "https://storyset.com/illustrations/marketing-amico.svg",
         what_you_will_learn: [
             "Search Engine Optimization (SEO)",
             "High-impact Content Marketing",
@@ -477,6 +501,8 @@ export const courses = [
         category: "Programming",
         level: "Intermediate",
         color: "from-blue-700 to-purple-800",
+        image: "https://storyset.com/illustrations/game-development-pana.svg",
+        illustration: "https://storyset.com/illustrations/game-development-pana.svg",
         what_you_will_learn: [
             "Pointers & Memory Allocation",
             "Object-Oriented Programming (OOP) in depth",
@@ -509,6 +535,8 @@ export const courses = [
         category: "Programming",
         level: "Beginner",
         color: "from-slate-600 to-slate-800",
+        image: "https://storyset.com/illustrations/logic-pana.svg",
+        illustration: "https://storyset.com/illustrations/logic-pana.svg",
         what_you_will_learn: [
             "Logic building with Loops and Conditions",
             "Mastery over C Pointers",
@@ -541,6 +569,8 @@ export const courses = [
         category: "Certification",
         level: "Beginner",
         color: "from-blue-500 to-blue-700",
+        image: "https://storyset.com/illustrations/presentation-pana.svg",
+        illustration: "https://storyset.com/illustrations/presentation-pana.svg",
         what_you_will_learn: [
             "Expert Level Excel Functions & Pivot Tables",
             "Professional Word Document formatting",
@@ -573,6 +603,8 @@ export const courses = [
         category: "Accounting",
         level: "Intermediate",
         color: "from-emerald-600 to-teal-700",
+        image: "https://storyset.com/illustrations/finance-amico.svg",
+        illustration: "https://storyset.com/illustrations/finance-amico.svg",
         what_you_will_learn: [
             "Computerized Accounting Foundations",
             "Professional Tally ERP/Prime skills",
@@ -605,6 +637,8 @@ export const courses = [
         category: "Certification",
         level: "Intermediate",
         color: "from-indigo-600 to-purple-700",
+        image: "https://storyset.com/illustrations/technology-pana.svg",
+        illustration: "https://storyset.com/illustrations/technology-pana.svg",
         what_you_will_learn: [
             "System Development Life Cycle (SDLC)",
             "Advanced Database Models",
@@ -637,6 +671,8 @@ export const courses = [
         category: "Certification",
         level: "Beginner",
         color: "from-emerald-500 to-teal-600",
+        image: "https://storyset.com/illustrations/online-learning-pana.svg",
+        illustration: "https://storyset.com/illustrations/online-learning-pana.svg",
         what_you_will_learn: [
             "Introduction to Computers & GUI",
             "Operating Systems Mastery",
@@ -669,6 +705,8 @@ export const courses = [
         category: "Web Development",
         level: "Beginner",
         color: "from-yellow-600 to-amber-700",
+        image: "https://storyset.com/illustrations/web-development-pana.svg",
+        illustration: "https://storyset.com/illustrations/web-development-pana.svg",
         what_you_will_learn: [
             "Semantic HTML5 tags",
             "Styling with CSS3 & Modern Selectors",
@@ -697,6 +735,8 @@ export const courses = [
         category: "Web Development",
         level: "Intermediate",
         color: "from-blue-600 to-cyan-700",
+        image: "https://storyset.com/illstrations/react-amico.svg",
+        illustration: "https://storyset.com/illstrations/react-amico.svg",
         what_you_will_learn: [
             "React Components & Props",
             "Modern Hook Architecture (useState, useEffect, etc)",

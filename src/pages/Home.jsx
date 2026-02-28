@@ -130,51 +130,69 @@ export default function Home() {
                             className="flex-1 relative w-full flex justify-center lg:justify-end order-1 lg:order-2"
                         >
                             <div className="relative w-full max-w-[500px] lg:max-w-[700px]">
-                                {/* Animated Orbiting Elements */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-blue-100 rounded-full animate-spin-slow -z-10 opacity-50"></div>
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-purple-100 rounded-full animate-reverse-spin -z-10 opacity-50"></div>
+                                {/* Animated Orbiting Elements - Enhanced for Storyset */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border-2 border-dashed border-blue-50 rounded-full animate-spin-slow -z-10 opacity-30"></div>
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] border-2 border-dotted border-purple-50 rounded-full animate-reverse-spin -z-10 opacity-30"></div>
 
                                 <motion.div
                                     animate={{ y: [0, -15, 0] }}
                                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                                     className="relative z-10 p-4"
                                 >
-                                    <img
-                                        src={heroGraphic}
-                                        alt="Tech Mastery Graphic"
-                                        className="w-full h-auto object-contain drop-shadow-[0_35px_60px_rgba(37,99,235,0.2)]"
-                                    />
+                                    {/* Responsive Storyset Graphics */}
+                                    <div className="relative group">
+                                        <img
+                                            src="https://storyset.com/illustrations/programming-pana.svg"
+                                            alt="Coding Mastery"
+                                            className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(37,99,235,0.15)] hidden md:block"
+                                        />
+                                        <img
+                                            src="https://storyset.com/illustrations/coding-amico.svg"
+                                            alt="Coding Mastery Mobile"
+                                            className="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(37,99,235,0.15)] md:hidden"
+                                        />
+                                    </div>
 
-                                    {/* Floating Stats Badges */}
+                                    {/* Floating Stats Badges - Repositioned for Storyset */}
                                     <motion.div
-                                        animate={{ x: [0, 10, 0] }}
+                                        animate={{ x: [0, 8, 0], y: [0, -4, 0] }}
                                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                        className="absolute -top-4 -right-4 p-4 md:p-6 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white flex items-center gap-4 group hover:scale-105 transition-transform"
+                                        className="absolute top-[10%] -right-2 p-3 md:p-5 bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white flex items-center gap-3 group hover:scale-105 transition-transform z-20"
                                     >
-                                        <div className="p-3 bg-blue-600 rounded-2xl text-white shadow-lg"><Zap size={24} /></div>
+                                        <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl text-white shadow-lg"><Zap size={20} /></div>
                                         <div>
-                                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Performance</div>
-                                            <div className="text-sm md:text-lg font-black text-slate-900 leading-none">High-Speed Lab</div>
+                                            <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Performance</div>
+                                            <div className="text-xs md:text-sm font-black text-slate-900 leading-none">High-Speed Lab</div>
                                         </div>
                                     </motion.div>
 
                                     <motion.div
-                                        animate={{ x: [0, -10, 0] }}
+                                        animate={{ x: [0, -8, 0], y: [0, 4, 0] }}
                                         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                        className="absolute -bottom-8 -left-4 p-4 md:p-6 bg-slate-900/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-700 flex items-center gap-4 group hover:scale-105 transition-transform"
+                                        className="absolute bottom-[15%] -left-2 p-3 md:p-5 bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-700 flex items-center gap-3 group hover:scale-105 transition-transform z-20"
                                     >
-                                        <div className="p-3 bg-indigo-500 rounded-2xl text-white shadow-lg"><Star size={24} /></div>
+                                        <div className="p-2 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-xl text-white shadow-lg"><Star size={20} /></div>
                                         <div>
-                                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 text-indigo-300">New Era</div>
-                                            <div className="text-sm md:text-lg font-black text-white leading-none">Learn The Best</div>
+                                            <div className="text-[9px] font-black text-indigo-300 uppercase tracking-widest leading-none mb-1">New Era</div>
+                                            <div className="text-xs md:text-sm font-black text-white leading-none">Learn The Best</div>
                                         </div>
                                     </motion.div>
                                 </motion.div>
 
-                                {/* Floating Code Snippet / Badge on Right Side */}
-                                <div className="absolute top-1/2 left-[-10%] translate-y-[-50%] p-4 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-blue-50 flex items-center gap-3 animate-pulse hidden lg:flex">
-                                    <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
-                                    <span className="text-[10px] font-bold text-slate-800 uppercase tracking-widest">Hiring Partners Active</span>
+                                {/* Floating Partnership Indicator */}
+                                <div className="absolute top-[30%] -left-[15%] p-3 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-blue-50 flex items-center gap-2 animate-bounce hidden lg:flex">
+                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                    <span className="text-[9px] font-extrabold text-slate-800 uppercase tracking-[0.15em]">Hiring Partners Active</span>
+                                </div>
+
+                                {/* Floating Code Badge */}
+                                <div className="absolute top-[60%] -right-[10%] p-3 bg-blue-600/10 backdrop-blur-md rounded-2xl border border-blue-200/50 hidden xl:flex flex-col gap-1 items-start rotate-3">
+                                    <div className="flex gap-1.5">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400"></div>
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                                    </div>
+                                    <div className="text-[8px] font-mono text-blue-700 font-bold">{"#bytecore_future"}</div>
                                 </div>
                             </div>
                         </motion.div>
@@ -302,14 +320,12 @@ export default function Home() {
                                 onClick={() => navigate(`/courses/${course.id || course.title.toLowerCase().replace(/\s+/g, '-')}`)}
                                 className="bg-[#f8fafc] rounded-[2rem] p-6 border border-slate-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full"
                             >
-                                <div className="h-48 rounded-2xl bg-white mb-6 overflow-hidden relative shadow-sm border border-slate-100">
-                                    {course.image ? (
-                                        <img src={course.image.startsWith('/') || course.image.startsWith('http') ? course.image : `/${course.image}`} alt={course.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                                    ) : (
-                                        <div className="w-full h-full bg-slate-100 flex items-center justify-center">
-                                            <Laptop className="w-12 h-12 text-slate-300" />
-                                        </div>
-                                    )}
+                                <div className="h-48 rounded-2xl bg-white mb-6 overflow-hidden relative shadow-sm border border-slate-100 flex items-center justify-center">
+                                    <img
+                                        src={course.illustration || "https://storyset.com/illustrations/web-development-amico.svg"}
+                                        alt={course.title}
+                                        className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700"
+                                    />
                                     <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white shadow-sm text-[10px] font-black uppercase tracking-widest text-slate-800">
                                         {course.category}
                                     </div>
