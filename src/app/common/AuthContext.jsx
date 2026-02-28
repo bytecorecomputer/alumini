@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/firestore";
 import { checkMonthlyFeeReminders } from "../../lib/feeAutomation";
 
@@ -11,9 +11,46 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Function to refresh user data from Firestore
+  // Sync Student Session on Init
+  useEffect(() => {
+    const session = localStorage.getItem('student_session');
+    if (session) {
+      try {
+        setStudent(JSON.parse(session));
+      } catch (err) {
+        localStorage.removeItem('student_session');
+      }
+    }
+  }, []);
+
+  // Sync Student Firestore for Real-time updates if student is logged in
+  useEffect(() => {
+    if (!student?.registration) return;
+    const studentRef = doc(db, "students", student.registration);
+    const unsub = onSnapshot(studentRef, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        setStudent(prev => ({ ...prev, ...data }));
+        localStorage.setItem('student_session', JSON.stringify(data));
+      }
+    });
+    return () => unsub();
+  }, [student?.registration]);
+
+  const loginStudent = (data) => {
+    setStudent(data);
+    localStorage.setItem('student_session', JSON.stringify(data));
+  };
+
+  const logoutStudent = () => {
+    setStudent(null);
+    localStorage.removeItem('student_session');
+  };
+
+  // Function to refresh user data (Admin/Staff) from Firestore
   const refreshUserData = async () => {
     if (!user) return;
     try {
@@ -42,23 +79,18 @@ export function AuthProvider({ children }) {
             // SUPER ADMIN AUTO-PROMOTION SITE OWNER
             if (u.email === "coderafroj@gmail.com" && data?.role !== "super_admin") {
               await updateDoc(userRef, { role: "super_admin" });
-              // Refresh data
               snap = await getDoc(userRef);
               data = snap.data();
-              console.log("Auto-promoted owner to Super Admin");
             }
 
             if (snap.exists()) {
               setRole(data?.role);
               setUserData(data);
 
-              // Trigger Fee Audit for Admins on Login
               if (data?.role === 'admin' || data?.role === 'super_admin') {
                 checkMonthlyFeeReminders();
               }
             } else {
-              // User exists in Auth but not Firestore (e.g. registration partially failed)
-              console.warn("User authenticated but no profile found in Firestore");
               setUserData({});
             }
           } catch (error) {
@@ -80,7 +112,14 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, role, userData, loading, refreshUserData }}>
+    <AuthContext.Provider value={{
+      user, role, userData,
+      student, isStudent: !!student,
+      loading,
+      refreshUserData,
+      loginStudent,
+      logoutStudent
+    }}>
       {children}
     </AuthContext.Provider>
   );

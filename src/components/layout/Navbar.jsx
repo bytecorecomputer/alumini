@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, GraduationCap, LogOut, User, Shield, Zap, FileText, Database } from 'lucide-react';
+import { Menu, X, GraduationCap, LogOut, Shield, Database, User, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../app/common/AuthContext';
@@ -12,15 +12,7 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const navigate = useNavigate();
-    const { user, userData, role } = useAuth();
-    const [studentSession, setStudentSession] = useState(null);
-
-    useEffect(() => {
-        const session = localStorage.getItem('student_session');
-        if (session) {
-            setStudentSession(JSON.parse(session));
-        }
-    }, [user]);
+    const { user, userData, role, student, isStudent, logoutStudent } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -29,9 +21,33 @@ export default function Navbar() {
     }, []);
 
     const handleLogout = async () => {
-        await signOut(auth);
+        if (isStudent) {
+            logoutStudent();
+        } else if (user) {
+            await signOut(auth);
+        }
+        setIsOpen(false);
         navigate('/login');
     };
+
+    const NavLink = ({ to, children }) => (
+        <Link
+            to={to}
+            className="px-5 py-2.5 text-slate-500 hover:text-slate-900 font-black text-xs uppercase tracking-widest transition-all hover:bg-slate-50 rounded-2xl"
+        >
+            {children}
+        </Link>
+    );
+
+    const MobileNavLink = ({ to, children, onClick }) => (
+        <Link
+            to={to}
+            onClick={onClick}
+            className="block px-6 py-5 text-slate-900 font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-50 rounded-[2rem] transition-all"
+        >
+            {children}
+        </Link>
+    );
 
     return (
         <nav className={cn(
@@ -56,10 +72,11 @@ export default function Navbar() {
                     </Link>
 
                     {/* Desktop Nav */}
-                    <div className="hidden lg:flex items-center space-x-2">
+                    <div className="hidden lg:flex items-center space-x-1">
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="/courses">Courses</NavLink>
                         <NavLink to="/about">About</NavLink>
+                        {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
                         <NavLink to="/directory">Members</NavLink>
                         <NavLink to="/events">Events</NavLink>
                         <NavLink to="/jobs">Jobs</NavLink>
@@ -90,19 +107,29 @@ export default function Navbar() {
 
                         <div className="h-6 w-px bg-slate-200/60 mx-4" />
 
-                        {user ? (
-                            <div className="flex items-center gap-4">
-                                <Link to="/profile" className="flex items-center gap-3 p-1 pr-4 bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 rounded-full transition-all group shadow-sm">
+                        {user || isStudent ? (
+                            <div className="flex items-center gap-3">
+                                <Link to={isStudent ? "/student-portal" : "/profile"} className="flex items-center gap-3 p-1 pr-4 bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 rounded-full transition-all group shadow-sm">
                                     <div className="h-9 w-9 rounded-full bg-slate-200 overflow-hidden border-2 border-white shadow-sm ring-1 ring-slate-100">
-                                        {userData?.photoURL ? (
+                                        {isStudent ? (
+                                            student.photoUrl ? (
+                                                <img src={student.photoUrl} alt="" className="h-full w-full object-cover" />
+                                            ) : (
+                                                <div className="h-full w-full flex items-center justify-center bg-blue-600 text-white text-[10px] font-black uppercase">
+                                                    {student.fullName?.[0]}
+                                                </div>
+                                            )
+                                        ) : userData?.photoURL ? (
                                             <img src={getOptimizedUrl(userData.photoURL, 'w_100,h_100,c_fill,g_face,f_auto,q_auto')} alt="" className="h-full w-full object-cover" />
                                         ) : (
-                                            <div className="h-full w-full flex items-center justify-center bg-slate-900 text-white text-[10px] font-black">
-                                                {user.displayName?.[0]?.toUpperCase()}
+                                            <div className="h-full w-full flex items-center justify-center bg-slate-900 text-white text-[10px] font-black uppercase">
+                                                {user.displayName?.[0]}
                                             </div>
                                         )}
                                     </div>
-                                    <span className="text-xs font-black text-slate-700 uppercase tracking-widest">{user.displayName?.split(' ')[0]}</span>
+                                    <span className="text-xs font-black text-slate-700 uppercase tracking-widest">
+                                        {isStudent ? student.fullName?.split(' ')[0] : user.displayName?.split(' ')[0]}
+                                    </span>
                                 </Link>
                                 <button
                                     onClick={handleLogout}
@@ -156,12 +183,14 @@ export default function Navbar() {
                                 <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
                                 <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Courses</MobileNavLink>
                                 <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About</MobileNavLink>
+                                {isStudent && <MobileNavLink to="/student-portal" onClick={() => setIsOpen(false)}>Dashboard</MobileNavLink>}
                                 <MobileNavLink to="/directory" onClick={() => setIsOpen(false)}>Members</MobileNavLink>
                                 <MobileNavLink to="/events" onClick={() => setIsOpen(false)}>Events</MobileNavLink>
                                 <MobileNavLink to="/jobs" onClick={() => setIsOpen(false)}>Jobs</MobileNavLink>
 
                                 {(role === 'admin' || role === 'super_admin') && (
                                     <>
+                                        <div className="h-px bg-slate-100 my-4" />
                                         <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
                                             <div className="flex items-center gap-2 text-purple-600">
                                                 <Shield size={16} /> Admin Panel
@@ -175,60 +204,53 @@ export default function Navbar() {
                                     </>
                                 )}
 
-                                <MobileNavLink to="/resume" onClick={() => setIsOpen(false)}>
-                                    <div className="flex items-center gap-2 text-blue-600">
-                                        <FileText size={16} /> Resume Architect
-                                    </div>
-                                </MobileNavLink>
-
-                                {user || studentSession ? (
-                                    <div className="pt-8 mt-8 border-t border-slate-100 space-y-4">
-                                        <Link
-                                            to={user ? "/profile" : "/student-portal"}
-                                            onClick={() => setIsOpen(false)}
-                                            className="flex items-center gap-4 p-5 bg-slate-50 rounded-[2rem] group"
-                                        >
-                                            <div className="h-12 w-12 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-lg overflow-hidden border-2 border-white">
-                                                {(userData?.photoURL || studentSession?.photoUrl) ? (
-                                                    <img src={userData?.photoURL || studentSession?.photoUrl} alt="" className="h-full w-full object-cover" />
-                                                ) : (
-                                                    <User size={20} />
-                                                )}
-                                            </div>
-                                            <div>
-                                                <div className="font-black text-slate-900 text-sm truncate max-w-[150px]">
-                                                    {user?.displayName || studentSession?.fullName}
+                                <div className="pt-8 mt-8 border-t border-slate-100 space-y-4">
+                                    {user || isStudent ? (
+                                        <>
+                                            <Link
+                                                to={isStudent ? "/student-portal" : "/profile"}
+                                                onClick={() => setIsOpen(false)}
+                                                className="flex items-center gap-4 p-5 bg-slate-50 rounded-[2rem] group"
+                                            >
+                                                <div className="h-12 w-12 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-lg overflow-hidden border-2 border-white">
+                                                    {isStudent ? (
+                                                        student.photoUrl ? (
+                                                            <img src={student.photoUrl} alt="" className="h-full w-full object-cover" />
+                                                        ) : (
+                                                            <div className="h-full w-full flex items-center justify-center bg-blue-600 text-white text-sm font-black uppercase">
+                                                                {student.fullName?.[0]}
+                                                            </div>
+                                                        )
+                                                    ) : userData?.photoURL ? (
+                                                        <img src={getOptimizedUrl(userData.photoURL, 'w_100,h_100,c_fill,g_face,f_auto,q_auto')} alt="" className="h-full w-full object-cover" />
+                                                    ) : (
+                                                        <User size={20} />
+                                                    )}
                                                 </div>
-                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                                    {user ? "View Profile" : studentSession?.registration}
+                                                <div>
+                                                    <div className="font-black text-slate-900 text-sm truncate max-w-[150px]">
+                                                        {isStudent ? student.fullName : user.displayName}
+                                                    </div>
+                                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                        {isStudent ? "Student Profile" : role}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Link>
-                                        <button
-                                            onClick={async () => {
-                                                if (user) await signOut(auth);
-                                                localStorage.removeItem('student_session');
-                                                setStudentSession(null);
-                                                setIsOpen(false);
-                                                navigate('/login');
-                                            }}
-                                            className="w-full flex items-center justify-center gap-3 p-5 text-red-600 font-black uppercase tracking-widest text-xs hover:bg-red-50 rounded-[2rem] transition-all border border-transparent hover:border-red-100"
-                                        >
-                                            <LogOut size={18} />
-                                            <span>Logout System</span>
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="pt-8 mt-8 border-t border-slate-100 flex flex-col gap-4">
-                                        <Link
-                                            to="/login"
-                                            onClick={() => setIsOpen(false)}
-                                            className="w-full py-5 text-center text-slate-900 font-black uppercase tracking-widest text-xs border border-slate-100 rounded-[2rem] hover:bg-slate-50 transition-all"
-                                        >
-                                            Login / Portal
-                                        </Link>
-                                    </div>
-                                )}
+                                            </Link>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="w-full flex items-center justify-center gap-3 p-5 text-red-600 font-black uppercase tracking-widest text-xs hover:bg-red-50 rounded-[2rem] transition-all border border-transparent hover:border-red-100"
+                                            >
+                                                <LogOut size={18} />
+                                                <span>Logout System</span>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <div className="flex flex-col gap-3 mt-2">
+                                            <Link to="/login" onClick={() => setIsOpen(false)} className="w-full py-5 text-center text-slate-900 font-black uppercase tracking-widest text-xs border border-slate-100 rounded-[2rem] hover:bg-slate-50 transition-all">Login / Portal</Link>
+                                            <Link to="/register" onClick={() => setIsOpen(false)} className="w-full py-5 text-center bg-slate-900 text-white font-black uppercase tracking-widest text-xs rounded-[2rem] shadow-xl shadow-slate-200">Join Network</Link>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="absolute bottom-10 left-8 right-8">
@@ -242,28 +264,5 @@ export default function Navbar() {
                 )}
             </AnimatePresence>
         </nav>
-    );
-}
-
-function NavLink({ to, children }) {
-    return (
-        <Link
-            to={to}
-            className="px-5 py-2.5 text-slate-500 hover:text-slate-900 font-black text-xs uppercase tracking-widest transition-all hover:bg-slate-50 rounded-2xl"
-        >
-            {children}
-        </Link>
-    );
-}
-
-function MobileNavLink({ to, children, onClick }) {
-    return (
-        <Link
-            to={to}
-            onClick={onClick}
-            className="block px-6 py-5 text-slate-900 font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-50 rounded-[2rem] transition-all"
-        >
-            {children}
-        </Link>
     );
 }

@@ -148,16 +148,24 @@ export default function QuizModule({ student }) {
     // View Components
     if (view === 'dashboard') {
         return (
-            <div className="space-y-8 animate-in fade-in duration-500">
-                <div>
-                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">Access Learning Hub</h2>
-                    <p className="text-slate-500 font-bold">Your course curriculum modules. Unlock badges by scoring 80%+.</p>
+            <div className="space-y-12 animate-in fade-in duration-500">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <h2 className="text-4xl font-black text-slate-900 tracking-tight mb-2 uppercase">Learning Hub</h2>
+                        <p className="text-slate-500 font-bold max-w-lg">Master your core modules. Score above 80% to earn your certification badges.</p>
+                    </div>
+                    <div className="px-6 py-4 bg-blue-50 text-blue-600 rounded-2xl border border-blue-100 flex items-center gap-3">
+                        <Trophy size={24} className="animate-bounce" />
+                        <div>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-blue-400">Hub Progress</p>
+                            <p className="text-lg font-black">{Math.round((Object.keys(student.quizProgress || {}).length / studentModules.length) * 100) || 0}% Mastery</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-                    {studentModules.map((modId) => {
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {studentModules.map((modId, idx) => {
                         const data = QUIZ_BANK[modId];
-                        // Render placeholder if data doesn't exist yet, or skip
                         if (!data) return null;
 
                         const progress = student.quizProgress?.[modId];
@@ -167,45 +175,62 @@ export default function QuizModule({ student }) {
                         return (
                             <motion.div
                                 key={modId}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: idx * 0.05 }}
+                                whileHover={{ y: -5 }}
                                 onClick={() => startQuiz(modId)}
                                 className={cn(
-                                    "p-5 md:p-6 rounded-3xl border-2 transition-all cursor-pointer relative overflow-hidden group select-none flex flex-col justify-between h-full",
+                                    "p-8 rounded-[2.5rem] border-2 transition-all cursor-pointer relative overflow-hidden group select-none flex flex-col justify-between min-h-[320px]",
                                     isCompleted
-                                        ? "bg-emerald-50 border-emerald-100"
-                                        : "bg-white border-slate-100 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-50"
+                                        ? "bg-gradient-to-br from-emerald-50 to-white border-emerald-100 shadow-xl shadow-emerald-500/5"
+                                        : "bg-white border-slate-50 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-500/10"
                                 )}
                             >
-                                <div>
-                                    <div className="flex justify-between items-start mb-4 relative z-10">
+                                <div className="absolute top-0 right-0 p-8 text-blue-600/5 group-hover:scale-110 transition-transform">
+                                    <Icon size={120} />
+                                </div>
+
+                                <div className="relative z-10">
+                                    <div className="flex justify-between items-start mb-10">
                                         <div className={cn(
-                                            "h-10 w-10 md:h-12 md:w-12 rounded-xl flex items-center justify-center text-white shadow-lg",
-                                            isCompleted ? "bg-emerald-500" : `bg-${data.color || 'blue'}-500`
+                                            "h-14 w-14 rounded-2xl flex items-center justify-center text-white shadow-xl rotate-3 group-hover:rotate-12 transition-transform",
+                                            isCompleted ? "bg-emerald-600 shadow-emerald-200" : `bg-${data.color || 'blue'}-600 shadow-blue-200`
                                         )}>
-                                            <Icon size={20} className="md:w-6 md:h-6" />
+                                            <Icon size={28} />
                                         </div>
                                         {progress && (
                                             <div className="text-right">
-                                                <p className="text-xl md:text-2xl font-black text-slate-900">{progress.score}%</p>
-                                                <p className="text-[9px] md:text-[10px] font-bold uppercase text-slate-400">Best Score</p>
+                                                <p className={cn(
+                                                    "text-2xl font-black",
+                                                    isCompleted ? "text-emerald-600" : "text-slate-900"
+                                                )}>{progress.score}%</p>
+                                                <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Accuracy</p>
                                             </div>
                                         )}
                                     </div>
 
-                                    <h3 className="text-lg md:text-xl font-black text-slate-900 mb-1 relative z-10 line-clamp-1">{data.title}</h3>
-                                    <p className="text-slate-500 text-[10px] md:text-xs font-bold mb-4 relative z-10 line-clamp-2 min-h-[2.5em]">{data.description}</p>
+                                    <h3 className="text-2xl font-black text-slate-900 mb-2">{data.title}</h3>
+                                    <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-6 leading-relaxed line-clamp-2">{data.description}</p>
                                 </div>
 
-                                <div className="flex items-center text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-400 gap-2 relative z-10 mt-auto">
-                                    <span className="flex items-center gap-1"><Brain size={12} /> {data.questions.length} Qs</span>
-                                    <span>•</span>
-                                    <span>{progress?.attempts || 0} Attempts</span>
+                                <div className="relative z-10 flex items-center justify-between mt-auto">
+                                    <div className="flex items-center text-[10px] font-black uppercase tracking-widest text-slate-400 gap-3">
+                                        <span className="flex items-center gap-1.5"><Brain size={14} className="text-blue-400" /> {data.questions.length} Qs</span>
+                                        <span className="h-4 w-px bg-slate-100" />
+                                        <span>{progress?.attempts || 0} Tries</span>
+                                    </div>
+                                    <button className={cn(
+                                        "p-3 rounded-xl transition-all",
+                                        isCompleted ? "bg-emerald-100 text-emerald-600" : "bg-slate-50 text-slate-400 group-hover:bg-blue-600 group-hover:text-white"
+                                    )}>
+                                        <ArrowRight size={20} />
+                                    </button>
                                 </div>
 
                                 {isCompleted && (
-                                    <div className="absolute -bottom-4 -right-4 text-emerald-500/10 rotate-12">
-                                        <Trophy size={100} className="md:w-[120px] md:h-[120px]" />
+                                    <div className="absolute -bottom-6 -right-6 text-emerald-500 opacity-10 rotate-12 group-hover:rotate-0 transition-transform">
+                                        <Trophy size={150} />
                                     </div>
                                 )}
                             </motion.div>

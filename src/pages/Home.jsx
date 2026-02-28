@@ -5,7 +5,7 @@ import {
     Laptop, GraduationCap, Award, MapPin, Building, Star
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import bcc from '../assets/BANNER.jpg';
+import heroGraphic from '../assets/images/hero_graphic.png';
 import { useAuth } from '../app/common/AuthContext';
 import { runMigration } from '../lib/migrateStudents';
 import { cn } from '../lib/utils';
@@ -64,124 +64,117 @@ export default function Home() {
 
     return (
         <div className="bg-[#f8fafc] overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
-            {/* --- ULTIMATE HERO SECTION --- */}
+            {/* --- ULTIMATE TECH HERO SECTION --- */}
             <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-white px-6">
                 {/* Advanced Background Elements */}
                 <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-100/30 rounded-full blur-[140px] animate-pulse"></div>
                 <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-100/30 rounded-full blur-[140px] animate-pulse delay-1000"></div>
-                <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-amber-50/50 rounded-full blur-[100px] animate-bounce" style={{ animationDuration: '8s' }}></div>
 
                 <div className="max-w-7xl mx-auto w-full relative z-20">
-                    <div className="flex flex-col lg:flex-row items-center gap-20 py-20">
+                    <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 py-10 md:py-20">
                         {/* Left Side: Content */}
                         <motion.div
                             initial="hidden"
                             animate="visible"
                             variants={containerVariants}
-                            className="flex-1 text-center lg:text-left"
+                            className="flex-1 text-center lg:text-left order-2 lg:order-1"
                         >
-                            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-slate-900 border border-slate-800 shadow-2xl mb-10 transform -rotate-1 hover:rotate-0 transition-transform">
+                            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-50 border border-blue-100 shadow-sm mb-8 transform hover:scale-105 transition-transform">
                                 <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                                 </span>
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Bareilly's #1 Ranked Campus</span>
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">The #1 Choice for Offline Learning</span>
                             </motion.div>
 
-                            <motion.div variants={itemVariants} className="relative inline-block mb-10">
-                                <img
-                                    src="/assets/img/logo.png"
-                                    alt="Bytecore"
-                                    className="h-24 md:h-32 object-contain drop-shadow-[0_20px_50px_rgba(37,99,235,0.2)]"
-                                    onError={(e) => { e.target.style.display = 'none'; }}
-                                />
-                                <div className="absolute -bottom-4 -right-10 px-4 py-1.5 bg-blue-600 rounded-lg text-[10px] font-black text-white uppercase tracking-widest -rotate-6 shadow-xl">14+ Years</div>
+                            <motion.div variants={itemVariants} className="mb-6">
+                                <h2 className="text-xl md:text-2xl font-black text-slate-400 uppercase tracking-[0.4em] mb-2 leading-none">BYTECORE</h2>
+                                <h1 className="text-5xl md:text-[80px] font-[1000] text-slate-900 leading-[1] tracking-[-0.05em]">
+                                    COMPUTER <br />
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 uppercase">CENTRE.</span>
+                                </h1>
                             </motion.div>
 
-                            <motion.h1
-                                variants={itemVariants}
-                                className="text-7xl md:text-[110px] font-[1000] text-slate-900 leading-[0.85] tracking-[-0.06em] mb-10"
-                            >
-                                CRAFTING <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">THE FUTURE.</span>
-                            </motion.h1>
+                            <motion.div variants={itemVariants} className="mb-10">
+                                <span className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight italic">
+                                    "Tech Mastery <span className="text-blue-600">Starts Here.</span>"
+                                </span>
+                            </motion.div>
 
                             <motion.p
                                 variants={itemVariants}
-                                className="text-xl md:text-2xl text-slate-500 font-medium max-w-2xl mx-auto lg:mx-0 mb-12 leading-relaxed tracking-tight"
+                                className="text-lg md:text-xl text-slate-500 font-medium max-w-xl mx-auto lg:mx-0 mb-12 leading-relaxed"
                             >
-                                Join an elite community where high-end development meets creative design. <strong className="text-slate-900">Bytecore Offline Campus</strong> is where Bareilly’s best tech talent is forged.
+                                Step into the most advanced offline lab in Bareilly. We don't just teach software; we build <strong className="text-slate-900 underline decoration-blue-500 decoration-4">Digital Masters</strong>.
                             </motion.p>
 
                             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6">
                                 <Link to="/courses" className="group relative w-full sm:w-auto">
                                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                                    <div className="relative px-10 py-5 bg-slate-900 rounded-xl text-white font-black uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-4 active:scale-95 transition-all">
-                                        Explore Premium Fees
+                                    <div className="relative px-10 py-5 bg-slate-900 rounded-xl text-white font-black uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-4 active:scale-95 transition-all">
+                                        Join The Mastery
                                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                                     </div>
                                 </Link>
-                                <Link to="/about" className="w-full sm:w-auto px-10 py-5 rounded-xl bg-white text-slate-900 font-black uppercase tracking-[0.2em] text-xs border-2 border-slate-100 hover:border-blue-600 hover:text-blue-600 transition-all shadow-xl shadow-slate-200/50 active:scale-95 text-center">
-                                    Our Legacy
+                                <Link to="/about" className="w-full sm:w-auto px-10 py-5 rounded-xl bg-white text-slate-900 font-black uppercase tracking-[0.2em] text-[11px] border-2 border-slate-100 hover:border-blue-600 hover:text-blue-600 transition-all shadow-xl shadow-slate-200/50 active:scale-95 text-center">
+                                    Explore Centre
                                 </Link>
                             </motion.div>
                         </motion.div>
 
-                        {/* Right Side: Visual Masterpiece */}
+                        {/* Right Side: High-End Tech Graphic */}
                         <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-                            className="flex-1 relative w-full max-w-2xl"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                            className="flex-1 relative w-full flex justify-center lg:justify-end order-1 lg:order-2"
                         >
-                            {/* Decorative Elements */}
-                            <div className="absolute -top-10 -left-10 w-40 h-40 border-2 border-blue-100 rounded-full -z-10 animate-spin-slow"></div>
-                            <div className="absolute -bottom-10 -right-10 w-60 h-60 border-2 border-purple-100 rounded-[3rem] -z-10 animate-reverse-spin"></div>
+                            <div className="relative w-full max-w-[500px] lg:max-w-[700px]">
+                                {/* Animated Orbiting Elements */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-blue-100 rounded-full animate-spin-slow -z-10 opacity-50"></div>
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border border-purple-100 rounded-full animate-reverse-spin -z-10 opacity-50"></div>
 
-                            <div className="relative z-10 p-4 bg-white/40 backdrop-blur-3xl border border-white/50 rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)]">
-                                <div className="rounded-[3.5rem] overflow-hidden relative group">
+                                <motion.div
+                                    animate={{ y: [0, -15, 0] }}
+                                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                    className="relative z-10 p-4"
+                                >
                                     <img
-                                        src={bcc}
-                                        alt="Campus"
-                                        className="w-full h-[550px] object-cover transition-transform duration-[2s] group-hover:scale-110"
+                                        src={heroGraphic}
+                                        alt="Tech Mastery Graphic"
+                                        className="w-full h-auto object-contain drop-shadow-[0_35px_60px_rgba(37,99,235,0.2)]"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/30 to-transparent"></div>
 
-                                    {/* Glass Floating Badges */}
+                                    {/* Floating Stats Badges */}
                                     <motion.div
-                                        animate={{ y: [0, -20, 0] }}
+                                        animate={{ x: [0, 10, 0] }}
                                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                        className="absolute top-10 right-10 p-6 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white flex items-center gap-4"
+                                        className="absolute -top-4 -right-4 p-4 md:p-6 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white flex items-center gap-4 group hover:scale-105 transition-transform"
                                     >
-                                        <div className="p-3 bg-blue-600 rounded-2xl text-white shadow-lg"><CheckCircle size={24} /></div>
+                                        <div className="p-3 bg-blue-600 rounded-2xl text-white shadow-lg"><Zap size={24} /></div>
                                         <div>
-                                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">ISO Certified</div>
-                                            <div className="text-lg font-black text-slate-900">Govt. Verified</div>
+                                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Performance</div>
+                                            <div className="text-sm md:text-lg font-black text-slate-900 leading-none">High-Speed Lab</div>
                                         </div>
                                     </motion.div>
 
                                     <motion.div
-                                        animate={{ y: [0, 20, 0] }}
+                                        animate={{ x: [0, -10, 0] }}
                                         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                                        className="absolute bottom-10 left-10 p-6 bg-slate-900/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-700 flex items-center gap-4"
+                                        className="absolute -bottom-8 -left-4 p-4 md:p-6 bg-slate-900/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-700 flex items-center gap-4 group hover:scale-105 transition-transform"
                                     >
-                                        <div className="p-3 bg-amber-500 rounded-2xl text-white shadow-lg"><Award size={24} /></div>
+                                        <div className="p-3 bg-indigo-500 rounded-2xl text-white shadow-lg"><Star size={24} /></div>
                                         <div>
-                                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Alumni Network</div>
-                                            <div className="text-lg font-black text-white">10,000+ Success</div>
+                                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 text-indigo-300">New Era</div>
+                                            <div className="text-sm md:text-lg font-black text-white leading-none">Learn The Best</div>
                                         </div>
                                     </motion.div>
-                                </div>
-                            </div>
+                                </motion.div>
 
-                            {/* Center Pin Indicator */}
-                            <div className="absolute top-1/2 left-[-10%] translate-y-[-50%] p-5 bg-white rounded-2xl shadow-2xl border border-slate-100 animate-bounce hidden lg:block" style={{ animationDuration: '4s' }}>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-rose-50 rounded-xl flex items-center justify-center text-rose-500"><MapPin size={24} /></div>
-                                    <div className="pr-4">
-                                        <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Visit Offline</div>
-                                        <div className="text-xs font-black text-slate-900">Bareilly Campus</div>
-                                    </div>
+                                {/* Floating Code Snippet / Badge on Right Side */}
+                                <div className="absolute top-1/2 left-[-10%] translate-y-[-50%] p-4 bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-blue-50 flex items-center gap-3 animate-pulse hidden lg:flex">
+                                    <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+                                    <span className="text-[10px] font-bold text-slate-800 uppercase tracking-widest">Hiring Partners Active</span>
                                 </div>
                             </div>
                         </motion.div>

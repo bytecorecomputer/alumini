@@ -1,424 +1,350 @@
-import { useEffect, useState } from "react";
-import { db } from "../firebase/firestore";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { uploadToCloudinary } from "../lib/cloudinary";
-import { compressImage } from "../lib/imageCompression";
-import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Calendar, MapPin, Phone, GraduationCap,
-    CheckCircle2, AlertCircle,
-    BookOpen, History, User, LogOut, Wallet, Camera,
-    LayoutDashboard, CheckSquare, Sparkles, Download
-} from "lucide-react";
-import { cn } from "../lib/utils";
-import QuizModule from "../components/student/QuizModule";
+    User, Book, CreditCard, Award, LogOut,
+    Calendar, Phone, Hash, CheckCircle,
+    Clock, ChevronRight, Play, FileText,
+    TrendingUp, ShieldCheck, Zap, Star
+} from 'lucide-react';
+import { useAuth } from '../app/common/AuthContext';
+import QuizModule from '../components/student/QuizModule';
+import { COURSE_CURRICULUM, QUIZ_BANK } from '../lib/quizData';
+import { cn } from '../lib/utils';
 
 export default function StudentPortal() {
-    const [student, setStudent] = useState(() => {
-        const session = localStorage.getItem('student_session');
-        return session ? JSON.parse(session) : null;
-    });
-    const [loading, setLoading] = useState(true);
+    const { student, logoutStudent } = useAuth();
     const [activeTab, setActiveTab] = useState('overview');
-    const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!student) {
-            navigate('/login');
-            return;
+    // Resolve course modules
+    const courseModules = useMemo(() => {
+        if (!student?.course) return [];
+        // Support both exact match and fuzzy match (like ADCA+ or ADCA)
+        let courseKey = student.course;
+        if (!COURSE_CURRICULUM[courseKey]) {
+            courseKey = Object.keys(COURSE_CURRICULUM).find(k => student.course.includes(k)) || "DCA";
         }
+        const modules = COURSE_CURRICULUM[courseKey] || [];
+        return modules.map(id => ({ id, ...QUIZ_BANK[id] })).filter(m => m.title);
+    }, [student?.course]);
 
-        // Listen for real-time updates from Firestore
-        const unsub = onSnapshot(doc(db, "students", student.registration), (docSnapshot) => {
-            if (docSnapshot.exists()) {
-                const data = docSnapshot.data();
-                setStudent(prev => ({ ...prev, ...data }));
-                localStorage.setItem('student_session', JSON.stringify(data));
-            }
-            setLoading(false);
-        });
-
-        return () => unsub();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [navigate, student?.registration]);
-
-    const handleLogout = () => {
-        localStorage.removeItem('student_session');
-        navigate('/login');
-    };
-
-    if (loading || !student) {
+    if (!student) {
         return (
-            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-                <motion.div
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                    className="h-16 w-16 bg-blue-600 rounded-2xl shadow-xl shadow-blue-100 flex items-center justify-center text-white"
-                >
-                    <GraduationCap size={32} />
-                </motion.div>
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 pt-20">
+                <div className="text-center p-8 bg-white rounded-3xl shadow-xl border border-slate-100 max-w-sm">
+                    <div className="h-16 w-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <ShieldCheck size={32} />
+                    </div>
+                    <h2 className="text-2xl font-black text-slate-900 mb-2">Unauthorized Access</h2>
+                    <p className="text-slate-500 font-bold mb-8">Please login with your credentials to access the portal.</p>
+                    <a href="/login" className="block w-full py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-transform active:scale-95">Back to Login</a>
+                </div>
             </div>
         );
     }
 
-    const feePercentage = Math.round((student.paidFees / student.totalFees) * 100) || 0;
-    const remainingFees = student.totalFees - student.paidFees;
+    const tabs = [
+        { id: 'overview', label: 'Overview', icon: User },
+        { id: 'courses', label: 'My Course', icon: Book },
+        { id: 'learning', label: 'Learning Hub', icon: Zap },
+        { id: 'fees', label: 'Fee Record', icon: CreditCard },
+    ];
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] pt-24 pb-20 font-inter selection:bg-blue-100 selection:text-blue-900">
-            {/* Dynamic Background */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute -top-[20%] -right-[10%] w-[800px] h-[800px] bg-blue-50/40 rounded-full blur-[120px]" />
-                <div className="absolute top-[40%] -left-[10%] w-[600px] h-[600px] bg-indigo-50/40 rounded-full blur-[100px]" />
-            </div>
+        <div className="min-h-screen bg-[#F8FAFC] pb-20 font-inter pt-28">
+            <div className="max-w-7xl mx-auto px-4 md:px-8">
 
-            <div className="max-w-6xl mx-auto px-4 md:px-8 relative z-10">
-                {/* Modern Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 md:mb-12"
-                >
-                    <div className="w-full md:w-auto">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-white border border-slate-100 text-slate-500 shadow-sm text-[9px] md:text-[10px] font-black uppercase tracking-widest mb-3 md:mb-4">
-                            <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-emerald-500 animate-pulse" />
-                            Bytecore Student Portal
+                {/* Header Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                    <div className="flex items-center gap-6">
+                        <div className="relative group">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                            <div className="relative h-24 w-24 md:h-32 md:w-32 rounded-[2rem] bg-white p-1 shadow-2xl overflow-hidden border border-white/50">
+                                {student.photoUrl ? (
+                                    <img src={student.photoUrl} alt="" className="h-full w-full object-cover rounded-[1.8rem]" />
+                                ) : (
+                                    <div className="h-full w-full bg-slate-900 flex items-center justify-center text-white text-3xl font-black rounded-[1.8rem]">
+                                        {student.fullName?.[0]}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        <h1 className="text-3xl md:text-6xl font-black text-slate-900 tracking-tighter mb-2 break-words">
-                            Hello, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{student.fullName?.split(' ')[0]}</span>
-                        </h1>
-                        <p className="text-slate-500 font-bold text-sm md:text-lg max-w-md leading-relaxed">Your personalized dashboard for academics, finance, and skill growth.</p>
+                        <div>
+                            <div className="flex items-center gap-3 mb-1">
+                                <span className="px-3 py-1 bg-blue-100 text-blue-600 text-[10px] font-black uppercase tracking-widest rounded-full">Active Student</span>
+                                <span className="text-slate-400 font-bold text-xs uppercase tracking-widest">ID: {student.registration}</span>
+                            </div>
+                            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">
+                                {student.fullName?.split(' ')[0]}<span className="text-blue-600">.</span>
+                            </h1>
+                            <p className="text-slate-500 font-bold text-lg">{student.course} Specialist</p>
+                        </div>
                     </div>
 
-                    <button
-                        onClick={handleLogout}
-                        className="self-end md:self-auto flex items-center gap-2 md:gap-3 px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-white text-slate-600 font-black text-[10px] md:text-xs uppercase tracking-widest border border-slate-100 shadow-lg md:shadow-xl shadow-slate-200/50 hover:bg-slate-900 hover:text-white transition-all group active:scale-95"
-                    >
-                        <LogOut size={16} className="md:w-[18px] md:h-[18px] group-hover:-translate-x-1 transition-transform" />
-                        <span className="hidden md:inline">Log Out</span>
-                        <span className="md:hidden">Exit</span>
-                    </button>
-                </motion.div>
-
-                {/* Navigation Tabs */}
-                <div className="sticky top-20 z-40 bg-[#f8fafc]/80 backdrop-blur-md py-4 -mx-4 px-4 md:mx-0 md:px-0 flex items-center gap-2 md:gap-4 mb-8 overflow-x-auto scrollbar-hide border-b border-slate-200/50">
-                    <TabButton
-                        id="overview"
-                        label="Overview"
-                        icon={<LayoutDashboard size={18} />}
-                        active={activeTab}
-                        onClick={setActiveTab}
-                    />
-                    <TabButton
-                        id="fees"
-                        label="Financials"
-                        icon={<Wallet size={18} />}
-                        active={activeTab}
-                        onClick={setActiveTab}
-                    />
-                    <TabButton
-                        id="quiz"
-                        label="Learning Hub"
-                        icon={<Sparkles size={18} />}
-                        active={activeTab}
-                        onClick={setActiveTab}
-                        badge="New"
-                    />
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={logoutStudent}
+                            className="flex items-center gap-3 px-6 py-4 bg-white border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-[1.5rem] font-black uppercase tracking-widest text-xs transition-all shadow-sm"
+                        >
+                            <LogOut size={18} />
+                            Logout Portal
+                        </button>
+                    </div>
                 </div>
 
-                {/* Active Tab Content */}
-                <AnimatePresence mode="wait">
+                {/* Navigation Tabs */}
+                <div className="flex items-center gap-1 p-1.5 bg-white/50 backdrop-blur-xl border border-white/50 rounded-[2rem] mb-12 overflow-x-auto no-scrollbar scroll-smooth">
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            className={cn(
+                                "flex items-center gap-3 px-6 py-4 rounded-[1.5rem] font-black uppercase tracking-widest text-xs transition-all whitespace-nowrap",
+                                activeTab === tab.id
+                                    ? "bg-white text-blue-600 shadow-xl shadow-blue-500/10 scale-100"
+                                    : "text-slate-500 hover:text-slate-900 hover:bg-white/50 scale-95 opacity-70"
+                            )}
+                        >
+                            <tab.icon size={18} />
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Tab Content */}
+                <AnimatePresence mode='wait'>
                     <motion.div
                         key={activeTab}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.2 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
                     >
                         {activeTab === 'overview' && (
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                {/* Certificate Alert */}
-                                {student.certificate && (
-                                    <div className="lg:col-span-3">
-                                        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
-                                            <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                                                <GraduationCap size={150} />
+                                {/* Main Stats */}
+                                <div className="lg:col-span-2 space-y-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden group">
+                                            <div className="absolute top-0 right-0 p-8 text-blue-500/10 group-hover:scale-110 transition-transform duration-500">
+                                                <Award size={100} />
                                             </div>
-                                            <div className="relative z-10 flex items-center gap-6">
-                                                <div className="h-16 w-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/30 shrink-0">
-                                                    <GraduationCap size={32} />
+                                            <div className="relative z-10">
+                                                <p className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-4">Course Status</p>
+                                                <h3 className="text-3xl font-black text-slate-900 mb-2">{student.status}</h3>
+                                                <div className="w-full h-2 bg-slate-100 rounded-full mt-4 overflow-hidden">
+                                                    <div className="w-3/4 h-full bg-blue-600 rounded-full" />
                                                 </div>
-                                                <div>
-                                                    <h3 className="text-lg md:text-xl font-black uppercase tracking-tight mb-1">Certificate Issued</h3>
-                                                    <p className="text-blue-100 text-sm font-medium">
-                                                        Your {student.certificate.course} certificate is ready.
-                                                        <br className="hidden md:block" /> No: {student.certificate.number}
-                                                    </p>
-                                                </div>
+                                                <p className="text-[10px] font-bold text-blue-600 mt-2 uppercase tracking-widest">75% Course Completed</p>
                                             </div>
-                                            <a
-                                                href={student.certificate.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="relative z-10 px-6 py-3 bg-white text-blue-700 rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg flex items-center gap-2"
-                                            >
-                                                <Download size={16} /> Download
-                                            </a>
+                                        </div>
+                                        <div className="p-8 bg-slate-900 text-white rounded-[2.5rem] shadow-2xl shadow-slate-200 relative overflow-hidden group">
+                                            <div className="absolute -bottom-10 -right-10 p-8 text-white/5 group-hover:scale-125 transition-transform duration-700">
+                                                <Zap size={180} />
+                                            </div>
+                                            <div className="relative z-10">
+                                                <p className="text-white/40 font-bold uppercase tracking-widest text-xs mb-4">Attendance Rate</p>
+                                                <h3 className="text-5xl font-black mb-2">92%</h3>
+                                                <p className="text-emerald-400 font-bold text-xs uppercase tracking-widest mt-2 flex items-center gap-1">
+                                                    <TrendingUp size={14} /> Exceptional performance
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
-                                )}
 
-                                {/* Profile Identity Card */}
-                                <div className="lg:col-span-2 space-y-6">
-                                    <div className="premium-card bg-white p-8 md:p-10 border border-slate-100 relative group overflow-hidden">
-                                        <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-                                            <User size={200} />
+                                    {/* Recent Activity */}
+                                    <div className="bg-white rounded-[2.5rem] border border-slate-100 p-8 shadow-sm">
+                                        <div className="flex items-center justify-between mb-8">
+                                            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Recent Activity</h3>
+                                            <button className="text-blue-600 font-black text-[10px] uppercase tracking-widest hover:underline">View All</button>
                                         </div>
-
-                                        <div className="flex flex-col md:flex-row gap-8 items-start relative z-10">
-                                            {/* Photo Box */}
-                                            <div className="relative group shrink-0">
-                                                <div className="h-32 w-32 md:h-40 md:w-40 rounded-[2rem] overflow-hidden shadow-2xl shadow-blue-200/50 ring-4 ring-white relative z-10">
-                                                    {student.photoUrl ? (
-                                                        <img src={student.photoUrl} alt="" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                                                    ) : (
-                                                        <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300">
-                                                            <User size={48} />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <label htmlFor="upload-photo" className="absolute -bottom-4 -right-4 h-12 w-12 bg-slate-900 text-white rounded-xl flex items-center justify-center shadow-lg cursor-pointer hover:bg-blue-600 transition-colors z-20 hover:scale-110 active:scale-95">
-                                                    <Camera size={20} />
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    id="upload-photo"
-                                                    className="hidden"
-                                                    accept="image/*"
-                                                    onChange={async (e) => {
-                                                        const file = e.target.files?.[0];
-                                                        if (!file) return;
-                                                        // Simple Loader Handling could be added here
-                                                        if (confirm("Upload new profile photo?")) {
-                                                            try {
-                                                                const compressed = await compressImage(file, 50);
-                                                                const url = await uploadToCloudinary(compressed);
-                                                                await updateDoc(doc(db, "students", student.registration), {
-                                                                    photoUrl: url,
-                                                                    updatedAt: Date.now()
-                                                                });
-                                                            } catch (err) {
-                                                                alert("Failed to upload");
-                                                            }
-                                                        }
-                                                    }}
-                                                />
-                                            </div>
-
-                                            {/* Details */}
-                                            <div className="space-y-6 flex-1">
-                                                <div>
-                                                    <h2 className="text-3xl font-black text-slate-900 tracking-tight">{student.fullName}</h2>
-                                                    <div className="flex flex-wrap gap-2 mt-2">
-                                                        <Badge>{student.course}</Badge>
-                                                        <Badge variant="outline">Reg: {student.registration}</Badge>
+                                        <div className="space-y-6">
+                                            {[1, 2, 3].map(i => (
+                                                <div key={i} className="flex items-center gap-4 group cursor-pointer">
+                                                    <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                                                        <Clock size={20} />
                                                     </div>
+                                                    <div className="flex-1">
+                                                        <p className="font-black text-slate-900 text-sm">{i === 1 ? 'Attendance Marked' : i === 2 ? 'Quiz Completed: MS Word' : 'Monthly Fee Paid'}</p>
+                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{i * 2} days ago • 10:30 AM</p>
+                                                    </div>
+                                                    <ChevronRight size={16} className="text-slate-300 group-hover:translate-x-1 transition-transform" />
                                                 </div>
-
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                    <InfoRow icon={<Phone size={16} />} label="Mobile" value={student.mobile} />
-                                                    <InfoRow icon={<Calendar size={16} />} label="Joined" value={student.admissionDate || 'N/A'} />
-                                                    <InfoRow icon={<MapPin size={16} />} label="Location" value={student.address} />
-                                                    <InfoRow icon={<User size={16} />} label="Father" value={student.fatherName} />
-                                                </div>
-                                            </div>
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Status & Quick Stats */}
-                                <div className="space-y-6">
-                                    <div className="premium-card bg-slate-900 text-white p-8 relative overflow-hidden">
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-[60px] opacity-20" />
-                                        <h3 className="text-xl font-black mb-4">Current Status</h3>
-                                        <div className="flex items-center gap-4 mb-8">
-                                            {student.status === 'pass' ? (
-                                                <div className="h-16 w-16 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/50">
-                                                    <CheckSquare size={32} />
+                                {/* Sidebar Info */}
+                                <div className="space-y-8">
+                                    <div className="bg-white rounded-[2.5rem] border border-slate-100 p-8 shadow-sm">
+                                        <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-8 border-b border-slate-50 pb-4">Personal Vault</h3>
+                                        <div className="space-y-6">
+                                            <div className="flex items-center gap-4">
+                                                <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center"><Hash size={18} /></div>
+                                                <div>
+                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Roll No</p>
+                                                    <p className="font-black text-slate-900 text-sm">{student.registration}</p>
                                                 </div>
-                                            ) : (
-                                                <div className="h-16 w-16 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center border border-amber-500/50">
-                                                    <Sparkles size={32} />
+                                            </div>
+                                            <div className="flex items-center gap-4">
+                                                <div className="h-10 w-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><Calendar size={18} /></div>
+                                                <div>
+                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Join Date</p>
+                                                    <p className="font-black text-slate-900 text-sm">{student.admissionDate}</p>
                                                 </div>
-                                            )}
-                                            <div>
-                                                <p className="text-2xl font-black tracking-tight">
-                                                    {student.status === 'pass' ? 'Alumni' : 'Active Student'}
-                                                </p>
-                                                <p className="text-white/50 text-xs font-bold uppercase tracking-widest">
-                                                    {student.status === 'pass' ? 'Course Completed' : 'In Progress'}
-                                                </p>
+                                            </div>
+                                            <div className="flex items-center gap-4">
+                                                <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><Phone size={18} /></div>
+                                                <div>
+                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Emergency Contact</p>
+                                                    <p className="font-black text-slate-900 text-sm">{student.mobile}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
-                                            <div className="h-full bg-blue-500 w-[70%]" /> {/* Fake progress for visual */}
+                                    </div>
+
+                                    <div className="p-1 bg-gradient-to-br from-blue-600 to-blue-700 rounded-[2.5rem] shadow-2xl shadow-blue-200">
+                                        <div className="p-8 backdrop-blur-xl rounded-[2.4rem] text-white">
+                                            <Star className="text-yellow-400 mb-4 fill-yellow-400" size={24} />
+                                            <h4 className="text-xl font-black mb-2">Academic Badge</h4>
+                                            <p className="text-blue-100 font-bold text-xs leading-relaxed mb-6">Complete your pending modules to unlock the "Master App" certificate.</p>
+                                            <button className="w-full py-4 bg-white text-blue-600 rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-transform">Claim Badge</button>
                                         </div>
-                                        <p className="text-right text-[10px] text-white/40 mt-2 font-mono">ID: {student.registration}</p>
                                     </div>
                                 </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'courses' && (
+                            <div className="space-y-8 animate-in fade-in duration-500">
+                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                    <div>
+                                        <h2 className="text-3xl font-black text-slate-900">Your Curriculum</h2>
+                                        <p className="text-slate-500 font-bold">Comprehensive breakdown of your {student.course} modules.</p>
+                                    </div>
+                                    <button className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-blue-600 transition-colors">
+                                        <FileText size={16} /> Download Syllabus
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {courseModules.map((mod, idx) => (
+                                        <motion.div
+                                            key={mod.id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: idx * 0.1 }}
+                                            className="group bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1 transition-all duration-300"
+                                        >
+                                            <div className="flex items-start justify-between mb-8">
+                                                <div className={cn(
+                                                    "h-14 w-14 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform",
+                                                    mod.color === 'blue' ? 'bg-blue-600' :
+                                                        mod.color === 'emerald' ? 'bg-emerald-600' :
+                                                            mod.color === 'orange' ? 'bg-orange-600' :
+                                                                mod.color === 'green' ? 'bg-green-600' :
+                                                                    mod.color === 'yellow' ? 'bg-yellow-500' :
+                                                                        mod.color === 'slate' ? 'bg-slate-600' :
+                                                                            mod.color === 'indigo' ? 'bg-indigo-600' :
+                                                                                mod.color === 'cyan' ? 'bg-cyan-600' :
+                                                                                    mod.color === 'teal' ? 'bg-teal-600' :
+                                                                                        mod.color === 'red' ? 'bg-red-600' : 'bg-blue-600'
+                                                )}>
+                                                    <Book size={28} />
+                                                </div>
+                                                <div className="px-3 py-1 bg-slate-50 text-slate-400 rounded-full font-black text-[9px] uppercase tracking-widest">
+                                                    Module {idx + 1}
+                                                </div>
+                                            </div>
+                                            <h3 className="text-2xl font-black text-slate-900 mb-2 truncate">{mod.title}</h3>
+                                            <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-6">{mod.description}</p>
+                                            <div className="flex flex-wrap gap-2 mb-8">
+                                                <span className="px-3 py-1.5 bg-slate-50 text-slate-600 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 text-nowrap">
+                                                    <Play size={10} fill="currentColor" /> Lectures
+                                                </span>
+                                                <span className="px-3 py-1.5 bg-slate-50 text-slate-600 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 text-nowrap">
+                                                    <FileText size={10} /> PDF Notes
+                                                </span>
+                                            </div>
+                                            <button className="w-full py-4 border-2 border-slate-100 text-slate-400 font-black uppercase tracking-widest text-[10px] group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900 rounded-[1.5rem] transition-all">Start learning</button>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'learning' && (
+                            <div className="bg-white rounded-[3rem] p-8 md:p-12 shadow-2xl shadow-blue-500/5 min-h-[600px] border border-slate-100">
+                                <QuizModule student={student} />
                             </div>
                         )}
 
                         {activeTab === 'fees' && (
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                <div className="lg:col-span-1 space-y-6">
-                                    <div className="premium-card bg-white p-8 border border-slate-100 h-full">
-                                        <h3 className="text-xl font-black text-slate-900 mb-6">Summary</h3>
-                                        <div className="space-y-6">
-                                            <FeeStat label="Total Course Fee" amount={student.totalFees} color="slate" />
-                                            <FeeStat label="Amount Paid" amount={student.paidFees} color="green" />
-                                            <div className="h-px bg-slate-100" />
-                                            <FeeStat label="Pending Dues" amount={remainingFees} color="red" />
-                                        </div>
+                            <div className="max-w-4xl mx-auto space-y-8">
+                                <div className="p-12 bg-white rounded-[3rem] border border-slate-100 shadow-sm relative overflow-hidden text-center">
+                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-2 bg-blue-600 rounded-b-full" />
+                                    <p className="text-slate-400 font-black uppercase tracking-widest text-xs mb-4">Current Balance Account</p>
+                                    <h3 className="text-7xl font-black text-slate-900 tracking-tighter mb-4">
+                                        ₹{student.pendingFees || 0}
+                                    </h3>
+                                    <p className="text-slate-500 font-bold text-sm mb-12">Total balance to clear for certification eligibility.</p>
 
-                                        <div className="mt-8 pt-8 border-t border-slate-100">
-                                            <div className="flex justify-between text-xs font-black uppercase text-slate-400 mb-2">
-                                                <span>Completion</span>
-                                                <span>{feePercentage}%</span>
-                                            </div>
-                                            <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden">
-                                                <motion.div
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${feePercentage}%` }}
-                                                    className={cn("h-full rounded-full shadow-sm",
-                                                        feePercentage === 100 ? "bg-emerald-500" : "bg-blue-600"
-                                                    )}
-                                                />
-                                            </div>
+                                    <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-12">
+                                        <div className="p-6 bg-slate-50 rounded-3xl">
+                                            <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Paid Amount</p>
+                                            <p className="text-xl font-black text-emerald-600">₹{(student.totalFees || 0) - (student.pendingFees || 0)}</p>
+                                        </div>
+                                        <div className="p-6 bg-slate-50 rounded-3xl">
+                                            <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Total Fee</p>
+                                            <p className="text-xl font-black text-slate-900">₹{student.totalFees || 0}</p>
                                         </div>
                                     </div>
+
+                                    <button className="px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+                                        Download Fee Statement
+                                    </button>
                                 </div>
 
-                                <div className="lg:col-span-2">
-                                    <div className="premium-card bg-white p-8 border border-slate-100 min-h-[500px]">
-                                        <div className="flex items-center gap-4 mb-8">
-                                            <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
-                                                <History size={20} />
-                                            </div>
-                                            <h3 className="text-xl font-black text-slate-900">Payment History</h3>
+                                <div className="bg-white rounded-[3rem] p-8 border border-slate-100 shadow-sm">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Transaction History</h3>
+                                        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                            <ShieldCheck size={14} /> Encrypted
                                         </div>
-
-                                        <div className="space-y-4">
-                                            {student.installments && student.installments.length > 0 ? (
-                                                student.installments.map((inst, i) => (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, x: -10 }}
-                                                        animate={{ opacity: 1, x: 0 }}
-                                                        transition={{ delay: i * 0.1 }}
-                                                        key={i}
-                                                        className="flex items-center justify-between p-5 rounded-2xl bg-slate-50/50 hover:bg-blue-50/50 border border-transparent hover:border-blue-100 transition-all group"
-                                                    >
-                                                        <div className="flex items-center gap-4">
-                                                            <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center shadow-sm text-slate-400 group-hover:text-blue-600 group-hover:scale-110 transition-all">
-                                                                <CheckCircle2 size={18} />
-                                                            </div>
-                                                            <div>
-                                                                <p className="font-black text-slate-900">Payment Received</p>
-                                                                <p className="text-xs font-bold text-slate-400">{inst.date}</p>
-                                                            </div>
+                                    </div>
+                                    <div className="divide-y divide-slate-100">
+                                        {(student.paymentHistory || []).length > 0 ? (
+                                            student.paymentHistory.map((pmt, i) => (
+                                                <div key={i} className="py-6 flex items-center justify-between group">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="h-10 w-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                                                            <CheckCircle size={18} />
                                                         </div>
-                                                        <div className="text-right">
-                                                            <p className="font-black text-lg text-slate-900">₹{inst.amount}</p>
-                                                            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">Paid</span>
+                                                        <div>
+                                                            <p className="font-black text-slate-900">₹{pmt.amount}</p>
+                                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{pmt.date}</p>
                                                         </div>
-                                                    </motion.div>
-                                                ))
-                                            ) : (
-                                                <div className="flex flex-col items-center justify-center py-20 opacity-50">
-                                                    <Wallet size={48} className="mb-4 text-slate-300" />
-                                                    <p className="font-bold text-slate-400">No transactions found</p>
+                                                    </div>
+                                                    <button className="p-3 text-slate-300 hover:text-blue-600 transition-colors">
+                                                        <FileText size={18} />
+                                                    </button>
                                                 </div>
-                                            )}
-                                        </div>
+                                            ))
+                                        ) : (
+                                            <div className="py-20 text-center">
+                                                <div className="h-16 w-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                    <CreditCard size={32} />
+                                                </div>
+                                                <p className="text-slate-400 font-black text-xs uppercase tracking-widest">No transactions found</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                            </div>
-                        )}
-
-                        {activeTab === 'quiz' && (
-                            <div className="premium-card bg-white p-6 md:p-10 border border-slate-100 min-h-[600px] flex flex-col">
-                                <QuizModule student={student} />
                             </div>
                         )}
                     </motion.div>
                 </AnimatePresence>
             </div>
-        </div>
-    );
-}
-
-// --- Sub Components ---
-
-function TabButton({ id, label, icon, active, onClick, badge }) {
-    const isActive = active === id;
-    return (
-        <button
-            onClick={() => onClick(id)}
-            className={cn(
-                "relative flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all whitespace-nowrap",
-                isActive
-                    ? "bg-slate-900 text-white shadow-xl shadow-slate-200 scale-105"
-                    : "bg-white text-slate-500 hover:bg-slate-50 border border-transparent hover:border-slate-200"
-            )}
-        >
-            {icon}
-            {label}
-            {badge && (
-                <span className="ml-1 px-1.5 py-0.5 bg-blue-500 text-white text-[9px] rounded-md animate-pulse">
-                    {badge}
-                </span>
-            )}
-        </button>
-    );
-}
-
-function Badge({ children, variant = 'default' }) {
-    return (
-        <span className={cn(
-            "px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest",
-            variant === 'outline' ? "border border-slate-200 text-slate-500" : "bg-blue-50 text-blue-600"
-        )}>
-            {children}
-        </span>
-    );
-}
-
-function InfoRow({ icon, label, value }) {
-    return (
-        <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="text-slate-400">{icon}</div>
-            <div>
-                <p className="text-[9px] font-black uppercase text-slate-400 tracking-wider mb-0.5">{label}</p>
-                <p className="text-sm font-bold text-slate-900">{value}</p>
-            </div>
-        </div>
-    );
-}
-
-function FeeStat({ label, amount, color }) {
-    const colors = {
-        slate: "text-slate-900",
-        green: "text-emerald-600",
-        red: "text-red-500"
-    };
-
-    return (
-        <div>
-            <p className="text-xs font-black uppercase text-slate-400 tracking-widest mb-1">{label}</p>
-            <p className={cn("text-2xl font-black tracking-tighter", colors[color])}>
-                ₹{amount?.toLocaleString()}
-            </p>
         </div>
     );
 }

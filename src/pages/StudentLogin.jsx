@@ -4,6 +4,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Hash, Phone, ArrowRight, Loader2, ShieldCheck, Database, Zap, Sparkles } from 'lucide-react';
+import { useAuth } from '../app/common/AuthContext';
 import { sendTelegramNotification } from '../lib/telegram';
 
 export default function StudentLogin() {
@@ -12,6 +13,7 @@ export default function StudentLogin() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { loginStudent } = useAuth();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -29,8 +31,8 @@ export default function StudentLogin() {
 
             if (!querySnapshot.empty) {
                 const studentData = querySnapshot.docs[0].data();
-                // Store student session in localStorage
-                localStorage.setItem('student_session', JSON.stringify(studentData));
+                // Use unified login function
+                loginStudent(studentData);
 
                 // Send Telegram Notification
                 await sendTelegramNotification('login', {
