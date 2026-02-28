@@ -146,50 +146,31 @@ export default function Home() {
                                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                                     className="relative z-10 p-4"
                                 >
-                                    {/* Responsive Lottie Graphics - Professional Tech */}
-                                    <div className="relative group p-6 rounded-[2.5rem] bg-white/40 backdrop-blur-xl border border-white/50 shadow-2xl overflow-hidden">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 -z-10"></div>
+                                    {/* Responsive Lottie Graphics - Fully Integrated (No Box) */}
+                                    <div className="relative group flex items-center justify-center lg:justify-end">
+                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-blue-100/20 rounded-full blur-[100px] -z-10 animate-pulse"></div>
                                         <Lottie
                                             animationData={heroLottie}
                                             loop={true}
-                                            className="w-full h-auto max-w-[550px] mx-auto drop-shadow-2xl"
+                                            className="w-full h-auto max-w-[650px] lg:scale-125 transform transition-transform duration-700 group-hover:scale-[1.3] drop-shadow-[0_20px_50px_rgba(37,99,235,0.2)]"
                                         />
+                                        {/* Floating Partnership Indicator */}
+                                        <div className="absolute top-[30%] -left-[15%] p-3 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-blue-50 flex items-center gap-2 animate-bounce hidden lg:flex">
+                                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                            <span className="text-[9px] font-extrabold text-slate-800 uppercase tracking-[0.15em]">Hiring Partners Active</span>
+                                        </div>
 
-                                        {/* Floating Elements inside Lottie Container */}
-                                        <div className="absolute bottom-4 left-4 right-4 p-4 rounded-2xl bg-white/60 backdrop-blur-md border border-white/80 shadow-lg flex items-center justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white">
-                                                    <Laptop size={20} />
-                                                </div>
-                                                <div>
-                                                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active System</div>
-                                                    <div className="text-xs font-black text-slate-900 uppercase">Core Lab Access</div>
-                                                </div>
+                                        {/* Floating Code Badge */}
+                                        <div className="absolute top-[60%] -right-[10%] p-3 bg-blue-600/10 backdrop-blur-md rounded-2xl border border-blue-200/50 hidden xl:flex flex-col gap-1 items-start rotate-3">
+                                            <div className="flex gap-1.5">
+                                                <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-amber-400"></div>
+                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
                                             </div>
-                                            <div className="flex gap-1">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
-                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse delay-75"></div>
-                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse delay-150"></div>
-                                            </div>
+                                            <div className="text-[8px] font-mono text-blue-700 font-bold">{"#bytecore_future"}</div>
                                         </div>
                                     </div>
                                 </motion.div>
-
-                                {/* Floating Partnership Indicator */}
-                                <div className="absolute top-[30%] -left-[15%] p-3 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-blue-50 flex items-center gap-2 animate-bounce hidden lg:flex">
-                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                                    <span className="text-[9px] font-extrabold text-slate-800 uppercase tracking-[0.15em]">Hiring Partners Active</span>
-                                </div>
-
-                                {/* Floating Code Badge */}
-                                <div className="absolute top-[60%] -right-[10%] p-3 bg-blue-600/10 backdrop-blur-md rounded-2xl border border-blue-200/50 hidden xl:flex flex-col gap-1 items-start rotate-3">
-                                    <div className="flex gap-1.5">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
-                                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400"></div>
-                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
-                                    </div>
-                                    <div className="text-[8px] font-mono text-blue-700 font-bold">{"#bytecore_future"}</div>
-                                </div>
                             </div>
                         </motion.div>
                     </div>
