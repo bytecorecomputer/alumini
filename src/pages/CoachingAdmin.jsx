@@ -93,12 +93,6 @@ export default function CoachingAdmin() {
         };
     }, [isOwner, searchTerm, centerFilter, filterStatus]);
 
-    useEffect(() => {
-        if (isOwner) {
-            // Run silent fee audit on load
-            checkMonthlyFeeReminders();
-        }
-    }, [isOwner]);
 
     const loadMoreStudents = async () => {
         if (!lastDoc || !hasMore || isUpdating) return;

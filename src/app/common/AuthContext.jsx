@@ -3,6 +3,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firestore";
+import { checkMonthlyFeeReminders } from "../../lib/feeAutomation";
 
 const AuthContext = createContext();
 
@@ -50,6 +51,11 @@ export function AuthProvider({ children }) {
             if (snap.exists()) {
               setRole(data?.role);
               setUserData(data);
+
+              // Trigger Fee Audit for Admins on Login
+              if (data?.role === 'admin' || data?.role === 'super_admin') {
+                checkMonthlyFeeReminders();
+              }
             } else {
               // User exists in Auth but not Firestore (e.g. registration partially failed)
               console.warn("User authenticated but no profile found in Firestore");

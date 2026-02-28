@@ -1,27 +1,44 @@
 import { db } from "../firebase/firestore";
-import { collection, getDocs, doc, setDoc, getDoc } from "firebase/firestore";
+import { auth } from "../firebase/auth";
+import { collection, getDocs, doc, setDoc, getDoc, query, where } from "firebase/firestore";
 import { sendTelegramNotification } from "./telegram";
 
 /**
  * Intelligent Fee Reminder Algorithm
  * High Level logic to detect which students' monthly fee is due today.
  */
-export const checkMonthlyFeeReminders = async () => {
+export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
     try {
-        console.log("Initializing Intelligent Fee Audit...");
+        // 1. Authentication Guard
+        const currentUser = auth.currentUser;
+        if (!currentUser && !targetStudentId) {
+            console.log("Fee Audit: Skipping (unauthenticated).");
+            return;
+        }
 
-        // 1. Avoid duplicate checks for the same day
+        console.log(`Initializing Intelligent Fee Audit${targetStudentId ? ` for Reg: ${targetStudentId}` : "..."}`);
+
+        // 2. Avoid duplicate checks for the same day (Global Audit only)
         const todayStr = new Date().toISOString().split('T')[0];
         const metaRef = doc(db, "metadata", "last_fee_check");
-        const metaSnap = await getDoc(metaRef);
 
-        // If already checked today, skip (uncomment for production)
-        // if (metaSnap.exists() && metaSnap.data().date === todayStr) {
-        //     console.log("Fee audit already completed for today.");
-        //     return;
-        // }
+        if (!targetStudentId) {
+            const metaSnap = await getDoc(metaRef);
+            if (metaSnap.exists() && metaSnap.data().date === todayStr) {
+                console.log("Fee audit already completed for today.");
+                return;
+            }
+        }
 
-        const snapshot = await getDocs(collection(db, "students"));
+        let snapshot;
+        if (targetStudentId) {
+            // Precise check for single student
+            const q = query(collection(db, "students"), where("registration", "==", targetStudentId.toString()));
+            snapshot = await getDocs(q);
+        } else {
+            // Full collection for bulk audit
+            snapshot = await getDocs(collection(db, "students"));
+        }
         const studentsDue = [];
         const today = new Date();
         const currentDay = today.getDate();
@@ -131,8 +148,11 @@ export const checkMonthlyFeeReminders = async () => {
             });
         }
 
-        // Update last check date
-        await setDoc(metaRef, { date: todayStr, count: studentsDue.length });
+        // 4. Finalize
+        if (!targetStudentId) {
+            // Update last check date (Admin only)
+            await setDoc(metaRef, { date: todayStr, count: studentsDue.length });
+        }
 
     } catch (err) {
         console.error("Fee Automation Error:", err);

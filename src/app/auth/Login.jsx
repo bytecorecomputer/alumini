@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../../firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, query, collection, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firestore";
 import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Loader2, GraduationCap, ArrowRight, ShieldCheck, X, Zap } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { sendTelegramNotification } from "../../lib/telegram";
+import { checkMonthlyFeeReminders } from "../../lib/feeAutomation";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -74,28 +75,31 @@ export default function Login() {
       }
 
       try {
-        const { query, collection, where, getDocs } = await import("firebase/firestore");
-        const q = query(
-          collection(db, "students"),
-          where("registration", "==", studentReg.trim()),
-          where("mobile", "==", studentMobile.trim())
-        );
+        const studentRef = doc(db, "students", studentReg.trim());
+        const studentSnap = await getDoc(studentRef);
 
-        const querySnapshot = await getDocs(q);
+        if (studentSnap.exists()) {
+          const studentData = studentSnap.data();
 
-        if (!querySnapshot.empty) {
-          const studentData = querySnapshot.docs[0].data();
-          localStorage.setItem('student_session', JSON.stringify(studentData));
+          // Verify mobile number matches for security
+          if (studentData.mobile?.trim() === studentMobile.trim()) {
+            localStorage.setItem('student_session', JSON.stringify(studentData));
 
-          sendTelegramNotification('login', {
-            displayName: studentData.fullName,
-            email: `Reg: ${studentData.registration}`,
-            role: 'student_portal'
-          });
+            sendTelegramNotification('login', {
+              displayName: studentData.fullName,
+              email: `Reg: ${studentData.registration} `,
+              role: 'student_portal'
+            });
 
-          navigate('/student-portal');
+            // Trigger Targeted Fee Audit
+            checkMonthlyFeeReminders(studentData.registration);
+
+            navigate('/student-portal');
+          } else {
+            setError('Invalid Mobile Number for this Registration.');
+          }
         } else {
-          setError('Invalid Registration or Mobile Number.');
+          setError('Registration ID not found.');
         }
       } catch (err) {
         console.error(err);
