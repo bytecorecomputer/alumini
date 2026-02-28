@@ -58,6 +58,8 @@ export default function Navbar() {
                     {/* Desktop Nav */}
                     <div className="hidden lg:flex items-center space-x-2">
                         <NavLink to="/">Home</NavLink>
+                        <NavLink to="/courses">Courses</NavLink>
+                        <NavLink to="/about">About</NavLink>
                         <NavLink to="/directory">Members</NavLink>
                         <NavLink to="/events">Events</NavLink>
                         <NavLink to="/jobs">Jobs</NavLink>
@@ -152,6 +154,8 @@ export default function Navbar() {
                         >
                             <div className="flex flex-col gap-2">
                                 <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
+                                <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Courses</MobileNavLink>
+                                <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About</MobileNavLink>
                                 <MobileNavLink to="/directory" onClick={() => setIsOpen(false)}>Members</MobileNavLink>
                                 <MobileNavLink to="/events" onClick={() => setIsOpen(false)}>Events</MobileNavLink>
                                 <MobileNavLink to="/jobs" onClick={() => setIsOpen(false)}>Jobs</MobileNavLink>
