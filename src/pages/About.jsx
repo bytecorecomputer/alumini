@@ -31,19 +31,19 @@ const testimonials = [
     {
         name: "Aditya Singh",
         course: "ADCA Student",
-        image: "/images/aditya.jpg",
+        image: "/images/students/ADITYA (ADCA).jpg",
         text: "Maine Bytecore se ADCA course kiya. Teachers bahut achhe se padhate hain aur practical knowledge milti hai. Computer skills improve ho gayi."
     },
     {
         name: "Manjeet Singh",
         course: "ADCA Student",
-        image: "/images/manjeet.jpg",
+        image: "/images/students/MANJEET (ADCA).jpg",
         text: "ADCA course complete kiya Bytecore se. Multimedia aur animation bahut achhe se sikhaya. Projects bhi karwaye."
     },
     {
         name: "Manoj",
         course: "MDCA Student",
-        image: "/images/manoj.jpg",
+        image: "/images/students/MANOJ (MDCA).jpg",
         text: "ADCA course kiya yahan se. MS Office, Tally, Internet sab sikha diya. Ab office work easily kar leta hun."
     }
 ];

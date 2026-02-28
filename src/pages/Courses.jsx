@@ -32,8 +32,18 @@ const Courses = () => {
         fetchCourses();
     }, []);
 
-    // Use Firebase courses if available, otherwise fallback to local courses
-    const displayCourses = firebaseCourses.length > 0 ? firebaseCourses : localCourses;
+    // Merge Firebase courses with local rich data so UI (images, tags, descriptions) isn't lost
+    const displayCourses = localCourses.map(localCourse => {
+        const fbMatch = firebaseCourses.find(fb =>
+            fb.id.toLowerCase() === localCourse.title.toLowerCase() ||
+            fb.name?.toLowerCase() === localCourse.title.toLowerCase() ||
+            fb.id === localCourse.id?.toString()
+        );
+        return {
+            ...localCourse,
+            price: fbMatch?.fee || fbMatch?.price || localCourse.price || "Contact for Pricing",
+        };
+    });
 
     const categories = ["All", ...new Set(displayCourses.map(c => c.category || "General"))];
 
@@ -115,8 +125,8 @@ const Courses = () => {
                             key={idx}
                             onClick={() => setActiveCategory(category)}
                             className={`px-5 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 border ${activeCategory === category
-                                    ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-200 scale-105'
-                                    : 'bg-white text-slate-500 border-slate-200 hover:border-blue-300 hover:text-blue-600'
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-200 scale-105'
+                                : 'bg-white text-slate-500 border-slate-200 hover:border-blue-300 hover:text-blue-600'
                                 }`}
                         >
                             {category}
@@ -169,7 +179,7 @@ const Courses = () => {
                                     exit={{ opacity: 0, scale: 0.9 }}
                                     transition={{ duration: 0.3 }}
                                     key={course.id}
-                                    onClick={() => navigate('/register')}
+                                    onClick={() => navigate(`/courses/${course.id || course.title.toLowerCase().replace(/\s+/g, '-')}`)}
                                     className="group relative bg-white rounded-[2rem] p-6 shadow-xl shadow-slate-200/50 border border-slate-100 hover:border-blue-200 transition-all duration-500 flex flex-col h-full overflow-hidden cursor-pointer"
                                 >
                                     {/* Hover effect background */}

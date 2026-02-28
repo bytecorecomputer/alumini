@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import Courses from "./pages/Courses";
+import CourseDetails from "./pages/CourseDetails";
 import About from "./pages/About";
 import Login from "./app/auth/Login";
 import Register from "./app/auth/Register";
@@ -30,6 +31,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/courses/:id" element={<CourseDetails />} />
             <Route path="/about" element={<About />} />
             <Route path="/donate" element={<Donate />} />
 
