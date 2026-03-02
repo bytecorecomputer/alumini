@@ -16,6 +16,7 @@ import { compressImage } from '../lib/imageCompression';
 import { runThiriyaMigration } from '../lib/migrateBytecoreThiriya';
 import { syncAggregateStats } from '../lib/migrateStudents';
 import { checkMonthlyFeeReminders } from '../lib/feeAutomation';
+import { syncFromGoogleSheet } from '../lib/syncGoogleSheet';
 import { limit, startAfter } from 'firebase/firestore';
 
 export default function CoachingAdmin() {
@@ -432,6 +433,36 @@ export default function CoachingAdmin() {
                         >
                             {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
                             <span className="md:hidden font-black text-[10px] uppercase">Sync Thiriya</span>
+                        </button>
+                        <button
+                            onClick={async () => {
+                                if (!window.confirm("Sync Student Data from Live Google Sheet?")) return;
+                                setIsUpdating(true);
+                                try {
+                                    // https://docs.google.com/spreadsheets/d/e/2PACX-1vSR3LLRHq4DsbOplvZ0JPfEOXjrR-wGfOUqpSUnunRD6PGiCCAX9VVcC-80-d8GEoTqQF--fX4bDjbh/pub?gid=0&single=true&output=csv
+                                    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSR3LLRHq4DsbOplvZ0JPfEOXjrR-wGfOUqpSUnunRD6PGiCCAX9VVcC-80-d8GEoTqQF--fX4bDjbh/pub?gid=0&single=true&output=csv";
+                                    const result = await syncFromGoogleSheet(csvUrl);
+                                    if (result.success) {
+                                        alert("Google Sheets Sync Complete!\n" + result.message);
+                                    } else {
+                                        throw new Error(result.message);
+                                    }
+                                } catch (err) {
+                                    console.error(err);
+                                    alert(`Google Sheets Sync failed: ${err.message}`);
+                                } finally {
+                                    setIsUpdating(false);
+                                }
+                            }}
+                            disabled={isUpdating}
+                            className={cn(
+                                "hidden md:flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
+                                isUpdating ? "bg-emerald-100 text-emerald-400 cursor-not-allowed" : "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white"
+                            )}
+                            title="Sync Live Google Sheet"
+                        >
+                            {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
+                            <span className="md:hidden font-black text-[10px] uppercase">Sync G-Sheet</span>
                         </button>
                         <div className="flex gap-2">
                             <select
