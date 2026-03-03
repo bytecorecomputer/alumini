@@ -26,13 +26,15 @@ export const useGithubUpload = () => {
         });
     };
 
-    const uploadFile = async (file, rollNo) => {
+    const uploadFile = async (file, rollNo, manualToken = null) => {
         setIsUploading(true);
         setUploadError(null);
 
+        const activeToken = manualToken || GITHUB_TOKEN;
+
         try {
-            if (!GITHUB_TOKEN) {
-                throw new Error("GitHub Authentication Token is missing. Check .env configuration.");
+            if (!activeToken) {
+                throw new Error("GitHub Authentication Token is missing. Provide it in the vault or check .env.");
             }
 
             if (file.size > 20 * 1024 * 1024) { // GitHub API allows up to ~100MB, but let's cap it at 20MB for browser memory
@@ -49,7 +51,7 @@ export const useGithubUpload = () => {
             const response = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Authorization': `token ${activeToken}`,
                     'Accept': 'application/vnd.github.v3+json',
                     'Content-Type': 'application/json',
                 },

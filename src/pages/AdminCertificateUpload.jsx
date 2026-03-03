@@ -4,19 +4,29 @@ import { Helmet } from 'react-helmet-async';
 import { UploadCloud, CheckCircle2, FileImage, ShieldCheck, Loader2, ArrowLeft, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { collection, addDoc, query, where, getDocs, updateDoc } from 'firebase/firestore';
-
-import { uploadToCloudinary } from '../lib/cloudinary';
+import { useGithubUpload } from '../hooks/useGithubUpload';
 import { db } from '../firebase/firestore';
+import { Key, Eye, EyeOff } from 'lucide-react';
 
 export default function AdminCertificateUpload() {
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
     const [rollNo, setRollNo] = useState('');
     const [dob, setDob] = useState('');
+    const [token, setToken] = useState(() => sessionStorage.getItem('gh_vault_token') || '');
+    const [showToken, setShowToken] = useState(false);
+
+    const { uploadFile } = useGithubUpload();
 
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [status, setStatus] = useState({ type: '', message: '' }); // 'success' | 'error'
+
+    // Persist token in session memory (safe - cleared on tab close)
+    const handleTokenChange = (val) => {
+        setToken(val);
+        sessionStorage.setItem('gh_vault_token', val);
+    };
 
     const handleFileChange = (e) => {
         const selected = e.target.files[0];
@@ -67,9 +77,9 @@ export default function AdminCertificateUpload() {
         setUploadProgress(0);
 
         try {
-            // 1. Upload to Cloudinary (Bypasses CORS restrictions)
-            console.log("Starting Cloudinary Upload...");
-            const downloadURL = await uploadToCloudinary(file);
+            // 1. Upload to GitHub Repository using Dynamic Token
+            console.log("Deploying to GitHub Vault...");
+            const downloadURL = await uploadFile(file, rollNo.trim(), token.trim());
             setUploadProgress(100);
 
             // 2. Save metadata to Firestore
@@ -83,7 +93,7 @@ export default function AdminCertificateUpload() {
                     link: downloadURL,
                     updatedAt: new Date()
                 });
-                setStatus({ type: 'success', message: `Certificate overwritten successfully: ${rollNo.trim()}` });
+                setStatus({ type: 'success', message: `Certificate securely updated in Vault: ${rollNo.trim()}` });
             } else {
                 await addDoc(collection(db, 'certificates'), {
                     roll: rollNo.trim(),
@@ -91,12 +101,18 @@ export default function AdminCertificateUpload() {
                     link: downloadURL,
                     createdAt: new Date()
                 });
-                setStatus({ type: 'success', message: `Certificate securely stored: ${rollNo.trim()}` });
+                setStatus({ type: 'success', message: `Certificate deployed to Vault: ${rollNo.trim()}` });
             }
             clearForm();
         } catch (err) {
-            console.error("Upload error:", err);
-            setStatus({ type: 'error', message: err.message || 'Upload failed. Check your connection.' });
+            console.error("Vault deployment failed:", err);
+            const isAuthError = err.message?.includes('Bad credentials') || err.message?.includes('401') || err.message?.includes('Authentication');
+            setStatus({
+                type: 'error',
+                message: isAuthError
+                    ? 'Authentication Failed: Please ensure your Secret Token is valid and has "repo" scope.'
+                    : (err.message || 'Deployment failed. Check your connection.')
+            });
         } finally {
             setIsUploading(false);
         }
@@ -153,6 +169,31 @@ export default function AdminCertificateUpload() {
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500" />
 
                     <form onSubmit={handleSubmit} className="space-y-6">
+
+                        {/* Secret Token Input - Dynamic Insertion */}
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-purple-400 uppercase tracking-widest pl-1 flex items-center gap-1.5">
+                                <Key size={10} /> GitHub Secret Token (Active Session)
+                            </label>
+                            <div className="relative group">
+                                <input
+                                    type={showToken ? "text" : "password"}
+                                    value={token}
+                                    onChange={(e) => handleTokenChange(e.target.value)}
+                                    placeholder="Enter your ghp_... token here"
+                                    disabled={isUploading}
+                                    className="w-full bg-slate-950/80 border border-slate-800 text-white rounded-xl px-4 py-3 pr-12 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-mono text-sm placeholder:text-slate-800 disabled:opacity-50"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowToken(!showToken)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-purple-400 transition-colors"
+                                >
+                                    {showToken ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                            <p className="text-[9px] text-slate-500 pl-1">Token is kept in temporary session memory and cleared on close.</p>
+                        </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
@@ -254,7 +295,7 @@ export default function AdminCertificateUpload() {
                         <div className="pt-2">
                             <button
                                 type="submit"
-                                disabled={isUploading || !file || !rollNo || !dob}
+                                disabled={isUploading || !file || !rollNo || !dob || !token}
                                 className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black uppercase tracking-widest text-sm rounded-xl py-4 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:grayscale active:scale-[0.98] shadow-lg shadow-purple-600/20 relative overflow-hidden group"
                             >
                                 {isUploading ? (
