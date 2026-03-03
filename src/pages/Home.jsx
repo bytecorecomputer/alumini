@@ -250,7 +250,7 @@ export default function Home() {
                                 variants={itemVariants}
                                 className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto mb-12 leading-relaxed font-medium drop-shadow-md"
                             >
-                                Step into the most advanced offline lab in Bareilly. We don't just teach software; we build <strong className="text-white relative inline-block">Digital Masters<div className="absolute bottom-1 left-0 w-full h-1 bg-blue-500 rounded-full"></div></strong>.
+                                Step into the most advanced offline lab in Bareilly. We don't just teach software; we build <strong className="text-white relative inline-block">Digital Masters<span className="absolute bottom-1 left-0 w-full h-1 bg-blue-500 rounded-full block"></span></strong>.
                             </motion.p>
 
                             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto">
@@ -511,34 +511,36 @@ export default function Home() {
             </div>
 
             {/* --- SECRET ADMIN MIGRATION TOOL --- */}
-            {isOwner && (
-                <div className="fixed bottom-10 left-10 z-[100]">
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="bg-white p-5 rounded-[2rem] shadow-2xl border border-slate-100 flex items-center gap-4"
-                    >
-                        <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl">
-                            <Database size={20} />
-                        </div>
-                        <div>
-                            <div className="text-[9px] font-black uppercase tracking-widest text-slate-400">Admin</div>
-                            <h4 className="text-xs font-black text-slate-900 uppercase">MIGRATE DATA</h4>
-                        </div>
-                        <button
-                            disabled={isMigrating || migrationDone}
-                            onClick={handleDataMigration}
-                            className={cn(
-                                "py-2 px-5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-white transition-all shadow-md active:scale-95",
-                                migrationDone ? "bg-emerald-500 shadow-emerald-200" : "bg-blue-600 shadow-blue-200 hover:bg-blue-700"
-                            )}
+            {
+                isOwner && (
+                    <div className="fixed bottom-10 left-10 z-[100]">
+                        <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="bg-white p-5 rounded-[2rem] shadow-2xl border border-slate-100 flex items-center gap-4"
                         >
-                            {isMigrating ? <Loader2 className="animate-spin" size={14} /> : (migrationDone ? <CheckCircle size={14} /> : <Zap size={14} />)}
-                            {migrationDone ? 'Done' : 'Execute'}
-                        </button>
-                    </motion.div>
-                </div>
-            )}
-        </div>
+                            <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl">
+                                <Database size={20} />
+                            </div>
+                            <div>
+                                <div className="text-[9px] font-black uppercase tracking-widest text-slate-400">Admin</div>
+                                <h4 className="text-xs font-black text-slate-900 uppercase">MIGRATE DATA</h4>
+                            </div>
+                            <button
+                                disabled={isMigrating || migrationDone}
+                                onClick={handleDataMigration}
+                                className={cn(
+                                    "py-2 px-5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-white transition-all shadow-md active:scale-95",
+                                    migrationDone ? "bg-emerald-500 shadow-emerald-200" : "bg-blue-600 shadow-blue-200 hover:bg-blue-700"
+                                )}
+                            >
+                                {isMigrating ? <Loader2 className="animate-spin" size={14} /> : (migrationDone ? <CheckCircle size={14} /> : <Zap size={14} />)}
+                                {migrationDone ? 'Done' : 'Execute'}
+                            </button>
+                        </motion.div>
+                    </div>
+                )
+            }
+        </div >
     );
 }

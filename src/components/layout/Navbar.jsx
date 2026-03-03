@@ -96,6 +96,7 @@ export default function Navbar() {
                         <NavLink to="/">Home</NavLink>
                         {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
                         <NavLink to="/about">About Us</NavLink>
+                        <NavLink to="/certificate">Certificate</NavLink>
                         <NavLink to="/contact">Contact</NavLink>
 
                         {(role === 'admin' || role === 'super_admin') && (
@@ -116,6 +117,12 @@ export default function Navbar() {
                                                 <Database size={14} />
                                             </div>
                                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Students</span>
+                                        </Link>
+                                        <Link to="/admin/certificates/upload" className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-all group/item">
+                                            <div className="bg-emerald-50 text-emerald-600 p-2 rounded-lg group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors">
+                                                <Shield size={14} />
+                                            </div>
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Upload Certs</span>
                                         </Link>
                                     </div>
                                 </div>

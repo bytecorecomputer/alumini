@@ -23,6 +23,8 @@ import StudentPortal from "./pages/StudentPortal";
 import CoachingAdmin from "./pages/CoachingAdmin";
 import StudentDetails from "./pages/StudentDetails";
 import CertificateGenerator from "./pages/CertificateGenerator";
+import CertificateDownload from "./pages/CertificateDownload";
+import AdminCertificateUpload from "./pages/AdminCertificateUpload";
 
 export default function App() {
   return (
@@ -35,6 +37,7 @@ export default function App() {
             <Route path="/courses/:id" element={<CourseDetails />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/certificate" element={<CertificateDownload />} />
             <Route path="/donate" element={<Donate />} />
 
             {/* Protected Routes */}
@@ -90,6 +93,11 @@ export default function App() {
             <Route path="/admin/certificates" element={
               <AdminRoute>
                 <CertificateGenerator />
+              </AdminRoute>
+            } />
+            <Route path="/admin/certificates/upload" element={
+              <AdminRoute>
+                <AdminCertificateUpload />
               </AdminRoute>
             } />
           </Routes>
