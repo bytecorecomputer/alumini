@@ -43,11 +43,27 @@ export default function Navbar() {
         <Link
             to={to}
             onClick={onClick}
-            className="block px-6 py-5 text-slate-900 font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-50 rounded-[2rem] transition-all"
+            className="block px-6 py-4 text-slate-900 font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-50 rounded-[2rem] transition-all"
         >
             {children}
         </Link>
     );
+
+    const mobileNavContainer = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.1
+            }
+        }
+    };
+
+    const mobileNavItem = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+    };
 
     return (
         <nav className={cn(
@@ -161,100 +177,122 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Nav Overlay */}
+            {/* Mobile Nav Overlay (Card Nav Style) */}
             <AnimatePresence>
                 {isOpen && (
-                    <div className="fixed inset-0 z-[90] lg:hidden">
+                    <div className="fixed inset-0 z-[90] lg:hidden flex justify-end">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsOpen(false)}
-                            className="absolute inset-0 bg-slate-950/40 backdrop-blur-md"
+                            className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
                         />
                         <motion.div
-                            initial={{ x: '100%' }}
-                            animate={{ x: 0 }}
-                            exit={{ x: '100%' }}
-                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="absolute top-0 right-0 h-screen w-[85%] max-w-sm bg-white shadow-[-20px_0_50px_rgba(0,0,0,0.1)] p-8 pt-24"
+                            initial={{ x: '120%', scale: 0.9, opacity: 0, rotateY: 15 }}
+                            animate={{ x: 0, scale: 1, opacity: 1, rotateY: 0 }}
+                            exit={{ x: '120%', scale: 0.9, opacity: 0, rotateY: 15 }}
+                            transition={{ type: "spring", damping: 22, stiffness: 200, mass: 1, bounce: 0.2 }}
+                            className="relative h-[calc(100vh-32px)] w-[calc(100%-32px)] max-w-sm bg-white/95 backdrop-blur-3xl shadow-[0_0_100px_rgba(30,58,138,0.2)] rounded-[2.5rem] p-8 pt-12 m-4 flex flex-col overflow-y-auto overflow-x-hidden border border-white/80 perspective-[1000px]"
                         >
-                            <div className="flex flex-col gap-2">
-                                <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
-                                {isStudent && <MobileNavLink to="/student-portal" onClick={() => setIsOpen(false)}>Dashboard</MobileNavLink>}
-                                <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink>
-                                <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink>
+                            <div className="flex justify-between items-center mb-10">
+                                <span className="font-black text-xl text-slate-900 tracking-tighter">Navigation</span>
+                                <button
+                                    onClick={() => setIsOpen(false)}
+                                    className="p-3 text-slate-400 bg-slate-50 hover:bg-slate-100 hover:text-slate-900 rounded-full transition-all"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+
+                            <motion.div
+                                variants={mobileNavContainer}
+                                initial="hidden"
+                                animate="show"
+                                className="flex flex-col gap-2 flex-grow"
+                            >
+                                <motion.div variants={mobileNavItem}><MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink></motion.div>
+                                {isStudent && <motion.div variants={mobileNavItem}><MobileNavLink to="/student-portal" onClick={() => setIsOpen(false)}>Dashboard</MobileNavLink></motion.div>}
+                                <motion.div variants={mobileNavItem}><MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink></motion.div>
+                                <motion.div variants={mobileNavItem}><MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink></motion.div>
 
                                 {(role === 'admin' || role === 'super_admin') && (
                                     <>
-                                        <div className="h-px bg-slate-100 my-4" />
-                                        <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
-                                            <div className="flex items-center gap-2 text-purple-600">
-                                                <Shield size={16} /> Admin Panel
-                                            </div>
-                                        </MobileNavLink>
-                                        <MobileNavLink to="/admin/coaching" onClick={() => setIsOpen(false)}>
-                                            <div className="flex items-center gap-2 text-blue-600">
-                                                <Database size={16} /> Student Management
-                                            </div>
-                                        </MobileNavLink>
+                                        <motion.div variants={mobileNavItem} className="h-px bg-slate-100 my-3" />
+                                        <motion.div variants={mobileNavItem}>
+                                            <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
+                                                <div className="flex items-center gap-2 text-purple-600">
+                                                    <Shield size={16} /> Admin Panel
+                                                </div>
+                                            </MobileNavLink>
+                                        </motion.div>
+                                        <motion.div variants={mobileNavItem}>
+                                            <MobileNavLink to="/admin/coaching" onClick={() => setIsOpen(false)}>
+                                                <div className="flex items-center gap-2 text-blue-600">
+                                                    <Database size={16} /> Student Management
+                                                </div>
+                                            </MobileNavLink>
+                                        </motion.div>
                                     </>
                                 )}
+                            </motion.div>
 
-                                <div className="pt-8 mt-8 border-t border-slate-100 space-y-4">
-                                    {user || isStudent ? (
-                                        <>
-                                            <Link
-                                                to={isStudent ? "/student-portal" : "/profile"}
-                                                onClick={() => setIsOpen(false)}
-                                                className="flex items-center gap-4 p-5 bg-slate-50 rounded-[2rem] group"
-                                            >
-                                                <div className="h-12 w-12 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-lg overflow-hidden border-2 border-white">
-                                                    {isStudent ? (
-                                                        student.photoUrl ? (
-                                                            <img src={student.photoUrl} alt="" className="h-full w-full object-cover" />
-                                                        ) : (
-                                                            <div className="h-full w-full flex items-center justify-center bg-blue-600 text-white text-sm font-black uppercase">
-                                                                {student.fullName?.[0]}
-                                                            </div>
-                                                        )
-                                                    ) : userData?.photoURL ? (
-                                                        <img src={getOptimizedUrl(userData.photoURL, 'w_100,h_100,c_fill,g_face,f_auto,q_auto')} alt="" className="h-full w-full object-cover" />
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 24 }}
+                                className="pt-6 mt-6 border-t border-slate-100 space-y-4 pb-8"
+                            >
+                                {user || isStudent ? (
+                                    <>
+                                        <Link
+                                            to={isStudent ? "/student-portal" : "/profile"}
+                                            onClick={() => setIsOpen(false)}
+                                            className="flex items-center gap-4 p-4 bg-slate-50 hover:bg-slate-100 rounded-3xl transition-colors group"
+                                        >
+                                            <div className="h-12 w-12 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-md overflow-hidden border-2 border-white">
+                                                {isStudent ? (
+                                                    student.photoUrl ? (
+                                                        <img src={student.photoUrl} alt="" className="h-full w-full object-cover" />
                                                     ) : (
-                                                        <User size={20} />
-                                                    )}
+                                                        <div className="h-full w-full flex items-center justify-center bg-blue-600 text-white text-sm font-black uppercase">
+                                                            {student.fullName?.[0]}
+                                                        </div>
+                                                    )
+                                                ) : userData?.photoURL ? (
+                                                    <img src={getOptimizedUrl(userData.photoURL, 'w_100,h_100,c_fill,g_face,f_auto,q_auto')} alt="" className="h-full w-full object-cover" />
+                                                ) : (
+                                                    <User size={20} />
+                                                )}
+                                            </div>
+                                            <div>
+                                                <div className="font-black text-slate-900 text-sm truncate max-w-[150px]">
+                                                    {isStudent ? student.fullName : user.displayName}
                                                 </div>
-                                                <div>
-                                                    <div className="font-black text-slate-900 text-sm truncate max-w-[150px]">
-                                                        {isStudent ? student.fullName : user.displayName}
-                                                    </div>
-                                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                                        {isStudent ? "Student Profile" : role}
-                                                    </div>
+                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                    {isStudent ? "Student Profile" : role}
                                                 </div>
-                                            </Link>
-                                            <button
-                                                onClick={handleLogout}
-                                                className="w-full flex items-center justify-center gap-3 p-5 text-red-600 font-black uppercase tracking-widest text-xs hover:bg-red-50 rounded-[2rem] transition-all border border-transparent hover:border-red-100"
-                                            >
-                                                <LogOut size={18} />
-                                                <span>Logout System</span>
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <div className="flex flex-col gap-3 mt-2">
-                                            <Link to="/login" onClick={() => setIsOpen(false)} className="w-full py-5 text-center text-slate-900 font-black uppercase tracking-widest text-xs border border-slate-100 rounded-[2rem] hover:bg-slate-50 transition-all">Login / Portal</Link>
-                                            <Link to="/register" onClick={() => setIsOpen(false)} className="w-full py-5 text-center bg-slate-900 text-white font-black uppercase tracking-widest text-xs rounded-[2rem] shadow-xl shadow-slate-200">Join Network</Link>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
+                                            </div>
+                                        </Link>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full flex items-center justify-center gap-3 p-4 text-red-600 font-black uppercase tracking-widest text-xs hover:bg-red-50 rounded-3xl transition-all border border-transparent hover:border-red-100"
+                                        >
+                                            <LogOut size={18} />
+                                            <span>Logout System</span>
+                                        </button>
+                                    </>
+                                ) : (
+                                    <div className="flex flex-col gap-3">
+                                        <Link to="/login" onClick={() => setIsOpen(false)} className="w-full py-4 text-center text-slate-900 font-black uppercase tracking-widest text-xs border border-slate-200 rounded-3xl hover:bg-slate-50 transition-all">Login / Portal</Link>
+                                        <Link to="/register" onClick={() => setIsOpen(false)} className="w-full py-4 text-center bg-slate-900 text-white font-black uppercase tracking-widest text-xs rounded-3xl shadow-lg shadow-slate-200 hover:shadow-xl hover:-translate-y-0.5 transition-all">Join Network</Link>
+                                    </div>
+                                )}
+                            </motion.div>
 
-                            <div className="absolute bottom-10 left-8 right-8">
-                                <div className="flex items-center justify-center gap-2 text-slate-300">
-                                    <Zap size={14} />
-                                    <span className="text-[10px] uppercase font-black tracking-widest">Secure Link Established</span>
-                                </div>
+                            <div className="flex items-center justify-center gap-2 text-slate-300 mt-auto">
+                                <Zap size={14} />
+                                <span className="text-[10px] uppercase font-black tracking-widest">Secure Link Established</span>
                             </div>
                         </motion.div>
                     </div>

@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import Particles from "react-tsparticles";
-import { loadFull } from "tsparticles";
 import { Helmet } from "react-helmet-async";
 import Lottie from 'lottie-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowRight, Users, CheckCircle, Database, Loader2, Zap,
     Laptop, GraduationCap, Award, MapPin, Building, Star
@@ -14,11 +12,6 @@ import { useAuth } from '../app/common/AuthContext';
 import { runMigration } from '../lib/migrateStudents';
 import { cn } from '../lib/utils';
 import { courses as localCourses } from '../data/courses';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectCards, FreeMode } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/effect-cards';
-import 'swiper/css/free-mode';
 
 // Import Lottie Animations
 import heroLottie from '../assets/lottie/hero.json';
@@ -26,11 +19,98 @@ import webLottie from '../assets/lottie/web.json';
 import dataLottie from '../assets/lottie/data.json';
 import pythonLottie from '../assets/lottie/python.json';
 
+const DomeCarousel = () => {
+    const students = [
+        "ABHISHEK (DCST).jpg", "ADIL (DCST).jpg", "ADITYA (ADCA).jpg", "ADITYA (DCST).jpg",
+        "AJAY (DFA).jpg", "AMAN (DCST).jpg", "AMAR (TALLY).jpg", "AMIR (ADCA).jpg",
+        "ANIKET (DCST).jpg", "ANISH (TALLY0.jpg", "ANUJ (DCST).jpg", "ARFAT (ADCA).jpg",
+        "ARIF (DCST).jpg", "ARISH (DCA).jpg", "ARVIND (DCST).jpg"
+    ];
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        handleResize(); // Initial check
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const [isHovered, setIsHovered] = useState(false);
+
+    useEffect(() => {
+        if (isHovered) return;
+        const timer = setInterval(() => {
+            setCurrentIndex(prev => (prev + 1) % students.length);
+        }, 3000);
+        return () => clearInterval(timer);
+    }, [students.length, isHovered]);
+
+    return (
+        <div
+            className="relative w-full h-[450px] md:h-[550px] flex items-center justify-center overflow-hidden flex-col md:flex-row perspective-[1200px]"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={() => setIsHovered(true)}
+            onTouchEnd={() => setIsHovered(false)}
+        >
+            <AnimatePresence initial={false}>
+                {students.map((file, i) => {
+                    let diff = i - currentIndex;
+                    if (diff > students.length / 2) diff -= students.length;
+                    if (diff < -students.length / 2) diff += students.length;
+
+                    // Optimize by not rendering elements too far away
+                    if (Math.abs(diff) > 3) return null;
+
+                    const match = file.match(/^(.+)\s\((.+)\)\.jpg$/);
+                    const name = match ? match[1] : file.replace('.jpg', '');
+                    const course = match ? match[2] : "Student";
+
+                    // Added active state reflection and deeper 3D transforms
+                    const isActive = Math.abs(diff) === 0;
+
+                    return (
+                        <motion.div
+                            key={file}
+                            initial={{ opacity: 0, x: diff > 0 ? (isMobile ? 100 : 300) : -(isMobile ? 100 : 300), rotateY: diff * -30 }}
+                            animate={{
+                                opacity: isActive ? 1 : Math.abs(diff) === 1 ? 0.7 : 0.2,
+                                x: diff * (isMobile ? 140 : 250),
+                                scale: isActive ? 1 : 1 - Math.abs(diff) * (isMobile ? 0.15 : 0.2),
+                                zIndex: 10 - Math.abs(diff),
+                                rotateY: diff * -25,
+                                z: isActive ? 50 : Math.abs(diff) * -100
+                            }}
+                            transition={{ duration: 0.8, type: "spring", damping: 20, stiffness: 100, mass: 1 }}
+                            className={cn(
+                                "absolute w-[260px] md:w-[400px] h-[360px] md:h-[500px] rounded-[2.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden cursor-pointer",
+                                isActive ? "border-2 border-blue-400/50 shadow-[0_0_50px_rgba(59,130,246,0.3)]" : "border border-slate-700/50 shadow-black/50"
+                            )}
+                            onClick={() => setCurrentIndex(i)}
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent z-10 opacity-70"></div>
+                            <img
+                                src={`/images/students/${file}`}
+                                alt={name}
+                                className="w-full h-full object-cover"
+                            />
+                            <div className="absolute bottom-6 md:bottom-8 left-6 md:left-8 right-6 md:right-8 z-20">
+                                <div className="bg-slate-900/80 backdrop-blur-md border border-slate-600/50 p-3 md:p-4 rounded-3xl text-left">
+                                    <h3 className="text-lg md:text-xl font-black text-white">{name}</h3>
+                                    <span className="text-[9px] md:text-[10px] uppercase font-black tracking-widest text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full mt-2 inline-block">{course}</span>
+                                </div>
+                            </div>
+                        </motion.div>
+                    );
+                })}
+            </AnimatePresence>
+        </div>
+    );
+};
 
 export default function Home() {
-    const particlesInit = useCallback(async (engine) => {
-        await loadFull(engine);
-    }, []);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -74,6 +154,54 @@ export default function Home() {
         { name: "Coder Afroj", role: "Lead Instructor & Web Dev", image: "/images/cd/coderafroj.jpg" }
     ];
 
+    const AuroraBackground = () => {
+        return (
+            <div className="absolute inset-0 overflow-hidden bg-slate-950 pointer-events-none z-0">
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.05] mix-blend-overlay z-10"></div>
+                <div className="absolute -inset-[20%] opacity-50">
+                    <motion.div
+                        animate={{
+                            x: ["-10%", "10%", "-10%"],
+                            y: ["10%", "-10%", "10%"]
+                        }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute h-[60vh] w-[60vw] rounded-full bg-blue-600/30 blur-[130px] top-[-10%] left-[-10%]"
+                    />
+                    <motion.div
+                        animate={{
+                            x: ["10%", "-10%", "10%"],
+                            y: ["-10%", "10%", "-10%"]
+                        }}
+                        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute h-[70vh] w-[70vw] rounded-full bg-indigo-600/30 blur-[150px] top-[10%] right-[-10%]"
+                    />
+                    <motion.div
+                        animate={{
+                            x: ["-15%", "15%", "-15%"],
+                            y: ["-15%", "15%", "-15%"]
+                        }}
+                        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute h-[50vh] w-[50vw] rounded-full bg-purple-600/20 blur-[120px] bottom-[-10%] right-[10%]"
+                    />
+                    <motion.div
+                        animate={{
+                            backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
+                        }}
+                        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                        className="absolute inset-0 opacity-40 mix-blend-screen"
+                        style={{
+                            backgroundImage: `repeating-linear-gradient(100deg,transparent,rgba(255,255,255,0.03) 1px,transparent 3px),repeating-linear-gradient(10deg,rgba(0,0,0,0.05),rgba(0,0,0,0) 2px,transparent 3px)`
+                        }}
+                    />
+                </div>
+                {/* Tech Grid overlay */}
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] bg-[length:50px_50px]"></div>
+                {/* Fade to white at bottom */}
+                <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white to-transparent z-20"></div>
+            </div>
+        );
+    };
+
 
 
     return (
@@ -85,83 +213,7 @@ export default function Home() {
             </Helmet>
             {/* --- ULTIMATE TECH HERO SECTION --- */}
             <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-                {/* Background Image with Parallax effect */}
-                <div
-                    className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-                    style={{
-                        backgroundImage: `url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop')`,
-                        backgroundAttachment: 'fixed'
-                    }}
-                >
-                    {/* Premium Dark Overlay with Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/70 to-white"></div>
-                </div>
-
-                {/* Stunning Premium Particles Background */}
-                <Particles
-                    id="tsparticles"
-                    init={particlesInit}
-                    className="absolute inset-0 z-0 pointer-events-auto"
-                    options={{
-                        fullScreen: { enable: false, zIndex: 0 },
-                        fpsLimit: 120,
-                        particles: {
-                            number: { value: 60, density: { enable: true, value_area: 800 } },
-                            color: { value: ["#60a5fa", "#a78bfa", "#38bdf8", "#818cf8"] }, // Premium blues & purples
-                            shape: {
-                                type: ["circle", "triangle"],
-                            },
-                            opacity: {
-                                value: 0.8,
-                                random: true,
-                                anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-                            },
-                            size: {
-                                value: { min: 2, max: 4 },
-                                random: true,
-                                anim: { enable: true, speed: 2, size_min: 0.1, sync: false }
-                            },
-                            links: {
-                                enable: true,
-                                distance: 150,
-                                color: "#818cf8",
-                                opacity: 0.5,
-                                width: 1.5,
-                                trips: { enable: true, color: "#38bdf8" } // Cool network effect
-                            },
-                            move: {
-                                enable: true,
-                                speed: 1.2,
-                                direction: "none",
-                                random: true,
-                                straight: false,
-                                outModes: { default: "bounce" }, // Stay within screen for density
-                                attract: { enable: false, rotateX: 600, rotateY: 1200 }
-                            },
-                        },
-                        interactivity: {
-                            detectsOn: "window",
-                            events: {
-                                onHover: { enable: true, mode: "grab" }, // Grab lines on hover
-                                onClick: { enable: true, mode: "push" }, // Add particles on click
-                                resize: true
-                            },
-                            modes: {
-                                grab: { distance: 250, links: { opacity: 1, color: "#cbd5e1" } },
-                                push: { quantity: 4 },
-                                repulse: { distance: 200, duration: 0.4 }
-                            }
-                        },
-                        background: {
-                            color: "transparent",
-                        },
-                        detectRetina: true
-                    }}
-                />
-
-                {/* Animated Particles/Lights */}
-                <div className="absolute top-1/4 left-1/4 w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[120px] animate-pulse z-0 pointer-events-none"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[120px] animate-pulse delay-1000 z-0 pointer-events-none"></div>
+                <AuroraBackground />
 
                 <div className="max-w-7xl mx-auto w-full relative z-20 px-6 pt-20">
                     <div className="flex flex-col items-center justify-center text-center py-20 pb-32">
@@ -421,61 +473,16 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* --- STUDENT GALLERY PREVIEW INTERACTIVE SWIPER --- */}
+            {/* --- STUDENT DOME GALLERY (React Bits Style) --- */}
             <div className="py-32 bg-slate-900 border-t border-slate-800 relative overflow-hidden">
                 <div className="absolute top-0 left-1/2 w-[800px] h-[800px] bg-blue-500/10 rounded-full blur-[150px] -z-10 transform -translate-x-1/2"></div>
-                <div className="max-w-7xl mx-auto px-6 text-center z-10 relative">
+                <div className="max-w-[100vw] mx-auto text-center z-10 relative overflow-hidden">
                     <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4 block">Proven Results</span>
-                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6">Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Campus Life</span></h2>
-                    <p className="text-slate-400 font-medium mb-20 max-w-2xl mx-auto text-lg">Discover the incredible environment where our students build projects, attend intensive offline labs, and map their success.</p>
+                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6 relative z-20">The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">ByteCore Dome</span></h2>
+                    <p className="text-slate-400 font-medium mb-12 max-w-2xl mx-auto text-lg px-6 relative z-20">Discover the incredible environment where our students build projects, attend intensive offline labs, and map their success.</p>
 
-                    <div className="w-full max-w-6xl mx-auto mb-16 cursor-grab active:cursor-grabbing pb-10">
-                        <Swiper
-                            effect={'cards'}
-                            grabCursor={true}
-                            modules={[EffectCards, Autoplay, FreeMode]}
-                            className="w-[280px] h-[350px] md:w-[450px] md:h-[550px]"
-                            autoplay={{
-                                delay: 2500,
-                                disableOnInteraction: false,
-                            }}
-                        >
-                            {[
-                                "ABHISHEK (DCST).jpg", "ADIL (DCST).jpg", "ADITYA (ADCA).jpg", "ADITYA (DCST).jpg",
-                                "AJAY (DFA).jpg", "AMAN (DCST).jpg", "AMAR (TALLY).jpg", "AMIR (ADCA).jpg",
-                                "ANIKET (DCST).jpg", "ANISH (TALLY0.jpg", "ANUJ (DCST).jpg", "ARFAT (ADCA).jpg",
-                                "ARIF (DCST).jpg", "ARISH (DCA).jpg", "ARVIND (DCST).jpg"
-                            ].map((file, i) => {
-                                // Extract name and course from filename "NAME (COURSE).jpg"
-                                const match = file.match(/^(.+)\s\((.+)\)\.jpg$/);
-                                const name = match ? match[1] : file.replace('.jpg', '');
-                                const course = match ? match[2] : "Student";
+                    <DomeCarousel />
 
-                                return (
-                                    <SwiperSlide key={i} className="rounded-[3rem] shadow-2xl overflow-hidden border-4 border-slate-700 bg-slate-800 group">
-                                        <img
-                                            src={`/images/students/${file}`}
-                                            alt={name}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                        />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent pointer-events-none"></div>
-                                        <div className="absolute bottom-10 left-10 text-left pointer-events-none">
-                                            <div className="text-white font-black text-2xl md:text-3xl tracking-tight flex items-center gap-3 mb-2">
-                                                {name}
-                                                <CheckCircle size={24} className="text-blue-400" />
-                                            </div>
-                                            <div className="text-slate-400 text-[11px] uppercase tracking-[0.2em] font-black">{course}</div>
-                                        </div>
-                                        <div className="absolute top-6 right-6 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-[10px] font-black uppercase tracking-widest text-white">#Success</div>
-                                    </SwiperSlide>
-                                );
-                            })}
-                        </Swiper>
-                    </div>
-
-                    <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto opacity-60 pointer-events-none">
-                        <div className="px-6 py-3 rounded-full border border-slate-700 text-slate-300 text-xs font-black uppercase tracking-widest bg-slate-800/50 backdrop-blur-sm">Drag to explore students</div>
-                    </div>
                 </div>
             </div>
 
