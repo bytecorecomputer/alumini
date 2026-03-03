@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import CourseDetails from "./pages/CourseDetails";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 import Login from "./app/auth/Login";
 import Register from "./app/auth/Register";
 import Profile from "./pages/Profile";
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:id" element={<CourseDetails />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/donate" element={<Donate />} />
 
             {/* Protected Routes */}

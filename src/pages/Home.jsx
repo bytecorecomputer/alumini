@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import Particles from "react-tsparticles";
+import { loadFull } from "tsparticles";
+import { Helmet } from "react-helmet-async";
 import Lottie from 'lottie-react';
 import { motion } from 'framer-motion';
 import {
@@ -25,6 +28,10 @@ import pythonLottie from '../assets/lottie/python.json';
 
 
 export default function Home() {
+    const particlesInit = useCallback(async (engine) => {
+        await loadFull(engine);
+    }, []);
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -71,110 +78,147 @@ export default function Home() {
 
     return (
         <div className="bg-[#f8fafc] overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
+            <Helmet>
+                <title>ByteCore Computer Centre | #1 Rank Offline Tech Lab in Bareilly</title>
+                <meta name="description" content="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime. Contact Nariyawal and Thiriya centers." />
+                <meta name="keywords" content="ByteCore, ByteCore Computer Centre, Computer Centre Bareilly, Coding classes Bareilly, Nariyawal computer centre, Thiriya computer centre, Best IT institute in Bareilly, Nariyawal hub, offline computer courses" />
+            </Helmet>
             {/* --- ULTIMATE TECH HERO SECTION --- */}
-            <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-white px-6">
-                {/* Advanced Background Elements */}
-                <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-100/30 rounded-full blur-[140px] animate-pulse"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-100/30 rounded-full blur-[140px] animate-pulse delay-1000"></div>
+            <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+                {/* Background Image with Parallax effect */}
+                <div
+                    className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+                    style={{
+                        backgroundImage: `url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop')`,
+                        backgroundAttachment: 'fixed'
+                    }}
+                >
+                    {/* Premium Dark Overlay with Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/70 to-white"></div>
+                </div>
 
-                <div className="max-w-7xl mx-auto w-full relative z-20">
-                    <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 py-10 md:py-20">
-                        {/* Left Side: Content */}
+                {/* Stunning Premium Particles Background */}
+                <Particles
+                    id="tsparticles"
+                    init={particlesInit}
+                    className="absolute inset-0 z-0 pointer-events-auto"
+                    options={{
+                        fullScreen: { enable: false, zIndex: 0 },
+                        fpsLimit: 120,
+                        particles: {
+                            number: { value: 60, density: { enable: true, value_area: 800 } },
+                            color: { value: ["#60a5fa", "#a78bfa", "#38bdf8", "#818cf8"] }, // Premium blues & purples
+                            shape: {
+                                type: ["circle", "triangle"],
+                            },
+                            opacity: {
+                                value: 0.8,
+                                random: true,
+                                anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+                            },
+                            size: {
+                                value: { min: 2, max: 4 },
+                                random: true,
+                                anim: { enable: true, speed: 2, size_min: 0.1, sync: false }
+                            },
+                            links: {
+                                enable: true,
+                                distance: 150,
+                                color: "#818cf8",
+                                opacity: 0.5,
+                                width: 1.5,
+                                trips: { enable: true, color: "#38bdf8" } // Cool network effect
+                            },
+                            move: {
+                                enable: true,
+                                speed: 1.2,
+                                direction: "none",
+                                random: true,
+                                straight: false,
+                                outModes: { default: "bounce" }, // Stay within screen for density
+                                attract: { enable: false, rotateX: 600, rotateY: 1200 }
+                            },
+                        },
+                        interactivity: {
+                            detectsOn: "window",
+                            events: {
+                                onHover: { enable: true, mode: "grab" }, // Grab lines on hover
+                                onClick: { enable: true, mode: "push" }, // Add particles on click
+                                resize: true
+                            },
+                            modes: {
+                                grab: { distance: 250, links: { opacity: 1, color: "#cbd5e1" } },
+                                push: { quantity: 4 },
+                                repulse: { distance: 200, duration: 0.4 }
+                            }
+                        },
+                        background: {
+                            color: "transparent",
+                        },
+                        detectRetina: true
+                    }}
+                />
+
+                {/* Animated Particles/Lights */}
+                <div className="absolute top-1/4 left-1/4 w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[120px] animate-pulse z-0 pointer-events-none"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[120px] animate-pulse delay-1000 z-0 pointer-events-none"></div>
+
+                <div className="max-w-7xl mx-auto w-full relative z-20 px-6 pt-20">
+                    <div className="flex flex-col items-center justify-center text-center py-20 pb-32">
+                        {/* Content */}
                         <motion.div
                             initial="hidden"
                             animate="visible"
                             variants={containerVariants}
-                            className="flex-1 text-center lg:text-left order-2 lg:order-1"
+                            className="max-w-4xl mx-auto flex flex-col items-center"
                         >
-                            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-50 border border-blue-100 shadow-sm mb-8 transform hover:scale-105 transition-transform">
+                            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-slate-800/80 backdrop-blur-md border border-slate-700/50 shadow-2xl mb-8 transform hover:scale-105 transition-transform">
                                 <span className="relative flex h-2 w-2">
                                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                                     <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
                                 </span>
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">The #1 Choice for Offline Learning</span>
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-300">The #1 Choice for Offline Learning</span>
                             </motion.div>
 
                             <motion.div variants={itemVariants} className="mb-6">
-                                <h2 className="text-xl md:text-2xl font-black text-slate-400 uppercase tracking-[0.4em] mb-2 leading-none">BYTECORE</h2>
-                                <h1 className="text-5xl md:text-[80px] font-[1000] text-slate-900 leading-[1] tracking-[-0.05em]">
+                                <h2 className="text-3xl md:text-5xl font-black text-slate-300 uppercase tracking-[0.4em] mb-4 leading-none drop-shadow-md">BYTECORE</h2>
+                                <h1 className="text-6xl md:text-[100px] font-[1000] text-white leading-[1.1] tracking-tighter drop-shadow-2xl">
                                     COMPUTER <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 uppercase">CENTRE.</span>
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 uppercase">CENTRE.</span>
                                 </h1>
                             </motion.div>
 
-                            <motion.div variants={itemVariants} className="mb-10">
-                                <span className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight italic">
-                                    "Tech Mastery <span className="text-blue-600">Starts Here.</span>"
+                            <motion.div variants={itemVariants} className="mb-8">
+                                <span className="text-3xl md:text-4xl font-black text-slate-100 tracking-tight italic drop-shadow-lg">
+                                    "Tech Mastery <span className="text-blue-400">Starts Here.</span>"
                                 </span>
                             </motion.div>
 
                             <motion.p
                                 variants={itemVariants}
-                                className="text-lg md:text-xl text-slate-500 font-medium max-w-xl mx-auto lg:mx-0 mb-12 leading-relaxed"
+                                className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto mb-12 leading-relaxed font-medium drop-shadow-md"
                             >
-                                Step into the most advanced offline lab in Bareilly. We don't just teach software; we build <strong className="text-slate-900 underline decoration-blue-500 decoration-4">Digital Masters</strong>.
+                                Step into the most advanced offline lab in Bareilly. We don't just teach software; we build <strong className="text-white relative inline-block">Digital Masters<div className="absolute bottom-1 left-0 w-full h-1 bg-blue-500 rounded-full"></div></strong>.
                             </motion.p>
 
-                            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6">
+                            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto">
                                 <Link to="/courses" className="group relative w-full sm:w-auto">
-                                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                                    <div className="relative px-10 py-5 bg-slate-900 rounded-xl text-white font-black uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-4 active:scale-95 transition-all">
+                                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur-md opacity-75 group-hover:opacity-100 transition duration-500 group-hover:duration-200"></div>
+                                    <div className="relative px-12 py-5 bg-white rounded-xl text-slate-900 font-black uppercase tracking-[0.2em] text-[12px] flex items-center justify-center gap-4 active:scale-95 transition-all shadow-2xl">
                                         Join The Mastery
-                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
                                     </div>
                                 </Link>
-                                <Link to="/about" className="w-full sm:w-auto px-10 py-5 rounded-xl bg-white text-slate-900 font-black uppercase tracking-[0.2em] text-[11px] border-2 border-slate-100 hover:border-blue-600 hover:text-blue-600 transition-all shadow-xl shadow-slate-200/50 active:scale-95 text-center">
+                                <Link to="/about" className="w-full sm:w-auto px-12 py-5 rounded-xl bg-slate-900/50 backdrop-blur-md text-white font-black uppercase tracking-[0.2em] text-[12px] border border-slate-600 hover:border-blue-400 hover:bg-slate-800 transition-all shadow-xl active:scale-95 text-center">
                                     Explore Centre
                                 </Link>
                             </motion.div>
                         </motion.div>
-
-                        {/* Right Side: High-End Tech Graphic */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-                            className="flex-1 relative w-full flex justify-center lg:justify-end order-1 lg:order-2"
-                        >
-                            <div className="relative w-full max-w-[500px] lg:max-w-[700px]">
-                                {/* Animated Orbiting Elements - Enhanced for Storyset */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] border-2 border-dashed border-blue-50 rounded-full animate-spin-slow -z-10 opacity-30"></div>
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] border-2 border-dotted border-purple-50 rounded-full animate-reverse-spin -z-10 opacity-30"></div>
-
-                                <motion.div
-                                    animate={{ y: [0, -15, 0] }}
-                                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                                    className="relative z-10 p-4"
-                                >
-                                    {/* Responsive Lottie Graphics - Fully Integrated (No Box) */}
-                                    <div className="relative group flex items-center justify-center lg:justify-end">
-                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-blue-100/20 rounded-full blur-[100px] -z-10 animate-pulse"></div>
-                                        <Lottie
-                                            animationData={heroLottie}
-                                            loop={true}
-                                            className="w-full h-auto max-w-[650px] lg:scale-125 transform transition-transform duration-700 group-hover:scale-[1.3] drop-shadow-[0_20px_50px_rgba(37,99,235,0.2)]"
-                                        />
-                                        {/* Floating Partnership Indicator */}
-                                        <div className="absolute top-[30%] -left-[15%] p-3 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-blue-50 flex items-center gap-2 animate-bounce hidden lg:flex">
-                                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                                            <span className="text-[9px] font-extrabold text-slate-800 uppercase tracking-[0.15em]">Hiring Partners Active</span>
-                                        </div>
-
-                                        {/* Floating Code Badge */}
-                                        <div className="absolute top-[60%] -right-[10%] p-3 bg-blue-600/10 backdrop-blur-md rounded-2xl border border-blue-200/50 hidden xl:flex flex-col gap-1 items-start rotate-3">
-                                            <div className="flex gap-1.5">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-red-400"></div>
-                                                <div className="w-1.5 h-1.5 rounded-full bg-amber-400"></div>
-                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
-                                            </div>
-                                            <div className="text-[8px] font-mono text-blue-700 font-bold">{"#bytecore_future"}</div>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </motion.div>
                     </div>
                 </div>
+
+                {/* Bottom Gradient Fade to transition smoothly to white section below */}
+                <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none"></div>
             </div>
 
             {/* --- TECH MARQUEE (Modern Feature) --- */}
@@ -400,21 +444,7 @@ export default function Home() {
                                 "ABHISHEK (DCST).jpg", "ADIL (DCST).jpg", "ADITYA (ADCA).jpg", "ADITYA (DCST).jpg",
                                 "AJAY (DFA).jpg", "AMAN (DCST).jpg", "AMAR (TALLY).jpg", "AMIR (ADCA).jpg",
                                 "ANIKET (DCST).jpg", "ANISH (TALLY0.jpg", "ANUJ (DCST).jpg", "ARFAT (ADCA).jpg",
-                                "ARIF (DCST).jpg", "ARISH (DCA).jpg", "ARVIND (DCST).jpg", "AYAAN (ADCA).jpg",
-                                "AYAN (CCC).jpg", "AZHAR (TALLY).jpg", "DEEPAK (ADCA).jpg", "DHEERAJ (DCST).jpg",
-                                "DHRUV (DCST).jpg", "DIVYANSH (ADCA).jpg", "GAURAV (DCST).jpg", "GAURAV (TALLY).jpg",
-                                "GUNJIT (DCST).jpg", "HIMANSHU (DCA).jpg", "HIMANSHU (DCST).jpg", "IFRAJ (ADCA).jpg",
-                                "JABIR (TALLY).jpg", "JUNAID (CCC).jpg", "JUNAID (DCA).jpg", "KASIM (DCA).jpg",
-                                "KAUSHAL (DCA).jpg", "KRISHNA (DCA).jpg", "KUNAL (DCST).jpg", "LALIT (MDCA).jpg",
-                                "LALTA (CSC).jpg", "MANJEET (ADCA).jpg", "MANOJ (MDCA).jpg", "MOHIT (ADCA).jpg",
-                                "NAZIL (ADCA).jpg", "NITESH (ADCA).jpg", "NITIN (CCC).jpg", "PAWAN (DFA).jpg",
-                                "PRINCE (ADCA).jpg", "RACHIT (DCST).jpg", "RAGHAV (DCST).jpg", "RAHUL (DFA).jpg",
-                                "RAJ (DCA).jpg", "RAJESH (DCA).jpg", "RAMLAKHAN (DCA).jpg", "RISHAV (DCST).jpg",
-                                "RITESH (MDCA).jpg", "ROHIT (DCST).jpg", "RUPENDRA (ADCA).jpg", "SANJEEV (DCST).jpg",
-                                "SARHAN (ADCA).jpg", "SAURABH (DCA).jpg", "SAURAV (DCST).jpg", "SHAHIL (DCST).jpg",
-                                "SHIVAM (ADCA).jpg", "SHRIRAM (ADCA).jpg", "SHRIYANSH (DCST).jpg", "SURAJBHAN  (ADCA0.jpg",
-                                "SURAJPAL (MS EXCEL).jpg", "TARIQ (TALLY).jpg", "UMAR (MS EXCEL).jpg", "VIKAS (ADCA).jpg",
-                                "VIKRAM (DCST).jpg", "VINAY (MDCA).jpg", "VINOD (MS OFFICE).jpg", "VISHNU (ADCA).jpg"
+                                "ARIF (DCST).jpg", "ARISH (DCA).jpg", "ARVIND (DCST).jpg"
                             ].map((file, i) => {
                                 // Extract name and course from filename "NAME (COURSE).jpg"
                                 const match = file.match(/^(.+)\s\((.+)\)\.jpg$/);

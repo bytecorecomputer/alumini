@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Footer() {
     return (
         <footer className="bg-gray-50 border-t border-gray-200 py-12">
@@ -20,18 +22,19 @@ export default function Footer() {
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-4">Platform</h4>
                         <ul className="space-y-2 text-sm text-gray-500">
-                            <li><a href="#" className="hover:text-primary-600">Directory</a></li>
-                            <li><a href="#" className="hover:text-primary-600">Events</a></li>
-                            <li><a href="#" className="hover:text-primary-600">Careers</a></li>
+                            <li><Link to="/courses" className="hover:text-blue-600">Courses</Link></li>
+                            <li><Link to="/directory" className="hover:text-blue-600">Members Directory</Link></li>
+                            <li><Link to="/events" className="hover:text-blue-600">Events</Link></li>
+                            <li><Link to="/jobs" className="hover:text-blue-600">Careers</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-4">Resources</h4>
                         <ul className="space-y-2 text-sm text-gray-500">
-                            <li><a href="#" className="hover:text-primary-600">About Us</a></li>
-                            <li><a href="#" className="hover:text-primary-600">Contact</a></li>
-                            <li><a href="#" className="hover:text-primary-600">Privacy Policy</a></li>
+                            <li><Link to="/about" className="hover:text-blue-600">About Us</Link></li>
+                            <li><Link to="/contact" className="hover:text-blue-600">Contact</Link></li>
+                            <li><Link to="/" className="hover:text-blue-600">Privacy Policy</Link></li>
                         </ul>
                     </div>
 
@@ -42,7 +45,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-400">
-                    © {new Date().getFullYear()} Alumni Association. Developed by <span className="text-primary-600 font-bold">CoderAfroj</span>. All rights reserved.
+                    © {new Date().getFullYear()} ByteCore Computer Centre. Developed by <span className="text-blue-600 font-bold">CoderAfroj</span>. All rights reserved.
                 </div>
             </div>
         </footer>

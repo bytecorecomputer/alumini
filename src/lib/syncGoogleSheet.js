@@ -56,7 +56,7 @@ function parseCSV(str) {
 }
 
 /**
- * Extracts fee and date from a string like "100 (20-05-2024)" or "450 150 (20-11-2025)"
+ * Extracts fee and date from a string like "100 (20-05-2024)" or "450 150 (20-11-2025)" or "(02-12-2025)"
  * Returns an array of installment objects or null if invalid.
  */
 function parseInstallment(str) {
@@ -64,6 +64,7 @@ function parseInstallment(str) {
 
     // Match format: 100 (20-05-2024)
     // Or format with text: Free 500 (02-12-2025)
+    // Or format with only date: (02-12-2025)
 
     // First, try standard regex: (amount) (date string)
     // We can just extract the date inside parentheses and take all the preceding numbers/text as comment/amount.
@@ -74,7 +75,7 @@ function parseInstallment(str) {
     if (!dateMatch) return [];
 
     const dateStr = dateMatch[1]; // e.g., "20-05-2024"
-    const amountStr = str.replace(dateRegex, '').trim(); // e.g., "100" or "450 150" or "Free"
+    const amountStr = str.replace(dateRegex, '').trim(); // e.g., "100" or "450 150" or "Free" or ""
 
     // If "Free", treat as 0 amount
     if (amountStr.toLowerCase() === 'free') {
@@ -84,10 +85,12 @@ function parseInstallment(str) {
     // Try to extract numerical amount
     const numbers = amountStr.match(/\d+/g);
     if (numbers && numbers.length > 0) {
-        // If there are multiple numbers e.g. "450 150", sum them or take the first?
-        // Let's sum them as total installment paid on that date
+        // If there are multiple numbers e.g. "450 150", sum them
         const totalAmount = numbers.reduce((acc, curr) => acc + parseInt(curr, 10), 0);
         return [{ amount: totalAmount, date: dateStr, status: 'paid' }];
+    } else if (amountStr === '') {
+        // If there's only a date (e.g. they forgot the amount), default to 0 to record the date history
+        return [{ amount: 0, date: dateStr, status: 'paid', note: 'Missing Amount' }];
     }
 
     return [];

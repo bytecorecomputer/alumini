@@ -61,12 +61,15 @@ export default function Navbar() {
                 )}>
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-3 group">
-                        <div className="bg-slate-900 text-white p-2.5 rounded-2xl group-hover:rotate-12 transition-all duration-500 shadow-xl group-hover:shadow-blue-500/20">
-                            <GraduationCap size={24} />
+                        <div className="h-10 w-auto group-hover:scale-105 transition-all duration-500 rounded-lg overflow-hidden flex items-center justify-center bg-white p-1">
+                            <img src="/assets/img/logo.png" alt="ByteCore Logo" className="h-full w-auto object-contain" onError={(e) => { e.target.onerror = null; e.target.src = "https://via.placeholder.com/150x50?text=ByteCore" }} />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none">
-                                Alumni<span className="text-blue-600">Connect</span>
+                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none hidden sm:block">
+                                ByteCore <span className="text-blue-600">Computer Centre</span>
+                            </span>
+                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none sm:hidden">
+                                ByteCore
                             </span>
                         </div>
                     </Link>
@@ -74,12 +77,9 @@ export default function Navbar() {
                     {/* Desktop Nav */}
                     <div className="hidden lg:flex items-center space-x-1">
                         <NavLink to="/">Home</NavLink>
-                        <NavLink to="/courses">Courses</NavLink>
-                        <NavLink to="/about">About</NavLink>
                         {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
-                        <NavLink to="/directory">Members</NavLink>
-                        <NavLink to="/events">Events</NavLink>
-                        <NavLink to="/jobs">Jobs</NavLink>
+                        <NavLink to="/about">About Us</NavLink>
+                        <NavLink to="/contact">Contact</NavLink>
 
                         {(role === 'admin' || role === 'super_admin') && (
                             <div className="relative group/mgmt">
@@ -181,12 +181,9 @@ export default function Navbar() {
                         >
                             <div className="flex flex-col gap-2">
                                 <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
-                                <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Courses</MobileNavLink>
-                                <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About</MobileNavLink>
                                 {isStudent && <MobileNavLink to="/student-portal" onClick={() => setIsOpen(false)}>Dashboard</MobileNavLink>}
-                                <MobileNavLink to="/directory" onClick={() => setIsOpen(false)}>Members</MobileNavLink>
-                                <MobileNavLink to="/events" onClick={() => setIsOpen(false)}>Events</MobileNavLink>
-                                <MobileNavLink to="/jobs" onClick={() => setIsOpen(false)}>Jobs</MobileNavLink>
+                                <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink>
+                                <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink>
 
                                 {(role === 'admin' || role === 'super_admin') && (
                                     <>
