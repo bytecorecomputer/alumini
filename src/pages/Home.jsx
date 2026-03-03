@@ -211,10 +211,48 @@ export default function Home() {
                 <title>ByteCore Computer Centre | #1 Rank Offline Tech Lab in Bareilly</title>
                 <meta name="description" content="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime. Contact Nariyawal and Thiriya centers." />
                 <meta name="keywords" content="ByteCore, ByteCore Computer Centre, Computer Centre Bareilly, Coding classes Bareilly, Nariyawal computer centre, Thiriya computer centre, Best IT institute in Bareilly, Nariyawal hub, offline computer courses" />
-                <link rel="canonical" href="https://bytecores.in/" />
-                <meta property="og:title" content="ByteCore Computer Centre | #1 Rank Offline Tech Lab in Bareilly" />
-                <meta property="og:description" content="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime. Contact Nariyawal and Thiriya centers." />
                 <meta property="og:url" content="https://bytecores.in/" />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "LocalBusiness",
+                        "name": "ByteCore Computer Centre",
+                        "image": "https://bytecores.in/banner-og.png",
+                        "@id": "https://bytecores.in",
+                        "url": "https://bytecores.in",
+                        "telephone": "+91XXXXXXXXXX",
+                        "address": {
+                            "@type": "PostalAddress",
+                            "streetAddress": "Nariyawal & Thiriya",
+                            "addressLocality": "Bareilly",
+                            "addressRegion": "UP",
+                            "postalCode": "243001",
+                            "addressCountry": "IN"
+                        },
+                        "geo": {
+                            "@type": "GeoCoordinates",
+                            "latitude": 28.3670,
+                            "longitude": 79.4322
+                        },
+                        "openingHoursSpecification": {
+                            "@type": "OpeningHoursSpecification",
+                            "dayOfWeek": [
+                                "Monday",
+                                "Tuesday",
+                                "Wednesday",
+                                "Thursday",
+                                "Friday",
+                                "Saturday"
+                            ],
+                            "opens": "09:00",
+                            "closes": "18:00"
+                        },
+                        "sameAs": [
+                            "https://www.facebook.com/bytecore",
+                            "https://www.instagram.com/bytecore"
+                        ]
+                    })}
+                </script>
             </Helmet>
             {/* --- ULTIMATE TECH HERO SECTION --- */}
             <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
