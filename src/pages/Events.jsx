@@ -7,6 +7,7 @@ import { Calendar, MapPin, Clock, Plus, Trash2, Edit2, X, Save, Users, Video, Ar
 import { cn } from '../lib/utils';
 import { sendTelegramNotification } from '../lib/telegram';
 import { uploadToCloudinary, getOptimizedUrl } from '../lib/cloudinary';
+import { Helmet } from 'react-helmet-async';
 
 export default function Events() {
     const { user, role, userData } = useAuth();
@@ -125,6 +126,14 @@ export default function Events() {
 
     return (
         <div className="min-h-screen pt-24 pb-20 px-4 md:px-8">
+            <Helmet>
+                <title>Global Events | ByteCore Computer Centre</title>
+                <meta name="description" content="Stay updated with the latest events, offline bootcamps, and digital meetups at ByteCore Computer Centre." />
+                <link rel="canonical" href="https://bytecores.in/events" />
+                <meta property="og:title" content="Global Events | ByteCore Computer Centre" />
+                <meta property="og:description" content="Stay updated with the latest events, offline bootcamps, and digital meetups at ByteCore Computer Centre." />
+                <meta property="og:url" content="https://bytecores.in/events" />
+            </Helmet>
             <div className="max-w-7xl mx-auto">
                 {/* Premium Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">

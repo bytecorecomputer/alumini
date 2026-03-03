@@ -95,6 +95,7 @@ const DomeCarousel = () => {
                                 src={`/images/students/${file}`}
                                 alt={name}
                                 className="w-full h-full object-cover"
+                                loading="lazy"
                             />
                             <div className="absolute bottom-6 md:bottom-8 left-6 md:left-8 right-6 md:right-8 z-20">
                                 <div className="bg-slate-900/80 backdrop-blur-md border border-slate-600/50 p-3 md:p-4 rounded-3xl text-left">
@@ -165,7 +166,7 @@ export default function Home() {
                             y: ["10%", "-10%", "10%"]
                         }}
                         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute h-[60vh] w-[60vw] rounded-full bg-blue-600/30 blur-[130px] top-[-10%] left-[-10%]"
+                        className="absolute h-[60vh] w-[60vw] rounded-full bg-blue-600/30 blur-[80px] top-[-10%] left-[-10%] will-change-transform"
                     />
                     <motion.div
                         animate={{
@@ -173,7 +174,7 @@ export default function Home() {
                             y: ["-10%", "10%", "-10%"]
                         }}
                         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute h-[70vh] w-[70vw] rounded-full bg-indigo-600/30 blur-[150px] top-[10%] right-[-10%]"
+                        className="absolute h-[70vh] w-[70vw] rounded-full bg-indigo-600/30 blur-[90px] top-[10%] right-[-10%] will-change-transform"
                     />
                     <motion.div
                         animate={{
@@ -181,7 +182,7 @@ export default function Home() {
                             y: ["-15%", "15%", "-15%"]
                         }}
                         transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute h-[50vh] w-[50vw] rounded-full bg-purple-600/20 blur-[120px] bottom-[-10%] right-[10%]"
+                        className="absolute h-[50vh] w-[50vw] rounded-full bg-purple-600/20 blur-[80px] bottom-[-10%] right-[10%] will-change-transform"
                     />
                     <motion.div
                         animate={{
@@ -210,6 +211,10 @@ export default function Home() {
                 <title>ByteCore Computer Centre | #1 Rank Offline Tech Lab in Bareilly</title>
                 <meta name="description" content="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime. Contact Nariyawal and Thiriya centers." />
                 <meta name="keywords" content="ByteCore, ByteCore Computer Centre, Computer Centre Bareilly, Coding classes Bareilly, Nariyawal computer centre, Thiriya computer centre, Best IT institute in Bareilly, Nariyawal hub, offline computer courses" />
+                <link rel="canonical" href="https://bytecores.in/" />
+                <meta property="og:title" content="ByteCore Computer Centre | #1 Rank Offline Tech Lab in Bareilly" />
+                <meta property="og:description" content="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime. Contact Nariyawal and Thiriya centers." />
+                <meta property="og:url" content="https://bytecores.in/" />
             </Helmet>
             {/* --- ULTIMATE TECH HERO SECTION --- */}
             <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -409,6 +414,7 @@ export default function Home() {
                                                     animationData={animationData}
                                                     loop={true}
                                                     className="w-full h-full"
+                                                    initialSegment={[0, 60]} // Start only first segment for better initial load
                                                 />
                                             </div>
                                         ) : (
@@ -416,6 +422,7 @@ export default function Home() {
                                                 src={course.illustration || "https://edit.storyset.com/images/illustrations/web-development-amico.svg"}
                                                 alt={course.title}
                                                 className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700"
+                                                loading="lazy"
                                             />
                                         )}
                                         <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white shadow-sm text-[10px] font-black uppercase tracking-widest text-slate-800">
@@ -459,7 +466,7 @@ export default function Home() {
                                 <div className="absolute inset-0 bg-blue-100 rounded-[3rem] transform translate-y-4 group-hover:translate-y-2 transition-transform -z-10"></div>
                                 <div className="bg-white p-6 rounded-[3rem] border border-slate-100 shadow-sm text-center">
                                     <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-slate-50 shadow-inner mb-6 relative">
-                                        <img src={t.image} alt={t.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                        <img src={t.image} alt={t.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
                                     </div>
                                     <h3 className="text-xl font-black text-slate-900 mb-1">{t.name}</h3>
                                     <p className="text-[10px] uppercase tracking-widest font-black text-blue-600 mb-4">{t.role}</p>

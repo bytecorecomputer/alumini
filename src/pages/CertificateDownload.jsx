@@ -72,6 +72,14 @@ export default function CertificateDownload() {
         if (!result) return;
         setIsDownloading(true);
 
+        const isPdf = result.link.toLowerCase().endsWith('.pdf');
+        if (isPdf) {
+            // Cannot download a PDF as a JPG source directly without conversion, so just open/download it
+            window.open(result.link, '_blank');
+            setIsDownloading(false);
+            return;
+        }
+
         // Fetch the image as a blob to force download instead of opening in new tab
         fetch(result.link)
             .then(res => res.blob())
@@ -96,6 +104,30 @@ export default function CertificateDownload() {
     const downloadPDF = () => {
         if (!result) return;
         setIsDownloading(true);
+
+        const isPdf = result.link.toLowerCase().endsWith('.pdf');
+        if (isPdf) {
+            // It's already a PDF, just trigger download
+            fetch(result.link)
+                .then(res => res.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `ByteCore_Certificate_${result.roll}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    setIsDownloading(false);
+                })
+                .catch(err => {
+                    console.error('Error downloading pdf:', err);
+                    setIsDownloading(false);
+                    setError('Failed to download PDF. Try again later.');
+                });
+            return;
+        }
 
         const img = new Image();
         img.crossOrigin = "Anonymous";
@@ -303,14 +335,24 @@ export default function CertificateDownload() {
                                         </div>
                                     </motion.div>
 
-                                    <motion.div variants={itemVariants} className="aspect-[1.414/1] w-full bg-slate-950 rounded-2xl overflow-hidden shadow-inner border border-slate-800 relative group/img mb-6">
+                                    <motion.div variants={itemVariants} className="aspect-[1.414/1] w-full bg-slate-950 rounded-2xl overflow-hidden shadow-inner border border-slate-800 relative group/img mb-6 flex items-center justify-center">
                                         <div className="absolute inset-0 bg-slate-900 animate-pulse" /> {/* Loading skeleton */}
-                                        <img
-                                            src={result.link}
-                                            alt={`Certificate for Roll No ${result.roll}`}
-                                            className="w-full h-full object-contain relative z-10 transition-transform duration-700 group-hover/img:scale-[1.02]"
-                                            onLoad={(e) => e.target.previousSibling.style.display = 'none'}
-                                        />
+                                        {result.link.toLowerCase().endsWith('.pdf') ? (
+                                            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center bg-slate-900 text-slate-400 p-6 text-center">
+                                                <div className="w-24 h-24 mb-4 rounded-3xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
+                                                    <FileText size={48} />
+                                                </div>
+                                                <p className="font-bold text-lg text-white mb-2">Secure PDF Document</p>
+                                                <p className="text-sm">This is a PDF certificate. Please use the download buttons below to view or save it.</p>
+                                            </div>
+                                        ) : (
+                                            <img
+                                                src={result.link}
+                                                alt={`Certificate for Roll No ${result.roll}`}
+                                                className="w-full h-full object-contain relative z-10 transition-transform duration-700 group-hover/img:scale-[1.02]"
+                                                onLoad={(e) => e.target.previousSibling.style.display = 'none'}
+                                            />
+                                        )}
                                     </motion.div>
 
                                     <motion.div variants={itemVariants} className="grid grid-cols-2 gap-4">

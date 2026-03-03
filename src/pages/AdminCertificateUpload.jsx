@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { UploadCloud, CheckCircle2, FileImage, ShieldCheck, Loader2, ArrowLeft, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, query, where, getDocs, updateDoc } from 'firebase/firestore';
-import { storage } from '../firebase/storage';
+
+import { uploadToCloudinary } from '../lib/cloudinary';
 import { db } from '../firebase/firestore';
 
 export default function AdminCertificateUpload() {
@@ -67,70 +67,37 @@ export default function AdminCertificateUpload() {
         setUploadProgress(0);
 
         try {
-            // 1. Upload file to Firebase Storage
-            const fileExtension = file.name.split('.').pop();
-            const fileName = `certificates/${rollNo.trim()}_${Date.now()}.${fileExtension}`;
-            const storageRef = ref(storage, fileName);
+            // 1. Upload to Cloudinary (Bypasses CORS restrictions)
+            console.log("Starting Cloudinary Upload...");
+            const downloadURL = await uploadToCloudinary(file);
+            setUploadProgress(100);
 
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            // 2. Save metadata to Firestore
+            const q = query(collection(db, 'certificates'), where('roll', '==', rollNo.trim()));
+            const querySnapshot = await getDocs(q);
 
-            uploadTask.on(
-                'state_changed',
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    setUploadProgress(Math.round(progress));
-                },
-                (error) => {
-                    console.error("Storage upload error:", error);
-                    setStatus({ type: 'error', message: 'Failed to upload file to Secure Vault.' });
-                    setIsUploading(false);
-                },
-                async () => {
-                    // Upload completed successfully
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
-                    // 2. Save metadata to Firestore
-                    try {
-                        // Check if certificate already exists for this roll number
-                        const q = query(collection(db, 'certificates'), where('roll', '==', rollNo.trim()));
-                        const querySnapshot = await getDocs(q);
-
-                        if (!querySnapshot.empty) {
-                            // Update existing record
-                            const docId = querySnapshot.docs[0].id;
-                            const docRef = querySnapshot.docs[0].ref;
-
-                            await updateDoc(docRef, {
-                                dob: dob.trim(),
-                                link: downloadURL,
-                                updatedAt: new Date()
-                            });
-
-                            setStatus({ type: 'success', message: `Certificate overwritten successfully for Roll: ${rollNo.trim()}` });
-                        } else {
-                            // Create new record
-                            await addDoc(collection(db, 'certificates'), {
-                                roll: rollNo.trim(),
-                                dob: dob.trim(),
-                                link: downloadURL,
-                                createdAt: new Date()
-                            });
-                            setStatus({ type: 'success', message: `Certificate securely added for Roll: ${rollNo.trim()}` });
-                        }
-
-                        clearForm();
-                    } catch (dbError) {
-                        console.error("Firestore error:", dbError);
-                        setStatus({ type: 'error', message: 'File uploaded, but failed to save database record.' });
-                    } finally {
-                        setIsUploading(false);
-                    }
-                }
-            );
-
+            if (!querySnapshot.empty) {
+                const docRef = querySnapshot.docs[0].ref;
+                await updateDoc(docRef, {
+                    dob: dob.trim(),
+                    link: downloadURL,
+                    updatedAt: new Date()
+                });
+                setStatus({ type: 'success', message: `Certificate overwritten successfully: ${rollNo.trim()}` });
+            } else {
+                await addDoc(collection(db, 'certificates'), {
+                    roll: rollNo.trim(),
+                    dob: dob.trim(),
+                    link: downloadURL,
+                    createdAt: new Date()
+                });
+                setStatus({ type: 'success', message: `Certificate securely stored: ${rollNo.trim()}` });
+            }
+            clearForm();
         } catch (err) {
-            console.error("Unexpected error:", err);
-            setStatus({ type: 'error', message: 'An unexpected error occurred during processing.' });
+            console.error("Upload error:", err);
+            setStatus({ type: 'error', message: err.message || 'Upload failed. Check your connection.' });
+        } finally {
             setIsUploading(false);
         }
     };
@@ -273,8 +240,8 @@ export default function AdminCertificateUpload() {
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
                                     className={`text-sm font-medium rounded-xl p-4 flex items-center gap-3 ${status.type === 'error'
-                                            ? 'bg-red-500/10 border border-red-500/20 text-red-400'
-                                            : 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'
+                                        ? 'bg-red-500/10 border border-red-500/20 text-red-400'
+                                        : 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'
                                         }`}
                                 >
                                     {status.type === 'error' ? <X size={18} /> : <CheckCircle2 size={18} />}
@@ -292,13 +259,11 @@ export default function AdminCertificateUpload() {
                             >
                                 {isUploading ? (
                                     <>
-                                        {/* Progress Bar Background Overlay */}
                                         <div
-                                            className="absolute left-0 top-0 bottom-0 bg-white/20 transition-all duration-300"
-                                            style={{ width: `${uploadProgress}%` }}
+                                            className="absolute left-0 top-0 bottom-0 bg-white/20 animate-pulse w-full"
                                         />
                                         <Loader2 size={18} className="animate-spin relative z-10" />
-                                        <span className="relative z-10">Deploying to Vault ({uploadProgress}%)</span>
+                                        <span className="relative z-10">Deploying to High-Speed Vault...</span>
                                     </>
                                 ) : (
                                     <>

@@ -46,6 +46,10 @@ const Contact = () => {
                 <title>Contact Us | ByteCore Computer Centre</title>
                 <meta name="description" content="Get in touch with ByteCore Computer Centre. Visit our Nariyawal and Thiriya campuses in Bareilly for the best IT and Coding courses." />
                 <meta name="keywords" content="ByteCore Computer Centre, ByteCore contact, computer centre Nariyawal, computer centre Thiriya, Bareilly coding classes contact" />
+                <link rel="canonical" href="https://bytecores.in/contact" />
+                <meta property="og:title" content="Contact Us | ByteCore Computer Centre" />
+                <meta property="og:description" content="Get in touch with ByteCore Computer Centre. Visit our Nariyawal and Thiriya campuses in Bareilly for the best IT and Coding courses." />
+                <meta property="og:url" content="https://bytecores.in/contact" />
             </Helmet>
 
             {/* Premium Header Section */}

@@ -4,15 +4,15 @@ const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'alumni_p
 /**
  * Uploads a file to Cloudinary using Unsigned Uploads.
  * This keeps the API Secret safe from exposure in the frontend.
- * @param {File} file - The image file to upload
+ * @param {File} file - The file to upload (image or pdf)
  * @returns {Promise<string>} - The secure URL of the uploaded image
  */
 export const uploadToCloudinary = async (file) => {
     if (!file) return null;
 
-    // Performance optimization: Check file size (800KB limit for consistency)
-    if (file.size > 800 * 1024) {
-        throw new Error('Image size exceeds 800KB. Please optimize your graphic.');
+    // Performance optimization: Check file size (5MB limit for consistency)
+    if (file.size > 5 * 1024 * 1024) {
+        throw new Error('File size exceeds 5MB. Please optimize your upload.');
     }
 
     const formData = new FormData();
@@ -21,7 +21,7 @@ export const uploadToCloudinary = async (file) => {
 
     try {
         const response = await fetch(
-            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
             {
                 method: 'POST',
                 body: formData,

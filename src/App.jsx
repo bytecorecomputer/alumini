@@ -12,6 +12,8 @@ import Directory from "./pages/Directory";
 import Events from "./pages/Events";
 import Jobs from "./pages/Jobs";
 import Donate from "./pages/Donate";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 import { AuthProvider } from "./app/common/AuthContext";
 
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -39,6 +41,8 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/certificate" element={<CertificateDownload />} />
             <Route path="/donate" element={<Donate />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
 
             {/* Protected Routes */}
             <Route path="/directory" element={

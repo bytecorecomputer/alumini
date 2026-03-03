@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Heart, Building, GraduationCap, ArrowRight, CreditCard, Gift, Target, Zap, ShieldCheck, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { sendTelegramNotification } from '../lib/telegram';
+import { Helmet } from 'react-helmet-async';
 
 export default function Donate() {
     const [amount, setAmount] = useState('100');
@@ -161,6 +162,14 @@ export default function Donate() {
 
     return (
         <div className="min-h-screen pt-24 pb-20 px-4 md:px-8 bg-slate-50 relative overflow-hidden">
+            <Helmet>
+                <title>Empower the Legacy | Donate | ByteCore Computer Centre</title>
+                <meta name="description" content="Support ByteCore Computer Centre in empowering the next generation of tech leaders. Sponsor scholarships, infrastructure, and events." />
+                <link rel="canonical" href="https://bytecores.in/donate" />
+                <meta property="og:title" content="Empower the Legacy | Donate | ByteCore Computer Centre" />
+                <meta property="og:description" content="Support ByteCore Computer Centre in empowering the next generation of tech leaders. Sponsor scholarships, infrastructure, and events." />
+                <meta property="og:url" content="https://bytecores.in/donate" />
+            </Helmet>
             {/* Background Orbs */}
             <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-30">
                 <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-rose-100 rounded-full blur-[120px] animate-pulse"></div>
