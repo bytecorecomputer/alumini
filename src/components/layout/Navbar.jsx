@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, GraduationCap, LogOut, Shield, Database, User, Zap } from 'lucide-react';
+import { Menu, X, LogOut, Shield, Database, User, Zap, ArrowUpRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../app/common/AuthContext';
@@ -43,9 +43,10 @@ export default function Navbar() {
         <Link
             to={to}
             onClick={onClick}
-            className="block px-6 py-4 text-slate-900 font-black uppercase tracking-[0.2em] text-xs hover:bg-slate-50 rounded-[2rem] transition-all"
+            className="flex items-center gap-3 px-2 py-3 text-white/80 hover:text-white font-medium text-[15px] transition-all group"
         >
-            {children}
+            <ArrowUpRight size={16} className="text-white/40 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            <span className="group-hover:translate-x-1 transition-transform">{children}</span>
         </Link>
     );
 
@@ -193,15 +194,22 @@ export default function Navbar() {
                             animate={{ x: 0, scale: 1, opacity: 1, rotateY: 0 }}
                             exit={{ x: '120%', scale: 0.9, opacity: 0, rotateY: 15 }}
                             transition={{ type: "spring", damping: 22, stiffness: 200, mass: 1, bounce: 0.2 }}
-                            className="relative h-[calc(100vh-32px)] w-[calc(100%-32px)] max-w-sm bg-white/95 backdrop-blur-3xl shadow-[0_0_100px_rgba(30,58,138,0.2)] rounded-[2.5rem] p-8 pt-12 m-4 flex flex-col overflow-y-auto overflow-x-hidden border border-white/80 perspective-[1000px]"
+                            className="relative h-[calc(100vh-32px)] w-[calc(100%-32px)] max-w-sm bg-[#f8fafc] backdrop-blur-3xl shadow-[0_0_100px_rgba(30,58,138,0.2)] rounded-[2.5rem] p-6 pt-10 m-4 flex flex-col overflow-y-auto overflow-x-hidden border border-white perspective-[1000px] no-scrollbar"
                         >
-                            <div className="flex justify-between items-center mb-10">
-                                <span className="font-black text-xl text-slate-900 tracking-tighter">Navigation</span>
+                            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.15]" style={{ backgroundImage: 'radial-gradient(#0f172a 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
+
+                            <div className="flex justify-between items-center mb-8 relative z-10 px-2 mt-2">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-2xl bg-slate-900 flex items-center justify-center shadow-lg">
+                                        <Zap size={20} className="text-white" />
+                                    </div>
+                                    <span className="font-black text-2xl text-slate-900 tracking-tighter">ByteCore</span>
+                                </div>
                                 <button
                                     onClick={() => setIsOpen(false)}
-                                    className="p-3 text-slate-400 bg-slate-50 hover:bg-slate-100 hover:text-slate-900 rounded-full transition-all"
+                                    className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 rounded-full transition-all"
                                 >
-                                    <X size={20} />
+                                    <X size={28} strokeWidth={1.5} />
                                 </button>
                             </div>
 
@@ -209,91 +217,65 @@ export default function Navbar() {
                                 variants={mobileNavContainer}
                                 initial="hidden"
                                 animate="show"
-                                className="flex flex-col gap-2 flex-grow"
+                                className="flex flex-col gap-4 flex-grow relative z-10 pb-20"
                             >
-                                <motion.div variants={mobileNavItem}><MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink></motion.div>
-                                {isStudent && <motion.div variants={mobileNavItem}><MobileNavLink to="/student-portal" onClick={() => setIsOpen(false)}>Dashboard</MobileNavLink></motion.div>}
-                                <motion.div variants={mobileNavItem}><MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink></motion.div>
-                                <motion.div variants={mobileNavItem}><MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink></motion.div>
-
-                                {(role === 'admin' || role === 'super_admin') && (
-                                    <>
-                                        <motion.div variants={mobileNavItem} className="h-px bg-slate-100 my-3" />
-                                        <motion.div variants={mobileNavItem}>
-                                            <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
-                                                <div className="flex items-center gap-2 text-purple-600">
-                                                    <Shield size={16} /> Admin Panel
-                                                </div>
-                                            </MobileNavLink>
-                                        </motion.div>
-                                        <motion.div variants={mobileNavItem}>
-                                            <MobileNavLink to="/admin/coaching" onClick={() => setIsOpen(false)}>
-                                                <div className="flex items-center gap-2 text-blue-600">
-                                                    <Database size={16} /> Student Management
-                                                </div>
-                                            </MobileNavLink>
-                                        </motion.div>
-                                    </>
-                                )}
-                            </motion.div>
-
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4, type: "spring", stiffness: 300, damping: 24 }}
-                                className="pt-6 mt-6 border-t border-slate-100 space-y-4 pb-8"
-                            >
-                                {user || isStudent ? (
-                                    <>
-                                        <Link
-                                            to={isStudent ? "/student-portal" : "/profile"}
-                                            onClick={() => setIsOpen(false)}
-                                            className="flex items-center gap-4 p-4 bg-slate-50 hover:bg-slate-100 rounded-3xl transition-colors group"
-                                        >
-                                            <div className="h-12 w-12 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-md overflow-hidden border-2 border-white">
-                                                {isStudent ? (
-                                                    student.photoUrl ? (
-                                                        <img src={student.photoUrl} alt="" className="h-full w-full object-cover" />
-                                                    ) : (
-                                                        <div className="h-full w-full flex items-center justify-center bg-blue-600 text-white text-sm font-black uppercase">
-                                                            {student.fullName?.[0]}
-                                                        </div>
-                                                    )
-                                                ) : userData?.photoURL ? (
-                                                    <img src={getOptimizedUrl(userData.photoURL, 'w_100,h_100,c_fill,g_face,f_auto,q_auto')} alt="" className="h-full w-full object-cover" />
-                                                ) : (
-                                                    <User size={20} />
-                                                )}
-                                            </div>
-                                            <div>
-                                                <div className="font-black text-slate-900 text-sm truncate max-w-[150px]">
-                                                    {isStudent ? student.fullName : user.displayName}
-                                                </div>
-                                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                                    {isStudent ? "Student Profile" : role}
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <button
-                                            onClick={handleLogout}
-                                            className="w-full flex items-center justify-center gap-3 p-4 text-red-600 font-black uppercase tracking-widest text-xs hover:bg-red-50 rounded-3xl transition-all border border-transparent hover:border-red-100"
-                                        >
-                                            <LogOut size={18} />
-                                            <span>Logout System</span>
-                                        </button>
-                                    </>
-                                ) : (
-                                    <div className="flex flex-col gap-3">
-                                        <Link to="/login" onClick={() => setIsOpen(false)} className="w-full py-4 text-center text-slate-900 font-black uppercase tracking-widest text-xs border border-slate-200 rounded-3xl hover:bg-slate-50 transition-all">Login / Portal</Link>
-                                        <Link to="/register" onClick={() => setIsOpen(false)} className="w-full py-4 text-center bg-slate-900 text-white font-black uppercase tracking-widest text-xs rounded-3xl shadow-lg shadow-slate-200 hover:shadow-xl hover:-translate-y-0.5 transition-all">Join Network</Link>
+                                {/* Pages Card */}
+                                <motion.div variants={mobileNavItem} className="bg-slate-900 rounded-[2rem] p-6 shadow-2xl border border-slate-800">
+                                    <h4 className="text-white font-black text-xl mb-3 tracking-tight">Explore</h4>
+                                    <div className="flex flex-col">
+                                        <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
+                                        <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink>
+                                        <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Courses</MobileNavLink>
+                                        <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink>
                                     </div>
-                                )}
-                            </motion.div>
+                                </motion.div>
 
-                            <div className="flex items-center justify-center gap-2 text-slate-300 mt-auto">
-                                <Zap size={14} />
-                                <span className="text-[10px] uppercase font-black tracking-widest">Secure Link Established</span>
-                            </div>
+                                {/* Academics Card */}
+                                <motion.div variants={mobileNavItem} className="bg-slate-900 rounded-[2rem] p-6 shadow-2xl border border-slate-800">
+                                    <h4 className="text-white font-black text-xl mb-3 tracking-tight">Academics</h4>
+                                    <div className="flex flex-col">
+                                        <MobileNavLink to="/certificate" onClick={() => setIsOpen(false)}>Certificate Download</MobileNavLink>
+                                        <MobileNavLink to="/fee-check" onClick={() => setIsOpen(false)}>Fee Check / Verify</MobileNavLink>
+                                    </div>
+                                </motion.div>
+
+                                {/* Management / Portal Card */}
+                                <motion.div variants={mobileNavItem} className="bg-slate-900 rounded-[2rem] p-6 shadow-2xl border border-slate-800">
+                                    <h4 className="text-white font-black text-xl mb-3 tracking-tight">Portal Interface</h4>
+                                    <div className="flex flex-col">
+                                        {user || isStudent ? (
+                                            <>
+                                                <MobileNavLink to={isStudent ? "/student-portal" : "/profile"} onClick={() => setIsOpen(false)}>
+                                                    <span className="text-blue-400">{isStudent ? student?.fullName?.split(' ')[0] + "'s Profile" : role}</span>
+                                                </MobileNavLink>
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="w-full flex items-center gap-3 px-2 py-3 text-red-500 hover:text-red-400 transition-all group text-left font-medium text-[15px]"
+                                                >
+                                                    <LogOut size={16} className="text-red-500/50 group-hover:text-red-400 group-hover:-translate-x-1 transition-all" />
+                                                    <span className="group-hover:translate-x-1 transition-transform">Logout Session</span>
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <MobileNavLink to="/login" onClick={() => setIsOpen(false)}>Login / Secure Access</MobileNavLink>
+                                                <MobileNavLink to="/register" onClick={() => setIsOpen(false)}>Join Main Network</MobileNavLink>
+                                            </>
+                                        )}
+
+                                        {(role === 'admin' || role === 'super_admin') && (
+                                            <div className="pt-4 border-t border-slate-700/50 mt-3 flex flex-col gap-1">
+                                                <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
+                                                    <span className="text-purple-400">Main Admin Panel</span>
+                                                </MobileNavLink>
+                                                <MobileNavLink to="/admin/coaching" onClick={() => setIsOpen(false)}>
+                                                    <span className="text-purple-400">Student Database</span>
+                                                </MobileNavLink>
+                                            </div>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            </motion.div>
                         </motion.div>
                     </div>
                 )}
