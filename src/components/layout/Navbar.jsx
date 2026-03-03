@@ -78,8 +78,8 @@ export default function Navbar() {
                 )}>
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-3 group">
-                        <div className="h-10 w-auto group-hover:scale-105 transition-all duration-500 rounded-lg overflow-hidden flex items-center justify-center bg-white p-1">
-                            <img src="/assets/img/logo.png" alt="ByteCore Logo" className="h-full w-auto object-contain" onError={(e) => { e.target.onerror = null; e.target.src = "https://via.placeholder.com/150x50?text=ByteCore" }} />
+                        <div className="h-10 w-10 group-hover:scale-110 transition-all duration-500 rounded-xl overflow-hidden flex items-center justify-center bg-white shadow-sm border border-slate-100 p-1">
+                            <img src="/favicon.ico" alt="ByteCore Logo" className="h-full w-full object-contain" />
                         </div>
                         <div className="flex flex-col">
                             <span className="font-black text-xl text-slate-900 tracking-tighter leading-none hidden sm:block">
@@ -207,8 +207,8 @@ export default function Navbar() {
 
                             <div className="flex justify-between items-center mb-8 relative z-10 px-2 mt-2">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-2xl bg-slate-900 flex items-center justify-center shadow-lg">
-                                        <Zap size={20} className="text-white" />
+                                    <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center shadow-lg p-1 overflow-hidden border border-slate-100">
+                                        <img src="/favicon.ico" alt="Logo" className="w-full h-full object-contain" />
                                     </div>
                                     <span className="font-black text-2xl text-slate-900 tracking-tighter">ByteCore</span>
                                 </div>
