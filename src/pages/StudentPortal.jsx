@@ -9,6 +9,10 @@ import {
 import { useAuth } from '../app/common/AuthContext';
 import QuizModule from '../components/student/QuizModule';
 import { COURSE_CURRICULUM, QUIZ_BANK } from '../lib/quizData';
+import { uploadToCloudinary } from '../lib/cloudinary';
+import { db } from '../firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
+import { Camera, Loader2, ImagePlus } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export default function StudentPortal() {
@@ -26,6 +30,32 @@ export default function StudentPortal() {
         const modules = COURSE_CURRICULUM[courseKey] || [];
         return modules.map(id => ({ id, ...QUIZ_BANK[id] })).filter(m => m.title);
     }, [student?.course]);
+
+    const [isUploading, setIsUploading] = useState(false);
+
+    const handlePhotoUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            // 1. Upload to Cloudinary
+            const imageUrl = await uploadToCloudinary(file);
+
+            // 2. Update Firestore
+            const studentRef = doc(db, 'students', student.registration);
+            await updateDoc(studentRef, {
+                photoUrl: imageUrl,
+                updatedAt: new Date()
+            });
+            // AuthContext's onSnapshot handle refresh
+        } catch (error) {
+            console.error('Photo upload failed:', error);
+            alert(error.message || 'Failed to update profile photo.');
+        } finally {
+            setIsUploading(false);
+        }
+    };
 
     if (!student) {
         return (
@@ -58,7 +88,7 @@ export default function StudentPortal() {
                     <div className="flex items-center gap-6">
                         <div className="relative group">
                             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2rem] blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                            <div className="relative h-24 w-24 md:h-32 md:w-32 rounded-[2rem] bg-white p-1 shadow-2xl overflow-hidden border border-white/50">
+                            <div className="relative h-24 w-24 md:h-32 md:w-32 rounded-[2rem] bg-white p-1 shadow-2xl overflow-hidden border border-white/50 group/photo">
                                 {student.photoUrl ? (
                                     <img src={student.photoUrl} alt="" className="h-full w-full object-cover rounded-[1.8rem]" />
                                 ) : (
@@ -66,6 +96,28 @@ export default function StudentPortal() {
                                         {student.fullName?.[0]}
                                     </div>
                                 )}
+
+                                {/* Upload Overlay */}
+                                <label className={cn(
+                                    "absolute inset-0 flex flex-col items-center justify-center bg-slate-900/60 transition-all cursor-pointer",
+                                    isUploading ? "opacity-100" : "opacity-0 group-hover/photo:opacity-100"
+                                )}>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={handlePhotoUpload}
+                                        disabled={isUploading}
+                                    />
+                                    {isUploading ? (
+                                        <Loader2 className="animate-spin text-white" size={24} />
+                                    ) : (
+                                        <>
+                                            <Camera size={24} className="text-white mb-1" />
+                                            <span className="text-[10px] text-white font-black uppercase tracking-widest px-2 text-center">Update Photo</span>
+                                        </>
+                                    )}
+                                </label>
                             </div>
                         </div>
                         <div>
