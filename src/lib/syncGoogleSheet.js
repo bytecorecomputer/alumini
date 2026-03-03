@@ -6,6 +6,7 @@ import Papa from 'papaparse';
 /**
  * Parses a CSV string into an array of objects.
  * Uses PapaParse to handle complex CSV rules and duplicate columns correctly.
+ * Dynamically finds the header row to handle sheets with titles in the first row.
  */
 function parseCSV(str) {
     const parsed = Papa.parse(str, { skipEmptyLines: true });
@@ -17,15 +18,27 @@ function parseCSV(str) {
     const rows = parsed.data;
     if (rows.length < 2) return [];
 
-    const headers = rows[0].map(h => h.trim());
+    // Find the actual header row
+    let headerRowIndex = 0;
+    for (let i = 0; i < Math.min(5, rows.length); i++) {
+        const rowStr = rows[i].join('').toLowerCase();
+        if (rowStr.includes('student name') || rowStr.includes('registration')) {
+            headerRowIndex = i;
+            break;
+        }
+    }
+
+    const headers = rows[headerRowIndex].map(h => typeof h === 'string' ? h.trim() : '');
     const dataObjects = [];
 
-    for (let i = 1; i < rows.length; i++) {
+    for (let i = headerRowIndex + 1; i < rows.length; i++) {
         const rowData = rows[i];
         const obj = {};
         for (let j = 0; j < headers.length; j++) {
             const h = headers[j];
-            const val = rowData[j] ? rowData[j].trim() : '';
+            if (!h) continue; // Skip empty headers
+            // ensure we work with strings to use .trim() safely
+            const val = rowData[j] ? (typeof rowData[j] === 'string' ? rowData[j].trim() : String(rowData[j]).trim()) : '';
             if (obj[h] !== undefined) {
                 if (Array.isArray(obj[h])) {
                     obj[h].push(val);
