@@ -22,7 +22,7 @@ export default function Login() {
   const [resetSuccess, setResetSuccess] = useState("");
   const [resetError, setResetError] = useState("");
 
-  const [loginMode, setLoginMode] = useState("alumni"); // "alumni" or "student"
+  const [loginMode, setLoginMode] = useState("student"); // "alumni" or "student"
   const [studentReg, setStudentReg] = useState("");
   const [studentMobile, setStudentMobile] = useState("");
 
