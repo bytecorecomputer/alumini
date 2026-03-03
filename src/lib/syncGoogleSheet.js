@@ -103,7 +103,7 @@ function normalizeStatus(status) {
     return 'unpaid';
 }
 
-export async function syncFromGoogleSheet(csvUrl) {
+export async function syncFromGoogleSheet(csvUrl, centerName = 'Nariyawal') {
     try {
         const response = await fetch(csvUrl);
         if (!response.ok) throw new Error("Failed to fetch CSV from Google Sheets");
@@ -117,7 +117,7 @@ export async function syncFromGoogleSheet(csvUrl) {
         let batchCount = 0;
 
         for (const row of data) {
-            const regId = row['Registration'];
+            const regId = row['Registration'] || row['Registration NO.'];
             if (!regId || regId === '' || isNaN(regId)) continue; // Skip invalid or missing registration IDs
 
             const student = {
@@ -129,17 +129,25 @@ export async function syncFromGoogleSheet(csvUrl) {
                 mobile: row['Mob. No.']?.trim() || '',
                 address: row['Address ']?.trim() || row['Address']?.trim() || '',
                 admissionDate: normalizeDate((row['Admission Date'] || '').trim()),
-                registrationFee: parseInt(row['Registration Fee']) || 0,
+                registrationFee: parseInt(row['Registration Fee'] || row['Regi. Fee']) || 0,
                 totalFees: parseInt(row['Total Fee']) || 0,
-                center: 'Nariyawal', // Defaulting as per previous implementations
+                center: centerName, // Defaulting as per parameter
                 updatedAt: Date.now()
             };
 
-            // Extract all dynamic "Fee / Date" columns
+            // Extract all dynamic "Fee / Date" or "Fee - Date" columns
             let installments = [];
             let totalPaid = 0;
 
-            const feeDateCells = Array.isArray(row['Fee / Date']) ? row['Fee / Date'] : [row['Fee / Date']];
+            let feeDateCells = [];
+            if (row['Fee / Date']) {
+                feeDateCells = Array.isArray(row['Fee / Date']) ? row['Fee / Date'] : [row['Fee / Date']];
+            } else if (row['Fee - Date']) {
+                feeDateCells = Array.isArray(row['Fee - Date']) ? row['Fee - Date'] : [row['Fee - Date']];
+            } else if (row['Fee - Date ']) { // handle potential trailing spaces
+                feeDateCells = Array.isArray(row['Fee - Date ']) ? row['Fee - Date '] : [row['Fee - Date ']];
+            }
+
             for (const cellValue of feeDateCells) {
                 if (cellValue && cellValue.trim() !== '') {
                     const parsedInstalls = parseInstallment(cellValue.trim());
