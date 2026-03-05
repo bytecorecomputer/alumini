@@ -68,21 +68,23 @@ export default function Navbar() {
 
     return (
         <nav className={cn(
-            "fixed top-0 w-full z-[100] transition-all duration-500 px-4 md:px-8 py-4",
-            scrolled ? "py-2" : "py-4"
+            "fixed top-0 w-full z-[100] transition-all duration-700 px-4 md:px-8 py-6",
+            scrolled ? "py-3" : "py-6"
         )}>
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-7xl mx-auto flex justify-center">
                 <div className={cn(
-                    "glass rounded-[2rem] px-6 h-20 flex justify-between items-center relative z-20 transition-all duration-500",
-                    scrolled ? "shadow-2xl shadow-slate-200/50 border-white/40 h-16" : "shadow-none border-transparent h-20"
+                    "glass px-6 h-20 flex justify-between items-center relative z-20 transition-all duration-700",
+                    scrolled
+                        ? "rounded-full shadow-2xl shadow-blue-900/10 border-white/40 h-16 w-full max-w-5xl bg-white/70 backdrop-blur-2xl px-1.5"
+                        : "rounded-[2.5rem] shadow-none border-transparent h-20 w-full bg-transparent px-6"
                 )}>
-                    {/* Logo */}
-                    <Link to="/" className="flex items-center gap-3 group">
+                    {/* Logo Area */}
+                    <Link to="/" className="flex items-center gap-3 group ml-2">
                         <div className="h-10 w-10 group-hover:scale-110 transition-all duration-500 rounded-xl overflow-hidden flex items-center justify-center bg-white shadow-sm border border-slate-100 p-1">
                             <img src="/logo.png" alt="ByteCore Logo" className="h-full w-full object-contain" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none hidden sm:block">
+                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none hidden sm:block italic">
                                 ByteCore <span className="text-blue-600">Computer Centre</span>
                             </span>
                             <span className="font-black text-xl text-slate-900 tracking-tighter leading-none sm:hidden">
@@ -91,51 +93,20 @@ export default function Navbar() {
                         </div>
                     </Link>
 
-                    {/* Desktop Nav */}
-                    <div className="hidden lg:flex items-center space-x-1">
+                    {/* Minimal Desktop Nav - Center Aligned */}
+                    <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 bg-slate-100/50 backdrop-blur-md rounded-full p-1 border border-slate-200/50">
                         <NavLink to="/">Home</NavLink>
-                        {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
-                        <NavLink to="/about">About Us</NavLink>
-                        <NavLink to="/gallery">Lab Gallery</NavLink>
-                        <NavLink to="/certificate">Certificate</NavLink>
+                        <NavLink to="/courses">Courses</NavLink>
                         <NavLink to="/contact">Contact</NavLink>
+                        {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
+                    </div>
 
-                        {(role === 'admin' || role === 'super_admin') && (
-                            <div className="relative group/mgmt">
-                                <button className="px-5 py-2.5 text-slate-500 hover:text-slate-900 font-black text-xs uppercase tracking-widest transition-all hover:bg-slate-50 rounded-2xl flex items-center gap-2">
-                                    <Shield size={16} className="text-blue-600" /> Management
-                                </button>
-                                <div className="absolute top-full left-0 pt-2 opacity-0 translate-y-2 pointer-events-none group-hover/mgmt:opacity-100 group-hover/mgmt:translate-y-0 group-hover/mgmt:pointer-events-auto transition-all duration-300">
-                                    <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 p-2 min-w-[200px]">
-                                        <Link to="/admin/dashboard" className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-all group/item">
-                                            <div className="bg-purple-50 text-purple-600 p-2 rounded-lg group-hover/item:bg-purple-600 group-hover/item:text-white transition-colors">
-                                                <Shield size={14} />
-                                            </div>
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Admin Panel</span>
-                                        </Link>
-                                        <Link to="/admin/coaching" className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-all group/item">
-                                            <div className="bg-blue-50 text-blue-600 p-2 rounded-lg group-hover/item:bg-blue-600 group-hover/item:text-white transition-colors">
-                                                <Database size={14} />
-                                            </div>
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Students</span>
-                                        </Link>
-                                        <Link to="/admin/certificates/upload" className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-xl transition-all group/item">
-                                            <div className="bg-emerald-50 text-emerald-600 p-2 rounded-lg group-hover/item:bg-emerald-600 group-hover/item:text-white transition-colors">
-                                                <Shield size={14} />
-                                            </div>
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Upload Certs</span>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="h-6 w-px bg-slate-200/60 mx-4" />
-
+                    {/* Right Side Actions */}
+                    <div className="hidden lg:flex items-center gap-2">
                         {user || isStudent ? (
-                            <div className="flex items-center gap-3">
-                                <Link to={isStudent ? "/student-portal" : "/profile"} className="flex items-center gap-3 p-1 pr-4 bg-slate-50 hover:bg-white border border-transparent hover:border-slate-100 rounded-full transition-all group shadow-sm">
-                                    <div className="h-9 w-9 rounded-full bg-slate-200 overflow-hidden border-2 border-white shadow-sm ring-1 ring-slate-100">
+                            <div className="flex items-center gap-2">
+                                <Link to={isStudent ? "/student-portal" : "/profile"} className="flex items-center gap-3 p-1 pr-4 bg-white hover:bg-slate-50 border border-slate-200 rounded-full transition-all group shadow-sm">
+                                    <div className="h-9 w-9 rounded-full bg-slate-200 overflow-hidden border-2 border-white shadow-sm">
                                         {isStudent ? (
                                             student.photoUrl ? (
                                                 <img src={student.photoUrl} alt="" className="h-full w-full object-cover" />
@@ -152,22 +123,21 @@ export default function Navbar() {
                                             </div>
                                         )}
                                     </div>
-                                    <span className="text-xs font-black text-slate-700 uppercase tracking-widest">
+                                    <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">
                                         {isStudent ? student.fullName?.split(' ')[0] : user.displayName?.split(' ')[0]}
                                     </span>
                                 </Link>
                                 <button
                                     onClick={handleLogout}
-                                    className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"
-                                    title="Logout"
+                                    className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
                                 >
-                                    <LogOut size={20} />
+                                    <LogOut size={18} />
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex items-center gap-4">
-                                <Link to="/login" className="px-6 py-2.5 text-slate-500 hover:text-slate-900 font-black text-xs uppercase tracking-widest transition-colors">Login</Link>
-                                <Link to="/register" className="btn-premium px-8 py-3.5 bg-slate-900 text-white shadow-xl shadow-slate-200 text-xs uppercase tracking-widest">
+                            <div className="flex items-center gap-3">
+                                <Link to="/login" className="px-6 py-2.5 text-slate-500 hover:text-slate-900 font-black text-[10px] uppercase tracking-widest transition-colors">Login</Link>
+                                <Link to="/register" className="btn-premium px-8 py-3.5 bg-slate-900 text-white shadow-xl shadow-slate-200 text-[10px] font-black uppercase tracking-widest rounded-full">
                                     Join Network
                                 </Link>
                             </div>
@@ -175,10 +145,10 @@ export default function Navbar() {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <div className="lg:hidden">
+                    <div className="lg:hidden flex items-center gap-3">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="p-3 text-slate-900 bg-slate-50 hover:bg-white rounded-2xl transition-all border border-transparent hover:border-slate-100"
+                            className="p-3 text-slate-900 bg-slate-100 hover:bg-white rounded-2xl transition-all border border-transparent shadow-sm"
                         >
                             {isOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
@@ -186,7 +156,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Nav Overlay (Card Nav Style) */}
+            {/* Mobile Nav Overlay (The Toggle/Card Nav) */}
             <AnimatePresence>
                 {isOpen && (
                     <div className="fixed inset-0 z-[90] lg:hidden flex justify-end">
@@ -195,94 +165,65 @@ export default function Navbar() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsOpen(false)}
-                            className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
                         />
                         <motion.div
-                            initial={{ x: '120%', scale: 0.9, opacity: 0, rotateY: 15 }}
-                            animate={{ x: 0, scale: 1, opacity: 1, rotateY: 0 }}
-                            exit={{ x: '120%', scale: 0.9, opacity: 0, rotateY: 15 }}
-                            transition={{ type: "spring", damping: 22, stiffness: 200, mass: 1, bounce: 0.2 }}
-                            className="relative h-[calc(100vh-32px)] w-[calc(100%-32px)] max-w-sm bg-[#f8fafc] backdrop-blur-3xl shadow-[0_0_100px_rgba(30,58,138,0.2)] rounded-[2.5rem] p-6 pt-10 m-4 flex flex-col overflow-y-auto overflow-x-hidden border border-white perspective-[1000px] no-scrollbar"
+                            initial={{ x: '100%', opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            exit={{ x: '100%', opacity: 0 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="relative h-full w-full max-w-sm bg-white shadow-2xl p-6 pt-10 flex flex-col overflow-y-auto"
                         >
-                            <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.15]" style={{ backgroundImage: 'radial-gradient(#0f172a 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
-
-                            <div className="flex justify-between items-center mb-8 relative z-10 px-2 mt-2">
+                            <div className="flex justify-between items-center mb-12">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center shadow-lg p-1 overflow-hidden border border-slate-100">
+                                    <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center p-1 border border-slate-100">
                                         <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
                                     </div>
-                                    <span className="font-black text-2xl text-slate-900 tracking-tighter">ByteCore</span>
+                                    <span className="font-black text-2xl text-slate-900 tracking-tighter italic">ByteCore</span>
                                 </div>
-                                <button
-                                    onClick={() => setIsOpen(false)}
-                                    className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 rounded-full transition-all"
-                                >
-                                    <X size={28} strokeWidth={1.5} />
-                                </button>
+                                <X size={32} onClick={() => setIsOpen(false)} className="text-slate-400 cursor-pointer" />
                             </div>
 
                             <motion.div
                                 variants={mobileNavContainer}
                                 initial="hidden"
                                 animate="show"
-                                className="flex flex-col gap-4 flex-grow relative z-10 pb-20"
+                                className="flex flex-col gap-6"
                             >
-                                {/* Pages Card */}
-                                <motion.div variants={mobileNavItem} className="bg-slate-900 rounded-[2rem] p-6 shadow-2xl border border-slate-800">
-                                    <h4 className="text-white font-black text-xl mb-3 tracking-tight">Explore</h4>
-                                    <div className="flex flex-col">
-                                        <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home</MobileNavLink>
-                                        <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink>
-                                        <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Courses</MobileNavLink>
-                                        <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Contact</MobileNavLink>
-                                    </div>
-                                </motion.div>
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-4 ml-2">Quick Navigation</p>
+                                    <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home Landing</MobileNavLink>
+                                    <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Our Journey</MobileNavLink>
+                                    <MobileNavLink to="/gallery" onClick={() => setIsOpen(false)}>Lab Gallery Feed</MobileNavLink>
+                                    <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Professional Courses</MobileNavLink>
+                                    <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Connect with Us</MobileNavLink>
+                                </div>
 
-                                {/* Academics Card */}
-                                <motion.div variants={mobileNavItem} className="bg-slate-900 rounded-[2rem] p-6 shadow-2xl border border-slate-800">
-                                    <h4 className="text-white font-black text-xl mb-3 tracking-tight">Academics</h4>
-                                    <div className="flex flex-col">
-                                        <MobileNavLink to="/certificate" onClick={() => setIsOpen(false)}>Certificate Download</MobileNavLink>
-                                        <MobileNavLink to="/fee-check" onClick={() => setIsOpen(false)}>Fee Check / Verify</MobileNavLink>
-                                    </div>
-                                </motion.div>
+                                <div className="space-y-1 pt-6 border-t border-slate-100">
+                                    <p className="text-[10px] font-black text-purple-600 uppercase tracking-[0.2em] mb-4 ml-2">Academics & Trust</p>
+                                    <MobileNavLink to="/certificate" onClick={() => setIsOpen(false)}>Student Certificates</MobileNavLink>
+                                    <MobileNavLink to="/fee-check" onClick={() => setIsOpen(false)}>Course Fee Verification</MobileNavLink>
+                                </div>
 
-                                {/* Management / Portal Card */}
-                                <motion.div variants={mobileNavItem} className="bg-slate-900 rounded-[2rem] p-6 shadow-2xl border border-slate-800">
-                                    <h4 className="text-white font-black text-xl mb-3 tracking-tight">Portal Interface</h4>
-                                    <div className="flex flex-col">
-                                        {user || isStudent ? (
-                                            <>
-                                                <MobileNavLink to={isStudent ? "/student-portal" : "/profile"} onClick={() => setIsOpen(false)}>
-                                                    <span className="text-blue-400">{isStudent ? student?.fullName?.split(' ')[0] + "'s Profile" : role}</span>
-                                                </MobileNavLink>
-                                                <button
-                                                    onClick={handleLogout}
-                                                    className="w-full flex items-center gap-3 px-2 py-3 text-red-500 hover:text-red-400 transition-all group text-left font-medium text-[15px]"
-                                                >
-                                                    <LogOut size={16} className="text-red-500/50 group-hover:text-red-400 group-hover:-translate-x-1 transition-all" />
-                                                    <span className="group-hover:translate-x-1 transition-transform">Logout Session</span>
-                                                </button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <MobileNavLink to="/login" onClick={() => setIsOpen(false)}>Login / Secure Access</MobileNavLink>
-                                                <MobileNavLink to="/register" onClick={() => setIsOpen(false)}>Join Main Network</MobileNavLink>
-                                            </>
-                                        )}
-
-                                        {(role === 'admin' || role === 'super_admin') && (
-                                            <div className="pt-4 border-t border-slate-700/50 mt-3 flex flex-col gap-1">
-                                                <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>
-                                                    <span className="text-purple-400">Main Admin Panel</span>
-                                                </MobileNavLink>
-                                                <MobileNavLink to="/admin/coaching" onClick={() => setIsOpen(false)}>
-                                                    <span className="text-purple-400">Student Database</span>
-                                                </MobileNavLink>
-                                            </div>
-                                        )}
-                                    </div>
-                                </motion.div>
+                                <div className="mt-auto pt-10 space-y-4">
+                                    {user || isStudent ? (
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full py-4 bg-red-50 text-red-600 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"
+                                        >
+                                            <LogOut size={16} /> Sign Out Session
+                                        </button>
+                                    ) : (
+                                        <>
+                                            <Link to="/login" onClick={() => setIsOpen(false)} className="block w-full py-4 text-center border border-slate-200 rounded-2xl font-black uppercase text-[10px] tracking-widest text-slate-700">
+                                                Login Account
+                                            </Link>
+                                            <Link to="/register" onClick={() => setIsOpen(false)} className="block w-full py-4 text-center bg-slate-900 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-slate-200">
+                                                Register Profile
+                                            </Link>
+                                        </>
+                                    )}
+                                </div>
                             </motion.div>
                         </motion.div>
                     </div>
