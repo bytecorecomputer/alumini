@@ -84,10 +84,10 @@ export default function Navbar() {
                             <img src="/logo.png" alt="ByteCore Logo" className="h-full w-full object-contain" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none hidden sm:block italic">
+                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none hidden lg:block italic">
                                 ByteCore <span className="text-blue-600">Computer Centre</span>
                             </span>
-                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none sm:hidden">
+                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none lg:hidden italic">
                                 ByteCore
                             </span>
                         </div>
@@ -101,12 +101,12 @@ export default function Navbar() {
                         {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
                     </div>
 
-                    {/* Right Side Actions */}
-                    <div className="hidden lg:flex items-center gap-2">
+                    {/* Actions (Responsive) */}
+                    <div className="flex items-center gap-2">
                         {user || isStudent ? (
                             <div className="flex items-center gap-2">
-                                <Link to={isStudent ? "/student-portal" : "/profile"} className="flex items-center gap-3 p-1 pr-4 bg-white hover:bg-slate-50 border border-slate-200 rounded-full transition-all group shadow-sm">
-                                    <div className="h-9 w-9 rounded-full bg-slate-200 overflow-hidden border-2 border-white shadow-sm">
+                                <Link to={isStudent ? "/student-portal" : "/profile"} className="flex items-center gap-1.5 p-1 pr-3 md:pr-4 bg-white/80 hover:bg-white border border-slate-200 rounded-full transition-all group shadow-sm">
+                                    <div className="h-8 w-8 md:h-9 md:w-9 rounded-full bg-slate-200 overflow-hidden border-2 border-white shadow-sm">
                                         {isStudent ? (
                                             student.photoUrl ? (
                                                 <img src={student.photoUrl} alt="" className="h-full w-full object-cover" />
@@ -123,35 +123,43 @@ export default function Navbar() {
                                             </div>
                                         )}
                                     </div>
-                                    <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">
+                                    <span className="text-[9px] md:text-[10px] font-black text-slate-700 uppercase tracking-widest hidden sm:block">
                                         {isStudent ? student.fullName?.split(' ')[0] : user.displayName?.split(' ')[0]}
                                     </span>
                                 </Link>
                                 <button
                                     onClick={handleLogout}
-                                    className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                                    className="p-2.5 md:p-3 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all hidden md:block"
                                 >
                                     <LogOut size={18} />
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex items-center gap-3">
-                                <Link to="/login" className="px-6 py-2.5 text-slate-500 hover:text-slate-900 font-black text-[10px] uppercase tracking-widest transition-colors">Login</Link>
-                                <Link to="/register" className="btn-premium px-8 py-3.5 bg-slate-900 text-white shadow-xl shadow-slate-200 text-[10px] font-black uppercase tracking-widest rounded-full">
-                                    Join Network
+                            <div className="flex items-center gap-1.5 md:gap-3">
+                                <Link
+                                    to="/login"
+                                    className="px-4 md:px-6 py-2.5 text-slate-500 hover:text-slate-900 font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-colors"
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    to="/register"
+                                    className="btn-premium px-5 md:px-8 py-2.5 md:py-3.5 bg-slate-900 text-white shadow-lg shadow-slate-200 text-[9px] md:text-[10px] font-black uppercase tracking-widest rounded-full whitespace-nowrap"
+                                >
+                                    Join
                                 </Link>
                             </div>
                         )}
-                    </div>
 
-                    {/* Mobile Menu Button */}
-                    <div className="lg:hidden flex items-center gap-3">
-                        <button
-                            onClick={() => setIsOpen(!isOpen)}
-                            className="p-3 text-slate-900 bg-slate-100 hover:bg-white rounded-2xl transition-all border border-transparent shadow-sm"
-                        >
-                            {isOpen ? <X size={24} /> : <Menu size={24} />}
-                        </button>
+                        {/* Mobile Menu Toggle */}
+                        <div className="lg:hidden">
+                            <button
+                                onClick={() => setIsOpen(!isOpen)}
+                                className="p-3 text-slate-900 bg-slate-100 hover:bg-white rounded-2xl transition-all border border-transparent shadow-sm active:scale-95"
+                            >
+                                {isOpen ? <X size={24} /> : <Menu size={24} />}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
