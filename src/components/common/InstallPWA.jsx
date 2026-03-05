@@ -2,10 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { Download, X, Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const STORAGE_KEY = 'bytecore_pwa_install_dismissed';
+const DISMISS_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
 export default function InstallPWA() {
     const [deferredPrompt, setDeferredPrompt] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
     const [isStandalone, setIsStandalone] = useState(false);
+
+    const checkDismissalState = () => {
+        const dismissedAt = localStorage.getItem(STORAGE_KEY);
+        if (dismissedAt) {
+            const timePassed = Date.now() - parseInt(dismissedAt);
+            if (timePassed < DISMISS_DURATION) {
+                return true; // Still dismissed
+            }
+            localStorage.removeItem(STORAGE_KEY); // Expired, clear it
+        }
+        return false;
+    };
+
+    const markAsDismissed = () => {
+        localStorage.setItem(STORAGE_KEY, Date.now().toString());
+        setIsVisible(false);
+    };
 
     useEffect(() => {
         // Check if already installed
@@ -18,15 +38,18 @@ export default function InstallPWA() {
             e.preventDefault();
             // Stash the event so it can be triggered later.
             setDeferredPrompt(e);
-            // Update UI notify the user they can install the PWA
-            setIsVisible(true);
+
+            // Only show if not recently dismissed
+            if (!checkDismissalState()) {
+                setIsVisible(true);
+            }
         };
 
         window.addEventListener('beforeinstallprompt', handler);
 
         // Check for iOS instructions
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS && !isStandalone) {
+        if (isIOS && !isStandalone && !checkDismissalState()) {
             // Show iOS specific instructions after a short delay
             const timer = setTimeout(() => setIsVisible(true), 3000);
             return () => clearTimeout(timer);
@@ -39,6 +62,7 @@ export default function InstallPWA() {
         if (!deferredPrompt) {
             // If on iOS, maybe show a nice modal with instructions
             alert('To install on iOS: Tap the "Share" button and then "Add to Home Screen".');
+            markAsDismissed(); // Also mark as dismissed so it doesn't pop up again immediately
             return;
         }
 
@@ -50,13 +74,14 @@ export default function InstallPWA() {
 
         if (outcome === 'accepted') {
             console.log('User accepted the install prompt');
+            markAsDismissed(); // Hide it once installed or action taken
         } else {
             console.log('User dismissed the install prompt');
+            markAsDismissed(); // Respect the dismissal
         }
 
         // We've used the prompt, and can't use it again, throw it away
         setDeferredPrompt(null);
-        setIsVisible(false);
     };
 
     if (isStandalone || !isVisible) return null;
@@ -88,7 +113,7 @@ export default function InstallPWA() {
                             Install
                         </button>
                         <button
-                            onClick={() => setIsVisible(false)}
+                            onClick={markAsDismissed}
                             className="p-2 text-slate-400 hover:text-white transition-colors"
                         >
                             <X size={18} />
