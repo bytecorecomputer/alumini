@@ -11,7 +11,7 @@ const icons = {
 export default function ProfileCard({
     name = 'ByteCore Member',
     role = 'Instructor',
-    image = 'https://bytecores.in/images/logo.png',
+    image = '/logo.png',
     theme = 'light',
     bgColor = '#ffffff',
     className = '',
