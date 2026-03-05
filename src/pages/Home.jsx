@@ -19,6 +19,90 @@ import webLottie from '../assets/lottie/web.json';
 import dataLottie from '../assets/lottie/data.json';
 import pythonLottie from '../assets/lottie/python.json';
 
+// Import Lab Assets
+import labVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
+import labImg1 from '../assets/images/computer lab/students (1).jpg';
+import labImg2 from '../assets/images/computer lab/students (2).jpg';
+
+const LabGallery = () => {
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 md:p-8 max-w-7xl mx-auto h-auto md:h-[600px]">
+            {/* Main Video Feature */}
+            <motion.div
+                whileHover={{ scale: 1.01 }}
+                className="md:col-span-2 md:row-span-2 relative group rounded-[2.5rem] overflow-hidden bg-slate-800 border-2 border-slate-700 shadow-2xl"
+            >
+                <div className="absolute top-6 left-6 z-20 flex items-center gap-2 bg-red-600/90 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg animate-pulse">
+                    <span className="w-2 h-2 bg-white rounded-full"></span>
+                    Live Teaching Lab
+                </div>
+                <video
+                    src={labVideo}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
+                <div className="absolute bottom-10 left-10 z-20">
+                    <h3 className="text-2xl font-black text-white tracking-tight mb-2">Rahul Sir Teaching</h3>
+                    <p className="text-slate-300 text-sm font-medium">Hands-on offline guidance for complex tech concepts.</p>
+                </div>
+            </motion.div>
+
+            {/* Photo 1 */}
+            <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="md:col-span-2 relative group rounded-[2.5rem] overflow-hidden bg-slate-800 border border-slate-700/50 shadow-xl"
+            >
+                <img
+                    src={labImg1}
+                    alt="Students in Lab"
+                    className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent"></div>
+                <div className="absolute bottom-6 left-8 z-20">
+                    <span className="text-blue-400 text-[10px] font-black uppercase tracking-widest mb-1 block">Nariyawal HQ</span>
+                    <h4 className="text-xl font-black text-white">Student Lab Focus</h4>
+                </div>
+            </motion.div>
+
+            {/* Photo 2 */}
+            <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="md:col-span-1 relative group rounded-[2.5rem] overflow-hidden bg-slate-800 border border-slate-700/50 shadow-xl"
+            >
+                <img
+                    src={labImg2}
+                    alt="Lab Atmosphere"
+                    className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent"></div>
+                <div className="absolute bottom-6 left-8 z-20">
+                    <h4 className="text-lg font-black text-white">Learning Hub</h4>
+                </div>
+            </motion.div>
+
+            {/* Stats / Branding Card */}
+            <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="md:col-span-1 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] p-8 flex flex-col justify-between items-center text-center shadow-2xl relative overflow-hidden group"
+            >
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20 bg-[length:20px_20px]"></div>
+                <Laptop className="w-12 h-12 text-white/50 mb-4 relative z-10 group-hover:scale-110 transition-transform" />
+                <div className="relative z-10">
+                    <div className="text-4xl font-black text-white mb-2 tracking-tighter italic">2024</div>
+                    <p className="text-blue-100 text-[10px] font-black uppercase tracking-widest leading-relaxed">Redefining Tech Education</p>
+                </div>
+                <div className="mt-4 relative z-10 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 w-full">
+                    <p className="text-xs text-white font-medium italic">"Best Lab in Bareilly"</p>
+                </div>
+            </motion.div>
+        </div>
+    );
+};
+
 const DomeCarousel = () => {
     const students = [
         "ABHISHEK (DCST).jpg", "ADIL (DCST).jpg", "ADITYA (ADCA).jpg", "ADITYA (DCST).jpg",
@@ -512,18 +596,40 @@ export default function Home() {
                 </div>
             </div >
 
-            {/* --- STUDENT DOME GALLERY (React Bits Style) --- */}
-            < div className="py-32 bg-slate-900 border-t border-slate-800 relative overflow-hidden" >
-                <div className="absolute top-0 left-1/2 w-[800px] h-[800px] bg-blue-500/10 rounded-full blur-[150px] -z-10 transform -translate-x-1/2"></div>
-                <div className="max-w-[100vw] mx-auto text-center z-10 relative overflow-hidden">
-                    <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4 block">Proven Results</span>
-                    <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6 relative z-20">The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">ByteCore Dome</span></h2>
-                    <p className="text-slate-400 font-medium mb-12 max-w-2xl mx-auto text-lg px-6 relative z-20">Discover the incredible environment where our students build projects, attend intensive offline labs, and map their success.</p>
+            {/* --- STUDENT LAB GALLERY (Bento Grid) --- */}
+            <div className="py-32 bg-slate-950 border-t border-slate-900 relative overflow-hidden">
+                <div className="absolute top-0 left-1/2 w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[200px] -z-10 transform -translate-x-1/2"></div>
+                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[150px] -z-10"></div>
 
-                    <DomeCarousel />
-
+                <div className="max-w-7xl mx-auto text-center z-10 relative mb-16 px-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                            Authentic Environment
+                        </span>
+                        <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-8 italic">
+                            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-200 to-indigo-400">ByteCore Lab</span> Experience
+                        </h2>
+                        <p className="text-slate-400 font-medium max-w-2xl mx-auto text-lg leading-relaxed">
+                            Step inside our state-of-the-art computer labs. This is where theory meets practice, and students transform into industry-ready professionals.
+                        </p>
+                    </motion.div>
                 </div>
-            </div >
+
+                <LabGallery />
+
+                {/* Legacy Dome Carousel (Reduced prominence or hidden) */}
+                <div className="mt-24 pointer-events-none opacity-20 grayscale transition-all hover:grayscale-0 hover:opacity-100 hover:pointer-events-auto">
+                    <div className="text-center mb-10">
+                        <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Our Global Community</p>
+                    </div>
+                    <DomeCarousel />
+                </div>
+            </div>
 
             {/* --- CTA BANNER --- */}
             < div className="py-20 px-6 bg-slate-50" >
