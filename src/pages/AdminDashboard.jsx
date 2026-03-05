@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     Users, GraduationCap, Briefcase, Shield, Trash2, Search,
     Award, ShieldAlert, ShieldOff, X, MapPin, Linkedin, Github,
-    ChevronRight, ExternalLink, Mail, Edit3, Database
+    ChevronRight, ExternalLink, Mail, Edit3, Database, UploadCloud, Calendar, Zap
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { getOptimizedUrl } from "../lib/cloudinary";
@@ -124,6 +124,46 @@ export default function AdminDashboard() {
                     </div>
                 </div>
 
+                {/* Quick Actions Hub - Optimized for Mobile */}
+                <div className="mb-12">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 bg-blue-600 rounded-lg text-white">
+                            <Zap size={18} />
+                        </div>
+                        <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Quick Terminal</h2>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                        <ActionCard
+                            title="Manage Students"
+                            subtitle="Coaching System"
+                            icon={<Database />}
+                            href="/admin/coaching"
+                            color="blue"
+                        />
+                        <ActionCard
+                            title="Upload Certificate"
+                            subtitle="Security Vault"
+                            icon={<UploadCloud />}
+                            href="/admin/certificates/upload"
+                            color="purple"
+                        />
+                        <ActionCard
+                            title="Generate Certificate"
+                            subtitle="Academic Diploma"
+                            icon={<Award />}
+                            href="/admin/certificates"
+                            color="emerald"
+                        />
+                        <ActionCard
+                            title="Live Events"
+                            subtitle="Campus Activity"
+                            icon={<Calendar />}
+                            href="/events"
+                            color="amber"
+                        />
+                    </div>
+                </div>
+
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
                     <StatCard
@@ -153,22 +193,6 @@ export default function AdminDashboard() {
                         icon={<Shield className="text-purple-600" />}
                         color="purple"
                     />
-                    <motion.button
-                        whileHover={{ y: -5 }}
-                        onClick={() => window.location.href = '/admin/coaching'}
-                        className="premium-card p-8 bg-blue-600 text-white shadow-xl shadow-blue-200 flex flex-col justify-between group"
-                    >
-                        <div className="flex justify-between items-start mb-6">
-                            <div className="p-4 rounded-2xl bg-white/20 ring-1 ring-white/30">
-                                <Database size={24} strokeWidth={2.5} />
-                            </div>
-                            <ExternalLink size={20} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-                        </div>
-                        <div>
-                            <p className="text-[10px] font-black text-blue-100 uppercase tracking-[0.2em] mb-1">Coaching System</p>
-                            <h3 className="text-2xl font-black tracking-tight">Manage Students</h3>
-                        </div>
-                    </motion.button>
                 </div>
 
                 {/* User Management Section */}
@@ -421,6 +445,48 @@ export default function AdminDashboard() {
                 )}
             </AnimatePresence>
         </div>
+    );
+}
+
+function ActionCard({ title, subtitle, icon, href, color }) {
+    const colors = {
+        blue: "bg-blue-600 text-white shadow-blue-200 hover:bg-blue-700",
+        purple: "bg-slate-900 text-white shadow-slate-200 hover:bg-slate-800",
+        emerald: "bg-emerald-600 text-white shadow-emerald-200 hover:bg-emerald-700",
+        amber: "bg-white text-slate-900 border-slate-100 shadow-slate-100 hover:bg-slate-50"
+    };
+
+    const iconColors = {
+        blue: "bg-white/20 ring-white/30",
+        purple: "bg-white/10 ring-white/20",
+        emerald: "bg-white/20 ring-white/30",
+        amber: "bg-amber-50 ring-amber-100 text-amber-600"
+    };
+
+    return (
+        <motion.button
+            whileHover={{ y: -5, scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => window.location.href = href}
+            className={cn(
+                "p-4 md:p-6 rounded-[2rem] shadow-xl flex flex-col justify-between group text-left transition-all border",
+                colors[color] || colors.purple
+            )}
+        >
+            <div className="flex justify-between items-start mb-4 md:mb-8">
+                <div className={cn("p-2.5 md:p-3.5 rounded-2xl ring-1 shadow-sm", iconColors[color])}>
+                    {cloneElement(icon, { size: 20, strokeWidth: 2.5 })}
+                </div>
+                <ArrowUpRight size={18} className="opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </div>
+            <div>
+                <p className={cn(
+                    "text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-1 opacity-70",
+                    color === 'amber' ? 'text-slate-400' : 'text-white'
+                )}>{subtitle}</p>
+                <h3 className="text-xs md:text-sm font-black tracking-tight leading-tight">{title}</h3>
+            </div>
+        </motion.button>
     );
 }
 
