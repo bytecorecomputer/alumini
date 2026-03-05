@@ -7,7 +7,7 @@ import { Briefcase, MapPin, Building, Plus, Trash2, X, Search, Filter, ArrowRigh
 import { cn } from '../lib/utils';
 import { sendTelegramNotification } from '../lib/telegram';
 import { uploadToCloudinary, getOptimizedUrl } from '../lib/cloudinary';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/common/SEO';
 
 export default function Jobs() {
     const { user, role, userData } = useAuth();
@@ -111,14 +111,11 @@ export default function Jobs() {
 
     return (
         <div className="min-h-screen pt-24 pb-20 px-4 md:px-8">
-            <Helmet>
-                <title>Jobs & Opportunities | ByteCore Computer Centre</title>
-                <meta name="description" content="Discover full-time roles, internships, and freelance opportunities. Exclusive job portal for ByteCore alumni and students." />
-                <link rel="canonical" href="https://bytecores.in/jobs" />
-                <meta property="og:title" content="Jobs & Opportunities | ByteCore Computer Centre" />
-                <meta property="og:description" content="Discover full-time roles, internships, and freelance opportunities. Exclusive job portal for ByteCore alumni and students." />
-                <meta property="og:url" content="https://bytecores.in/jobs" />
-            </Helmet>
+            <SEO
+                title="Jobs & Opportunities"
+                description="Discover full-time roles, internships, and freelance opportunities. Exclusive job portal for ByteCore alumni and students."
+                url="https://bytecores.in/jobs"
+            />
             <div className="max-w-6xl mx-auto">
                 {/* Premium Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">

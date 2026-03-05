@@ -1,15 +1,15 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/common/SEO';
 import { FileText, Mail } from 'lucide-react';
 
 export default function Terms() {
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-800 pt-32 pb-20">
-            <Helmet>
-                <title>Terms of Service | ByteCore Computer Centre</title>
-                <meta name="description" content="Review the Terms of Service for using ByteCore Computer Centre educational platforms and resources." />
-                <link rel="canonical" href="https://bytecores.in/terms" />
-            </Helmet>
+            <SEO
+                title="Terms of Service"
+                description="Review the Terms of Service for using ByteCore Computer Centre educational platforms and resources."
+                url="https://bytecores.in/terms"
+            />
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">

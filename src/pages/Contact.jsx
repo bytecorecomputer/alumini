@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/common/SEO';
 import { MapPin, Phone, Mail, Clock, ArrowRight, Building, Globe } from 'lucide-react';
 
 const Contact = () => {
@@ -42,15 +42,12 @@ const Contact = () => {
 
     return (
         <div className="bg-[#f8fafc] overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans min-h-screen">
-            <Helmet>
-                <title>Contact Us | ByteCore Computer Centre</title>
-                <meta name="description" content="Get in touch with ByteCore Computer Centre. Visit our Nariyawal and Thiriya campuses in Bareilly for the best IT and Coding courses." />
-                <meta name="keywords" content="ByteCore Computer Centre, ByteCore contact, computer centre Nariyawal, computer centre Thiriya, Bareilly coding classes contact" />
-                <link rel="canonical" href="https://bytecores.in/contact" />
-                <meta property="og:title" content="Contact Us | ByteCore Computer Centre" />
-                <meta property="og:description" content="Get in touch with ByteCore Computer Centre. Visit our Nariyawal and Thiriya campuses in Bareilly for the best IT and Coding courses." />
-                <meta property="og:url" content="https://bytecores.in/contact" />
-            </Helmet>
+            <SEO
+                title="Contact Us"
+                description="Get in touch with ByteCore Computer Centre. Visit our Nariyawal and Thiriya campuses in Bareilly for the best IT and Coding courses."
+                keywords="ByteCore Computer Centre contact, computer centre Nariyawal, computer centre Thiriya, Bareilly coding classes contact, Rahul sir Bareilly, Coder Afroj"
+                url="https://bytecores.in/contact"
+            />
 
             {/* Premium Header Section */}
             <div className="relative py-24 bg-slate-900 overflow-hidden isolate">

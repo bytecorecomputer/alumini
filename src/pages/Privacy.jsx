@@ -1,15 +1,15 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/common/SEO';
 import { ShieldCheck, Mail } from 'lucide-react';
 
 export default function Privacy() {
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-800 pt-32 pb-20">
-            <Helmet>
-                <title>Privacy Policy | ByteCore Computer Centre</title>
-                <meta name="description" content="Read the ByteCore Computer Centre Privacy Policy to understand how we securely handle, protect, and use your data." />
-                <link rel="canonical" href="https://bytecores.in/privacy" />
-            </Helmet>
+            <SEO
+                title="Privacy Policy"
+                description="Read the ByteCore Computer Centre Privacy Policy to understand how we securely handle, protect, and use your data."
+                url="https://bytecores.in/privacy"
+            />
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">

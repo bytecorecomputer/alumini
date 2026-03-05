@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Helmet } from "react-helmet-async";
+import SEO from '../components/common/SEO';
 import Lottie from 'lottie-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -199,53 +199,50 @@ export default function Home() {
 
     return (
         <div className="bg-white overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
-            <Helmet>
-                <title>ByteCore Computer Centre | #1 Rank Offline Tech Lab in Bareilly</title>
-                <meta name="description" content="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime. Contact Nariyawal and Thiriya centers." />
-                <meta name="keywords" content="ByteCore, ByteCore Computer Centre, Computer Centre Bareilly, Coding classes Bareilly, Nariyawal computer centre, Thiriya computer centre, Best IT institute in Bareilly, Nariyawal hub, offline computer courses" />
-                <meta property="og:url" content="https://bytecores.in/" />
-                <script type="application/ld+json">
-                    {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "LocalBusiness",
-                        "name": "ByteCore Computer Centre",
-                        "image": "https://bytecores.in/banner-og.png",
-                        "@id": "https://bytecores.in",
-                        "url": "https://bytecores.in",
-                        "telephone": "+91XXXXXXXXXX",
-                        "address": {
-                            "@type": "PostalAddress",
-                            "streetAddress": "Nariyawal & Thiriya",
-                            "addressLocality": "Bareilly",
-                            "addressRegion": "UP",
-                            "postalCode": "243001",
-                            "addressCountry": "IN"
-                        },
-                        "geo": {
-                            "@type": "GeoCoordinates",
-                            "latitude": 28.3670,
-                            "longitude": 79.4322
-                        },
-                        "openingHoursSpecification": {
-                            "@type": "OpeningHoursSpecification",
-                            "dayOfWeek": [
-                                "Monday",
-                                "Tuesday",
-                                "Wednesday",
-                                "Thursday",
-                                "Friday",
-                                "Saturday"
-                            ],
-                            "opens": "09:00",
-                            "closes": "18:00"
-                        },
-                        "sameAs": [
-                            "https://www.facebook.com/bytecore",
-                            "https://www.instagram.com/bytecore"
-                        ]
-                    })}
-                </script>
-            </Helmet>
+            <SEO
+                title="#1 Rank Offline Tech Lab in Bareilly"
+                description="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime. Contact Nariyawal and Thiriya centers."
+                keywords="ByteCore, ByteCore Computer Centre, Computer Centre Bareilly, Coding classes Bareilly, Nariyawal computer centre, Thiriya computer centre, Best IT institute in Bareilly, Nariyawal hub, offline computer courses"
+                schema={{
+                    "@context": "https://schema.org",
+                    "@type": "LocalBusiness",
+                    "name": "ByteCore Computer Centre",
+                    "image": "https://bytecores.in/banner-og.png",
+                    "@id": "https://bytecores.in",
+                    "url": "https://bytecores.in",
+                    "telephone": "+91XXXXXXXXXX",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "streetAddress": "Nariyawal & Thiriya",
+                        "addressLocality": "Bareilly",
+                        "addressRegion": "UP",
+                        "postalCode": "243001",
+                        "addressCountry": "IN"
+                    },
+                    "geo": {
+                        "@type": "GeoCoordinates",
+                        "latitude": 28.3670,
+                        "longitude": 79.4322
+                    },
+                    "openingHoursSpecification": {
+                        "@type": "OpeningHoursSpecification",
+                        "dayOfWeek": [
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday",
+                            "Saturday"
+                        ],
+                        "opens": "09:00",
+                        "closes": "18:00"
+                    },
+                    "sameAs": [
+                        "https://www.facebook.com/bytecore",
+                        "https://www.instagram.com/bytecore"
+                    ]
+                }}
+            />
             {/* --- ULTIMATE TECH HERO SECTION --- */}
             <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-12">
                 <AuroraBackground />

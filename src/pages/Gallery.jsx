@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/common/SEO';
 import { Camera, Play, Maximize2, X, Filter, ChevronRight, Video, Image as ImageIcon } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -60,7 +60,7 @@ const Gallery = () => {
                 {item.type === 'video' ? (
                     <video src={item.src} autoPlay controls className="w-full h-full object-contain" />
                 ) : (
-                    <img src={item.src} alt={item.title} className="w-full h-full object-contain" />
+                    <img src={item.src} alt={`${item.title} - ByteCore Computer Centre Lab`} className="w-full h-full object-contain" />
                 )}
                 <button
                     onClick={close}
@@ -80,10 +80,12 @@ const Gallery = () => {
 
     return (
         <div className="min-h-screen bg-slate-950 text-white pt-32 pb-24 font-sans selection:bg-blue-500/30 selection:text-blue-200">
-            <Helmet>
-                <title>Lab Gallery | ByteCore Computer Centre</title>
-                <meta name="description" content="Explore life at ByteCore Computer Centre. Real lab moments, teaching sessions, and the environment where future tech leaders are born." />
-            </Helmet>
+            <SEO
+                title="Lab Gallery | Authentic Moments"
+                description="Explore life at ByteCore Computer Centre. Real lab moments, teaching sessions, and the environment where future tech leaders are born in Bareilly."
+                keywords="ByteCore Lab, Computer Centre Bareilly students, coding lab images, tech education gallery"
+                url="https://bytecores.in/gallery"
+            />
 
             {/* Background elements */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
@@ -176,7 +178,7 @@ const Gallery = () => {
                                     ) : (
                                         <img
                                             src={item.src}
-                                            alt={item.title}
+                                            alt={`${item.title} - Life at ByteCore Computer Centre Bareilly`}
                                             className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700 hover:scale-110"
                                         />
                                     )}

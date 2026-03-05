@@ -8,6 +8,7 @@ import {
 import { courses as localCourses } from '../data/courses';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
+import SEO from '../components/common/SEO';
 
 const CourseDetails = () => {
     const { id } = useParams();
@@ -100,6 +101,36 @@ const CourseDetails = () => {
 
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-800 pt-24 pb-20 font-sans selection:bg-blue-100 selection:text-blue-900">
+            <SEO
+                title={course.title}
+                description={course.description || `Master ${course.title} at ByteCore Computer Centre. Professional offline IT training in Bareilly.`}
+                image={course.image ? (course.image.startsWith('/') || course.image.startsWith('http') ? course.image : `/${course.image}`) : undefined}
+                schema={{
+                    "@context": "https://schema.org",
+                    "@type": "Course",
+                    "name": course.title,
+                    "description": course.description,
+                    "provider": {
+                        "@type": "Organization",
+                        "name": "ByteCore Computer Centre",
+                        "sameAs": "https://bytecores.in"
+                    },
+                    "occupationalCredentialAwarded": "Professional Certification",
+                    "courseMode": "Offline Lab",
+                    "hasCourseInstance": {
+                        "@type": "CourseInstance",
+                        "courseMode": "Offline",
+                        "location": "Bareilly, Nariyawal & Thiriya"
+                    },
+                    "offers": {
+                        "@type": "Offer",
+                        "category": "Education",
+                        "price": typeof course.price === 'number' ? course.price : undefined,
+                        "priceCurrency": "INR",
+                        "availability": "https://schema.org/InStock"
+                    }
+                }}
+            />
             {/* --- HERO BANNER --- */}
             <div className="relative bg-slate-900 text-white overflow-hidden pt-20 pb-32">
                 <div className="absolute inset-0 z-0">

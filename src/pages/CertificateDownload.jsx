@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/common/SEO';
 import { Search, Download, FileImage, FileText, ArrowLeft, Loader2, CheckCircle2, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import jsPDF from 'jspdf';
@@ -175,10 +175,11 @@ export default function CertificateDownload() {
 
     return (
         <div className="min-h-screen bg-[#020617] pt-24 pb-12 px-4 relative overflow-hidden flex flex-col items-center selection:bg-blue-500/30">
-            <Helmet>
-                <title>Download Certificate | ByteCore Computer Centre</title>
-                <meta name="description" content="Securely view and download your verified ByteCore diploma and course certificates using your Roll Number and Date of Birth." />
-            </Helmet>
+            <SEO
+                title="Download Certificate"
+                description="Securely view and download your verified ByteCore diploma and course certificates using your Roll Number and Date of Birth."
+                url="https://bytecores.in/certificate"
+            />
 
             {/* Premium Background Effects */}
             <div className="absolute inset-0 z-0 pointer-events-none">

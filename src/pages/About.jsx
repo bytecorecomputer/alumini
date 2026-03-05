@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Users, Target, Eye, Calendar, ArrowRight, Quote, Star, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/common/SEO';
 import ProfileCard from '../components/ui/ProfileCard';
 
 const team = [
@@ -55,14 +55,11 @@ const About = () => {
 
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-800 pt-28 pb-20 font-sans transition-colors duration-300 overflow-hidden">
-            <Helmet>
-                <title>About Us | ByteCore Computer Centre</title>
-                <meta name="description" content="ByteCore Computer Centre has been the bridge between ambition and achievement since 2024. Learn about our vision, mission, and the expert team in Bareilly." />
-                <link rel="canonical" href="https://bytecores.in/about" />
-                <meta property="og:title" content="About Us | ByteCore Computer Centre" />
-                <meta property="og:description" content="ByteCore Computer Centre has been the bridge between ambition and achievement since 2024. Learn about our vision, mission, and the expert team in Bareilly." />
-                <meta property="og:url" content="https://bytecores.in/about" />
-            </Helmet>
+            <SEO
+                title="About Us"
+                description="ByteCore Computer Centre has been the bridge between ambition and achievement since 2024. Learn about our vision, mission, and the expert team in Bareilly."
+                url="https://bytecores.in/about"
+            />
 
             {/* Hero Section */}
             <section className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">

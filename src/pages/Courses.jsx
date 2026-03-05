@@ -5,7 +5,7 @@ import { courses as localCourses } from '../data/courses';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/common/SEO';
 
 const Courses = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -61,14 +61,12 @@ const Courses = () => {
 
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-800 pt-28 pb-20 px-4 sm:px-6 lg:px-8 font-sans">
-            <Helmet>
-                <title>Premium IT Courses | ByteCore Computer Centre</title>
-                <meta name="description" content="Explore our premium IT courses including Full Stack Development, Python, ADCA, Tally Prime, and more. Master the future of technology with ByteCore." />
-                <link rel="canonical" href="https://bytecores.in/courses" />
-                <meta property="og:title" content="Premium IT Courses | ByteCore Computer Centre" />
-                <meta property="og:description" content="Explore our premium IT courses including Full Stack Development, Python, ADCA, Tally Prime, and more. Master the future of technology with ByteCore." />
-                <meta property="og:url" content="https://bytecores.in/courses" />
-            </Helmet>
+            <SEO
+                title="Premium IT Courses"
+                description="Explore our premium IT courses including Full Stack Development, Python, ADCA, Tally Prime, and more. Master the future of technology with ByteCore Computer Centre Bareilly."
+                keywords="IT courses Bareilly, computer diploma Bareilly, web development training, Tally Prime classes, ADCA course, Python coding"
+                url="https://bytecores.in/courses"
+            />
 
             {/* Hero Section */}
             <div className="relative max-w-7xl mx-auto mb-16 text-center z-10">
