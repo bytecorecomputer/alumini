@@ -157,56 +157,54 @@ export default function Home() {
 
     const AuroraBackground = () => {
         return (
-            <div className="absolute inset-0 overflow-hidden bg-slate-950 pointer-events-none z-0">
-                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.05] mix-blend-overlay z-10"></div>
-                <div className="absolute -inset-[20%] opacity-50">
+            <div className="absolute inset-0 overflow-hidden bg-white pointer-events-none z-0">
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay z-10"></div>
+
+                {/* Massive Watermark Text */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none z-0">
+                    <h1 className="text-[20vw] font-[1000] text-slate-900 tracking-tighter uppercase whitespace-nowrap">
+                        BYTECORE
+                    </h1>
+                </div>
+
+                <div className="absolute -inset-[20%] opacity-30">
+                    <motion.div
+                        animate={{
+                            x: ["-5%", "5%", "-5%"],
+                            y: ["5%", "-5%", "5%"]
+                        }}
+                        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute h-[60vh] w-[60vw] rounded-full bg-blue-400/20 blur-[100px] top-[-5%] left-[-5%] will-change-transform"
+                    />
+                    <motion.div
+                        animate={{
+                            x: ["5%", "-5%", "5%"],
+                            y: ["-5%", "5%", "-5%"]
+                        }}
+                        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute h-[70vh] w-[70vw] rounded-full bg-indigo-300/20 blur-[110px] top-[15%] right-[-5%] will-change-transform"
+                    />
                     <motion.div
                         animate={{
                             x: ["-10%", "10%", "-10%"],
-                            y: ["10%", "-10%", "10%"]
-                        }}
-                        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute h-[60vh] w-[60vw] rounded-full bg-blue-600/30 blur-[80px] top-[-10%] left-[-10%] will-change-transform"
-                    />
-                    <motion.div
-                        animate={{
-                            x: ["10%", "-10%", "10%"],
                             y: ["-10%", "10%", "-10%"]
                         }}
-                        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute h-[70vh] w-[70vw] rounded-full bg-indigo-600/30 blur-[90px] top-[10%] right-[-10%] will-change-transform"
-                    />
-                    <motion.div
-                        animate={{
-                            x: ["-15%", "15%", "-15%"],
-                            y: ["-15%", "15%", "-15%"]
-                        }}
-                        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute h-[50vh] w-[50vw] rounded-full bg-purple-600/20 blur-[80px] bottom-[-10%] right-[10%] will-change-transform"
-                    />
-                    <motion.div
-                        animate={{
-                            backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
-                        }}
-                        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-0 opacity-40 mix-blend-screen"
-                        style={{
-                            backgroundImage: `repeating-linear-gradient(100deg,transparent,rgba(255,255,255,0.03) 1px,transparent 3px),repeating-linear-gradient(10deg,rgba(0,0,0,0.05),rgba(0,0,0,0) 2px,transparent 3px)`
-                        }}
+                        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute h-[50vh] w-[50vw] rounded-full bg-purple-300/10 blur-[100px] bottom-[-5%] right-[15%] will-change-transform"
                     />
                 </div>
-                {/* Tech Grid overlay */}
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] bg-[length:50px_50px]"></div>
-                {/* Fade to white at bottom */}
-                <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white to-transparent z-20"></div>
+
+                {/* Subtle Grid for Tech Feel */}
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-[length:40px_40px]"></div>
+
+                {/* Soft Bottom Grain / Glow */}
+                <div className="absolute bottom-0 left-0 w-full h-[30vh] bg-gradient-to-t from-white via-white/80 to-transparent z-10"></div>
             </div>
         );
     };
 
-
-
     return (
-        <div className="bg-[#f8fafc] overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
+        <div className="bg-white overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
             <Helmet>
                 <title>ByteCore Computer Centre | #1 Rank Offline Tech Lab in Bareilly</title>
                 <meta name="description" content="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime. Contact Nariyawal and Thiriya centers." />
@@ -255,65 +253,47 @@ export default function Home() {
                 </script>
             </Helmet>
             {/* --- ULTIMATE TECH HERO SECTION --- */}
-            <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-12">
                 <AuroraBackground />
 
-                <div className="max-w-7xl mx-auto w-full relative z-20 px-6 pt-20">
-                    <div className="flex flex-col items-center justify-center text-center py-20 pb-32">
+                <div className="max-w-7xl mx-auto w-full relative z-20 px-6 pt-12">
+                    <div className="flex flex-col items-center justify-center text-center">
                         {/* Content */}
                         <motion.div
                             initial="hidden"
                             animate="visible"
                             variants={containerVariants}
-                            className="max-w-4xl mx-auto flex flex-col items-center"
+                            className="max-w-5xl mx-auto flex flex-col items-center"
                         >
-                            <motion.div variants={itemVariants} className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-slate-800/80 backdrop-blur-md border border-slate-700/50 shadow-2xl mb-8 transform hover:scale-105 transition-transform">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                                </span>
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-300">The #1 Choice for Offline Learning</span>
-                            </motion.div>
-
-                            <motion.div variants={itemVariants} className="mb-6">
-                                <h2 className="text-3xl md:text-5xl font-black text-slate-300 uppercase tracking-[0.4em] mb-4 leading-none drop-shadow-md">BYTECORE</h2>
-                                <h1 className="text-6xl md:text-[100px] font-[1000] text-white leading-[1.1] tracking-tighter drop-shadow-2xl">
-                                    COMPUTER <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 uppercase">CENTRE.</span>
+                            <motion.div variants={itemVariants} className="mb-4">
+                                <h1 className="text-6xl md:text-[120px] font-[1000] text-slate-900 leading-[0.95] tracking-[-0.04em] mb-4">
+                                    TECH <span className="text-blue-600">MASTERY</span><br />
+                                    <span className="text-slate-900">STARTS HERE.</span>
                                 </h1>
-                            </motion.div>
-
-                            <motion.div variants={itemVariants} className="mb-8">
-                                <span className="text-3xl md:text-4xl font-black text-slate-100 tracking-tight italic drop-shadow-lg">
-                                    "Tech Mastery <span className="text-blue-400">Starts Here.</span>"
-                                </span>
                             </motion.div>
 
                             <motion.p
                                 variants={itemVariants}
-                                className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto mb-12 leading-relaxed font-medium drop-shadow-md"
+                                className="text-xl md:text-2xl text-slate-500 max-w-2xl mx-auto mb-12 leading-relaxed font-medium"
                             >
-                                Step into the most advanced offline lab in Bareilly. We don't just teach software; we build <strong className="text-white relative inline-block">Digital Masters<span className="absolute bottom-1 left-0 w-full h-1 bg-blue-500 rounded-full block"></span></strong>.
+                                Experience Bareilly's most advanced offline coding lab. We don't just teach courses; we build <strong className="text-slate-900 border-b-4 border-blue-500/20">Future Architects</strong>.
                             </motion.p>
 
                             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto">
                                 <Link to="/courses" className="group relative w-full sm:w-auto">
-                                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl blur-md opacity-75 group-hover:opacity-100 transition duration-500 group-hover:duration-200"></div>
-                                    <div className="relative px-12 py-5 bg-white rounded-xl text-slate-900 font-black uppercase tracking-[0.2em] text-[12px] flex items-center justify-center gap-4 active:scale-95 transition-all shadow-2xl">
-                                        Join The Mastery
+                                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-25 group-hover:opacity-60 transition duration-500"></div>
+                                    <div className="relative px-12 py-5 bg-slate-900 rounded-xl text-white font-black uppercase tracking-[0.2em] text-[12px] flex items-center justify-center gap-4 active:scale-95 transition-all shadow-xl">
+                                        Join The Network
                                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
                                     </div>
                                 </Link>
-                                <Link to="/about" className="w-full sm:w-auto px-12 py-5 rounded-xl bg-slate-900/50 backdrop-blur-md text-white font-black uppercase tracking-[0.2em] text-[12px] border border-slate-600 hover:border-blue-400 hover:bg-slate-800 transition-all shadow-xl active:scale-95 text-center">
-                                    Explore Centre
+                                <Link to="/about" className="w-full sm:w-auto px-12 py-5 rounded-xl bg-white text-slate-900 font-black uppercase tracking-[0.2em] text-[12px] border border-slate-200 hover:border-blue-600 hover:bg-slate-50 transition-all shadow-sm active:scale-95 text-center">
+                                    Explore Lab
                                 </Link>
                             </motion.div>
                         </motion.div>
                     </div>
                 </div>
-
-                {/* Bottom Gradient Fade to transition smoothly to white section below */}
-                <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none"></div>
             </div>
 
             {/* --- TECH MARQUEE (Modern Feature) --- */}
@@ -333,77 +313,79 @@ export default function Home() {
             </div>
 
             {/* --- BENTO GRID FEATURES (Modern Feature) --- */}
-            <div className="py-24 bg-[#f8fafc] px-6">
+            <div className="py-32 bg-white px-6">
                 <div className="max-w-7xl mx-auto">
-                    <div className="text-center lg:text-left mb-16">
-                        <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4 block underline underline-offset-8 decoration-2 decoration-blue-100">Why Bytecore?</span>
-                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">Everything you need to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Succeed</span>.</h2>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+                        <div className="max-w-3xl">
+                            <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em] mb-4 block underline underline-offset-8 decoration-2 decoration-blue-100">Why Choose The Lab?</span>
+                            <h2 className="text-4xl md:text-6xl font-[1000] text-slate-900 tracking-tight leading-[0.95]">Design your future with <span className="text-blue-600">Enterprise Standards</span>.</h2>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                         {/* Big Card 1 */}
                         <motion.div
-                            whileHover={{ y: -5 }}
-                            className="md:col-span-2 md:row-span-2 p-10 rounded-[3rem] bg-slate-900 text-white relative overflow-hidden group border border-slate-800"
+                            whileHover={{ y: -8 }}
+                            className="md:col-span-2 md:row-span-2 p-12 rounded-[3.5rem] bg-slate-50 text-slate-900 relative overflow-hidden group border border-slate-100 shadow-sm"
                         >
-                            <div className="absolute top-0 right-0 p-10 opacity-10 group-hover:scale-110 transition-transform duration-700">
-                                <Database size={200} />
+                            <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity duration-700">
+                                <Database size={240} />
                             </div>
-                            <div className="relative z-10">
-                                <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center mb-8 shadow-2xl shadow-blue-500/20">
-                                    <Zap size={28} />
+                            <div className="relative z-10 flex flex-col h-full">
+                                <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-10 shadow-xl shadow-blue-500/20 text-white">
+                                    <Zap size={32} />
                                 </div>
-                                <h3 className="text-3xl font-black mb-4 tracking-tight">Enterprise Lab Facility</h3>
-                                <p className="text-slate-400 font-medium text-lg leading-relaxed max-w-sm">Access high-performance systems and professional work environments that mimic modern software companies.</p>
-                                <div className="mt-12 flex items-center gap-4">
+                                <h3 className="text-4xl font-black mb-6 tracking-tight">Enterprise Lab Facility</h3>
+                                <p className="text-slate-500 font-medium text-xl leading-relaxed max-w-sm mb-12">Access high-performance workstations and professional dev environments used by top tech firms.</p>
+                                <div className="mt-auto flex items-center gap-6">
                                     <div className="flex -space-x-4">
-                                        {[1, 2, 3].map(i => <div key={i} className="w-10 h-10 rounded-full border-2 border-slate-900 bg-slate-800 flex items-center justify-center text-[10px] font-bold">ST</div>)}
+                                        {[1, 2, 3].map(i => <div key={i} className="w-12 h-12 rounded-full border-4 border-white bg-slate-200 flex items-center justify-center text-[10px] font-black text-slate-400">ST</div>)}
                                     </div>
-                                    <span className="text-xs font-bold text-slate-500">Joined by 10k+ local scholars</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Trusted by over 1,000 students</span>
                                 </div>
                             </div>
                         </motion.div>
 
                         {/* Small Card 1 */}
                         <motion.div
-                            whileHover={{ y: -5 }}
-                            className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm flex flex-col justify-between group"
+                            whileHover={{ y: -8 }}
+                            className="p-10 rounded-[3rem] bg-white border border-slate-100 shadow-sm flex flex-col justify-between group hover:shadow-xl transition-all"
                         >
-                            <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center group-hover:bg-amber-100 transition-colors">
-                                <Award size={24} />
+                            <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                                <Award size={28} />
                             </div>
                             <div>
-                                <h3 className="text-xl font-black text-slate-900 mb-2 mt-6">Certifications</h3>
-                                <p className="text-slate-500 text-sm font-medium">Govt. recognized and ISO verified certificates that value your efforts.</p>
+                                <h3 className="text-2xl font-black text-slate-900 mb-3 mt-8 tracking-tight">ISO Certified</h3>
+                                <p className="text-slate-500 text-[15px] font-medium leading-relaxed">Global recognition for your technical skills with our ISO verified certifications.</p>
                             </div>
                         </motion.div>
 
                         {/* Small Card 2 */}
                         <motion.div
-                            whileHover={{ y: -5 }}
-                            className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm flex flex-col justify-between group"
+                            whileHover={{ y: -8 }}
+                            className="p-10 rounded-[3rem] bg-white border border-slate-100 shadow-sm flex flex-col justify-between group hover:shadow-xl transition-all"
                         >
-                            <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
-                                <Users size={24} />
+                            <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
+                                <Users size={28} />
                             </div>
                             <div>
-                                <h3 className="text-xl font-black text-slate-900 mb-2 mt-6">Mentorship</h3>
-                                <p className="text-slate-500 text-sm font-medium">Direct training from industry experts who have built massive projects.</p>
+                                <h3 className="text-2xl font-black text-slate-900 mb-3 mt-8 tracking-tight">Direct Mentorship</h3>
+                                <p className="text-slate-500 text-[15px] font-medium leading-relaxed">Learn from instructors with 10+ years of industry experience building software.</p>
                             </div>
                         </motion.div>
 
                         {/* Horizontal Card */}
                         <motion.div
-                            whileHover={{ y: -5 }}
-                            className="md:col-span-2 p-8 rounded-[2.5rem] bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center gap-8 relative overflow-hidden"
+                            whileHover={{ y: -8 }}
+                            className="md:col-span-2 p-10 rounded-[3.5rem] bg-slate-900 text-white flex items-center gap-10 relative overflow-hidden group"
                         >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-                            <div className="flex-1">
-                                <h3 className="text-2xl font-black mb-2 tracking-tight">Real World Projects</h3>
-                                <p className="text-white/80 text-sm font-medium">Build sites like this one and more to populate your professional portfolio.</p>
+                            <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000"></div>
+                            <div className="flex-1 relative z-10">
+                                <h3 className="text-3xl font-black mb-4 tracking-tight">Real-World Projects</h3>
+                                <p className="text-slate-400 text-lg font-medium leading-relaxed">Build production-grade applications to populate your professional engineering portfolio.</p>
                             </div>
-                            <div className="hidden sm:flex w-24 h-24 bg-white/20 backdrop-blur-md rounded-2xl items-center justify-center border border-white/30">
-                                <Laptop size={40} />
+                            <div className="hidden sm:flex w-28 h-28 bg-white/10 backdrop-blur-xl rounded-3xl items-center justify-center border border-white/10 group-hover:rotate-12 transition-transform shadow-2xl">
+                                <Laptop size={48} className="text-blue-400" />
                             </div>
                         </motion.div>
                     </div>
@@ -425,8 +407,8 @@ export default function Home() {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {localCourses.slice(0, 3).map((course, i) => {
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {localCourses.filter(c => [1, 10, 8, 18, 7, 6].includes(c.id)).map((course, i) => {
                             // Map local lotties
                             const lottieMap = {
                                 'Full Stack Development': webLottie,
@@ -443,38 +425,68 @@ export default function Home() {
                                     transition={{ delay: i * 0.1 }}
                                     key={course.id}
                                     onClick={() => navigate(`/courses/${course.id || course.title.toLowerCase().replace(/\s+/g, '-')}`)}
-                                    className="bg-[#f8fafc] rounded-[2rem] p-6 border border-slate-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full"
+                                    className="bg-white rounded-[2.5rem] p-8 border border-slate-100 hover:border-blue-200 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer group flex flex-col h-full relative overflow-hidden"
                                 >
-                                    <div className="h-56 rounded-2xl bg-white mb-6 overflow-hidden relative shadow-sm border border-slate-100 flex items-center justify-center group-hover:shadow-lg transition-all">
-                                        {animationData ? (
-                                            <div className="w-full h-full p-4">
+                                    <div className="h-64 rounded-3xl bg-slate-50 mb-8 overflow-hidden relative shadow-inner border border-slate-100 flex items-center justify-center group-hover:bg-white transition-colors duration-500">
+                                        <div className="w-full h-full p-6 relative z-10">
+                                            {animationData ? (
                                                 <Lottie
                                                     animationData={animationData}
                                                     loop={true}
                                                     className="w-full h-full"
-                                                    initialSegment={[0, 60]} // Start only first segment for better initial load
                                                 />
-                                            </div>
-                                        ) : (
-                                            <img
-                                                src={course.illustration || "https://edit.storyset.com/images/illustrations/web-development-amico.svg"}
-                                                alt={course.title}
-                                                className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700"
-                                                loading="lazy"
-                                            />
-                                        )}
-                                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white shadow-sm text-[10px] font-black uppercase tracking-widest text-slate-800">
+                                            ) : course.lottieUrl ? (
+                                                <div className="w-full h-full flex items-center justify-center">
+                                                    {/* Using the Lottie component with a remote URL works if the component supports it, 
+                                                        but here we use the Lottie component with the fetched data pattern or React Player if needed.
+                                                        For simplicity in this environment, we'll try to use the course.lottieUrl with a custom component or a standard player.
+                                                        The current Lottie component from lottie-react usually takes a JSON object.
+                                                    */}
+                                                    <iframe
+                                                        src={course.lottieUrl.replace('.json', '')}
+                                                        className="w-full h-full pointer-events-none border-none"
+                                                        title={course.title}
+                                                    ></iframe>
+                                                </div>
+                                            ) : (
+                                                <img
+                                                    src={course.illustration || "https://storyset.com/illustration/web-development-amico.svg"}
+                                                    alt={course.title}
+                                                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
+                                                    loading="lazy"
+                                                />
+                                            )}
+                                        </div>
+
+                                        {/* Category Badge */}
+                                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white shadow-sm text-[10px] font-[1000] uppercase tracking-widest text-blue-600 z-20">
                                             {course.category}
                                         </div>
                                     </div>
-                                    <h3 className="text-xl font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors tracking-tight line-clamp-1">{course.title}</h3>
-                                    <p className="text-slate-500 text-sm font-medium line-clamp-2 mb-6 flex-grow">{course.description}</p>
-                                    <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-                                        <span className="text-emerald-600 font-black text-xs uppercase tracking-widest">Verify Fee Inside</span>
-                                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center border border-slate-200 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shadow-sm">
-                                            <ArrowRight size={16} className="group-hover:-rotate-45 transition-transform" />
+
+                                    <div className="flex-grow">
+                                        <h3 className="text-2xl font-black text-slate-900 mb-3 group-hover:text-blue-600 transition-colors tracking-tight line-clamp-1">
+                                            {course.title}
+                                        </h3>
+                                        <p className="text-slate-500 text-sm font-medium line-clamp-2 mb-8 leading-relaxed">
+                                            {course.description}
+                                        </p>
+                                    </div>
+
+                                    <div className="flex items-center justify-between pt-6 border-t border-slate-100 mt-auto">
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Fee Status</span>
+                                            <span className="text-emerald-600 font-black text-xs uppercase tracking-widest flex items-center gap-1">
+                                                <CheckCircle size={12} /> Verify Inside
+                                            </span>
+                                        </div>
+                                        <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center text-white group-hover:bg-blue-600 transition-all shadow-lg active:scale-90">
+                                            <ArrowRight size={20} className="group-hover:-rotate-45 transition-transform" />
                                         </div>
                                     </div>
+
+                                    {/* Subtle side accent */}
+                                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-600/10 transition-colors"></div>
                                 </motion.div>
                             );
                         })}

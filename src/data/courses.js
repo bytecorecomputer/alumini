@@ -166,7 +166,8 @@ export const courses = [
         level: "Intermediate",
         color: "from-indigo-600 to-cyan-700",
         image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=600&auto=format&fit=crop",
-        illustration: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=600&auto=format&fit=crop",
+        illustration: "https://storyset.com/illustration/accounting-amico.svg",
+        lottieUrl: "https://lottie.host/807f3531-294c-4700-b8c2-6f29bf36b761/6G7g0G6xK1.json",
         what_you_will_learn: [
             "GST Returns & E-Way Bills",
             "Professional Voucher Entry",
@@ -200,7 +201,8 @@ export const courses = [
         level: "Intermediate",
         color: "from-sky-500 to-blue-700",
         image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop",
-        illustration: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop",
+        illustration: "https://storyset.com/illustration/computer-learning-amico.svg",
+        lottieUrl: "https://lottie.host/67e80a5e-8561-4648-9f33-65775f0f353a/5yP0t4YOnS.json",
         what_you_will_learn: [
             "Expert Level MS-Office (Word/Excel/PowerPoint)",
             "Desktop Publishing (Photoshop & PageMaker)",
@@ -234,7 +236,8 @@ export const courses = [
         level: "Beginner",
         color: "from-violet-600 to-fuchsia-700",
         image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop",
-        illustration: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600&auto=format&fit=crop",
+        illustration: "https://storyset.com/illustration/online-learning-amico.svg",
+        lottieUrl: "https://lottie.host/8f6f8cd0-2a62-4b6e-8d5f-7c1e5a5c5d0a/xR8xK1.json",
         what_you_will_learn: [
             "M1: IT Tools & Network Basics",
             "M2: Web Designing & Publishing",
@@ -403,7 +406,8 @@ export const courses = [
         level: "Advanced",
         color: "from-cyan-600 to-blue-700",
         image: "https://images.unsplash.com/photo-1610563166150-b34df4f3bcd6?q=80&w=600&auto=format&fit=crop",
-        illustration: "https://images.unsplash.com/photo-1610563166150-b34df4f3bcd6?q=80&w=600&auto=format&fit=crop",
+        illustration: "https://storyset.com/illustration/knowledge-amico.svg",
+        lottieUrl: "https://lottie.host/67e80a5e-8561-4648-9f33-65775f0f353a/5yP0t4YOnS.json",
         what_you_will_learn: [
             "Advanced Software System Analysis",
             "Relational Database Management (RDBMS)",
@@ -675,7 +679,8 @@ export const courses = [
         level: "Beginner",
         color: "from-emerald-500 to-teal-600",
         image: "https://images.unsplash.com/photo-1522881113591-b6639430e32b?q=80&w=600&auto=format&fit=crop",
-        illustration: "https://images.unsplash.com/photo-1522881113591-b6639430e32b?q=80&w=600&auto=format&fit=crop",
+        illustration: "https://storyset.com/illustration/academic-amico.svg",
+        lottieUrl: "https://lottie.host/8f6f8cd0-2a62-4b6e-8d5f-7c1e5a5c5d0a/xR8xK1.json",
         what_you_will_learn: [
             "Introduction to Computers & GUI",
             "Operating Systems Mastery",
