@@ -4,6 +4,7 @@ import Layout from "./components/layout/Layout";
 import { AuthProvider } from "./app/common/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
+import InstallPWA from "./components/common/InstallPWA";
 
 // Lazy load pages for performance
 const Home = lazy(() => import("./pages/Home"));
@@ -46,6 +47,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Layout>
+          <InstallPWA />
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Home />} />
