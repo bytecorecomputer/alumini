@@ -96,6 +96,7 @@ export default function Navbar() {
                         <NavLink to="/">Home</NavLink>
                         {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
                         <NavLink to="/about">About Us</NavLink>
+                        <NavLink to="/gallery">Lab Gallery</NavLink>
                         <NavLink to="/certificate">Certificate</NavLink>
                         <NavLink to="/contact">Contact</NavLink>
 

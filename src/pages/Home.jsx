@@ -622,6 +622,23 @@ export default function Home() {
 
                 <LabGallery />
 
+                {/* Added CTA Button to Full Gallery */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="flex justify-center mt-16 px-6"
+                >
+                    <Link
+                        to="/gallery"
+                        className="group relative inline-flex items-center gap-4 px-10 py-5 bg-white text-slate-950 rounded-[2rem] font-black uppercase text-xs tracking-[0.2em] shadow-2xl hover:shadow-blue-500/20 transition-all active:scale-95 border border-white/10"
+                    >
+                        Explore Full Gallery
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <div className="absolute inset-x-10 bottom-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+                    </Link>
+                </motion.div>
+
                 {/* Legacy Dome Carousel (Reduced prominence or hidden) */}
                 <div className="mt-24 pointer-events-none opacity-20 grayscale transition-all hover:grayscale-0 hover:opacity-100 hover:pointer-events-auto">
                     <div className="text-center mb-10">

@@ -23,6 +23,7 @@ export default function Footer() {
                         <h4 className="font-semibold text-gray-900 mb-4">Platform</h4>
                         <ul className="space-y-2 text-sm text-gray-500">
                             <li><Link to="/courses" className="hover:text-blue-600">Courses</Link></li>
+                            <li><Link to="/gallery" className="hover:text-blue-600">Lab Gallery</Link></li>
                             <li><Link to="/directory" className="hover:text-blue-600">Members Directory</Link></li>
                             <li><Link to="/events" className="hover:text-blue-600">Events</Link></li>
                             <li><Link to="/jobs" className="hover:text-blue-600">Careers</Link></li>

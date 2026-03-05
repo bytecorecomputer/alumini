@@ -11,6 +11,7 @@ const Courses = lazy(() => import("./pages/Courses"));
 const CourseDetails = lazy(() => import("./pages/CourseDetails"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
+const Gallery = lazy(() => import("./pages/Gallery"));
 const Login = lazy(() => import("./app/auth/Login"));
 const Register = lazy(() => import("./app/auth/Register"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -52,6 +53,7 @@ export default function App() {
               <Route path="/courses/:id" element={<CourseDetails />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/gallery" element={<Gallery />} />
               <Route path="/certificate" element={<CertificateDownload />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/terms" element={<Terms />} />
