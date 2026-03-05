@@ -8,8 +8,8 @@ export default function Footer() {
                     <div className="flex flex-col gap-6">
                         <h4 className="font-semibold text-gray-900">Expert Support</h4>
                         <div className="space-y-1">
-                            <p className="text-xs font-black text-slate-900 uppercase tracking-widest">CoderAfroj</p>
-                            <p className="text-sm text-gray-500">+91 7017733805</p>
+                            <p className="text-xs font-black text-slate-900 uppercase tracking-widest">ByteCore Support</p>
+                            <p className="text-sm text-gray-500">+91 63968 35709</p>
                         </div>
                         <a
                             href="/donate"
@@ -41,8 +41,8 @@ export default function Footer() {
 
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-4">Connect</h4>
-                        <p className="text-sm text-gray-500">coderafroj@gmail.com</p>
-                        <p className="text-sm text-gray-500">+91 7017733805</p>
+                        <p className="text-sm text-gray-500">bytecore.info@gmail.com</p>
+                        <p className="text-sm text-gray-500">+91 63968 35709</p>
                     </div>
                 </div>
                 <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-400">

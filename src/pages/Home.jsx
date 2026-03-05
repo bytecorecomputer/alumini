@@ -150,7 +150,7 @@ export default function Home() {
     };
 
     const team = [
-        { name: "Maisar Hussain", role: "Centre Director", image: "/images/cd/maisar.jpg" },
+        { name: "Maisar Hussain", role: "Senior Teacher (Thiriya)", image: "/images/cd/maisar.jpg" },
         { name: "Rahul", role: "Founder & CEO", image: "/images/cd/rahul.jfif" },
         { name: "Coder Afroj", role: "Lead Instructor & Web Dev", image: "/images/cd/coderafroj.jpg" }
     ];
@@ -407,59 +407,34 @@ export default function Home() {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {localCourses.filter(c => [1, 10, 8, 18, 7, 6].includes(c.id)).map((course, i) => {
-                            // Map local lotties
-                            const lottieMap = {
-                                'Full Stack Development': webLottie,
-                                'Data Science & AI': dataLottie,
-                                'Python Programming': pythonLottie
-                            };
-                            const animationData = lottieMap[course.title];
-
-                            return (
+                    <div className="relative mt-8">
+                        <motion.div
+                            className="flex gap-8 cursor-grab active:cursor-grabbing px-4 pb-12 overflow-visible"
+                            drag="x"
+                            dragConstraints={{ left: -1400, right: 0 }}
+                            initial={{ x: 0 }}
+                        >
+                            {localCourses.filter(c => [1, 10, 8, 18, 7, 6, 21, 20].includes(c.id)).map((course) => (
                                 <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: i * 0.1 }}
                                     key={course.id}
+                                    whileHover={{ y: -10 }}
                                     onClick={() => navigate(`/courses/${course.id || course.title.toLowerCase().replace(/\s+/g, '-')}`)}
-                                    className="bg-white rounded-[2.5rem] p-8 border border-slate-100 hover:border-blue-200 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer group flex flex-col h-full relative overflow-hidden"
+                                    className="min-w-[320px] md:min-w-[420px] bg-white rounded-[3rem] p-8 border border-slate-100 hover:border-blue-200 shadow-sm hover:shadow-2xl transition-all duration-500 flex flex-col relative overflow-hidden group select-none"
                                 >
-                                    <div className="h-64 rounded-3xl bg-slate-50 mb-8 overflow-hidden relative shadow-inner border border-slate-100 flex items-center justify-center group-hover:bg-white transition-colors duration-500">
-                                        <div className="w-full h-full p-6 relative z-10">
-                                            {animationData ? (
-                                                <Lottie
-                                                    animationData={animationData}
-                                                    loop={true}
-                                                    className="w-full h-full"
-                                                />
-                                            ) : course.lottieUrl ? (
-                                                <div className="w-full h-full flex items-center justify-center">
-                                                    {/* Using the Lottie component with a remote URL works if the component supports it, 
-                                                        but here we use the Lottie component with the fetched data pattern or React Player if needed.
-                                                        For simplicity in this environment, we'll try to use the course.lottieUrl with a custom component or a standard player.
-                                                        The current Lottie component from lottie-react usually takes a JSON object.
-                                                    */}
-                                                    <iframe
-                                                        src={course.lottieUrl.replace('.json', '')}
-                                                        className="w-full h-full pointer-events-none border-none"
-                                                        title={course.title}
-                                                    ></iframe>
-                                                </div>
-                                            ) : (
-                                                <img
-                                                    src={course.illustration || "https://storyset.com/illustration/web-development-amico.svg"}
-                                                    alt={course.title}
-                                                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
-                                                    loading="lazy"
-                                                />
-                                            )}
+                                    <div className="h-64 rounded-[2.5rem] bg-slate-50 mb-8 overflow-hidden relative shadow-inner border border-slate-100 flex items-center justify-center group-hover:bg-blue-50/50 transition-colors duration-500">
+                                        <div className="w-full h-full p-4 relative z-10 flex items-center justify-center">
+                                            <img
+                                                src={course.illustration || `/images/courses/adca.png`}
+                                                alt={course.title}
+                                                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 pointer-events-none"
+                                                loading="lazy"
+                                                onError={(e) => {
+                                                    e.target.src = "https://storyset.com/illustration/web-development-amico.svg";
+                                                }}
+                                            />
                                         </div>
 
-                                        {/* Category Badge */}
-                                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl border border-white shadow-sm text-[10px] font-[1000] uppercase tracking-widest text-blue-600 z-20">
+                                        <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-4 py-2 rounded-xl border border-white shadow-sm text-[10px] font-[1000] uppercase tracking-widest text-blue-600 z-20">
                                             {course.category}
                                         </div>
                                     </div>
@@ -477,7 +452,7 @@ export default function Home() {
                                         <div className="flex flex-col">
                                             <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Fee Status</span>
                                             <span className="text-emerald-600 font-black text-xs uppercase tracking-widest flex items-center gap-1">
-                                                <CheckCircle size={12} /> Verify Inside
+                                                <CheckCircle size={12} /> Live Verification
                                             </span>
                                         </div>
                                         <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center text-white group-hover:bg-blue-600 transition-all shadow-lg active:scale-90">
@@ -485,17 +460,24 @@ export default function Home() {
                                         </div>
                                     </div>
 
-                                    {/* Subtle side accent */}
-                                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-600/10 transition-colors"></div>
+                                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-blue-600/10 transition-colors"></div>
                                 </motion.div>
-                            );
-                        })}
+                            ))}
+                        </motion.div>
+
+                        {/* Custom Navigation Hints */}
+                        <div className="flex justify-center mt-4 gap-4">
+                            <div className="h-1.5 w-12 bg-blue-600 rounded-full shadow-sm"></div>
+                            <div className="h-1.5 w-4 bg-slate-200 rounded-full"></div>
+                            <div className="h-1.5 w-4 bg-slate-200 rounded-full"></div>
+                            <p className="ml-4 text-[10px] font-black uppercase tracking-widest text-slate-400 self-center">Drag to explore more</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* --- OUR INSTRUCTORS / TEAM --- */}
-            <div className="py-24 bg-[#f8fafc]">
+            <div className="py-24 bg-[#f8fafc]" >
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="text-center mb-16">
                         <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4 block">Mentorship</span>
@@ -528,10 +510,10 @@ export default function Home() {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div >
 
             {/* --- STUDENT DOME GALLERY (React Bits Style) --- */}
-            <div className="py-32 bg-slate-900 border-t border-slate-800 relative overflow-hidden">
+            < div className="py-32 bg-slate-900 border-t border-slate-800 relative overflow-hidden" >
                 <div className="absolute top-0 left-1/2 w-[800px] h-[800px] bg-blue-500/10 rounded-full blur-[150px] -z-10 transform -translate-x-1/2"></div>
                 <div className="max-w-[100vw] mx-auto text-center z-10 relative overflow-hidden">
                     <span className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4 block">Proven Results</span>
@@ -541,10 +523,10 @@ export default function Home() {
                     <DomeCarousel />
 
                 </div>
-            </div>
+            </div >
 
             {/* --- CTA BANNER --- */}
-            <div className="py-20 px-6 bg-slate-50">
+            < div className="py-20 px-6 bg-slate-50" >
                 <div className="max-w-5xl mx-auto">
                     <div className="relative rounded-[3rem] bg-slate-900 overflow-hidden p-12 md:p-20 text-center shadow-2xl">
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-transparent opacity-50"></div>
@@ -565,7 +547,7 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
 
             {/* --- SECRET ADMIN MIGRATION TOOL --- */}
             {

@@ -21,9 +21,9 @@ const Contact = () => {
         {
             name: "Nariyawal Campus (HQ)",
             address: "Nariyawal, Bareilly, Uttar Pradesh, India - 243122",
-            phone: "+91 99999 99999",
-            email: "hq@bytecore.com",
-            timing: "Mon - Sat: 9:00 AM - 6:00 PM",
+            phone: "+91 63968 35709",
+            email: "bytecore.info@gmail.com",
+            timing: "Mon - Sat: 8:00 AM - 7:00 PM (Sunday Off)",
             mapUrl: "https://www.google.com/maps/embed?pb=...", // Placeholder or real
             features: ["Main Computer Labs", "Admin Office", "Counseling Centre"],
             gradient: "from-blue-600 to-indigo-600"
@@ -31,9 +31,9 @@ const Contact = () => {
         {
             name: "Thiriya Campus",
             address: "Thiriya Nizamat Khan, Bareilly, Uttar Pradesh, India - 243123",
-            phone: "+91 88888 88888",
-            email: "thiriya@bytecore.com",
-            timing: "Mon - Sat: 10:00 AM - 5:00 PM",
+            phone: "+91 63968 35709",
+            email: "bytecore.info@gmail.com",
+            timing: "Mon - Sat: 8:00 AM - 7:00 PM (Sunday Off)",
             mapUrl: "https://www.google.com/maps/embed?pb=...", // Placeholder or real
             features: ["Advanced Coding Labs", "Student Hub", "Doubt Sessions"],
             gradient: "from-purple-600 to-pink-600"

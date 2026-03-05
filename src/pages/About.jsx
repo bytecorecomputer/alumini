@@ -8,9 +8,9 @@ import ProfileCard from '../components/ui/ProfileCard';
 const team = [
     {
         name: "Maisar Hussain",
-        role: "Centre Director",
+        role: "Senior Teacher (Thiriya)",
         image: "/images/cd/maisar.jpg",
-        desc: "Expert in training and mentoring future tech leaders.",
+        desc: "Specialized in professional computer training and student mentorship at our Thiriya center.",
         whatsapp: "917455098949"
     },
     {
@@ -57,10 +57,10 @@ const About = () => {
         <div className="min-h-screen bg-[#f8fafc] text-slate-800 pt-28 pb-20 font-sans transition-colors duration-300 overflow-hidden">
             <Helmet>
                 <title>About Us | ByteCore Computer Centre</title>
-                <meta name="description" content="Bytecore Computer Centre has been the bridge between ambition and achievement since 2010. Learn about our vision, mission, and the expert team in Bareilly." />
+                <meta name="description" content="ByteCore Computer Centre has been the bridge between ambition and achievement since 2024. Learn about our vision, mission, and the expert team in Bareilly." />
                 <link rel="canonical" href="https://bytecores.in/about" />
                 <meta property="og:title" content="About Us | ByteCore Computer Centre" />
-                <meta property="og:description" content="Bytecore Computer Centre has been the bridge between ambition and achievement since 2010. Learn about our vision, mission, and the expert team in Bareilly." />
+                <meta property="og:description" content="ByteCore Computer Centre has been the bridge between ambition and achievement since 2024. Learn about our vision, mission, and the expert team in Bareilly." />
                 <meta property="og:url" content="https://bytecores.in/about" />
             </Helmet>
 
@@ -92,7 +92,7 @@ const About = () => {
                         transition={{ delay: 0.2 }}
                         className="text-xl text-slate-500 font-medium max-w-2xl mx-auto mb-10"
                     >
-                        Bytecore Computer Centre has been the bridge between ambition and achievement since 2010. We don't just teach code; we build careers.
+                        ByteCore Computer Centre has been the bridge between ambition and achievement since 2024. We don't just teach code; we build careers.
                     </motion.p>
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
@@ -146,23 +146,23 @@ const About = () => {
                         <h2 className="text-3xl md:text-5xl font-black mb-8 tracking-tighter text-slate-900">Our <span className="text-purple-600">Story</span></h2>
                         <div className="space-y-6 text-lg text-slate-600 font-medium leading-relaxed">
                             <p>
-                                Our journey began with extensive research to identify the ideal location for quality IT education. We chose <span className="text-slate-900 font-bold">Nariyawal</span> to serve the community with accessible, high-standard tech training.
+                                Every great legacy begins with a humble spark. ByteCore Computer Centre was founded in <span className="text-slate-900 font-bold">2024</span> with a single, powerful mission: to bring elite technical education to the heart of the community.
                             </p>
                             <p>
-                                On <strong className="text-slate-900">May 13, 2010</strong>, passionate partners united with a shared vision. Established with a commitment to excellence, Bytecore Computer Centre has grown into a leading hub for IT education.
+                                We started our journey in <strong className="text-slate-900">Nariyawal</strong> with nothing but <strong className="text-blue-600 italic">two laptops</strong> and an unshakeable belief in the potential of our students. What began as a small initiative quickly grew through word-of-mouth and proven results.
                             </p>
                             <p>
-                                Today, we are proud to be a catalyst for digital literacy and professional growth, offering hands-on training that prepares students for real-world challenges.
+                                Driven by the success of our Nariyawal students, we expanded our horizons and established our <strong className="text-purple-600">second campus at Thiriya</strong>. Today, ByteCore stands as a symbol of growth, quality, and dedication, transforming lives through modern tech skills.
                             </p>
                         </div>
                         <div className="grid grid-cols-2 gap-6 mt-12">
                             <div className="p-6 rounded-2xl bg-white shadow-xl shadow-slate-100 border border-slate-50 hover:-translate-y-1 transition-transform">
-                                <div className="text-4xl font-black text-blue-600 mb-2 tracking-tighter">2010</div>
-                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Established</div>
+                                <div className="text-4xl font-black text-blue-600 mb-2 tracking-tighter">2024</div>
+                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Founded</div>
                             </div>
                             <div className="p-6 rounded-2xl bg-white shadow-xl shadow-slate-100 border border-slate-50 hover:-translate-y-1 transition-transform">
-                                <div className="text-4xl font-black text-purple-600 mb-2 tracking-tighter">10+</div>
-                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Premium Courses</div>
+                                <div className="text-4xl font-black text-purple-600 mb-2 tracking-tighter">2</div>
+                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Campuses</div>
                             </div>
                         </div>
                     </motion.div>
@@ -231,11 +231,11 @@ const About = () => {
                         <div className="absolute left-[26px] top-6 w-5 h-5 rounded-full bg-blue-600 border-[5px] border-white shadow-xl z-10 transition-transform group-hover:scale-125"></div>
                         <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl shadow-slate-100 group-hover:shadow-blue-100/50 transition-all">
                             <div className="flex flex-wrap justify-between items-center mb-6 gap-4 border-b border-slate-50 pb-4">
-                                <h3 className="text-2xl font-black text-slate-900">Research & Planning</h3>
-                                <span className="bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-blue-100">Early 2010</span>
+                                <h3 className="text-2xl font-black text-slate-900">Research & Vision</h3>
+                                <span className="bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-blue-100">Early 2024</span>
                             </div>
                             <p className="text-slate-500 font-medium leading-relaxed">
-                                Conducted extensive research to identify the best location for establishing a quality computer training center in Nariyawal.
+                                Identified the need for high-quality, practical IT training in Nariyawal and planned the vision for ByteCore.
                             </p>
                         </div>
                     </motion.div>
@@ -249,11 +249,11 @@ const About = () => {
                         <div className="absolute left-[26px] top-6 w-5 h-5 rounded-full bg-purple-600 border-[5px] border-white shadow-xl z-10 transition-transform group-hover:scale-125"></div>
                         <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl shadow-slate-100 group-hover:shadow-purple-100/50 transition-all">
                             <div className="flex flex-wrap justify-between items-center mb-6 gap-4 border-b border-slate-50 pb-4">
-                                <h3 className="text-2xl font-black text-slate-900">Founded Bytecore</h3>
-                                <span className="bg-purple-50 text-purple-600 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-purple-100">May 2010</span>
+                                <h3 className="text-2xl font-black text-slate-900">The Humble Start</h3>
+                                <span className="bg-purple-50 text-purple-600 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-purple-100">May 2024</span>
                             </div>
                             <p className="text-slate-500 font-medium leading-relaxed">
-                                Bytecore was established in Nariyawal with a vision to provide accessible and quality IT training.
+                                ByteCore officially opened its doors in Nariyawal with just two laptops and a massive dream.
                             </p>
                         </div>
                     </motion.div>
