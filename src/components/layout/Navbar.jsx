@@ -40,14 +40,18 @@ export default function Navbar() {
     );
 
     const MobileNavLink = ({ to, children, onClick }) => (
-        <Link
-            to={to}
-            onClick={onClick}
-            className="flex items-center gap-3 px-2 py-3 text-white/80 hover:text-white font-medium text-[15px] transition-all group"
-        >
-            <ArrowUpRight size={16} className="text-white/40 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-            <span className="group-hover:translate-x-1 transition-transform">{children}</span>
-        </Link>
+        <motion.div variants={mobileNavItem}>
+            <Link
+                to={to}
+                onClick={onClick}
+                className="flex items-center gap-3 px-2 py-3 text-slate-600 hover:text-blue-600 font-bold text-[16px] transition-all group rounded-xl hover:bg-slate-50"
+            >
+                <div className="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-blue-50 flex items-center justify-center transition-colors">
+                    <ArrowUpRight size={16} className="text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                </div>
+                <span className="group-hover:translate-x-1 transition-transform uppercase tracking-tight">{children}</span>
+            </Link>
+        </motion.div>
     );
 
     const mobileNavContainer = {
