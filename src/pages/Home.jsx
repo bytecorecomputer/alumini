@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import heroGraphic from '../assets/images/hero_graphic.png';
+import DomeGallery from '../components/ui/DomeGallery';
 import { useAuth } from '../app/common/AuthContext';
 import { runMigration } from '../lib/migrateStudents';
 import { cn } from '../lib/utils';
@@ -103,97 +104,6 @@ const LabGallery = () => {
     );
 };
 
-const DomeCarousel = () => {
-    const students = [
-        "ABHISHEK (DCST).jpg", "ADIL (DCST).jpg", "ADITYA (ADCA).jpg", "ADITYA (DCST).jpg",
-        "AJAY (DFA).jpg", "AMAN (DCST).jpg", "AMAR (TALLY).jpg", "AMIR (ADCA).jpg",
-        "ANIKET (DCST).jpg", "ANISH (TALLY0.jpg", "ANUJ (DCST).jpg", "ARFAT (ADCA).jpg",
-        "ARIF (DCST).jpg", "ARISH (DCA).jpg", "ARVIND (DCST).jpg"
-    ];
-
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [isMobile, setIsMobile] = useState(false);
-
-    useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth < 768);
-        handleResize(); // Initial check
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    const [isHovered, setIsHovered] = useState(false);
-
-    useEffect(() => {
-        if (isHovered) return;
-        const timer = setInterval(() => {
-            setCurrentIndex(prev => (prev + 1) % students.length);
-        }, 3000);
-        return () => clearInterval(timer);
-    }, [students.length, isHovered]);
-
-    return (
-        <div
-            className="relative w-full h-[450px] md:h-[550px] flex items-center justify-center overflow-hidden flex-col md:flex-row perspective-[1200px]"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onTouchStart={() => setIsHovered(true)}
-            onTouchEnd={() => setIsHovered(false)}
-        >
-            <AnimatePresence initial={false}>
-                {students.map((file, i) => {
-                    let diff = i - currentIndex;
-                    if (diff > students.length / 2) diff -= students.length;
-                    if (diff < -students.length / 2) diff += students.length;
-
-                    // Optimize by not rendering elements too far away
-                    if (Math.abs(diff) > 3) return null;
-
-                    const match = file.match(/^(.+)\s\((.+)\)\.jpg$/);
-                    const name = match ? match[1] : file.replace('.jpg', '');
-                    const course = match ? match[2] : "Student";
-
-                    // Added active state reflection and deeper 3D transforms
-                    const isActive = Math.abs(diff) === 0;
-
-                    return (
-                        <motion.div
-                            key={file}
-                            initial={{ opacity: 0, x: diff > 0 ? (isMobile ? 100 : 300) : -(isMobile ? 100 : 300), rotateY: diff * -30 }}
-                            animate={{
-                                opacity: isActive ? 1 : Math.abs(diff) === 1 ? 0.7 : 0.2,
-                                x: diff * (isMobile ? 140 : 250),
-                                scale: isActive ? 1 : 1 - Math.abs(diff) * (isMobile ? 0.15 : 0.2),
-                                zIndex: 10 - Math.abs(diff),
-                                rotateY: diff * -25,
-                                z: isActive ? 50 : Math.abs(diff) * -100
-                            }}
-                            transition={{ duration: 0.8, type: "spring", damping: 20, stiffness: 100, mass: 1 }}
-                            className={cn(
-                                "absolute w-[260px] md:w-[400px] h-[360px] md:h-[500px] rounded-[2.5rem] md:rounded-[3rem] shadow-2xl overflow-hidden cursor-pointer",
-                                isActive ? "border-2 border-blue-400/50 shadow-[0_0_50px_rgba(59,130,246,0.3)]" : "border border-slate-700/50 shadow-black/50"
-                            )}
-                            onClick={() => setCurrentIndex(i)}
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent z-10 opacity-70"></div>
-                            <img
-                                src={`/images/students/${file}`}
-                                alt={name}
-                                className="w-full h-full object-cover"
-                                loading="lazy"
-                            />
-                            <div className="absolute bottom-6 md:bottom-8 left-6 md:left-8 right-6 md:right-8 z-20">
-                                <div className="bg-slate-900/80 backdrop-blur-md border border-slate-600/50 p-3 md:p-4 rounded-3xl text-left">
-                                    <h3 className="text-lg md:text-xl font-black text-white">{name}</h3>
-                                    <span className="text-[9px] md:text-[10px] uppercase font-black tracking-widest text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full mt-2 inline-block">{course}</span>
-                                </div>
-                            </div>
-                        </motion.div>
-                    );
-                })}
-            </AnimatePresence>
-        </div>
-    );
-};
 
 export default function Home() {
 
@@ -639,12 +549,21 @@ export default function Home() {
                     </Link>
                 </motion.div>
 
-                {/* Legacy Dome Carousel (Reduced prominence or hidden) */}
-                <div className="mt-24 pointer-events-none opacity-20 grayscale transition-all hover:grayscale-0 hover:opacity-100 hover:pointer-events-auto">
-                    <div className="text-center mb-10">
-                        <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Our Global Community</p>
+                {/* Dynamic Student Dome Gallery  */}
+                <div className="mt-24 transition-all hover:opacity-100 group">
+                    <div className="text-center mb-10 px-6">
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-4"
+                        >
+                            Our Growing Tech Family
+                        </motion.span>
+                        <h3 className="text-3xl md:text-5xl font-black text-white tracking-tighter">
+                            The <span className="text-blue-500">ByteCore</span> Faces.
+                        </h3>
                     </div>
-                    <DomeCarousel />
+                    <DomeGallery />
                 </div>
             </div>
 

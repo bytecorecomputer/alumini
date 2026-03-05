@@ -180,7 +180,7 @@ export default function Navbar() {
                             animate={{ x: 0, opacity: 1 }}
                             exit={{ x: '100%', opacity: 0 }}
                             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                            className="relative h-full w-full max-w-sm bg-white shadow-2xl p-6 pt-10 flex flex-col overflow-y-auto"
+                            className="relative h-full w-full bg-white shadow-2xl p-6 md:p-12 pt-10 flex flex-col overflow-y-auto"
                         >
                             <div className="flex justify-between items-center mb-12">
                                 <div className="flex items-center gap-3">
