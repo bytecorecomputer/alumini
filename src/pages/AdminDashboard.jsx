@@ -140,6 +140,13 @@ export default function AdminDashboard() {
                             href="/admin/coaching"
                             color="blue"
                         />
+                        <ActionCard
+                            title="Upload Diploma"
+                            subtitle="Admin Resource"
+                            icon={<Award />}
+                            href="/admin/certificates/upload"
+                            color="purple"
+                        />
 
                         <ActionCard
                             title="Generate Certificate"

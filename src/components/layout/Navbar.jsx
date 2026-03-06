@@ -101,7 +101,6 @@ export default function Navbar() {
                     <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 bg-slate-100/50 backdrop-blur-md rounded-full p-1 border border-slate-200/50">
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="/courses">Courses</NavLink>
-                        <NavLink to="/arena">Arena</NavLink>
                         <NavLink to="/contact">Contact</NavLink>
                         {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
                     </div>

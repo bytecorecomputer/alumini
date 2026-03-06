@@ -11,6 +11,7 @@ import QuizModule from '../components/student/QuizModule';
 import { COURSE_CURRICULUM, QUIZ_BANK } from '../lib/quizData';
 import { uploadToCloudinary } from '../lib/cloudinary';
 import { db } from '../firebase/firestore';
+import { doc, updateDoc } from 'firebase/firestore';
 import { Camera, Loader2, ImagePlus } from 'lucide-react';
 import { cn } from '../lib/utils';
 
