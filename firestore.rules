@@ -10,6 +10,9 @@ service cloud.firestore {
     // 2. Students: Public read (for login/directory), Restricted write
     match /students/{studentId} {
       allow get, list: if true; 
+      // Allow updates to photoUrl and updatedAt without authentication (for student portal)
+      allow update: if (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['photoUrl', 'updatedAt']));
+      // Full write still requires admin role
       allow write: if request.auth != null && 
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
     }

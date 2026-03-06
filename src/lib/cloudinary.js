@@ -1,40 +1,38 @@
 const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'da8todyb7';
-const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'alumni_preset';
+const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'ml_default';
 
 /**
  * Uploads a file to Cloudinary using Unsigned Uploads.
- * This keeps the API Secret safe from exposure in the frontend.
- * @param {File} file - The file to upload (image or pdf)
- * @returns {Promise<string>} - The secure URL of the uploaded image
  */
 export const uploadToCloudinary = async (file) => {
     if (!file) return null;
 
-    // Performance optimization: Check file size (5MB limit for consistency)
-    if (file.size > 5 * 1024 * 1024) {
-        throw new Error('File size exceeds 5MB. Please optimize your upload.');
+    if (file.size > 10 * 1024 * 1024) {
+        throw new Error('File size too large. Please select an image under 10MB.');
     }
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', UPLOAD_PRESET);
 
+    console.log(`Attempting Cloudinary upload to cloud: ${CLOUD_NAME} using preset: ${UPLOAD_PRESET}`);
+
     try {
         const response = await fetch(
-            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
             {
                 method: 'POST',
                 body: formData,
             }
         );
 
+        const data = await response.json();
+
         if (!response.ok) {
-            const error = await response.json();
-            console.error('Cloudinary Error:', error);
-            throw new Error(error.error?.message || 'We could not upload your image. Please try a different file.');
+            console.error('Cloudinary Server Error:', data);
+            throw new Error(data.error?.message || 'Cloudinary upload failed. Check if the "Unsigned" preset is correctly configured.');
         }
 
-        const data = await response.json();
         return data.secure_url;
     } catch (error) {
         console.error('Cloudinary Upload Protocol Failed:', error);

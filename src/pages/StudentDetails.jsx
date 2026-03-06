@@ -9,7 +9,7 @@ import {
     GraduationCap
 } from "lucide-react";
 import { cn } from "../lib/utils";
-import { uploadToCloudinary } from "../lib/cloudinary";
+import { uploadToImageKit } from "../lib/imagekit";
 import { compressImage } from "../lib/imageCompression";
 import { syncAggregateStats } from "../lib/migrateStudents";
 
@@ -361,7 +361,7 @@ export default function StudentDetails() {
                                                         setIsUpdating(true);
                                                         try {
                                                             const compressed = await compressImage(file, 50);
-                                                            const url = await uploadToCloudinary(compressed);
+                                                            const url = await uploadToImageKit(compressed, id, '/students');
                                                             setEditForm({ ...editForm, photoUrl: url });
                                                         } catch (err) {
                                                             alert("Photo upload failed: " + err.message);

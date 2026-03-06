@@ -9,11 +9,13 @@ import {
 import { useAuth } from '../app/common/AuthContext';
 import QuizModule from '../components/student/QuizModule';
 import { COURSE_CURRICULUM, QUIZ_BANK } from '../lib/quizData';
-import { uploadToCloudinary } from '../lib/cloudinary';
+import { uploadToImageKit } from '../lib/imagekit.js';
 import { db } from '../firebase/firestore';
 import { doc, updateDoc } from 'firebase/firestore';
 import { Camera, Loader2, ImagePlus } from 'lucide-react';
 import { cn } from '../lib/utils';
+
+import { compressImage } from '../lib/imageCompression';
 
 export default function StudentPortal() {
     const { student, logoutStudent } = useAuth();
@@ -39,14 +41,17 @@ export default function StudentPortal() {
 
         setIsUploading(true);
         try {
-            // 1. Upload to Cloudinary
-            const imageUrl = await uploadToCloudinary(file);
+            // 1. Compress Image (50KB limit)
+            const compressedFile = await compressImage(file, 50);
 
-            // 2. Update Firestore
+            // 2. Upload to ImageKit
+            const imageUrl = await uploadToImageKit(compressedFile, student.registration, '/students');
+
+            // 3. Update Firestore
             const studentRef = doc(db, 'students', student.registration);
             await updateDoc(studentRef, {
                 photoUrl: imageUrl,
-                updatedAt: new Date()
+                updatedAt: Date.now()
             });
             // AuthContext's onSnapshot handle refresh
         } catch (error) {
