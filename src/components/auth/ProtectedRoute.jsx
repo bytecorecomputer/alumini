@@ -2,8 +2,8 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../app/common/AuthContext";
 import { Loader2 } from "lucide-react";
 
-export default function ProtectedRoute({ children }) {
-    const { user, loading } = useAuth();
+export default function ProtectedRoute({ children, allowStudent = true }) {
+    const { user, student, loading } = useAuth();
     const location = useLocation();
 
     if (loading) {
@@ -14,7 +14,7 @@ export default function ProtectedRoute({ children }) {
         );
     }
 
-    if (!user) {
+    if (!user && !(allowStudent && student)) {
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 

@@ -1,66 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    CheckCircle2, XCircle, Trophy, Brain, ArrowRight, RefreshCcw, Timer,
-    FileText, Table, Presentation, Calculator, Activity, ShoppingBag,
-    BarChart2, Image, PenTool, File, Wifi, Code, Keyboard, Lock, Star, ChevronLeft
+    CheckCircle2, XCircle, Trophy, Brain, ArrowRight, BookOpen,
+    FileText, Table, Lock, Zap, ChevronLeft, Target, Award
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { COURSE_CURRICULUM, MODULE_EXPANSION, QUIZ_BANK } from '../../lib/quizData';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../firebase/firestore';
+import { HINDI_QUIZ_DATA } from '../../data/hindiQuizData';
+import { studentQuizProfileInit, getStudentQuizProgress, markModuleCompleted, awardMasterBadge } from '../../lib/quizDb';
 
-// Icon Map
+// Icon Map for dynamic rendering
 const ICONS = {
-    FileText, Table, Presentation, Calculator, Activity, ShoppingBag,
-    BarChart2, Image, PenTool, File, Wifi, Code, Keyboard
+    "file-word": FileText,
+    "table": Table,
+    "monitor": Brain,
+    "default": BookOpen
 };
 
 export default function QuizModule({ student }) {
-    const [view, setView] = useState('dashboard'); // dashboard | quiz | result
-    const [activeModuleId, setActiveModuleId] = useState(null);
+    const [view, setView] = useState('courses'); // courses | topics | quiz | result | badge
+    const [activeCourseKey, setActiveCourseKey] = useState(null); // e.g. "MS Word"
+    const [activeSubModule, setActiveSubModule] = useState(null); // e.g. "Home Tab"
+
+    // Quiz Progress State from Firebase
+    const [progress, setProgress] = useState({ completedModules: [], unlockedBadges: [], totalScore: 0 });
+    const [loadingProgress, setLoadingProgress] = useState(true);
+
+    // Active Quiz State
     const [quizState, setQuizState] = useState({
         qIndex: 0,
         score: 0,
-        answers: [], // boolean array
+        answers: [],
         isAnswered: false,
         selectedOption: null
     });
     const [saving, setSaving] = useState(false);
 
-    // 1. Resolve Modules for this Student
-    const studentModules = React.useMemo(() => {
+    // 1. Determine student's master course name to fetch data
+    const studentCourse = React.useMemo(() => {
         let courseKey = student.course || "DCA";
-        // Handle specialized naming if needed, fallback to DCA
-        if (!COURSE_CURRICULUM[courseKey]) {
-            // Fuzzy match or default
-            courseKey = Object.keys(COURSE_CURRICULUM).find(k => student.course && student.course.includes(k)) || "DCA";
+        if (!HINDI_QUIZ_DATA[courseKey]) {
+            courseKey = Object.keys(HINDI_QUIZ_DATA).find(k => student.course && student.course.includes(k)) || "DCA";
         }
-
-        const highLevelModules = COURSE_CURRICULUM[courseKey] || [];
-        let finalTopics = [];
-
-        highLevelModules.forEach(hm => {
-            if (MODULE_EXPANSION[hm]) {
-                finalTopics = [...finalTopics, ...MODULE_EXPANSION[hm]];
-            } else {
-                finalTopics.push(hm);
-            }
-        });
-
-        // Unique modules
-        return [...new Set(finalTopics)];
+        return courseKey;
     }, [student.course]);
 
-    // 2. Start Quiz Logic
-    const startQuiz = (moduleId) => {
-        const moduleData = QUIZ_BANK[moduleId];
-        if (!moduleData || !moduleData.questions || moduleData.questions.length === 0) {
-            alert("This module is currently being updated. Please check back later!");
-            return;
-        }
+    const courseData = HINDI_QUIZ_DATA[studentCourse] || {};
 
-        setActiveModuleId(moduleId);
+    // 2. Load Progress on mount
+    useEffect(() => {
+        const loadDb = async () => {
+            if (student?.registration) {
+                await studentQuizProfileInit(student.registration);
+                const data = await getStudentQuizProgress(student.registration);
+                if (data) setProgress(data);
+            }
+            setLoadingProgress(false);
+        };
+        loadDb();
+    }, [student]);
+
+    // Calculate overall completion
+    const totalAvailableSubModules = Object.values(courseData).reduce((err, topic) => err + Object.keys(topic.modules).length, 0);
+    const overallPercentage = totalAvailableSubModules > 0 ? Math.round((progress.completedModules.length / totalAvailableSubModules) * 100) : 0;
+
+    // Handlers
+    const handleTopicClick = (topicKey) => {
+        setActiveCourseKey(topicKey);
+        setView('topics');
+    };
+
+    const startQuiz = (subModuleKey) => {
+        if (!courseData[activeCourseKey]?.modules[subModuleKey]) return;
+
+        setActiveSubModule(subModuleKey);
         setQuizState({
             qIndex: 0,
             score: 0,
@@ -71,13 +83,12 @@ export default function QuizModule({ student }) {
         setView('quiz');
     };
 
-    // 3. Handle Answer
     const handleAnswer = (optionIndex) => {
         if (quizState.isAnswered) return;
 
-        const currentData = QUIZ_BANK[activeModuleId];
-        const currentQ = currentData.questions[quizState.qIndex];
-        const isCorrect = optionIndex === currentQ.correct;
+        const currentQList = courseData[activeCourseKey].modules[activeSubModule];
+        const currentQ = currentQList[quizState.qIndex];
+        const isCorrect = optionIndex === currentQ.correctAnswer;
 
         setQuizState(prev => ({
             ...prev,
@@ -87,9 +98,8 @@ export default function QuizModule({ student }) {
             answers: [...prev.answers, isCorrect]
         }));
 
-        // Auto Advance
         setTimeout(() => {
-            if (quizState.qIndex < currentData.questions.length - 1) {
+            if (quizState.qIndex < currentQList.length - 1) {
                 setQuizState(prev => ({
                     ...prev,
                     qIndex: prev.qIndex + 1,
@@ -99,140 +109,205 @@ export default function QuizModule({ student }) {
             } else {
                 finishQuiz(isCorrect ? quizState.score + 1 : quizState.score);
             }
-        }, 1500);
+        }, 3000); // 3 seconds to read explanation in Hindi
     };
 
-    // 4. Finish & Save
     const finishQuiz = async (finalScore) => {
-        setView('result');
         setSaving(true);
-        const moduleData = QUIZ_BANK[activeModuleId];
-        const totalQ = moduleData.questions.length;
-        const percentage = Math.round((finalScore / totalQ) * 100);
+        const qList = courseData[activeCourseKey].modules[activeSubModule];
+        const requiredScore = Math.ceil(qList.length * 0.8); // 80% to pass
+        const passed = finalScore >= requiredScore;
 
-        try {
-            // Save to Firestore
-            // Assuming 'student' object has 'id' or 'registration' as the document key
-            // Based on previous files, it seems to be 'registration' or the doc ID itself. 
-            // We will rely on 'student.id' if available, otherwise 'student.registration'.
-            // However, previous code used `doc(db, "students", student.registration)`.
-            // Check if student.id is available in the passed prop.
-            // If the prop comes from a snapshot where `id` was added, good. 
-            // Safe fallback: student.id || student.registration
+        const moduleIdentifier = `${studentCourse}|${activeCourseKey}|${activeSubModule}`;
 
-            const docId = student.id || student.registration;
-            if (!docId) {
-                console.error("No student ID found for saving progress");
-                return;
+        if (passed && student?.registration) {
+            await markModuleCompleted(student.registration, moduleIdentifier, finalScore);
+            // Refresh local state
+            const newData = await getStudentQuizProgress(student.registration);
+            if (newData) setProgress(newData);
+
+            // Check if entire topic (e.g., MS Word) is completed
+            const allSubModules = Object.keys(courseData[activeCourseKey].modules);
+            const completedCount = allSubModules.filter(sub => newData.completedModules.includes(`${studentCourse}|${activeCourseKey}|${sub}`)).length;
+
+            if (completedCount === allSubModules.length) {
+                const badgeIdentifier = `${studentCourse} - ${activeCourseKey} Master`;
+                if (!newData.unlockedBadges.includes(badgeIdentifier)) {
+                    await awardMasterBadge(student.registration, badgeIdentifier);
+                    setView('badge'); // Show the reward
+                    setSaving(false);
+                    return;
+                }
             }
-
-            const studentRef = doc(db, "students", docId);
-            const progressKey = `quizProgress.${activeModuleId}`;
-
-            await updateDoc(studentRef, {
-                [progressKey]: {
-                    score: percentage,
-                    attempts: (student.quizProgress?.[activeModuleId]?.attempts || 0) + 1,
-                    lastPlayed: new Date().toISOString()
-                },
-                // We don't want to overwrite the main updatedAt if not needed, but it helps track activity
-                lastQuizActivity: new Date().toISOString()
-            });
-        } catch (err) {
-            console.error("Failed to save progress", err);
-        } finally {
-            setSaving(false);
         }
+
+        setView('result');
+        setSaving(false);
     };
 
     // View Components
-    if (view === 'dashboard') {
+    if (loadingProgress) {
+        return (
+            <div className="h-64 flex items-center justify-center">
+                <Brain className="animate-pulse text-blue-300" size={48} />
+            </div>
+        );
+    }
+
+    if (view === 'courses') {
+        const topics = Object.keys(courseData);
+        if (topics.length === 0) {
+            return (
+                <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200">
+                    <BookOpen size={48} className="mx-auto text-slate-300 mb-4" />
+                    <h3 className="text-2xl font-black text-slate-800">No Hindi Content Available</h3>
+                    <p className="text-slate-500 mt-2">Check back soon for upcoming modules!</p>
+                </div>
+            );
+        }
+
         return (
             <div className="space-y-12 animate-in fade-in duration-500">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
-                        <h2 className="text-4xl font-black text-slate-900 tracking-tight mb-2 uppercase">Learning Hub</h2>
-                        <p className="text-slate-500 font-bold max-w-lg">Master your core modules. Score above 80% to earn your certification badges.</p>
+                        <h2 className="text-4xl font-black text-slate-900 tracking-tight mb-2 uppercase flex items-center gap-3">
+                            Skill Modules <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm tracking-widest font-black">HINDI</span>
+                        </h2>
+                        <p className="text-slate-500 font-bold max-w-lg">Complete all topics inside each software module to unlock your certification badge.</p>
                     </div>
-                    <div className="px-6 py-4 bg-blue-50 text-blue-600 rounded-2xl border border-blue-100 flex items-center gap-3">
-                        <Trophy size={24} className="animate-bounce" />
+                    <div className="px-6 py-4 bg-gradient-to-br from-blue-50 to-indigo-50 text-blue-900 rounded-[2rem] border border-blue-100/50 flex items-center gap-4 shadow-xl shadow-blue-500/10">
+                        <div className="p-3 bg-white rounded-xl shadow-sm text-blue-600">
+                            <Target size={24} />
+                        </div>
                         <div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-blue-400">Hub Progress</p>
-                            <p className="text-lg font-black">{Math.round((Object.keys(student.quizProgress || {}).length / studentModules.length) * 100) || 0}% Mastery</p>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Completion</p>
+                            <p className="text-2xl font-black tracking-tighter">{overallPercentage}%</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {studentModules.map((modId, idx) => {
-                        const data = QUIZ_BANK[modId];
-                        if (!data) return null;
+                    {topics.map((topicKey, idx) => {
+                        const data = courseData[topicKey];
+                        const Icon = ICONS[data.icon] || ICONS.default;
 
-                        const progress = student.quizProgress?.[modId];
-                        const Icon = ICONS[data.icon] || Brain;
-                        const isCompleted = progress?.score >= 80;
+                        // Calculate topic completion
+                        const subModules = Object.keys(data.modules);
+                        const completedCount = subModules.filter(sub => progress.completedModules.includes(`${studentCourse}|${topicKey}|${sub}`)).length;
+                        const isTopicComplete = completedCount === subModules.length && subModules.length > 0;
 
                         return (
                             <motion.div
-                                key={modId}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: idx * 0.05 }}
-                                whileHover={{ y: -5 }}
-                                onClick={() => startQuiz(modId)}
-                                className={cn(
-                                    "p-8 rounded-[2.5rem] border-2 transition-all cursor-pointer relative overflow-hidden group select-none flex flex-col justify-between min-h-[320px]",
-                                    isCompleted
-                                        ? "bg-gradient-to-br from-emerald-50 to-white border-emerald-100 shadow-xl shadow-emerald-500/5"
-                                        : "bg-white border-slate-50 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-500/10"
-                                )}
+                                key={topicKey}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: idx * 0.1 }}
+                                onClick={() => handleTopicClick(topicKey)}
+                                className="group cursor-pointer premium-card bg-white p-8 border hover:border-blue-300 hover:shadow-2xl transition-all relative overflow-hidden flex flex-col justify-between min-h-[280px]"
                             >
-                                <div className="absolute top-0 right-0 p-8 text-blue-600/5 group-hover:scale-110 transition-transform">
-                                    <Icon size={120} />
-                                </div>
-
                                 <div className="relative z-10">
-                                    <div className="flex justify-between items-start mb-10">
+                                    <div className="flex justify-between items-start mb-6">
                                         <div className={cn(
-                                            "h-14 w-14 rounded-2xl flex items-center justify-center text-white shadow-xl rotate-3 group-hover:rotate-12 transition-transform",
-                                            isCompleted ? "bg-emerald-600 shadow-emerald-200" : `bg-${data.color || 'blue'}-600 shadow-blue-200`
+                                            "h-16 w-16 rounded-[1.5rem] flex items-center justify-center text-white shadow-lg -rotate-6 group-hover:rotate-0 transition-transform",
+                                            isTopicComplete ? "bg-emerald-500 shadow-emerald-200" : `bg-${data.color}-500 shadow-${data.color}-200`
                                         )}>
-                                            <Icon size={28} />
+                                            <Icon size={32} />
                                         </div>
-                                        {progress && (
-                                            <div className="text-right">
-                                                <p className={cn(
-                                                    "text-2xl font-black",
-                                                    isCompleted ? "text-emerald-600" : "text-slate-900"
-                                                )}>{progress.score}%</p>
-                                                <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Accuracy</p>
+                                        {isTopicComplete && (
+                                            <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-widest rounded-full">
+                                                <Award size={12} /> Mastered
                                             </div>
                                         )}
                                     </div>
-
-                                    <h3 className="text-2xl font-black text-slate-900 mb-2">{data.title}</h3>
-                                    <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-6 leading-relaxed line-clamp-2">{data.description}</p>
+                                    <h3 className="text-2xl font-black text-slate-900 mb-2">{topicKey}</h3>
+                                    <p className="text-slate-400 font-bold text-xs uppercase tracking-widest leading-relaxed">{data.description}</p>
                                 </div>
 
-                                <div className="relative z-10 flex items-center justify-between mt-auto">
-                                    <div className="flex items-center text-[10px] font-black uppercase tracking-widest text-slate-400 gap-3">
-                                        <span className="flex items-center gap-1.5"><Brain size={14} className="text-blue-400" /> {data.questions.length} Qs</span>
-                                        <span className="h-4 w-px bg-slate-100" />
-                                        <span>{progress?.attempts || 0} Tries</span>
-                                    </div>
-                                    <button className={cn(
-                                        "p-3 rounded-xl transition-all",
-                                        isCompleted ? "bg-emerald-100 text-emerald-600" : "bg-slate-50 text-slate-400 group-hover:bg-blue-600 group-hover:text-white"
-                                    )}>
-                                        <ArrowRight size={20} />
-                                    </button>
+                                <div className="relative z-10 mt-8 pt-6 border-t border-slate-50 flex items-center justify-between">
+                                    <p className="text-xs font-black text-slate-500">
+                                        {completedCount} / {subModules.length} Modules
+                                    </p>
+                                    <ArrowRight className="text-slate-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all" size={20} />
                                 </div>
 
-                                {isCompleted && (
-                                    <div className="absolute -bottom-6 -right-6 text-emerald-500 opacity-10 rotate-12 group-hover:rotate-0 transition-transform">
-                                        <Trophy size={150} />
-                                    </div>
+                                <div className="absolute -bottom-8 -right-8 opacity-[0.03] group-hover:scale-110 transition-transform pointer-events-none">
+                                    <Icon size={180} />
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    }
+
+    if (view === 'topics') {
+        const data = courseData[activeCourseKey];
+        const subModules = Object.keys(data.modules);
+        const Icon = ICONS[data.icon] || ICONS.default;
+
+        return (
+            <div className="space-y-10 animate-in fade-in duration-500">
+                <button
+                    onClick={() => setView('courses')}
+                    className="flex items-center gap-2 text-slate-400 font-bold hover:text-slate-900 transition-colors"
+                >
+                    <ChevronLeft size={20} /> Back to Modules
+                </button>
+
+                <div className="flex items-center gap-6">
+                    <div className={cn(`h-20 w-20 rounded-[2rem] bg-${data.color}-500 text-white flex items-center justify-center shadow-2xl shadow-${data.color}-500/30`)}>
+                        <Icon size={40} />
+                    </div>
+                    <div>
+                        <h2 className="text-4xl font-black text-slate-900">{activeCourseKey}</h2>
+                        <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">{data.description}</p>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+                    {subModules.map((subMod, idx) => {
+                        const identifier = `${studentCourse}|${activeCourseKey}|${subMod}`;
+                        const isCompleted = progress.completedModules.includes(identifier);
+                        const qCount = data.modules[subMod].length;
+
+                        // Progression logic: require previous to be completed, unless it's the first one
+                        const prevIdentifier = idx > 0 ? `${studentCourse}|${activeCourseKey}|${subModules[idx - 1]}` : null;
+                        const isLocked = prevIdentifier ? !progress.completedModules.includes(prevIdentifier) : false;
+
+                        return (
+                            <motion.div
+                                key={subMod}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.1 }}
+                                onClick={() => !isLocked && startQuiz(subMod)}
+                                className={cn(
+                                    "p-6 rounded-[2rem] border-2 flex items-center justify-between transition-all",
+                                    isLocked ? "bg-slate-50 border-slate-100 opacity-60 grayscale cursor-not-allowed" :
+                                        isCompleted ? "bg-emerald-50 border-emerald-200 cursor-pointer hover:shadow-xl" :
+                                            "bg-white border-blue-100 cursor-pointer shadow-xl shadow-blue-500/5 hover:-translate-y-1"
                                 )}
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className={cn(
+                                        "h-12 w-12 rounded-xl flex items-center justify-center text-white shadow-inner font-black text-lg",
+                                        isLocked ? "bg-slate-300" : isCompleted ? "bg-emerald-500" : "bg-blue-600"
+                                    )}>
+                                        {idx + 1}
+                                    </div>
+                                    <div>
+                                        <h4 className="text-lg font-black text-slate-900">{subMod}</h4>
+                                        <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mt-1">
+                                            {qCount} Questions • Hindi
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    {isLocked ? <Lock className="text-slate-300" size={24} /> :
+                                        isCompleted ? <CheckCircle2 className="text-emerald-500 drop-shadow-sm" size={28} /> :
+                                            <ArrowRight className="text-blue-500" size={24} />}
+                                </div>
                             </motion.div>
                         );
                     })}
@@ -242,34 +317,34 @@ export default function QuizModule({ student }) {
     }
 
     if (view === 'quiz') {
-        const moduleData = QUIZ_BANK[activeModuleId];
-        const currentQ = moduleData.questions[quizState.qIndex];
+        const qList = courseData[activeCourseKey].modules[activeSubModule];
+        const currentQ = qList[quizState.qIndex];
 
         return (
             <div className="max-w-3xl mx-auto h-full flex flex-col justify-center animate-in fade-in slide-in-from-right-8 duration-500">
                 <button
-                    onClick={() => setView('dashboard')}
-                    className="flex items-center gap-2 text-slate-400 font-bold hover:text-slate-600 mb-8 self-start"
+                    onClick={() => setView('topics')}
+                    className="flex items-center gap-2 text-slate-400 font-bold hover:text-slate-900 mb-8 self-start"
                 >
-                    <ChevronLeft size={20} /> Back to Hub
+                    <ChevronLeft size={20} /> Quit Quiz
                 </button>
 
                 <div className="flex justify-between items-center mb-8">
                     <div>
                         <h2 className="text-2xl font-black text-slate-900 flex items-center gap-2">
-                            {moduleData.title} <span className="text-slate-300">/</span> <span className="text-blue-600">Q{quizState.qIndex + 1}</span>
+                            {activeSubModule} <span className="text-slate-300">/</span> <span className="text-blue-600">Q{quizState.qIndex + 1}</span>
                         </h2>
                     </div>
-                    <div className="h-10 w-10 rounded-full border-4 border-slate-100 flex items-center justify-center font-black text-xs text-slate-400">
-                        {quizState.qIndex + 1}/{moduleData.questions.length}
+                    <div className="h-10 w-10 rounded-full border-4 border-slate-100 flex items-center justify-center font-black text-xs text-slate-400 bg-white">
+                        {quizState.qIndex + 1}/{qList.length}
                     </div>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="w-full h-2 bg-slate-100 rounded-full mb-12 overflow-hidden">
+                <div className="w-full h-2 bg-slate-100 rounded-full mb-12 overflow-hidden shadow-inner">
                     <motion.div
                         initial={{ width: 0 }}
-                        animate={{ width: `${((quizState.qIndex + 1) / moduleData.questions.length) * 100}%` }}
+                        animate={{ width: `${((quizState.qIndex + 1) / qList.length) * 100}%` }}
                         transition={{ duration: 0.5 }}
                         className="h-full bg-blue-600"
                     />
@@ -283,20 +358,22 @@ export default function QuizModule({ student }) {
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-10 leading-relaxed">
-                            {currentQ.q}
-                        </h3>
+                        <div className="premium-card bg-white p-8 md:p-12 border border-slate-100 shadow-2xl shadow-blue-900/5 relative overflow-hidden mb-8">
+                            <h3 className="text-2xl md:text-3xl font-black text-slate-900 leading-relaxed font-hindi">
+                                {currentQ.question}
+                            </h3>
+                        </div>
 
                         <div className="space-y-4">
                             {currentQ.options.map((opt, i) => {
                                 const isSelected = quizState.selectedOption === i;
-                                const isCorrect = i === currentQ.correct;
+                                const isCorrect = i === currentQ.correctAnswer;
 
-                                let stateStyle = "bg-white border-slate-100 hover:border-blue-300";
+                                let stateStyle = "bg-white border-slate-100 hover:border-blue-300 hover:-translate-y-1 shadow-sm text-slate-700";
                                 if (quizState.isAnswered) {
-                                    if (isCorrect) stateStyle = "bg-emerald-50 border-emerald-500 text-emerald-800";
-                                    else if (isSelected) stateStyle = "bg-red-50 border-red-500 text-red-800";
-                                    else stateStyle = "bg-slate-50 border-transparent opacity-50";
+                                    if (isCorrect) stateStyle = "bg-emerald-50 border-emerald-500 text-emerald-800 shadow-emerald-500/20";
+                                    else if (isSelected) stateStyle = "bg-red-50 border-red-500 text-red-800 shadow-red-500/20";
+                                    else stateStyle = "bg-slate-50 border-transparent opacity-40 grayscale";
                                 }
 
                                 return (
@@ -305,13 +382,13 @@ export default function QuizModule({ student }) {
                                         onClick={() => handleAnswer(i)}
                                         disabled={quizState.isAnswered}
                                         className={cn(
-                                            "w-full text-left p-6 rounded-2xl border-2 transition-all duration-200 flex items-center justify-between group font-bold text-lg",
+                                            "w-full text-left p-6 md:p-8 rounded-[2rem] border-2 transition-all duration-300 flex items-center justify-between group font-bold text-xl font-hindi",
                                             stateStyle
                                         )}
                                     >
                                         <span>{opt}</span>
-                                        {quizState.isAnswered && isCorrect && <CheckCircle2 className="text-emerald-500 shrink-0 ml-2" />}
-                                        {quizState.isAnswered && isSelected && !isCorrect && <XCircle className="text-red-500 shrink-0 ml-2" />}
+                                        {quizState.isAnswered && isCorrect && <CheckCircle2 className="text-emerald-500 shrink-0 ml-4 drop-shadow-sm" size={28} />}
+                                        {quizState.isAnswered && isSelected && !isCorrect && <XCircle className="text-red-500 shrink-0 ml-4 drop-shadow-sm" size={28} />}
                                     </button>
                                 );
                             })}
@@ -323,10 +400,11 @@ export default function QuizModule({ student }) {
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-8 p-4 bg-blue-50/50 rounded-xl border border-blue-100 text-blue-800 "
+                        className="mt-8 p-6 bg-blue-50/80 backdrop-blur-md rounded-3xl border border-blue-100 text-blue-900 shadow-xl shadow-blue-500/10 font-hindi relative overflow-hidden"
                     >
-                        <span className="font-black uppercase tracking-wider text-xs block mb-1 text-blue-400">Explanation</span>
-                        <p className="text-sm font-medium">{currentQ.explanation}</p>
+                        <div className="absolute top-0 left-0 w-1 h-full bg-blue-400" />
+                        <span className="font-black uppercase tracking-[0.2em] text-[10px] block mb-2 text-blue-400 flex items-center gap-2"><Zap size={12} /> उत्तर (Explanation)</span>
+                        <p className="text-lg font-bold leading-relaxed">{currentQ.explanation}</p>
                     </motion.div>
                 )}
             </div>
@@ -334,47 +412,88 @@ export default function QuizModule({ student }) {
     }
 
     if (view === 'result') {
-        const percentage = Math.round((quizState.score / QUIZ_BANK[activeModuleId].questions.length) * 100);
+        const qList = courseData[activeCourseKey].modules[activeSubModule];
+        const percentage = Math.round((quizState.score / qList.length) * 100);
+        const passed = percentage >= 80;
+
         return (
-            <div className="flex flex-col items-center justify-center py-12 text-center h-full animate-in zoom-in-95 duration-500">
-                <div className="w-32 h-32 relative mb-8">
-                    <svg className="w-full h-full transform -rotate-90">
-                        <circle cx="64" cy="64" r="56" fill="none" stroke="#e2e8f0" strokeWidth="8" />
+            <div className="flex flex-col items-center justify-center py-20 text-center h-full animate-in zoom-in-95 duration-500">
+                <div className="w-48 h-48 relative mb-10">
+                    <svg className="w-full h-full transform -rotate-90 drop-shadow-xl">
+                        <circle cx="96" cy="96" r="84" fill="none" stroke="#f1f5f9" strokeWidth="12" />
                         <motion.circle
-                            cx="64" cy="64" r="56" fill="none" stroke={percentage >= 80 ? "#10b981" : "#3b82f6"} strokeWidth="8"
-                            strokeDasharray="351"
-                            strokeDashoffset="351"
-                            animate={{ strokeDashoffset: 351 - (351 * percentage) / 100 }}
-                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            cx="96" cy="96" r="84" fill="none" stroke={passed ? "#10b981" : "#ef4444"} strokeWidth="12"
+                            strokeDasharray="528"
+                            strokeDashoffset="528"
+                            animate={{ strokeDashoffset: 528 - (528 * percentage) / 100 }}
+                            transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
                             strokeLinecap="round"
                         />
                     </svg>
                     <div className="absolute inset-0 flex items-center justify-center flex-col">
-                        <span className="text-3xl font-black text-slate-900">{percentage}%</span>
+                        <span className="text-5xl font-black text-slate-900 tracking-tighter">{percentage}%</span>
                     </div>
                 </div>
 
-                <h2 className="text-3xl font-black text-slate-900 mb-2">
-                    {percentage >= 80 ? "Mastery Achieved! 🏆" : percentage >= 50 ? "Good Progress! 👍" : "Keep Practicing! 💪"}
+                <h2 className={cn("text-4xl font-black mb-4 tracking-tight", passed ? "text-emerald-600" : "text-slate-900")}>
+                    {passed ? "शानदार! (Module Cleared) 🌟" : "फिर प्रयास करें (Try Again) 💪"}
                 </h2>
-                <p className="text-slate-500 font-bold mb-8">
-                    You scored {quizState.score} out of {QUIZ_BANK[activeModuleId].questions.length} correct in {QUIZ_BANK[activeModuleId].title}.
+                <p className="text-slate-500 font-bold text-lg mb-12 max-w-md">
+                    आपने {qList.length} में से {quizState.score} प्रश्नों का सही उत्तर दिया है।
                 </p>
 
-                <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex flex-col md:flex-row gap-4 w-full max-w-sm">
                     <button
-                        onClick={() => setView('dashboard')}
-                        className="px-8 py-4 rounded-2xl bg-white border-2 border-slate-100 font-black text-slate-600 uppercase tracking-widest hover:border-slate-300 transition-all"
+                        onClick={() => setView('topics')}
+                        className="flex-1 py-5 rounded-[2rem] bg-slate-100 text-slate-600 font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
                     >
-                        Back to Hub
+                        Back
                     </button>
-                    <button
-                        onClick={() => startQuiz(activeModuleId)}
-                        className="px-8 py-4 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl hover:shadow-blue-200"
-                    >
-                        Retry Module
-                    </button>
+                    {!passed && (
+                        <button
+                            onClick={() => startQuiz(activeSubModule)}
+                            className="flex-1 py-5 rounded-[2rem] bg-blue-600 text-white font-black uppercase tracking-[0.2em] shadow-xl hover:shadow-blue-300 transition-all hover:-translate-y-1"
+                        >
+                            Retry
+                        </button>
+                    )}
                 </div>
+            </div>
+        );
+    }
+
+    if (view === 'badge') {
+        const Icon = ICONS[courseData[activeCourseKey]?.icon] || Trophy;
+        return (
+            <div className="flex flex-col items-center justify-center py-10 min-h-[60vh] text-center animate-in zoom-in-95 duration-700">
+                <motion.div
+                    initial={{ scale: 0.5, rotateY: 180 }}
+                    animate={{ scale: 1, rotateY: 0 }}
+                    transition={{ type: "spring", damping: 15, duration: 2 }}
+                    className="relative mb-12"
+                >
+                    <div className="absolute inset-0 bg-amber-400 blur-[80px] opacity-30 rounded-full animate-pulse" />
+                    <div className="h-64 w-64 bg-gradient-to-br from-amber-300 via-amber-500 to-orange-600 rounded-full flex flex-col items-center justify-center shadow-2xl shadow-amber-900/20 border-[8px] border-amber-100 relative z-10">
+                        <Icon size={80} className="text-white drop-shadow-md mb-4" />
+                        <span className="text-white font-black uppercase tracking-[0.3em] text-xs opacity-90">Mastery</span>
+                    </div>
+                </motion.div>
+
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }}>
+                    <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tighter uppercase">
+                        {activeCourseKey} <span className="text-amber-500">Master!</span>
+                    </h2>
+                    <p className="text-slate-500 font-bold text-lg max-w-xl mx-auto mb-10">
+                        You have successfully completed every Hindi module inside {activeCourseKey}. Your Mastery Badge has been recorded to your profile!
+                    </p>
+
+                    <button
+                        onClick={() => setView('courses')}
+                        className="px-12 py-5 rounded-[2rem] bg-slate-900 text-white font-black uppercase tracking-[0.2em] shadow-2xl hover:bg-blue-600 hover:-translate-y-1 transition-all"
+                    >
+                        Continue Journey
+                    </button>
+                </motion.div>
             </div>
         );
     }

@@ -73,6 +73,7 @@ export default function App() {
                 </ProtectedRoute>
               } />
 
+
               {/* Admin Routes */}
               <Route path="/admin/dashboard" element={
                 <AdminRoute>
@@ -121,6 +122,7 @@ export default function App() {
                   <AdminCertificateUpload />
                 </AdminRoute>
               } />
+
             </Routes>
           </Suspense>
         </Layout>

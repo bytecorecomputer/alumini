@@ -101,6 +101,7 @@ export default function Navbar() {
                     <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 bg-slate-100/50 backdrop-blur-md rounded-full p-1 border border-slate-200/50">
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="/courses">Courses</NavLink>
+                        <NavLink to="/arena">Arena</NavLink>
                         <NavLink to="/contact">Contact</NavLink>
                         {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
                     </div>
@@ -205,8 +206,6 @@ export default function Navbar() {
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-4 ml-2">Quick Navigation</p>
                                     <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home Landing</MobileNavLink>
-                                    <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Our Journey</MobileNavLink>
-                                    <MobileNavLink to="/gallery" onClick={() => setIsOpen(false)}>Lab Gallery Feed</MobileNavLink>
                                     <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Professional Courses</MobileNavLink>
                                     <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Connect with Us</MobileNavLink>
                                 </div>

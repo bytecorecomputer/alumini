@@ -140,13 +140,7 @@ export default function AdminDashboard() {
                             href="/admin/coaching"
                             color="blue"
                         />
-                        <ActionCard
-                            title="Upload Certificate"
-                            subtitle="Security Vault"
-                            icon={<UploadCloud />}
-                            href="/admin/certificates/upload"
-                            color="purple"
-                        />
+
                         <ActionCard
                             title="Generate Certificate"
                             subtitle="Academic Diploma"
