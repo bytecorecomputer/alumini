@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     Users, GraduationCap, Briefcase, Shield, Trash2, Search,
     Award, ShieldAlert, ShieldOff, X, MapPin, Linkedin, Github,
-    ChevronRight, ExternalLink, Mail, Edit3, Database, UploadCloud, Calendar, Zap
+    ChevronRight, ExternalLink, Mail, Edit3, Database, UploadCloud, Calendar, Zap, ArrowUpRight
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { getOptimizedUrl } from "../lib/cloudinary";

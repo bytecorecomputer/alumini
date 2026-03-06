@@ -1,0 +1,23 @@
+{
+    "name": "ByteCore Computer Centre",
+    "short_name": "ByteCore",
+    "description": "#1 Choice for Offline Tech Mastery in Bareilly",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0f172a",
+    "theme_color": "#0f172a",
+    "icons": [
+        {
+            "src": "/logo.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

@@ -92,9 +92,9 @@ export default function InstallPWA() {
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 100, opacity: 0 }}
-                className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[150] w-[90%] max-w-sm"
+                className="fixed bottom-6 inset-x-0 z-[150] px-4 flex justify-center"
             >
-                <div className="bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-slate-800 flex items-center justify-between gap-4">
+                <div className="w-full max-w-sm bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-slate-800 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-900/40">
                             <Smartphone size={20} className="text-white" />
