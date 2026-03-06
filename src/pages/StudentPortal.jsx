@@ -331,69 +331,83 @@ export default function StudentPortal() {
                             </div>
                         )}
 
-                        {activeTab === 'fees' && (
-                            <div className="max-w-4xl mx-auto space-y-8">
-                                <div className="p-12 bg-white rounded-[3rem] border border-slate-100 shadow-sm relative overflow-hidden text-center">
-                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-2 bg-blue-600 rounded-b-full" />
-                                    <p className="text-slate-400 font-black uppercase tracking-widest text-xs mb-4">Current Balance Account</p>
-                                    <h3 className="text-7xl font-black text-slate-900 tracking-tighter mb-4">
-                                        ₹{student.pendingFees || 0}
-                                    </h3>
-                                    <p className="text-slate-500 font-bold text-sm mb-12">Total balance to clear for certification eligibility.</p>
+                        {activeTab === 'fees' && (() => {
+                            const totalPaid = (student.paidFees || 0) + (student.oldPaidFees || 0);
+                            const pendingFees = Math.max(0, (student.totalFees || 0) - totalPaid);
 
-                                    <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-12">
-                                        <div className="p-6 bg-slate-50 rounded-3xl">
-                                            <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Paid Amount</p>
-                                            <p className="text-xl font-black text-emerald-600">₹{(student.totalFees || 0) - (student.pendingFees || 0)}</p>
-                                        </div>
-                                        <div className="p-6 bg-slate-50 rounded-3xl">
-                                            <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Total Fee</p>
-                                            <p className="text-xl font-black text-slate-900">₹{student.totalFees || 0}</p>
-                                        </div>
-                                    </div>
+                            return (
+                                <div className="max-w-4xl mx-auto space-y-8">
+                                    <div className="p-12 bg-white rounded-[3rem] border border-slate-100 shadow-sm relative overflow-hidden text-center">
+                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-2 bg-blue-600 rounded-b-full" />
+                                        <p className="text-slate-400 font-black uppercase tracking-widest text-xs mb-4">Current Balance Account</p>
+                                        <h3 className="text-7xl font-black text-slate-900 tracking-tighter mb-4">
+                                            ₹{pendingFees}
+                                        </h3>
+                                        <p className="text-slate-500 font-bold text-sm mb-12">Total balance to clear for certification eligibility.</p>
 
-                                    <button className="px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
-                                        Download Fee Statement
-                                    </button>
-                                </div>
-
-                                <div className="bg-white rounded-[3rem] p-8 border border-slate-100 shadow-sm">
-                                    <div className="flex items-center justify-between mb-8">
-                                        <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Transaction History</h3>
-                                        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest">
-                                            <ShieldCheck size={14} /> Encrypted
-                                        </div>
-                                    </div>
-                                    <div className="divide-y divide-slate-100">
-                                        {(student.paymentHistory || []).length > 0 ? (
-                                            student.paymentHistory.map((pmt, i) => (
-                                                <div key={i} className="py-6 flex items-center justify-between group">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="h-10 w-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
-                                                            <CheckCircle size={18} />
-                                                        </div>
-                                                        <div>
-                                                            <p className="font-black text-slate-900">₹{pmt.amount}</p>
-                                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{pmt.date}</p>
-                                                        </div>
-                                                    </div>
-                                                    <button className="p-3 text-slate-300 hover:text-blue-600 transition-colors">
-                                                        <FileText size={18} />
-                                                    </button>
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <div className="py-20 text-center">
-                                                <div className="h-16 w-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
-                                                    <CreditCard size={32} />
-                                                </div>
-                                                <p className="text-slate-400 font-black text-xs uppercase tracking-widest">No transactions found</p>
+                                        <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-12">
+                                            <div className="p-6 bg-slate-50 rounded-3xl">
+                                                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Paid Amount</p>
+                                                <p className="text-xl font-black text-emerald-600">₹{totalPaid}</p>
                                             </div>
-                                        )}
+                                            <div className="p-6 bg-slate-50 rounded-3xl">
+                                                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Total Fee</p>
+                                                <p className="text-xl font-black text-slate-900">₹{student.totalFees || 0}</p>
+                                            </div>
+                                        </div>
+
+                                        <button className="px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+                                            Download Fee Statement
+                                        </button>
+                                    </div>
+
+                                    <div className="bg-white rounded-[3rem] p-8 border border-slate-100 shadow-sm">
+                                        <div className="flex items-center justify-between mb-8">
+                                            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Transaction History</h3>
+                                            <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                                <ShieldCheck size={14} /> Encrypted
+                                            </div>
+                                        </div>
+                                        <div className="divide-y divide-slate-100">
+                                            {(student.installments || []).length > 0 ? (
+                                                student.installments.map((pmt, i) => (
+                                                    <div key={i} className="py-6 flex items-center justify-between group">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="h-10 w-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                                                                <CheckCircle size={18} />
+                                                            </div>
+                                                            <div>
+                                                                <div className="flex items-center gap-2 mb-1">
+                                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">Receipt Confirmed</p>
+                                                                    {pmt.installmentNo && (
+                                                                        <span className="px-2 py-0.5 bg-blue-100 text-blue-600 text-[8px] font-black rounded-lg uppercase tracking-tighter">Inst. #{pmt.installmentNo}</span>
+                                                                    )}
+                                                                </div>
+                                                                <p className="font-black text-slate-900">₹{pmt.amount}</p>
+                                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{pmt.date}</p>
+                                                                {pmt.note && (
+                                                                    <p className="text-[10px] text-slate-500 italic font-medium mt-1">{pmt.note}</p>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <button className="p-3 text-slate-300 hover:text-blue-600 transition-colors">
+                                                            <FileText size={18} />
+                                                        </button>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <div className="py-20 text-center">
+                                                    <div className="h-16 w-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                        <CreditCard size={32} />
+                                                    </div>
+                                                    <p className="text-slate-400 font-black text-xs uppercase tracking-widest">No transactions found</p>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            );
+                        })()}
                     </motion.div>
                 </AnimatePresence>
             </div>
