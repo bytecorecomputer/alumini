@@ -49,13 +49,16 @@ export default function InstallPWA() {
 
         // Check for iOS instructions
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        let timer;
         if (isIOS && !isStandalone && !checkDismissalState()) {
             // Show iOS specific instructions after a short delay
-            const timer = setTimeout(() => setIsVisible(true), 3000);
-            return () => clearTimeout(timer);
+            timer = setTimeout(() => setIsVisible(true), 3000);
         }
 
-        return () => window.removeEventListener('beforeinstallprompt', handler);
+        return () => {
+            window.removeEventListener('beforeinstallprompt', handler);
+            if (timer) clearTimeout(timer);
+        };
     }, [isStandalone]);
 
     const handleInstall = async () => {
