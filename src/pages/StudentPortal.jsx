@@ -9,7 +9,7 @@ import {
 import { useAuth } from '../app/common/AuthContext';
 import QuizModule from '../components/student/QuizModule';
 import { COURSE_CURRICULUM, QUIZ_BANK } from '../lib/quizData';
-import { uploadToImageKit } from '../lib/imagekit.js';
+import { uploadToSupabase } from '../lib/supabase';
 import { db } from '../firebase/firestore';
 import { doc, updateDoc } from 'firebase/firestore';
 import { Camera, Loader2, ImagePlus } from 'lucide-react';
@@ -44,8 +44,8 @@ export default function StudentPortal() {
             // 1. Compress Image (50KB limit)
             const compressedFile = await compressImage(file, 50);
 
-            // 2. Upload to ImageKit
-            const imageUrl = await uploadToImageKit(compressedFile, student.registration, '/students');
+            // 2. Upload to Supabase
+            const imageUrl = await uploadToSupabase(compressedFile, student.registration, 'student-photos');
 
             // 3. Update Firestore
             const studentRef = doc(db, 'students', student.registration);

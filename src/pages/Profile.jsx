@@ -6,7 +6,8 @@ import { db } from '../firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Briefcase, BookOpen, MapPin, Save, Loader2, Award, Camera, Phone, Linkedin, Github, Shield, ShieldAlert, FileText } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { uploadToCloudinary, getOptimizedUrl } from '../lib/cloudinary';
+import { uploadToSupabase } from '../lib/supabase';
+import { getOptimizedUrl } from '../lib/cloudinary';
 
 export default function Profile() {
     const { user, userData, role } = useAuth();
@@ -56,8 +57,8 @@ export default function Profile() {
         setUploading(true);
 
         try {
-            // Advanced Cloudinary Upload (Bypasses Firestore size limits)
-            const imageUrl = await uploadToCloudinary(file);
+            // Advanced Supabase Upload
+            const imageUrl = await uploadToSupabase(file, user.uid, 'student-photos');
 
             if (imageUrl) {
                 // Update Firestore user document with the public URL
@@ -66,8 +67,7 @@ export default function Profile() {
                 });
 
                 alert("Profile identity graphic updated successfully!");
-                // No need to reload, the state should eventually update if using hooks
-                // but window.location.reload() ensures all components get the new URL
+                // Refresh to sync Auth state
                 window.location.reload();
             }
         } catch (err) {

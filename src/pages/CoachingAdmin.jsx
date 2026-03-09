@@ -11,7 +11,7 @@ import {
     BookOpen, Settings, BarChart3, ArrowUpRight, GraduationCap, CheckCircle, Bell
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { uploadToCloudinary } from '../lib/cloudinary';
+import { uploadToSupabase } from '../lib/supabase';
 import { compressImage } from '../lib/imageCompression';
 import { runThiriyaMigration } from '../lib/migrateBytecoreThiriya';
 import { syncAggregateStats } from '../lib/migrateStudents';
@@ -749,7 +749,7 @@ export default function CoachingAdmin() {
                                                     setIsUpdating(true);
                                                     try {
                                                         const compressed = await compressImage(file, 50); // Target 50KB
-                                                        const url = await uploadToCloudinary(compressed);
+                                                        const url = await uploadToSupabase(compressed, studentForm.registration, 'student-photos');
                                                         setStudentForm({ ...studentForm, photoUrl: url });
                                                     } catch (err) {
                                                         alert("Photo upload failed: " + err.message);
