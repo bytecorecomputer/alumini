@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, MapPin, Clock, Plus, Trash2, Edit2, X, Save, Users, Video, ArrowRight, Zap, Target, Camera, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { sendTelegramNotification } from '../lib/telegram';
-import { uploadToCloudinary, getOptimizedUrl } from '../lib/cloudinary';
+import { uploadToSupabase } from '../lib/supabase';
+import { getOptimizedUrl } from '../lib/cloudinary';
 import SEO from '../components/common/SEO';
 
 export default function Events() {
@@ -66,7 +67,7 @@ export default function Events() {
 
         setUploading(true);
         try {
-            const imageUrl = await uploadToCloudinary(file);
+            const imageUrl = await uploadToSupabase(file, user.uid, 'event-images');
             setFormData({ ...formData, image: imageUrl });
         } catch (error) {
             alert(error.message || "Event graphic sync failed.");

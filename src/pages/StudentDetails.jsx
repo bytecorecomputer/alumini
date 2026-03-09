@@ -8,8 +8,7 @@ import {
     ArrowRight, TrendingUp, ShieldCheck, Wallet, History,
     GraduationCap
 } from "lucide-react";
-import { cn } from "../lib/utils";
-import { uploadToImageKit } from "../lib/imagekit";
+import { uploadToSupabase } from "../lib/supabase";
 import { compressImage } from "../lib/imageCompression";
 import { syncAggregateStats } from "../lib/migrateStudents";
 
@@ -361,7 +360,7 @@ export default function StudentDetails() {
                                                         setIsUpdating(true);
                                                         try {
                                                             const compressed = await compressImage(file, 50);
-                                                            const url = await uploadToImageKit(compressed, id, '/students');
+                                                            const url = await uploadToSupabase(compressed, id, 'student-photos');
                                                             setEditForm({ ...editForm, photoUrl: url });
                                                         } catch (err) {
                                                             alert("Photo upload failed: " + err.message);

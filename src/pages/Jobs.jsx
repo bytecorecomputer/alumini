@@ -6,7 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, MapPin, Building, Plus, Trash2, X, Search, Filter, ArrowRight, Zap, Target, ExternalLink, Camera, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { sendTelegramNotification } from '../lib/telegram';
-import { uploadToCloudinary, getOptimizedUrl } from '../lib/cloudinary';
+import { uploadToSupabase } from '../lib/supabase';
+import { getOptimizedUrl } from '../lib/cloudinary';
 import SEO from '../components/common/SEO';
 
 export default function Jobs() {
@@ -67,7 +68,7 @@ export default function Jobs() {
 
         setUploading(true);
         try {
-            const imageUrl = await uploadToCloudinary(file);
+            const imageUrl = await uploadToSupabase(file, user.uid, 'job-images');
             setFormData({ ...formData, image: imageUrl });
         } catch (error) {
             alert(error.message || "Visual sync failed.");
