@@ -48,15 +48,27 @@ export default function QuizModule({ student }) {
 
     // 2. Load Progress on mount
     useEffect(() => {
+        let isMounted = true;
         const loadDb = async () => {
             if (student?.registration) {
                 await studentQuizProfileInit(student.registration);
                 const data = await getStudentQuizProgress(student.registration);
-                if (data) setProgress(data);
+                if (isMounted) {
+                    if (data) {
+                        setProgress({
+                            completedModules: data.completedModules || [],
+                            unlockedBadges: data.unlockedBadges || [],
+                            totalScore: data.totalScore || 0
+                        });
+                    }
+                    setLoadingProgress(false);
+                }
+            } else if (isMounted) {
+                setLoadingProgress(false);
             }
-            setLoadingProgress(false);
         };
         loadDb();
+        return () => { isMounted = false; };
     }, [student]);
 
     // Calculate overall completion

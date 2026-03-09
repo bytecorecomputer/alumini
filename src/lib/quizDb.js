@@ -6,14 +6,18 @@ import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
  */
 export async function studentQuizProfileInit(studentId) {
     if (!studentId) return;
-    const ref = doc(db, 'quiz_progress', studentId);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) {
-        await setDoc(ref, {
-            completedModules: [],
-            unlockedBadges: [],
-            totalScore: 0
-        });
+    try {
+        const ref = doc(db, 'quiz_progress', studentId);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+            await setDoc(ref, {
+                completedModules: [],
+                unlockedBadges: [],
+                totalScore: 0
+            });
+        }
+    } catch (error) {
+        console.error("Error initializing quiz profile:", error);
     }
 }
 
@@ -21,13 +25,18 @@ export async function studentQuizProfileInit(studentId) {
  * Gets student's quiz progress
  */
 export async function getStudentQuizProgress(studentId) {
-    if (!studentId) return null;
-    const ref = doc(db, 'quiz_progress', studentId);
-    const snap = await getDoc(ref);
-    if (snap.exists()) {
-        return snap.data();
+    const defaultState = { completedModules: [], unlockedBadges: [], totalScore: 0 };
+    if (!studentId) return defaultState;
+    try {
+        const ref = doc(db, 'quiz_progress', studentId);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+            return snap.data();
+        }
+    } catch (error) {
+        console.error("Error getting quiz progress:", error);
     }
-    return { completedModules: [], unlockedBadges: [], totalScore: 0 };
+    return defaultState;
 }
 
 /**
@@ -36,24 +45,28 @@ export async function getStudentQuizProgress(studentId) {
  */
 export async function markModuleCompleted(studentId, moduleIdentifier, scoreEarned) {
     if (!studentId || !moduleIdentifier) return;
-    const ref = doc(db, 'quiz_progress', studentId);
-    const snap = await getDoc(ref);
+    try {
+        const ref = doc(db, 'quiz_progress', studentId);
+        const snap = await getDoc(ref);
 
-    if (snap.exists()) {
-        const data = snap.data();
-        const modules = data.completedModules || [];
-        if (!modules.includes(moduleIdentifier)) {
-            await updateDoc(ref, {
-                completedModules: [...modules, moduleIdentifier],
-                totalScore: (data.totalScore || 0) + scoreEarned
+        if (snap.exists()) {
+            const data = snap.data();
+            const modules = data.completedModules || [];
+            if (!modules.includes(moduleIdentifier)) {
+                await updateDoc(ref, {
+                    completedModules: [...modules, moduleIdentifier],
+                    totalScore: (data.totalScore || 0) + scoreEarned
+                });
+            }
+        } else {
+            await setDoc(ref, {
+                completedModules: [moduleIdentifier],
+                unlockedBadges: [],
+                totalScore: scoreEarned
             });
         }
-    } else {
-        await setDoc(ref, {
-            completedModules: [moduleIdentifier],
-            unlockedBadges: [],
-            totalScore: scoreEarned
-        });
+    } catch (error) {
+        console.error("Error marking module completed:", error);
     }
 }
 
@@ -63,22 +76,26 @@ export async function markModuleCompleted(studentId, moduleIdentifier, scoreEarn
  */
 export async function awardMasterBadge(studentId, badgeName) {
     if (!studentId || !badgeName) return;
-    const ref = doc(db, 'quiz_progress', studentId);
-    const snap = await getDoc(ref);
+    try {
+        const ref = doc(db, 'quiz_progress', studentId);
+        const snap = await getDoc(ref);
 
-    if (snap.exists()) {
-        const data = snap.data();
-        const badges = data.unlockedBadges || [];
-        if (!badges.includes(badgeName)) {
-            await updateDoc(ref, {
-                unlockedBadges: [...badges, badgeName]
+        if (snap.exists()) {
+            const data = snap.data();
+            const badges = data.unlockedBadges || [];
+            if (!badges.includes(badgeName)) {
+                await updateDoc(ref, {
+                    unlockedBadges: [...badges, badgeName]
+                });
+            }
+        } else {
+            await setDoc(ref, {
+                completedModules: [],
+                unlockedBadges: [badgeName],
+                totalScore: 0
             });
         }
-    } else {
-        await setDoc(ref, {
-            completedModules: [],
-            unlockedBadges: [badgeName],
-            totalScore: 0
-        });
+    } catch (error) {
+        console.error("Error awarding master badge:", error);
     }
 }
