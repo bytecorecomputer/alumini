@@ -67,7 +67,7 @@ export default function Events() {
 
         setUploading(true);
         try {
-            const imageUrl = await uploadToSupabase(file, user.uid, 'event-images');
+            const imageUrl = await uploadToSupabase(file, user.uid, 'student bcc');
             setFormData({ ...formData, image: imageUrl });
         } catch (error) {
             alert(error.message || "Event graphic sync failed.");

@@ -58,7 +58,7 @@ export default function Profile() {
 
         try {
             // Advanced Supabase Upload
-            const imageUrl = await uploadToSupabase(file, user.uid, 'student-photos');
+            const imageUrl = await uploadToSupabase(file, user.uid, 'student bcc');
 
             if (imageUrl) {
                 // Update Firestore user document with the public URL

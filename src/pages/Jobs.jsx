@@ -68,7 +68,7 @@ export default function Jobs() {
 
         setUploading(true);
         try {
-            const imageUrl = await uploadToSupabase(file, user.uid, 'job-images');
+            const imageUrl = await uploadToSupabase(file, user.uid, 'student bcc');
             setFormData({ ...formData, image: imageUrl });
         } catch (error) {
             alert(error.message || "Visual sync failed.");

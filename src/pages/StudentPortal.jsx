@@ -45,7 +45,7 @@ export default function StudentPortal() {
             const compressedFile = await compressImage(file, 50);
 
             // 2. Upload to Supabase
-            const imageUrl = await uploadToSupabase(compressedFile, student.registration, 'student-photos');
+            const imageUrl = await uploadToSupabase(compressedFile, student.registration, 'student bcc');
 
             // 3. Update Firestore
             const studentRef = doc(db, 'students', student.registration);

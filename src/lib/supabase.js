@@ -3,11 +3,30 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('Supabase URL or Anon Key is missing in environment variables.');
-}
+// Validation for Supabase initialization
+const validateSupabaseConfig = (url, key) => {
+    if (!url || !key) {
+        console.error('Supabase Error: URL or Anon Key is missing in environment variables.');
+        return false;
+    }
+    try {
+        new URL(url);
+        return true;
+    } catch (e) {
+        console.error('Supabase Error: Invalid URL provided:', url);
+        return false;
+    }
+};
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const isConfigValid = validateSupabaseConfig(supabaseUrl, supabaseAnonKey);
+
+export const supabase = isConfigValid
+    ? createClient(supabaseUrl, supabaseAnonKey)
+    : null;
+
+if (!supabase) {
+    console.warn('Supabase client failed to initialize. Storage features will be unavailable.');
+}
 
 /**
  * Uploads a file to Supabase Storage.
@@ -16,7 +35,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
  * @param {string} bucketName - The target bucket name (default: 'student-photos').
  * @returns {Promise<string>} - The public URL of the uploaded image.
  */
-export const uploadToSupabase = async (file, registration, bucketName = 'student-photos') => {
+export const uploadToSupabase = async (file, registration, bucketName = 'student bcc') => {
+    if (!supabase) {
+        console.error('Supabase client is not initialized. Cannot upload.');
+        throw new Error('Supabase client is not initialized. Please check your configuration.');
+    }
     if (!file) return null;
 
     try {
@@ -30,7 +53,8 @@ export const uploadToSupabase = async (file, registration, bucketName = 'student
             .from(bucketName)
             .upload(filePath, file, {
                 cacheControl: '3600',
-                upsert: true
+                upsert: true,
+                contentType: file.type || 'image/jpeg'
             });
 
         if (error) {
@@ -43,6 +67,7 @@ export const uploadToSupabase = async (file, registration, bucketName = 'student
             .from(bucketName)
             .getPublicUrl(filePath);
 
+        console.log('Generated Supabase URL:', publicUrl);
         return publicUrl;
     } catch (error) {
         console.error('Supabase protocol error:', error);
