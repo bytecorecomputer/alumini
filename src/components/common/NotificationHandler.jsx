@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { requestNotificationPermission, onMessageListener } from '../../lib/notifications';
 import { useAuth } from '../../app/common/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, X, Info, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Bell, X, Info, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 export default function NotificationHandler() {
@@ -17,7 +17,9 @@ export default function NotificationHandler() {
 
         // 1. Check permission status
         if (Notification.permission === 'default') {
-            setShowPermissionPrompt(true);
+            // Delay prompt to not overwhelm user immediately on load
+            const timer = setTimeout(() => setShowPermissionPrompt(true), 2500);
+            return () => clearTimeout(timer);
         } else if (Notification.permission === 'granted') {
             requestNotificationPermission(userId);
         }
@@ -33,10 +35,17 @@ export default function NotificationHandler() {
 
     }, [userId]);
 
+    const [isRequesting, setIsRequesting] = useState(false);
+
     const handleEnable = async () => {
-        const token = await requestNotificationPermission(userId);
-        if (token) {
-            setShowPermissionPrompt(false);
+        setIsRequesting(true);
+        try {
+            const token = await requestNotificationPermission(userId);
+            if (token) {
+                setShowPermissionPrompt(false);
+            }
+        } finally {
+            setIsRequesting(false);
         }
     };
 
@@ -61,9 +70,10 @@ export default function NotificationHandler() {
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleEnable}
-                                        className="flex-1 py-3 bg-white text-slate-950 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-md active:scale-95"
+                                        disabled={isRequesting}
+                                        className="flex-1 py-3 bg-white text-slate-950 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
                                     >
-                                        Enable Now
+                                        {isRequesting ? <Loader2 className="animate-spin" size={14} /> : "Enable Now"}
                                     </button>
                                     <button
                                         onClick={() => setShowPermissionPrompt(false)}

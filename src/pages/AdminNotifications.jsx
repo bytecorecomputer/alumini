@@ -63,12 +63,56 @@ export default function AdminNotifications() {
 
         setLoading(true);
         try {
+            // Gather Tokens
+            const usersRef = collection(db, "users");
+            const studentsRef = collection(db, "students");
+            const qUsers = query(usersRef, where("notificationsEnabled", "==", true));
+            const qStudents = query(studentsRef, where("notificationsEnabled", "==", true));
+
+            const [uSnap, sSnap] = await Promise.all([getDocs(qUsers), getDocs(qStudents)]);
+
+            let allTokens = new Set();
+            uSnap.forEach(doc => {
+                const data = doc.data();
+                if (data.fcmTokens) data.fcmTokens.forEach(t => allTokens.add(t));
+            });
+            sSnap.forEach(doc => {
+                const data = doc.data();
+                if (data.fcmTokens) data.fcmTokens.forEach(t => allTokens.add(t));
+            });
+
+            const tokensArray = Array.from(allTokens);
+            if (tokensArray.length === 0) throw new Error("No FCM tokens found.");
+
+            // Add to Queue History
             await queueBroadcast(title.trim(), message.trim(), user?.uid);
+
+            // Send via Serverless
+            const response = await fetch('/api/send-notification', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: title.trim(),
+                    body: message.trim(),
+                    tokens: tokensArray
+                })
+            });
+
+            const result = await response.json();
+            console.log("Push API Response:", result);
+
             setTitle("");
             setMessage("");
             fetchData(); // Refresh history
+
+            if (response.ok) {
+                alert(`Broadcast Pushed! Delivered to ${result.successCount} devices.`);
+            } else {
+                alert("Broadcast API partially failed. Check console.");
+            }
         } catch (e) {
-            alert("Broadcast creation failed. Check network.");
+            console.error("Broadcast failed:", e);
+            alert("Broadcast creation failed: " + e.message);
         } finally {
             setLoading(false);
         }
