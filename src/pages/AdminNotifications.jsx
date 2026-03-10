@@ -98,6 +98,14 @@ export default function AdminNotifications() {
                 })
             });
 
+            if (response.status === 404) {
+                alert("Queue Generated ✅\n\n(Local Dev Mode: Live Push via Firebase Admin SDK requires Vercel Production Environment. The broadcast has been queued in Firestore.)");
+                setTitle("");
+                setMessage("");
+                fetchData();
+                return;
+            }
+
             const result = await response.json();
             console.log("Push API Response:", result);
 

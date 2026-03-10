@@ -205,14 +205,23 @@ export default function Navbar() {
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] mb-4 ml-2">Quick Navigation</p>
                                     <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home Landing</MobileNavLink>
+                                    <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink>
                                     <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Professional Courses</MobileNavLink>
-                                    <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Connect with Us</MobileNavLink>
+                                    <MobileNavLink to="/gallery" onClick={() => setIsOpen(false)}>Dome Gallery</MobileNavLink>
                                 </div>
 
                                 <div className="space-y-1 pt-6 border-t border-slate-100">
-                                    <p className="text-[10px] font-black text-purple-600 uppercase tracking-[0.2em] mb-4 ml-2">Academics & Trust</p>
+                                    <p className="text-[10px] font-black text-amber-600 uppercase tracking-[0.2em] mb-4 ml-2">Alumni & Networking</p>
+                                    <MobileNavLink to="/directory" onClick={() => setIsOpen(false)}>Alumni Directory</MobileNavLink>
+                                    <MobileNavLink to="/events" onClick={() => setIsOpen(false)}>Networking Events</MobileNavLink>
+                                    <MobileNavLink to="/jobs" onClick={() => setIsOpen(false)}>Career & Jobs</MobileNavLink>
+                                </div>
+
+                                <div className="space-y-1 pt-6 border-t border-slate-100">
+                                    <p className="text-[10px] font-black text-purple-600 uppercase tracking-[0.2em] mb-4 ml-2">Academics & Support</p>
                                     <MobileNavLink to="/certificate" onClick={() => setIsOpen(false)}>Student Certificates</MobileNavLink>
                                     <MobileNavLink to="/fee-check" onClick={() => setIsOpen(false)}>Course Fee Verification</MobileNavLink>
+                                    <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Connect With Us</MobileNavLink>
                                 </div>
 
                                 <div className="mt-auto pt-10 space-y-4">
