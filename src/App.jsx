@@ -5,6 +5,7 @@ import { AuthProvider } from "./app/common/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import InstallPWA from "./components/common/InstallPWA";
+import NotificationHandler from "./components/common/NotificationHandler";
 
 // Lazy load pages for performance
 const Home = lazy(() => import("./pages/Home"));
@@ -31,6 +32,7 @@ const StudentDetails = lazy(() => import("./pages/StudentDetails"));
 const CertificateGenerator = lazy(() => import("./pages/CertificateGenerator"));
 const CertificateDownload = lazy(() => import("./pages/CertificateDownload"));
 const AdminCertificateUpload = lazy(() => import("./pages/AdminCertificateUpload"));
+const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -48,6 +50,7 @@ export default function App() {
       <BrowserRouter>
         <Layout>
           <InstallPWA />
+          <NotificationHandler />
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -120,6 +123,11 @@ export default function App() {
               <Route path="/admin/certificates/upload" element={
                 <AdminRoute>
                   <AdminCertificateUpload />
+                </AdminRoute>
+              } />
+              <Route path="/admin/notifications" element={
+                <AdminRoute>
+                  <AdminNotifications />
                 </AdminRoute>
               } />
 

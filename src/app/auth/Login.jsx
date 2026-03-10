@@ -2,18 +2,31 @@ import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/aut
 import { auth } from "../../firebase/auth";
 import { doc, getDoc, query, collection, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firestore";
-import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Loader2, GraduationCap, ArrowRight, ShieldCheck, X, Zap } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { sendTelegramNotification } from "../../lib/telegram";
 import { checkMonthlyFeeReminders } from "../../lib/feeAutomation";
+import { useAuth } from "../../app/common/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, role, student, loginStudent } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Handle auto-redirect when context is updated
+  useEffect(() => {
+    if (user && role) {
+      const from = location.state?.from?.pathname || (role === 'admin' || role === 'super_admin' ? "/admin/dashboard" : "/directory");
+      navigate(from, { replace: true });
+    } else if (student) {
+      navigate('/student-portal', { replace: true });
+    }
+  }, [user, role, student, navigate, location]);
 
   // Forgot Password States
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -51,16 +64,17 @@ export default function Login() {
         }
 
         const userData = snap.data();
-        const { role } = userData;
+        const userRole = userData.role;
 
         sendTelegramNotification('login', {
           displayName: userData.displayName,
           email: userData.email,
-          role: role
+          role: userRole
         });
 
-        if (role === "admin" || role === "super_admin") navigate("/admin/dashboard");
-        else navigate("/directory");
+        // Navigation is purposefully omitted here. 
+        // The useEffect hook will naturally catch the population of `user` and `role` 
+        // from the AuthContext and redirect safely, preventing Auth Observer race conditions.
       } catch (err) {
         setError(err.code === 'auth/invalid-credential' ? "Identity verification failed." : "Authentication failed.");
       } finally {
@@ -83,7 +97,8 @@ export default function Login() {
 
           // Verify mobile number matches for security
           if (studentData.mobile?.trim() === studentMobile.trim()) {
-            localStorage.setItem('student_session', JSON.stringify(studentData));
+            // Use context provider properly to keep everything in sync
+            loginStudent(studentData);
 
             sendTelegramNotification('login', {
               displayName: studentData.fullName,
@@ -94,7 +109,7 @@ export default function Login() {
             // Trigger Targeted Fee Audit
             checkMonthlyFeeReminders(studentData.registration);
 
-            navigate('/student-portal');
+            // Navigation handled by the useEffect above
           } else {
             setError('Invalid Mobile Number for this Registration.');
           }

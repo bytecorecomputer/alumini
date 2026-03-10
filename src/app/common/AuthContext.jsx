@@ -69,6 +69,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
+      setLoading(true);
       try {
         if (u) {
           try {
