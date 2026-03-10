@@ -148,8 +148,8 @@ export default function StudentPortal() {
                     </div>
                 </div>
 
-                {/* Navigation Tabs */}
-                <div className="flex items-center gap-1 p-1.5 bg-white/50 backdrop-blur-xl border border-white/50 rounded-[2rem] mb-12 overflow-x-auto no-scrollbar scroll-smooth">
+                {/* Desktop Navigation Tabs */}
+                <div className="hidden md:flex items-center gap-1 p-1.5 bg-white/50 backdrop-blur-xl border border-white/50 rounded-[2rem] mb-12 overflow-x-auto no-scrollbar scroll-smooth">
                     {tabs.map(tab => (
                         <button
                             key={tab.id}
@@ -415,6 +415,45 @@ export default function StudentPortal() {
                         })()}
                     </motion.div>
                 </AnimatePresence>
+            </div>
+
+            {/* Mobile Bottom Navigation (Student) */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] pb-safe bg-white border-t border-slate-200 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.1)]">
+                <div className="flex items-center justify-around px-2 py-3 bg-white/80 backdrop-blur-xl">
+                    {tabs.map((tab) => {
+                        const isActive = activeTab === tab.id;
+                        const Icon = tab.icon;
+
+                        return (
+                            <button
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab.id)}
+                                className="relative flex flex-col items-center justify-center w-full focus:outline-none tap-highlight-transparent"
+                                style={{ WebkitTapHighlightColor: 'transparent' }}
+                            >
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="studentBottomNavIndicator"
+                                        className="absolute inset-0 bg-blue-50 rounded-2xl -z-10"
+                                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                                    />
+                                )}
+                                <div className={cn(
+                                    "flex items-center justify-center transition-all duration-300 mb-1 rounded-xl p-2",
+                                    isActive ? "text-blue-600 scale-110" : "text-slate-400 hover:text-slate-600"
+                                )}>
+                                    <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+                                </div>
+                                <span className={cn(
+                                    "text-[9px] font-black uppercase tracking-widest transition-colors duration-300",
+                                    isActive ? "text-blue-600" : "text-slate-400"
+                                )}>
+                                    {tab.label.split(' ')[0]} {/* Shorten label slightly for fit */}
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );

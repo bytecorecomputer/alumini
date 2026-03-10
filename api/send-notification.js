@@ -5,9 +5,17 @@ if (!admin.apps.length) {
     try {
         let serviceAccount;
 
-        // Try to parse FIREBASE_SERVICE_ACCOUNT from env
         if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-            serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+            // Sometimes Vercel strips or double escapes newlines in JSON strings.
+            let rawJson = process.env.FIREBASE_SERVICE_ACCOUNT;
+            // Ensure any stringified \n is properly replaced before parsing
+            // Actually, if it's JSON, the parser handles \\n as \n inside strings.
+            serviceAccount = JSON.parse(rawJson);
+
+            // Just in case it got unescaped during ENV storage:
+            if (serviceAccount.private_key) {
+                serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+            }
         } else {
             // Fallback for individual env vars
             serviceAccount = {

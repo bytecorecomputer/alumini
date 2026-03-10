@@ -116,7 +116,7 @@ export default function AdminNotifications() {
             if (response.ok) {
                 alert(`Broadcast Pushed! Delivered to ${result.successCount} devices.`);
             } else {
-                alert("Broadcast API partially failed. Check console.");
+                alert(`Broadcast API Failed!\nError: ${result.error || 'Unknown'}\nDetails: ${result.details || 'Check Vercel Serverless Logs'}`);
             }
         } catch (e) {
             console.error("Broadcast failed:", e);

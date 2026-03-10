@@ -11,20 +11,21 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [userData, setUserData] = useState(null);
-  const [student, setStudent] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  // Sync Student Session on Init
-  useEffect(() => {
+  // Synchronous session load limits "Unauthorized" flashing
+  const [student, setStudent] = useState(() => {
     const session = localStorage.getItem('student_session');
     if (session) {
       try {
-        setStudent(JSON.parse(session));
+        return JSON.parse(session);
       } catch (err) {
         localStorage.removeItem('student_session');
       }
     }
-  }, []);
+    return null;
+  });
+
+  const [loading, setLoading] = useState(true);
 
   // Sync Student Firestore for Real-time updates if student is logged in
   useEffect(() => {
