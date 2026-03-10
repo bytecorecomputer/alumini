@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { User, Briefcase, BookOpen, MapPin, Save, Loader2, Award, Camera, Phone, Linkedin, Github, Shield, ShieldAlert, FileText } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { uploadToSupabase } from '../lib/supabase';
+import { compressImage } from '../lib/imageCompression';
 import { getOptimizedUrl } from '../lib/cloudinary';
 
 export default function Profile() {
@@ -57,8 +58,11 @@ export default function Profile() {
         setUploading(true);
 
         try {
-            // Advanced Supabase Upload
-            const imageUrl = await uploadToSupabase(file, user.uid, 'student bcc');
+            // 1. Compress Image (50KB limit)
+            const compressedFile = await compressImage(file, 50);
+
+            // 2. Advanced Supabase Upload
+            const imageUrl = await uploadToSupabase(compressedFile, user.uid, 'student bcc');
 
             if (imageUrl) {
                 // Update Firestore user document with the public URL

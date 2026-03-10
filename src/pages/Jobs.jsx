@@ -7,6 +7,7 @@ import { Briefcase, MapPin, Building, Plus, Trash2, X, Search, Filter, ArrowRigh
 import { cn } from '../lib/utils';
 import { sendTelegramNotification } from '../lib/telegram';
 import { uploadToSupabase } from '../lib/supabase';
+import { compressImage } from '../lib/imageCompression';
 import { getOptimizedUrl } from '../lib/cloudinary';
 import SEO from '../components/common/SEO';
 
@@ -68,7 +69,11 @@ export default function Jobs() {
 
         setUploading(true);
         try {
-            const imageUrl = await uploadToSupabase(file, user.uid, 'student bcc');
+            // 1. Compress Image (50KB limit)
+            const compressedFile = await compressImage(file, 50);
+
+            // 2. Upload to Supabase
+            const imageUrl = await uploadToSupabase(compressedFile, user.uid, 'student bcc');
             setFormData({ ...formData, image: imageUrl });
         } catch (error) {
             alert(error.message || "Visual sync failed.");
