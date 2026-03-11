@@ -366,7 +366,7 @@ export default function CoachingAdmin() {
                         </button>
                     </div>
 
-                    <div className="flex gap-4 w-full md:w-auto">
+                    <div className="flex flex-wrap gap-4 w-full md:w-auto">
                         <button
                             onClick={async () => {
                                 if (!window.confirm("Initiate Global Database Sync? \nThis will merge CSV installments and enforce standard fees.")) return;
@@ -397,13 +397,13 @@ export default function CoachingAdmin() {
                             }}
                             disabled={isUpdating}
                             className={cn(
-                                "hidden md:flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
+                                "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
                                 isUpdating ? "bg-blue-100 text-blue-400 cursor-not-allowed" : "bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white"
                             )}
                             title="Global Database Sync"
                         >
                             {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
-                            <span className="md:hidden font-black text-[10px] uppercase">Sync Database</span>
+                            <span className="font-black text-[10px] uppercase">Sync Database</span>
                         </button>
 
                         <button
@@ -426,13 +426,13 @@ export default function CoachingAdmin() {
                             }}
                             disabled={isUpdating}
                             className={cn(
-                                "hidden md:flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
+                                "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
                                 isUpdating ? "bg-amber-100 text-amber-400 cursor-not-allowed" : "bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white"
                             )}
                             title="Sync Thiriya CSV"
                         >
                             {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
-                            <span className="md:hidden font-black text-[10px] uppercase">Sync Thiriya</span>
+                            <span className="font-black text-[10px] uppercase">Sync Thiriya</span>
                         </button>
                         <button
                             onClick={async () => {
@@ -456,13 +456,13 @@ export default function CoachingAdmin() {
                             }}
                             disabled={isUpdating}
                             className={cn(
-                                "hidden md:flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
+                                "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
                                 isUpdating ? "bg-emerald-100 text-emerald-400 cursor-not-allowed" : "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white"
                             )}
                             title="Sync Live Nariyawal Google Sheet"
                         >
                             {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
-                            <span className="md:hidden font-black text-[10px] uppercase">Sync G-Sheet</span>
+                            <span className="font-black text-[10px] uppercase">Sync G-Sheet</span>
                         </button>
 
                         <button
@@ -486,13 +486,13 @@ export default function CoachingAdmin() {
                             }}
                             disabled={isUpdating}
                             className={cn(
-                                "hidden md:flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
+                                "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
                                 isUpdating ? "bg-purple-100 text-purple-400 cursor-not-allowed" : "bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white"
                             )}
                             title="Sync Live Thiriya Google Sheet"
                         >
                             {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
-                            <span className="md:hidden font-black text-[10px] uppercase">Sync Thiriya Sheet</span>
+                            <span className="font-black text-[10px] uppercase">Sync Thiriya Sheet</span>
                         </button>
                         <div className="flex gap-2">
                             <select

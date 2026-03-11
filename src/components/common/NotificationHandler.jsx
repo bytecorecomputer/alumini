@@ -4,16 +4,18 @@ import { useAuth } from '../../app/common/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, X, Info, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 export default function NotificationHandler() {
     const { user, student } = useAuth();
+    const navigate = useNavigate();
     const [notification, setNotification] = useState(null);
     const [showPermissionPrompt, setShowPermissionPrompt] = useState(false);
 
+    // userId can be undefined for guests
     const userId = user?.uid || student?.registration;
 
     useEffect(() => {
-        if (!userId) return;
 
         // 1. Check permission status
         if (Notification.permission === 'default') {
@@ -95,7 +97,18 @@ export default function NotificationHandler() {
                         exit={{ opacity: 0, x: 100 }}
                         className="fixed top-24 right-6 left-6 md:left-auto md:right-8 md:w-96 z-[9999]"
                     >
-                        <div className="bg-white border border-slate-100 p-6 rounded-[2rem] shadow-2xl flex items-start gap-4 relative overflow-hidden group">
+                        <div
+                            onClick={() => {
+                                if (notification.data?.url) {
+                                    navigate(notification.data.url);
+                                }
+                                setNotification(null);
+                            }}
+                            className={cn(
+                                "bg-white border border-slate-100 p-6 rounded-[2rem] shadow-2xl flex items-start gap-4 relative overflow-hidden group",
+                                notification.data?.url ? "cursor-pointer hover:shadow-blue-200 transition-all" : ""
+                            )}
+                        >
                             <div className="absolute top-0 left-0 w-2 h-full bg-blue-600" />
                             <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
                                 <Info size={20} />

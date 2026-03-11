@@ -1,6 +1,6 @@
 import { messaging } from "../firebase/firebase";
 import { getToken, onMessage } from "firebase/messaging";
-import { doc, updateDoc, arrayUnion, addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, addDoc, collection, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../firebase/firestore";
 
 const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
@@ -15,9 +15,7 @@ export const requestNotificationPermission = async (userId) => {
             const token = await getToken(messaging, { vapidKey: VAPID_KEY });
             if (token) {
                 console.log("FCM Token cached:", token);
-                if (userId) {
-                    await saveTokenToFirestore(userId, token);
-                }
+                await saveTokenToFirestore(userId, token);
                 return token;
             }
         } else {
@@ -33,6 +31,21 @@ export const requestNotificationPermission = async (userId) => {
  * Saves the FCM token to the user's document in Firestore.
  */
 const saveTokenToFirestore = async (userId, token) => {
+    if (!userId) {
+        try {
+            // Save to guest_subscribers if no userId is provided
+            const guestRef = doc(db, "guest_subscribers", token);
+            await setDoc(guestRef, {
+                token: token,
+                updatedAt: Date.now()
+            }, { merge: true });
+            return;
+        } catch (error) {
+            console.error("Failed to save guest FCM token:", error);
+            return;
+        }
+    }
+
     try {
         // We add the token to an array of fcmTokens so one user can have multiple devices
         const userRef = doc(db, "users", userId);

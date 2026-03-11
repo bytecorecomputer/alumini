@@ -48,7 +48,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { title, body, tokens } = req.body;
+        const { title, body, tokens, url } = req.body;
 
         if (!title || !body || !tokens || !Array.isArray(tokens) || tokens.length === 0) {
             return res.status(400).json({ error: 'Missing required payload (title, body, tokens array)' });
@@ -71,6 +71,7 @@ export default async function handler(req, res) {
                 title: title,
                 body: body,
             },
+            data: url ? { url: url } : {},
             tokens: validTokens, // Cleaned array
         };
 

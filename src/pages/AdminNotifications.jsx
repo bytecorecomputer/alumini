@@ -11,9 +11,10 @@ export default function AdminNotifications() {
     const { user } = useAuth();
     const [title, setTitle] = useState("");
     const [message, setMessage] = useState("");
+    const [url, setUrl] = useState("");
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(true);
-    const [stats, setStats] = useState({ alumni: 0, students: 0 });
+    const [stats, setStats] = useState({ alumni: 0, students: 0, guests: 0 });
     const [history, setHistory] = useState([]);
 
     useEffect(() => {
@@ -25,13 +26,15 @@ export default function AdminNotifications() {
         try {
             const usersRef = collection(db, "users");
             const studentsRef = collection(db, "students");
+            const guestsRef = collection(db, "guest_subscribers");
             const qUsers = query(usersRef, where("notificationsEnabled", "==", true));
             const qStudents = query(studentsRef, where("notificationsEnabled", "==", true));
 
-            const [uSnap, sSnap] = await Promise.all([getDocs(qUsers), getDocs(qStudents)]);
+            const [uSnap, sSnap, gSnap] = await Promise.all([getDocs(qUsers), getDocs(qStudents), getDocs(guestsRef)]);
             setStats({
                 alumni: uSnap.size,
-                students: sSnap.size
+                students: sSnap.size,
+                guests: gSnap.size
             });
 
             // Fetch History
@@ -51,7 +54,7 @@ export default function AdminNotifications() {
 
     const handleSend = async (e) => {
         e.preventDefault();
-        const total = stats.alumni + stats.students;
+        const total = stats.alumni + stats.students + (stats.guests || 0);
         if (total === 0) {
             alert("No devices are currently subscribed.");
             return;
@@ -66,10 +69,11 @@ export default function AdminNotifications() {
             // Gather Tokens
             const usersRef = collection(db, "users");
             const studentsRef = collection(db, "students");
+            const guestsRef = collection(db, "guest_subscribers");
             const qUsers = query(usersRef, where("notificationsEnabled", "==", true));
             const qStudents = query(studentsRef, where("notificationsEnabled", "==", true));
 
-            const [uSnap, sSnap] = await Promise.all([getDocs(qUsers), getDocs(qStudents)]);
+            const [uSnap, sSnap, gSnap] = await Promise.all([getDocs(qUsers), getDocs(qStudents), getDocs(guestsRef)]);
 
             let allTokens = new Set();
             uSnap.forEach(doc => {
@@ -79,6 +83,11 @@ export default function AdminNotifications() {
             sSnap.forEach(doc => {
                 const data = doc.data();
                 if (data.fcmTokens) data.fcmTokens.forEach(t => allTokens.add(t));
+            });
+            gSnap.forEach(doc => {
+                if (doc.id) allTokens.add(doc.id);
+                const data = doc.data();
+                if (data.token) allTokens.add(data.token);
             });
 
             const tokensArray = Array.from(allTokens);
@@ -94,6 +103,7 @@ export default function AdminNotifications() {
                 body: JSON.stringify({
                     title: title.trim(),
                     body: message.trim(),
+                    url: url.trim() || undefined,
                     tokens: tokensArray
                 })
             });
@@ -111,6 +121,7 @@ export default function AdminNotifications() {
 
             setTitle("");
             setMessage("");
+            setUrl("");
             fetchData(); // Refresh history
 
             if (response.ok) {
@@ -126,7 +137,7 @@ export default function AdminNotifications() {
         }
     }
 
-    const totalSubscribed = stats.alumni + stats.students;
+    const totalSubscribed = stats.alumni + stats.students + (stats.guests || 0);
 
     return (
         <div className="min-h-screen bg-[#f8fafc] pt-28 pb-20 px-4 sm:px-6 lg:px-8 font-inter">
@@ -222,6 +233,17 @@ export default function AdminNotifications() {
                                         disabled={totalSubscribed === 0}
                                     />
                                     <p className="text-right text-[10px] font-bold text-slate-400">{message.length}/150</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Target URL (Optional)</label>
+                                    <input
+                                        type="text"
+                                        className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none rounded-2xl transition-all font-bold text-slate-900 placeholder-slate-400"
+                                        placeholder="E.g., /quiz or https://example.com"
+                                        value={url}
+                                        onChange={(e) => setUrl(e.target.value)}
+                                        disabled={totalSubscribed === 0}
+                                    />
                                 </div>
                                 <button
                                     type="submit"
