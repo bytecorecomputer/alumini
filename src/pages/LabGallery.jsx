@@ -64,7 +64,8 @@ const LabGallery = () => {
 
     // Combine Static and Cloud Images
     useEffect(() => {
-        setImages([...staticRecords, ...firebaseImages]);
+        const sortedFirebase = [...firebaseImages].sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds);
+        setImages([...staticRecords, ...sortedFirebase]);
     }, [firebaseImages]);
 
     // Security: Anti-Screenshot & Anti-Download
@@ -302,11 +303,24 @@ const LabGallery = () => {
                                     {/* Security Layer: Protective Overlay */}
                                     <div className="absolute inset-0 z-10 pointer-events-auto bg-transparent" />
                                     
-                                    <div className="aspect-[4/5] relative overflow-hidden">
+                                    <div 
+                                        className="aspect-video relative overflow-hidden bg-black/40 cursor-pointer"
+                                        onClick={() => setSelectedImage(img)}
+                                    >
+                                        {/* Blurred Background for Full Photo Effect */}
+                                        {!img.type?.includes('video') && !img.src?.endsWith('.mp4') && (
+                                            <img 
+                                                src={img.imageUrl || img.src} 
+                                                alt=""
+                                                className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110"
+                                                loading="lazy"
+                                            />
+                                        )}
+
                                         {img.type === 'video' || img.src?.endsWith('.mp4') ? (
                                             <video 
                                                 src={img.imageUrl || img.src} 
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                                                className="w-full h-full object-contain relative z-10 transition-transform duration-700 group-hover:scale-110"
                                                 autoPlay
                                                 muted
                                                 loop
@@ -314,10 +328,11 @@ const LabGallery = () => {
                                             />
                                         ) : (
                                             <img 
-                                                src={img.imageUrl} 
+                                                src={img.imageUrl || img.src} 
                                                 alt={img.title}
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
-                                                loading="lazy"
+                                                className="w-full h-full object-contain relative z-10 transition-transform duration-700 group-hover:scale-105"
+                                                loading={idx < 6 ? "eager" : "lazy"}
+                                                {...(idx < 3 ? { fetchpriority: "high" } : {})}
                                             />
                                         )}
                                         
