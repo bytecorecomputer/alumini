@@ -34,6 +34,7 @@ const CertificateDownload = lazy(() => import("./pages/CertificateDownload"));
 const AdminCertificateUpload = lazy(() => import("./pages/AdminCertificateUpload"));
 const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
 const LabGallery = lazy(() => import("./pages/LabGallery"));
+const ResourceManager = lazy(() => import("./pages/ResourceManager"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -129,6 +130,11 @@ export default function App() {
               <Route path="/admin/notifications" element={
                 <AdminRoute>
                   <AdminNotifications />
+                </AdminRoute>
+              } />
+              <Route path="/admin/resources" element={
+                <AdminRoute>
+                  <ResourceManager />
                 </AdminRoute>
               } />
               <Route path="/lab-gallery" element={<LabGallery />} />

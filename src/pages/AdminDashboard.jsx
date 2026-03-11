@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, cloneElement } from "react";
+import { useEffect, useState, cloneElement } from "react";
 import { collection, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/firestore";
 import { useAuth } from "../app/common/AuthContext";
@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     Users, GraduationCap, Briefcase, Shield, Trash2, Search,
     Award, ShieldAlert, ShieldOff, X, MapPin, Linkedin, Github,
-    ChevronRight, ExternalLink, Mail, Edit3, Database, UploadCloud, Calendar, Zap, ArrowUpRight, Bell
+    ChevronRight, ExternalLink, Mail, Edit3, Database, UploadCloud, Calendar, Zap, ArrowUpRight, Bell, Image as ImageIcon
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { getOptimizedUrl } from "../lib/cloudinary";
@@ -147,6 +147,13 @@ export default function AdminDashboard() {
                             href="/admin/certificates/upload"
                             color="purple"
                         />
+                        <ActionCard
+                            title="Gallery Manager"
+                            subtitle="Content Suite"
+                            icon={<ImageIcon />}
+                            href="/gallery"
+                            color="emerald"
+                        />
 
                         <ActionCard
                             title="Generate Certificate"
@@ -161,6 +168,13 @@ export default function AdminDashboard() {
                             icon={<Calendar />}
                             href="/events"
                             color="amber"
+                        />
+                        <ActionCard
+                            title="Resource Center"
+                            subtitle="Word / PDF Suite"
+                            icon={<FileText />}
+                            href="/admin/resources"
+                            color="purple"
                         />
                         <ActionCard
                             title="Push Alerts"

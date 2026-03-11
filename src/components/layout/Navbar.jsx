@@ -103,6 +103,9 @@ export default function Navbar() {
                         <NavLink to="/courses">Courses</NavLink>
                         <NavLink to="/contact">Contact</NavLink>
                         {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
+                        {(role === 'admin' || role === 'super_admin') && (
+                            <NavLink to="/admin/dashboard">Admin Hub</NavLink>
+                        )}
                     </div>
 
                     {/* Actions (Responsive) */}
@@ -208,6 +211,12 @@ export default function Navbar() {
                                     <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink>
                                     <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Professional Courses</MobileNavLink>
                                     <MobileNavLink to="/gallery" onClick={() => setIsOpen(false)}>Dome Gallery</MobileNavLink>
+                                    {(role === 'admin' || role === 'super_admin') && (
+                                        <>
+                                            <MobileNavLink to="/admin/dashboard" onClick={() => setIsOpen(false)}>Admin Command Center</MobileNavLink>
+                                            <MobileNavLink to="/admin/resources" onClick={() => setIsOpen(false)}>Materials Repository</MobileNavLink>
+                                        </>
+                                    )}
                                 </div>
 
                                 <div className="space-y-1 pt-6 border-t border-slate-100">

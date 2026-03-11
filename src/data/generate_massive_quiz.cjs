@@ -103,6 +103,44 @@ const excelTheories = [
     }))
 ];
 
+const pythonTheories = [
+    { question: "Python फाइल का एक्सटेंशन क्या है?", options: [".py", ".python", ".p", ".txt"], correctAnswer: 0, explanation: "Python फाइलें .py एक्सटेंशन के साथ सेव होती हैं।" },
+    { question: "Python में आउटपुट दिखाने के लिए क्या उपयोग होता है?", options: ["echo", "print()", "console.log", "write"], correctAnswer: 1, explanation: "print() फंक्शन का उपयोग टेक्स्ट आउटपुट के लिए होता है।" },
+    { question: "Python के जनक (Founder) कौन हैं?", options: ["James Gosling", "Guido van Rossum", "Dennis Ritchie", "Bill Gates"], correctAnswer: 1, explanation: "Python को 1991 में Guido van Rossum ने बनाया था।" },
+    { question: "Python में कमेंट (Comment) के लिए क्या उपयोग होता है?", options: ["//", "/* */", "#", "--"], correctAnswer: 2, explanation: "सिंगल लाइन कमेंट के लिए # का उपयोग होता है।" },
+    { question: "Python किस प्रकार की प्रोग्रामिंग भाषा है?", options: ["Interpreted", "Compiled", "Low-level", "Machine"], correctAnswer: 0, explanation: "Python कोड को सीधे इंटरप्रेटर द्वारा रन किया जाता है।" },
+    { question: "List बनाने के लिए किस ब्रैकेट का उपयोग होता है?", options: ["()", "{}", "[]", "<>"], correctAnswer: 2, explanation: "Python में List के लिए स्कवायर ब्रैकेट [] का उपयोग होता है।" },
+    { question: "Python में यूज़र से इनपुट लेने के लिए फंक्शन?", options: ["get()", "scanf()", "input()", "read()"], correctAnswer: 2, explanation: "input() फंक्शन यूज़र से वैल्यू लेता है।" },
+    { question: "इनमें से कौन सा Python का डेटा टाइप नहीं है?", options: ["int", "string", "float", "pointer"], correctAnswer: 3, explanation: "Python में पॉइंटर्स सीधे उपयोग नहीं होते।" },
+    { question: "Python में इंडेंटेशन (Indentation) क्यों जरूरी है?", options: ["सुंदरता के लिए", "कोड ब्लॉक दिखाने के लिए", "जरूरी नहीं", "एरर हटाने के लिए"], correctAnswer: 1, explanation: "Python में 'scope' के लिए इंडेंटेशन अनिवार्य है।" },
+    { question: "Tuple और List में क्या अंतर है?", options: ["List बदल सकते हैं, Tuple नहीं", "Tuple बदल सकते हैं, List नहीं", "कोई अंतर नहीं", "दोनों समान हैं"], correctAnswer: 0, explanation: "List 'mutable' है जबकि Tuple 'immutable' है।" },
+    ...Array.from({ length: 80 }).map((_, i) => ({
+        question: `Python Theory Q${i + 11}: Python में ${['Variables', 'Keywords', 'Loops', 'Functions', 'Classes', 'Modules', 'Pip', 'Virtualenv', 'Lists', 'Dictionaries', 'Sets', 'Exception Handling', 'File I/O', 'Lambdas', 'Decorators', 'Generators', 'Iterators', 'Inheritance', 'Polymorphism', 'API Integration'][i % 20]} का क्या महत्व है?`,
+        options: ["कोडिंग लॉजिक", "डाटा मैनेजमेंट", "प्रोग्रामिंग स्ट्रक्चर", "सभी"],
+        correctAnswer: 3,
+        explanation: "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+    }))
+];
+
+const corelTheories = [
+    { question: "CorelDraw किस प्रकार का सॉफ्टवेयर है?", options: ["Video Editing", "Vector Graphics", "Accounting", "Operating System"], correctAnswer: 1, explanation: "यह एक वेक्टर ग्राफिक्स डिजाइनिंग सॉफ्टवेयर है।" },
+    { question: "CorelDraw फाइल का डिफ़ॉल्ट एक्सटेंशन क्या है?", options: [".cdr", ".psd", ".pdf", ".ai"], correctAnswer: 0, explanation: ".cdr कोरेलड्रॉ की मुख्य फाइल फॉर्मेट है।" },
+    { question: "ऑब्जेक्ट्स को सिलेक्ट और मूव करने के लिए कौन सा टूल है?", options: ["Pick Tool", "Zoom Tool", "Shape Tool", "Crop Tool"], correctAnswer: 0, explanation: "Pick Tool मुख्य टूल है जिससे हम ऑब्जेक्ट्स को पकड़ते हैं।" },
+    { question: "कर्व्स (Curves) को एडिट करने के लिए कौन सा टूल है?", options: ["Pick Tool", "Shape Tool", "Hand Tool", "Eraser"], correctAnswer: 1, explanation: "Shape Tool (F10) से नोड्स को एडिट किया जाता है।" },
+    { question: "ऑब्जेक्ट को 'Group' करने की शॉर्टकट की क्या है?", options: ["Ctrl+A", "Ctrl+G", "Ctrl+U", "Ctrl+D"], correctAnswer: 1, explanation: "Ctrl+G से कई ऑब्जेक्ट्स को एक साथ जोड़ा जा सकता है।" },
+    { question: "कोरेलड्रॉ में 'Zoom' की शॉर्टकट की क्या है?", options: ["Z", "X", "V", "C"], correctAnswer: 0, explanation: "Z प्रेस करके ज़ूम टूल एक्टिवेट होता है।" },
+    { question: "इनमें से कौन सा वेक्टर ग्राफ़िक नहीं है?", options: ["SVG", "CDR", "EPS", "JPEG"], correctAnswer: 3, explanation: "JPEG एक राष्ट्र (Raster) ग्राफ़िक है, वेक्टर नहीं।" },
+    { question: "ऑब्जेक्ट को पेज के बीच में (Center) करने की शॉर्टकट?", options: ["C", "E", "P", "T"], correctAnswer: 2, explanation: "P दबाने से कोई भी ऑब्जेक्ट पेज के सेंटर में आ जाता है।" },
+    { question: "स्मार्ट फिल टूल (Smart Fill) क्या करता है?", options: ["मिटाता है", "कलर भरता है", "नया ऑब्जेक्ट बनाता है", "दोनों 2 और 3"], correctAnswer: 3, explanation: "यह किसी बंद एरिया में नया ऑब्जेक्ट बनाकर कलर भरता है।" },
+    { question: "कलर पाइपेट (Eyedropper) टूल का क्या काम है?", options: ["कलर पिक करना", "पेंट करना", "डिजाइन बनाना", "लिखना"], correctAnswer: 0, explanation: "इससे किसी फोटो या ऑब्जेक्ट से कलर कॉपी किया जाता है।" },
+    ...Array.from({ length: 80 }).map((_, i) => ({
+        question: `CorelDraw Theory Q${i + 11}: कोरेलड्रॉ में ${['Layers', 'PowerClip', 'Blending', 'Contours', 'Transparency', 'Artistic Media', 'Text on Path', 'Color Docker', 'Guidelines', 'Snapping', 'Transformations', 'Grids', 'Symbols', 'Print Merge', 'Effects', 'Bitmaps', 'Tracing', 'Exporting', 'PDF Settings', 'Color Palettes'][i % 20]} का क्या काम है?`,
+        options: ["डिजाइनिंग", "फॉर्मेटिंग", "क्रिएटिविटी", "सभी"],
+        correctAnswer: 3,
+        explanation: "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+    }))
+];
+
 const getCourseContent = () => ({
     "MS Word": {
         description: "Microsoft Word Complete Mastery",
@@ -167,7 +205,9 @@ const finalData = {
             icon: "monitor",
             color: "blue",
             modules: {
-                "Basics": wordTheories.slice(0, 30).map(q => ({ ...q, question: "PYTHON: " + q.question }))
+                "Basics & Theory": pythonTheories.slice(0, 30),
+                "Advanced Concepts": pythonTheories.slice(30, 60),
+                "Project logic": pythonTheories.slice(60)
             }
         },
         "CorelDraw": {
@@ -175,7 +215,9 @@ const finalData = {
             icon: "monitor",
             color: "rose",
             modules: {
-                "Basics": wordTheories.slice(30, 60).map(q => ({ ...q, question: "CORELDRAW: " + q.question }))
+                "Basics & Tools": corelTheories.slice(0, 30),
+                "Design Effects": corelTheories.slice(30, 60),
+                "Pro Output": corelTheories.slice(60)
             }
         }
     }

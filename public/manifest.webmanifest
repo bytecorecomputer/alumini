@@ -4,8 +4,10 @@
     "description": "#1 Choice for Offline Tech Mastery in Bareilly",
     "start_url": "/",
     "display": "standalone",
+    "orientation": "portrait",
     "background_color": "#0f172a",
     "theme_color": "#0f172a",
+    "categories": ["education", "productivity"],
     "icons": [
         {
             "src": "/logo.png",
@@ -18,6 +20,22 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Student Portal",
+            "short_name": "Portal",
+            "description": "Access your courses and quizzes",
+            "url": "/login",
+            "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "Admin Hub",
+            "short_name": "Admin",
+            "description": "Manage the platform",
+            "url": "/admin/dashboard",
+            "icons": [{ "src": "/logo.png", "sizes": "192x192" }]
         }
     ]
 }

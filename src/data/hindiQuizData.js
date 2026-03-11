@@ -675,32 +675,32 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'नया डॉक्यूमेंट (New Document)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "Ctrl+Enter",
+                            "Ctrl+E",
                             "Ctrl+N",
-                            "Ctrl+P"
+                            "Ctrl+W",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'नया डॉक्यूमेंट (New Document)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+8",
-                            "Ctrl+Z",
-                            "Ctrl+O",
-                            "Ctrl+Enter"
+                            "Ctrl+Home",
+                            "Ctrl+B",
+                            "Ctrl+Shift+>",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+S",
-                            "Ctrl+L",
-                            "Ctrl+H",
-                            "Ctrl+P"
+                            "Ctrl+G",
+                            "Ctrl+W",
+                            "Ctrl+Y"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
@@ -708,21 +708,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Alt+P",
                             "F12",
-                            "Alt+F4",
-                            "Ctrl+U",
-                            "Ctrl+Z"
+                            "Ctrl+N",
+                            "Ctrl+Enter"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+P",
-                            "Ctrl+R",
-                            "Ctrl+A",
-                            "Ctrl+W"
+                            "Ctrl+Shift+8",
+                            "Ctrl+H",
+                            "Ctrl+B"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
@@ -730,42 +730,42 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+K",
-                            "Ctrl+2",
                             "Ctrl+Z",
-                            "Ctrl+I"
+                            "Ctrl+R",
+                            "Ctrl+Home",
+                            "Ctrl+Alt+P"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
-                            "Ctrl+J",
+                            "Ctrl+C",
                             "Ctrl+Y",
-                            "Ctrl+1"
+                            "Shift+F3",
+                            "Ctrl+E"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+N",
+                            "Ctrl+Delete",
                             "Ctrl+X",
-                            "Ctrl+H"
+                            "Ctrl+P",
+                            "Ctrl+G"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Alt+P",
-                            "Ctrl+Shift+<",
-                            "Ctrl+1",
+                            "Ctrl+R",
+                            "Ctrl+K",
+                            "Shift+F3",
                             "Ctrl+C"
                         ],
                         "correctAnswer": 3,
@@ -774,42 +774,42 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+V",
-                            "Ctrl+Shift+8",
-                            "Ctrl+R",
-                            "Ctrl+G"
+                            "Ctrl+H",
+                            "Ctrl+N",
+                            "Ctrl+Z",
+                            "Ctrl+V"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'पेस्ट (Paste)' के लिए 'Ctrl+V' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'सभी सिलेक्ट (Select All)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Enter",
+                            "Ctrl+P",
                             "Ctrl+A",
-                            "Ctrl+X",
-                            "Ctrl+V",
-                            "Ctrl+G"
+                            "Ctrl+J"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Word में 'सभी सिलेक्ट (Select All)' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+5",
-                            "Ctrl+I",
-                            "Ctrl+B"
+                            "Ctrl+B",
+                            "Ctrl+Enter",
+                            "Ctrl+S",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'बोल्ड (Bold)' के लिए 'Ctrl+B' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
-                            "Ctrl+H",
-                            "Alt+F4",
+                            "Ctrl+B",
+                            "F12",
+                            "Ctrl+F1",
                             "Ctrl+I"
                         ],
                         "correctAnswer": 3,
@@ -818,20 +818,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+U",
-                            "Ctrl+K",
-                            "Ctrl+S",
-                            "Shift+F7"
+                            "Ctrl+F",
+                            "Shift+F7",
+                            "Ctrl+5",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'लेफ्ट एलाइन (Left Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+F4",
-                            "Ctrl+V",
-                            "Ctrl+O",
+                            "Ctrl+Delete",
+                            "Ctrl+Shift+<",
+                            "Ctrl+K",
                             "Ctrl+L"
                         ],
                         "correctAnswer": 3,
@@ -840,20 +840,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'सेंटर एलाइन (Center Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+Ctrl+S",
                             "Ctrl+E",
-                            "Ctrl+R",
-                            "Ctrl+O"
+                            "Ctrl+Delete",
+                            "Ctrl+Z",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'सेंटर एलाइन (Center Align)' के लिए 'Ctrl+E' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'राइट एलाइन (Right Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+I",
-                            "F12",
-                            "Ctrl+B",
+                            "Ctrl+1",
+                            "Ctrl+N",
+                            "Ctrl+Y",
                             "Ctrl+R"
                         ],
                         "correctAnswer": 3,
@@ -862,10 +862,10 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'जस्टिफाई (Justify)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+8",
+                            "Ctrl+Shift+<",
                             "Ctrl+J",
-                            "Ctrl+H",
-                            "Ctrl+End"
+                            "Ctrl+E",
+                            "Ctrl+Z"
                         ],
                         "correctAnswer": 1,
                         "explanation": "MS Word में 'जस्टिफाई (Justify)' के लिए 'Ctrl+J' का उपयोग किया जाता है।"
@@ -873,53 +873,53 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'हाइपरलिंक (Hyperlink)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+K",
-                            "Ctrl+E",
                             "Ctrl+P",
-                            "F12"
+                            "Ctrl+5",
+                            "Alt+Ctrl+S",
+                            "Ctrl+K"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'हाइपरलिंक (Hyperlink)' के लिए 'Ctrl+K' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'ढूँढना (Find)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+L",
-                            "Ctrl+Enter",
-                            "Ctrl+G",
-                            "Ctrl+F"
+                            "Ctrl+F",
+                            "Ctrl+E",
+                            "Ctrl+5",
+                            "Ctrl+Delete"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'ढूँढना (Find)' के लिए 'Ctrl+F' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'बदलना (Replace)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+]",
-                            "Ctrl+N",
-                            "Ctrl+H",
-                            "Ctrl+G"
+                            "Alt+F4",
+                            "Ctrl+Shift+>",
+                            "Ctrl+U",
+                            "Ctrl+H"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'बदलना (Replace)' के लिए 'Ctrl+H' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'गो टू (Go To)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+G",
-                            "Ctrl+P",
-                            "Alt+Ctrl+S",
-                            "Alt+F4"
+                            "Ctrl+Delete",
+                            "Ctrl+S",
+                            "F12",
+                            "Ctrl+G"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'गो टू (Go To)' के लिए 'Ctrl+G' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'फॉन्ट साइज छोटा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
-                            "Ctrl+U",
                             "Ctrl+1",
+                            "Ctrl+F",
+                            "Ctrl+R",
                             "Ctrl+["
                         ],
                         "correctAnswer": 3,
@@ -928,65 +928,65 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'फॉन्ट साइज बड़ा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "Ctrl+U",
+                            "Ctrl+E",
                             "Ctrl+]",
-                            "Ctrl+I"
+                            "Ctrl+U",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'फॉन्ट साइज बड़ा' के लिए 'Ctrl+]' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'फॉन्ट साइज बढ़ाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+V",
-                            "Ctrl+Shift+>",
-                            "Ctrl+Alt+P",
-                            "Ctrl+Y"
+                            "Ctrl+F",
+                            "Ctrl+End",
+                            "Ctrl+I",
+                            "Ctrl+Shift+>"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'फॉन्ट साइज बढ़ाना' के लिए 'Ctrl+Shift+>' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'फॉन्ट साइज घटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+X",
-                            "Ctrl+P",
-                            "Ctrl+A",
-                            "Ctrl+Shift+<"
+                            "Ctrl+Shift+<",
+                            "Ctrl+Shift+>",
+                            "Ctrl+I",
+                            "F12"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'फॉन्ट साइज घटाना' के लिए 'Ctrl+Shift+<' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'केस बदलना (Change Case)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+>",
-                            "Ctrl+A",
-                            "Shift+F3",
-                            "Ctrl+["
+                            "Ctrl+Shift+8",
+                            "Ctrl+K",
+                            "Ctrl+Shift+<",
+                            "Shift+F3"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'केस बदलना (Change Case)' के लिए 'Shift+F3' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'पेज ब्रेक (Page Break)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Enter",
-                            "Ctrl+X",
-                            "Ctrl+Alt+N",
-                            "Ctrl+G"
+                            "Ctrl+O",
+                            "Ctrl+Alt+P",
+                            "Ctrl+H",
+                            "Ctrl+Enter"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'पेज ब्रेक (Page Break)' के लिए 'Ctrl+Enter' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'सिंगल लाइन स्पेसिंग' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "Ctrl+S",
+                            "F7",
+                            "Ctrl+C",
                             "Ctrl+1",
-                            "Ctrl+C"
+                            "Ctrl+F1"
                         ],
                         "correctAnswer": 2,
                         "explanation": "MS Word में 'सिंगल लाइन स्पेसिंग' के लिए 'Ctrl+1' का उपयोग किया जाता है।"
@@ -994,10 +994,10 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'डबल लाइन स्पेसिंग' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "Ctrl+S",
+                            "Ctrl+[",
+                            "Ctrl+5",
                             "Ctrl+2",
-                            "Shift+F7"
+                            "Ctrl+N"
                         ],
                         "correctAnswer": 2,
                         "explanation": "MS Word में 'डबल लाइन स्पेसिंग' के लिए 'Ctrl+2' का उपयोग किया जाता है।"
@@ -1005,21 +1005,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में '1.5 लाइन स्पेसिंग' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+F",
+                            "Ctrl+S",
                             "Ctrl+5",
-                            "Ctrl+G"
+                            "Ctrl+Enter",
+                            "F12"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में '1.5 लाइन स्पेसिंग' के लिए 'Ctrl+5' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'वर्ड बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Alt+F4",
-                            "Ctrl+A",
-                            "F7",
-                            "Ctrl+K"
+                            "Ctrl+Delete",
+                            "F12",
+                            "Ctrl+Alt+P"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'वर्ड बंद करना' के लिए 'Alt+F4' का उपयोग किया जाता है।"
@@ -1027,19 +1027,19 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'डॉक्यूमेंट बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+2",
-                            "Ctrl+Alt+P",
-                            "Ctrl+O",
-                            "Ctrl+W"
+                            "Ctrl+W",
+                            "Ctrl+N",
+                            "Ctrl+Y",
+                            "Ctrl+]"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'डॉक्यूमेंट बंद करना' के लिए 'Ctrl+W' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'रिबन दिखाना/छिपाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+E",
-                            "Ctrl+P",
+                            "Ctrl+Y",
+                            "Ctrl+U",
                             "Ctrl+N",
                             "Ctrl+F1"
                         ],
@@ -1049,32 +1049,32 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'पैराग्राफ मार्क' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+5",
                             "Ctrl+Shift+8",
-                            "Shift+F3",
-                            "F12"
+                            "F12",
+                            "Ctrl+End",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'पैराग्राफ मार्क' के लिए 'Ctrl+Shift+8' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'बाएं शब्द मिटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Shift+F3",
-                            "F7",
-                            "Ctrl+5",
-                            "Ctrl+Backspace"
+                            "Alt+F4",
+                            "Ctrl+Backspace",
+                            "Ctrl+Enter",
+                            "Ctrl+["
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'बाएं शब्द मिटाना' के लिए 'Ctrl+Backspace' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'दाएं शब्द मिटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+>",
-                            "Ctrl+Y",
+                            "Ctrl+P",
+                            "Ctrl+N",
                             "Ctrl+Delete",
-                            "Ctrl+Backspace"
+                            "Ctrl+X"
                         ],
                         "correctAnswer": 2,
                         "explanation": "MS Word में 'दाएं शब्द मिटाना' के लिए 'Ctrl+Delete' का उपयोग किया जाता है।"
@@ -1082,54 +1082,54 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'शुरुआत में जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Shift+F7",
                             "Ctrl+Home",
-                            "F12",
-                            "Ctrl+Z"
+                            "Ctrl+P",
+                            "Ctrl+Enter",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'शुरुआत में जाना' के लिए 'Ctrl+Home' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'अंत में जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+<",
-                            "Ctrl+Alt+P",
-                            "Ctrl+U",
-                            "Ctrl+End"
+                            "Ctrl+End",
+                            "Alt+F4",
+                            "Ctrl+X",
+                            "Ctrl+Enter"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'अंत में जाना' के लिए 'Ctrl+End' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'स्पेलिंग चेक' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+W",
                             "F7",
-                            "Ctrl+X",
-                            "Ctrl+S"
+                            "Shift+F7",
+                            "F12",
+                            "Ctrl+End"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'स्पेलिंग चेक' के लिए 'F7' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'थिसॉरस (Thesaurus)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F12",
                             "Shift+F7",
-                            "Ctrl+]",
-                            "Ctrl+G",
-                            "Ctrl+V"
+                            "Ctrl+Z",
+                            "Ctrl+G"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'थिसॉरस (Thesaurus)' के लिए 'Shift+F7' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'विंडो स्प्लिट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Alt+Ctrl+S",
-                            "Shift+F7",
                             "Ctrl+O",
-                            "Ctrl+Y"
+                            "Shift+F7",
+                            "Ctrl+["
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'विंडो स्प्लिट' के लिए 'Alt+Ctrl+S' का उपयोग किया जाता है।"
@@ -1137,34 +1137,34 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'प्रिंट प्रीव्यू' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+W",
                             "Alt+Ctrl+S",
-                            "Ctrl+Backspace"
+                            "Ctrl+2",
+                            "Ctrl+C",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'प्रिंट प्रीव्यू' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'नॉर्मल व्यू' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Shift+F7",
+                            "Ctrl+S",
                             "Ctrl+Alt+N",
-                            "Ctrl+F"
+                            "Ctrl+Delete",
+                            "Ctrl+A"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'नॉर्मल व्यू' के लिए 'Ctrl+Alt+N' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'प्रिंट लेआउट व्यू' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Backspace",
-                            "Alt+F4",
-                            "Ctrl+O",
-                            "Ctrl+Alt+P"
+                            "Ctrl+5",
+                            "Ctrl+End",
+                            "Ctrl+Alt+P",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "MS Word में 'प्रिंट लेआउट व्यू' के लिए 'Ctrl+Alt+P' का उपयोग किया जाता है।"
                     }
                 ],
@@ -2175,32 +2175,32 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'नई वर्कबुक (New Workbook)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F11",
-                            "Ctrl+N",
-                            "Ctrl+A",
-                            "Ctrl+Space"
+                            "Ctrl+Shift+L",
+                            "Ctrl++",
+                            "F12",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'नई वर्कबुक (New Workbook)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+W",
-                            "Ctrl+O",
-                            "Ctrl+A",
-                            "Ctrl+`"
+                            "Ctrl+N",
+                            "Ctrl+S",
+                            "Shift+Space",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+S",
-                            "Ctrl+Shift+:",
-                            "Ctrl+N",
-                            "Ctrl+C"
+                            "Ctrl+V",
+                            "Ctrl+B",
+                            "Ctrl+Shift+$"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
@@ -2208,120 +2208,120 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl++",
+                            "Ctrl+C",
                             "F12",
-                            "Ctrl+PageDown",
-                            "F2",
-                            "Ctrl+Y"
+                            "Ctrl+PageDown"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'वर्कबुक बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+L",
-                            "Ctrl+A",
                             "Ctrl+W",
-                            "Ctrl+1"
+                            "Ctrl+Shift+%",
+                            "Ctrl+R",
+                            "F2"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'वर्कबुक बंद करना' के लिए 'Ctrl+W' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+PageDown",
-                            "Ctrl+P",
-                            "Ctrl+D",
-                            "Ctrl+End"
+                            "Ctrl+N",
+                            "Alt+F1",
+                            "F11",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F12",
+                            "Ctrl+U",
                             "Ctrl+Z",
-                            "Ctrl+P",
-                            "Ctrl+1",
-                            "Ctrl+PageUp"
+                            "Ctrl+V"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+T",
-                            "Ctrl+X",
+                            "Ctrl+P",
                             "Ctrl+Y",
-                            "Ctrl+V"
+                            "Ctrl+V",
+                            "Ctrl+`"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+0",
-                            "Ctrl+O",
                             "Ctrl+X",
-                            "Ctrl+B"
+                            "Ctrl+O",
+                            "Ctrl+;",
+                            "Ctrl+0"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+0",
-                            "Ctrl+W",
-                            "Ctrl+Shift+$",
-                            "Ctrl+C"
+                            "Ctrl+C",
+                            "Ctrl+B",
+                            "Ctrl+U",
+                            "Ctrl+T"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'कॉपी (Copy)' के लिए 'Ctrl+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+W",
-                            "Ctrl+V",
-                            "Ctrl+Shift+$",
-                            "Ctrl+I"
+                            "Ctrl++",
+                            "Ctrl+Y",
+                            "F11",
+                            "Ctrl+V"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'पेस्ट (Paste)' के लिए 'Ctrl+V' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'पूरी शीट सिलेक्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl++",
                             "Ctrl+A",
-                            "Ctrl+W",
-                            "Ctrl+PageUp",
-                            "F12"
+                            "Ctrl+C",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'पूरी शीट सिलेक्ट' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Ctrl+O",
-                            "Alt+F1",
-                            "Ctrl+B"
+                            "Ctrl+B",
+                            "Ctrl+PageUp",
+                            "Ctrl+R",
+                            "Ctrl+Home"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'बोल्ड (Bold)' के लिए 'Ctrl+B' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+I",
-                            "Ctrl+;",
-                            "Ctrl+C",
-                            "Ctrl+O"
+                            "Ctrl+R",
+                            "Alt+F1",
+                            "Ctrl+B"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
@@ -2330,9 +2330,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Excel में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+U",
-                            "Ctrl+O",
-                            "Ctrl+;",
-                            "Ctrl+`"
+                            "F12",
+                            "Ctrl+Y",
+                            "Ctrl+Shift+$"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
@@ -2340,98 +2340,98 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'सेल एडिट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+B",
-                            "F2",
-                            "Ctrl+Shift+$",
-                            "Ctrl++"
+                            "Ctrl+End",
+                            "Ctrl+R",
+                            "Ctrl+Y",
+                            "F2"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'सेल एडिट करना' के लिए 'F2' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'ऑटो सम (AutoSum)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+R",
                             "Alt+=",
-                            "Ctrl+-",
-                            "Ctrl+;",
-                            "F11"
+                            "Ctrl+S",
+                            "Ctrl+W"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'ऑटो सम (AutoSum)' के लिए 'Alt+=' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'आज की तारीख' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+X",
                             "Ctrl+PageDown",
-                            "Ctrl+N",
-                            "Ctrl+R",
-                            "Ctrl+;"
+                            "Ctrl+;",
+                            "Ctrl+Home"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'आज की तारीख' के लिए 'Ctrl+;' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अभी का समय' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+End",
                             "Ctrl+Shift+:",
                             "Ctrl+PageUp",
-                            "Ctrl+V"
+                            "Ctrl+O",
+                            "Alt+F1"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'अभी का समय' के लिए 'Ctrl+Shift+:' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'फॉर्मेट सेल्स' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+B",
-                            "Ctrl+X",
                             "Ctrl+1",
-                            "Ctrl+Shift+$"
+                            "Ctrl+PageUp",
+                            "F12",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'फॉर्मेट सेल्स' के लिए 'Ctrl+1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'करेंसी फॉर्मेट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Shift+Space",
-                            "F12",
-                            "Ctrl+T",
-                            "Ctrl+Shift+$"
+                            "Ctrl+Shift+$",
+                            "Ctrl+PageDown",
+                            "Ctrl+N",
+                            "Alt+="
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'करेंसी फॉर्मेट' के लिए 'Ctrl+Shift+$' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'परसेंटेज फॉर्मेट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl++",
-                            "Ctrl+W",
-                            "Ctrl+Shift+%",
-                            "Ctrl+U"
+                            "Ctrl+X",
+                            "Ctrl+N",
+                            "Shift+Space",
+                            "Ctrl+Shift+%"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'परसेंटेज फॉर्मेट' के लिए 'Ctrl+Shift+%' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'नीचे फिल (Fill Down)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F12",
+                            "Ctrl+;",
                             "Ctrl+D",
-                            "Alt+=",
-                            "Ctrl+N",
-                            "F11"
+                            "Ctrl+Z"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'नीचे फिल (Fill Down)' के लिए 'Ctrl+D' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'दाएं फिल (Fill Right)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+R",
-                            "Ctrl+B",
-                            "Ctrl+Shift+:",
-                            "Ctrl+0"
+                            "Shift+Space",
+                            "Ctrl+Shift+%",
+                            "Ctrl+P"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'दाएं फिल (Fill Right)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
@@ -2439,54 +2439,54 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'नया चार्ट बनाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
                             "F11",
-                            "F12",
-                            "Ctrl+Y"
+                            "Ctrl+;",
+                            "Ctrl+Shift+:",
+                            "Ctrl+Shift+L"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'नया चार्ट बनाना' के लिए 'F11' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'सीट में चार्ट डालना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
-                            "Alt+F1",
+                            "Ctrl+9",
+                            "Ctrl+Shift+$",
                             "Ctrl+Y",
-                            "Ctrl+`"
+                            "Alt+F1"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'सीट में चार्ट डालना' के लिए 'Alt+F1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'टेबल बनाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+C",
+                            "Ctrl+I",
                             "Ctrl+T",
-                            "Ctrl+Shift+%",
-                            "Ctrl+V",
-                            "Ctrl+A"
+                            "Shift+Space"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'टेबल बनाना' के लिए 'Ctrl+T' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'फिल्टर लगाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+L",
-                            "Ctrl+N",
-                            "Ctrl+Space",
-                            "Ctrl+S"
+                            "Ctrl+Shift+%",
+                            "F2",
+                            "F11",
+                            "Ctrl+Shift+L"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'फिल्टर लगाना' के लिए 'Ctrl+Shift+L' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'A1 सेल पर जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+Home",
-                            "Ctrl+0",
-                            "Ctrl+B",
-                            "Ctrl+Shift+L"
+                            "Ctrl+N",
+                            "Ctrl+O",
+                            "Ctrl+B"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'A1 सेल पर जाना' के लिए 'Ctrl+Home' का उपयोग किया जाता है।"
@@ -2494,21 +2494,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'अंतिम सेल पर जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Shift+Space",
-                            "Alt+F1",
-                            "Ctrl+End",
-                            "Ctrl+R"
+                            "Ctrl+`",
+                            "Ctrl+V",
+                            "F12",
+                            "Ctrl+End"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'अंतिम सेल पर जाना' के लिए 'Ctrl+End' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कॉलम सिलेक्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+U",
+                            "Ctrl+P",
                             "Ctrl+Space",
-                            "Ctrl+Z",
-                            "Ctrl+N"
+                            "F2",
+                            "Ctrl+D"
                         ],
                         "correctAnswer": 1,
                         "explanation": "MS Excel में 'कॉलम सिलेक्ट' के लिए 'Ctrl+Space' का उपयोग किया जाता है।"
@@ -2516,87 +2516,87 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'रो सिलेक्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+I",
-                            "F2",
-                            "Shift+Space"
+                            "Ctrl+W",
+                            "Ctrl+Home",
+                            "Shift+Space",
+                            "Ctrl+V"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'रो सिलेक्ट' के लिए 'Shift+Space' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो/कॉलम जोड़ना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+-",
-                            "Ctrl+C",
-                            "Ctrl+B",
-                            "Ctrl++"
+                            "Ctrl+W",
+                            "Ctrl+Shift+:",
+                            "Ctrl++",
+                            "Ctrl+PageDown"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'रो/कॉलम जोड़ना' के लिए 'Ctrl++' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो/कॉलम हटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Y",
                             "Ctrl+-",
-                            "Ctrl+W",
-                            "Ctrl+A",
-                            "Ctrl+B"
+                            "Ctrl+I",
+                            "Ctrl+W"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'रो/कॉलम हटाना' के लिए 'Ctrl+-' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कॉलम छिपाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Shift+L",
                             "Ctrl+0",
-                            "Alt+=",
-                            "Ctrl+D",
-                            "Ctrl+-"
+                            "Ctrl+X",
+                            "Ctrl+`"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'कॉलम छिपाना' के लिए 'Ctrl+0' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो छिपाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+9",
-                            "Ctrl+Shift+$",
-                            "Alt+F1",
-                            "F12"
+                            "Ctrl+Space",
+                            "Ctrl+PageDown",
+                            "Ctrl+Y",
+                            "Ctrl+9"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'रो छिपाना' के लिए 'Ctrl+9' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'पिछली शीट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+PageUp",
-                            "Ctrl+Shift+L",
-                            "Ctrl+I",
-                            "Ctrl+-"
+                            "Ctrl+Home",
+                            "Ctrl+End",
+                            "Ctrl+0",
+                            "Ctrl+PageUp"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'पिछली शीट' के लिए 'Ctrl+PageUp' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अगली शीट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+PageDown",
-                            "Ctrl+N",
-                            "Ctrl+O",
-                            "Ctrl+C"
+                            "Ctrl+T",
+                            "F12",
+                            "Ctrl++",
+                            "Ctrl+PageDown"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'अगली शीट' के लिए 'Ctrl+PageDown' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'फॉर्मूला दिखाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+`",
-                            "Ctrl+End",
-                            "Ctrl+Y",
-                            "Ctrl+0"
+                            "Ctrl+;",
+                            "Ctrl+X",
+                            "Ctrl+B"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'फॉर्मूला दिखाना' के लिए 'Ctrl+`' का उपयोग किया जाता है।"
@@ -3168,9 +3168,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "PowerPoint में 'नया डॉक्यूमेंट (New Document)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+N",
-                            "Ctrl+X",
-                            "Ctrl+K",
-                            "Ctrl+U"
+                            "Ctrl+U",
+                            "Ctrl+P",
+                            "Ctrl+]"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'नया डॉक्यूमेंट (New Document)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
@@ -3178,32 +3178,32 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+O",
-                            "Ctrl+L",
-                            "Ctrl+N"
+                            "Ctrl+N",
+                            "Ctrl+X",
+                            "Ctrl+Shift+>",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Y",
                             "Ctrl+S",
-                            "Ctrl+K",
-                            "Ctrl+B"
+                            "Ctrl+Z",
+                            "Ctrl+L",
+                            "Ctrl+F"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F12",
-                            "Ctrl+Shift+>",
-                            "Ctrl+H",
-                            "Ctrl+Y"
+                            "Ctrl+N",
+                            "Ctrl+K",
+                            "Ctrl+L"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
@@ -3212,8 +3212,8 @@ export const HINDI_QUIZ_DATA = {
                         "question": "PowerPoint में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+P",
-                            "Ctrl+Z",
-                            "Ctrl+Y",
+                            "Ctrl+N",
+                            "Ctrl+U",
                             "Ctrl+Shift+>"
                         ],
                         "correctAnswer": 0,
@@ -3222,21 +3222,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+I",
-                            "Ctrl+[",
-                            "Ctrl+Z"
+                            "Ctrl+Z",
+                            "Ctrl+B",
+                            "Ctrl+Y",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+]",
-                            "Ctrl+F",
+                            "Ctrl+Shift+>",
+                            "Ctrl+U",
                             "Ctrl+Y",
-                            "Ctrl+V"
+                            "Ctrl+N"
                         ],
                         "correctAnswer": 2,
                         "explanation": "PowerPoint में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
@@ -3245,9 +3245,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "PowerPoint में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+X",
-                            "Ctrl+Y",
-                            "Ctrl+E",
-                            "Ctrl+R"
+                            "Ctrl+B",
+                            "Ctrl+P",
+                            "Ctrl+Z"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
@@ -3255,20 +3255,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
+                            "Ctrl+[",
+                            "Ctrl+S",
                             "Ctrl+C",
-                            "Ctrl+N",
-                            "Ctrl+R"
+                            "Ctrl+Z"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'कॉपी (Copy)' के लिए 'Ctrl+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+L",
+                            "Ctrl+N",
                             "Ctrl+K",
-                            "Ctrl+X",
-                            "Ctrl+Shift+>",
                             "Ctrl+V"
                         ],
                         "correctAnswer": 3,
@@ -3277,20 +3277,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'सभी सिलेक्ट (Select All)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+V",
-                            "Ctrl+Z",
-                            "F12",
-                            "Ctrl+A"
+                            "Ctrl+S",
+                            "Ctrl+U",
+                            "Ctrl+A",
+                            "F12"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'सभी सिलेक्ट (Select All)' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+L",
-                            "Ctrl+F",
-                            "Ctrl+E",
+                            "Ctrl+O",
+                            "Ctrl+H",
+                            "Ctrl+N",
                             "Ctrl+B"
                         ],
                         "correctAnswer": 3,
@@ -3299,21 +3299,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+C",
-                            "Ctrl+B",
-                            "Ctrl+E",
-                            "Ctrl+I"
+                            "Ctrl+I",
+                            "Ctrl+R",
+                            "Ctrl+L",
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+U",
-                            "Ctrl+N",
-                            "Ctrl+R",
-                            "Ctrl+Shift+>"
+                            "Ctrl+O",
+                            "Ctrl+J",
+                            "Ctrl+S"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
@@ -3321,21 +3321,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'लेफ्ट एलाइन (Left Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Shift+>",
                             "Ctrl+L",
-                            "Ctrl+J",
-                            "Ctrl+E",
-                            "Ctrl+X"
+                            "Ctrl+]",
+                            "F12"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'लेफ्ट एलाइन (Left Align)' के लिए 'Ctrl+L' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सेंटर एलाइन (Center Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+E",
-                            "Ctrl+R",
-                            "Ctrl+]",
-                            "Ctrl+U"
+                            "Ctrl+I",
+                            "Ctrl+Z",
+                            "Ctrl+X"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'सेंटर एलाइन (Center Align)' के लिए 'Ctrl+E' का उपयोग किया जाता है।"
@@ -3344,9 +3344,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "PowerPoint में 'राइट एलाइन (Right Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+R",
-                            "Ctrl+G",
-                            "Ctrl+U",
-                            "Ctrl+L"
+                            "Ctrl+O",
+                            "Ctrl+X",
+                            "Ctrl+P"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'राइट एलाइन (Right Align)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
@@ -3354,12 +3354,12 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'जस्टिफाई (Justify)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+J",
-                            "Ctrl+Z",
+                            "Ctrl+L",
                             "Ctrl+N",
-                            "Ctrl+B"
+                            "Ctrl+I",
+                            "Ctrl+J"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'जस्टिफाई (Justify)' के लिए 'Ctrl+J' का उपयोग किया जाता है।"
                     },
                     {
@@ -3367,8 +3367,8 @@ export const HINDI_QUIZ_DATA = {
                         "options": [
                             "Ctrl+R",
                             "Ctrl+K",
-                            "Ctrl+U",
-                            "Ctrl+N"
+                            "Ctrl+X",
+                            "Ctrl+H"
                         ],
                         "correctAnswer": 1,
                         "explanation": "PowerPoint में 'हाइपरलिंक (Hyperlink)' के लिए 'Ctrl+K' का उपयोग किया जाता है।"
@@ -3376,65 +3376,65 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'ढूँढना (Find)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "Ctrl+Z",
-                            "Ctrl+F",
-                            "Ctrl+R"
+                            "F12",
+                            "Ctrl+H",
+                            "Ctrl+X",
+                            "Ctrl+F"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'ढूँढना (Find)' के लिए 'Ctrl+F' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'बदलना (Replace)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+E",
                             "Ctrl+H",
-                            "Ctrl+S",
-                            "Ctrl+I"
+                            "Ctrl+Z",
+                            "Ctrl+Y",
+                            "Ctrl+]"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'बदलना (Replace)' के लिए 'Ctrl+H' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'गो टू (Go To)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
                             "Ctrl+Y",
                             "Ctrl+G",
-                            "Ctrl+U"
+                            "Ctrl+S",
+                            "Ctrl+B"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'गो टू (Go To)' के लिए 'Ctrl+G' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'फॉन्ट साइज छोटा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+X",
+                            "Ctrl+Y",
+                            "Ctrl+]",
                             "Ctrl+[",
-                            "Ctrl+H",
-                            "Ctrl+I"
+                            "Ctrl+L"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'फॉन्ट साइज छोटा' के लिए 'Ctrl+[' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'फॉन्ट साइज बड़ा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Y",
                             "Ctrl+]",
-                            "F12",
-                            "Ctrl+X",
-                            "Ctrl+K"
+                            "Ctrl+C",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'फॉन्ट साइज बड़ा' के लिए 'Ctrl+]' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'फॉन्ट साइज बढ़ाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+Shift+>",
-                            "Ctrl+]",
-                            "Ctrl+N",
-                            "Ctrl+U"
+                            "Ctrl+P",
+                            "Ctrl+S",
+                            "Ctrl+H"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'फॉन्ट साइज बढ़ाना' के लिए 'Ctrl+Shift+>' का उपयोग किया जाता है।"
@@ -3783,21 +3783,133 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'कंपनी सिलेक्ट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F2",
+                            "F8",
+                            "F6",
+                            "F1"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Tally में 'कंपनी सिलेक्ट करना' के लिए 'F1' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'कंपनी बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
                             "F1",
-                            "Alt+F2",
                             "Alt+F1",
-                            "F2"
+                            "F5",
+                            "F6"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Tally में 'कंपनी बंद करना' के लिए 'Alt+F1' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'तारीख बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F4",
+                            "F2",
+                            "F1",
+                            "F8"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Tally में 'तारीख बदलना' के लिए 'F2' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'पीरियड बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F5",
+                            "F1",
+                            "F8",
+                            "Alt+F2"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Tally में 'पीरियड बदलना' के लिए 'Alt+F2' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'कंपनी जानकारी' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F8",
+                            "F1",
+                            "F5",
+                            "F3"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Tally में 'कंपनी जानकारी' के लिए 'F3' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'कंट्रा वाउचर (Contra)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F2",
+                            "F4",
+                            "Alt+F1",
+                            "F5"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Tally में 'कंट्रा वाउचर (Contra)' के लिए 'F4' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'पेमेंट वाउचर (Payment)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F5",
+                            "Alt+F1",
+                            "F7",
+                            "F1"
                         ],
                         "correctAnswer": 0,
+                        "explanation": "Tally में 'पेमेंट वाउचर (Payment)' के लिए 'F5' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'रिसीप्ट वाउचर (Receipt)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F7",
+                            "F6",
+                            "Alt+F1",
+                            "F1"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Tally में 'रिसीप्ट वाउचर (Receipt)' के लिए 'F6' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'जर्नल वाउचर (Journal)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F7",
+                            "F6",
+                            "F2",
+                            "F5"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Tally में 'जर्नल वाउचर (Journal)' के लिए 'F7' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'सेल्स वाउचर (Sales)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F2",
+                            "Alt+F2",
+                            "F4",
+                            "F8"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Tally में 'सेल्स वाउचर (Sales)' के लिए 'F8' का उपयोग किया जाता है।"
+                    }
+                ],
+                "Shortcuts Pro": [
+                    {
+                        "question": "Tally में 'कंपनी सिलेक्ट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "Alt+D",
+                            "F7",
+                            "F9",
+                            "F1"
+                        ],
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'कंपनी सिलेक्ट करना' के लिए 'F1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'कंपनी बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Alt+F1",
-                            "Alt+F2",
-                            "F4",
-                            "F3"
+                            "Alt+D",
+                            "Alt+P",
+                            "F2"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'कंपनी बंद करना' के लिए 'Alt+F1' का उपयोग किया जाता है।"
@@ -3805,21 +3917,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'तारीख बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F5",
-                            "F1",
-                            "F6",
-                            "F2"
+                            "Alt+F2",
+                            "F9",
+                            "F2",
+                            "Alt+I"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "Tally में 'तारीख बदलना' के लिए 'F2' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'पीरियड बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Alt+F2",
-                            "F1",
-                            "F7",
-                            "Alt+F1"
+                            "Ctrl+F9",
+                            "F6",
+                            "F3"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'पीरियड बदलना' के लिए 'Alt+F2' का उपयोग किया जाता है।"
@@ -3827,20 +3939,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'कंपनी जानकारी' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F5",
-                            "F1",
+                            "F12",
                             "F3",
-                            "F7"
+                            "F1",
+                            "F11"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'कंपनी जानकारी' के लिए 'F3' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'कंट्रा वाउचर (Contra)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F5",
-                            "F1",
-                            "Alt+F1",
+                            "Alt+I",
+                            "F7",
+                            "Alt+D",
                             "F4"
                         ],
                         "correctAnswer": 3,
@@ -3849,31 +3961,31 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'पेमेंट वाउचर (Payment)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F8",
+                            "Ctrl+A",
                             "F5",
-                            "F1",
-                            "Alt+F2",
-                            "F6"
+                            "Ctrl+Enter"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "Tally में 'पेमेंट वाउचर (Payment)' के लिए 'F5' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'रिसीप्ट वाउचर (Receipt)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Enter",
+                            "Alt+I",
                             "F6",
-                            "F1",
-                            "Alt+F1",
-                            "F5"
+                            "Ctrl+F9"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "Tally में 'रिसीप्ट वाउचर (Receipt)' के लिए 'F6' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'जर्नल वाउचर (Journal)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F4",
+                            "F2",
                             "Alt+F2",
-                            "F1",
+                            "F4",
                             "F7"
                         ],
                         "correctAnswer": 3,
@@ -3882,144 +3994,32 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'सेल्स वाउचर (Sales)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+F2",
-                            "Alt+F1",
-                            "F8",
-                            "F5"
-                        ],
-                        "correctAnswer": 2,
-                        "explanation": "Tally में 'सेल्स वाउचर (Sales)' के लिए 'F8' का उपयोग किया जाता है।"
-                    }
-                ],
-                "Shortcuts Pro": [
-                    {
-                        "question": "Tally में 'कंपनी सिलेक्ट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "Alt+F1",
-                            "Ctrl+Q",
-                            "Alt+C",
-                            "F1"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "Tally में 'कंपनी सिलेक्ट करना' के लिए 'F1' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'कंपनी बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F3",
-                            "F12",
-                            "Alt+D",
-                            "Alt+F1"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "Tally में 'कंपनी बंद करना' के लिए 'Alt+F1' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'तारीख बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
                             "F2",
-                            "F1",
-                            "F12",
-                            "Ctrl+Enter"
-                        ],
-                        "correctAnswer": 0,
-                        "explanation": "Tally में 'तारीख बदलना' के लिए 'F2' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'पीरियड बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "Alt+F2",
-                            "F9",
-                            "F7",
-                            "Alt+I"
-                        ],
-                        "correctAnswer": 0,
-                        "explanation": "Tally में 'पीरियड बदलना' के लिए 'Alt+F2' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'कंपनी जानकारी' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F1",
-                            "F7",
-                            "Alt+F1",
-                            "F3"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "Tally में 'कंपनी जानकारी' के लिए 'F3' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'कंट्रा वाउचर (Contra)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F1",
-                            "F4",
-                            "Ctrl+F8",
-                            "Ctrl+Q"
-                        ],
-                        "correctAnswer": 1,
-                        "explanation": "Tally में 'कंट्रा वाउचर (Contra)' के लिए 'F4' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'पेमेंट वाउचर (Payment)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F6",
-                            "Alt+F2",
-                            "F5",
-                            "F2"
-                        ],
-                        "correctAnswer": 2,
-                        "explanation": "Tally में 'पेमेंट वाउचर (Payment)' के लिए 'F5' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'रिसीप्ट वाउचर (Receipt)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "Alt+F1",
-                            "F11",
-                            "F8",
-                            "F6"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "Tally में 'रिसीप्ट वाउचर (Receipt)' के लिए 'F6' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'जर्नल वाउचर (Journal)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F7",
-                            "Ctrl+Enter",
-                            "Alt+C",
-                            "Alt+P"
-                        ],
-                        "correctAnswer": 0,
-                        "explanation": "Tally में 'जर्नल वाउचर (Journal)' के लिए 'F7' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'सेल्स वाउचर (Sales)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
                             "Ctrl+Q",
-                            "F8",
-                            "Ctrl+F9",
-                            "Alt+C"
+                            "Alt+F2",
+                            "F8"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'सेल्स वाउचर (Sales)' के लिए 'F8' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'पर्चेस वाउचर (Purchase)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F1",
                             "F9",
-                            "F2",
-                            "Alt+D"
+                            "F5",
+                            "Alt+F1",
+                            "F1"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'पर्चेस वाउचर (Purchase)' के लिए 'F9' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'क्रेडिट नोट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F4",
+                            "Ctrl+Q",
                             "Ctrl+F8",
-                            "Ctrl+Enter",
-                            "F11"
+                            "F1",
+                            "Ctrl+F9"
                         ],
                         "correctAnswer": 1,
                         "explanation": "Tally में 'क्रेडिट नोट' के लिए 'Ctrl+F8' का उपयोग किया जाता है।"
@@ -4027,21 +4027,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'डेबिट नोट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+F9",
-                            "F1",
-                            "F6",
-                            "Ctrl+A"
+                            "Ctrl+F8",
+                            "F3",
+                            "F4",
+                            "Ctrl+F9"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'डेबिट नोट' के लिए 'Ctrl+F9' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'फीचर्स (Features)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+F8",
+                            "Alt+D",
                             "F11",
-                            "Ctrl+A",
-                            "F7"
+                            "F5",
+                            "F4"
                         ],
                         "correctAnswer": 1,
                         "explanation": "Tally में 'फीचर्स (Features)' के लिए 'F11' का उपयोग किया जाता है।"
@@ -4049,89 +4049,89 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'कॉन्फ़िगरेशन' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
+                            "F3",
+                            "F1",
                             "Ctrl+Enter",
-                            "F4",
-                            "F1"
+                            "F12"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'कॉन्फ़िगरेशन' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'नया लेजर बनाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F8",
-                            "Alt+F2",
-                            "F11",
-                            "Alt+C"
+                            "F4",
+                            "Alt+C",
+                            "F2",
+                            "F11"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'नया लेजर बनाना' के लिए 'Alt+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'डिलीट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F7",
                             "Alt+D",
-                            "F6",
-                            "F1",
-                            "F8"
+                            "F5",
+                            "F2"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'डिलीट करना' के लिए 'Alt+D' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'प्रिंट रिपोर्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+P",
-                            "Alt+C",
                             "Alt+F1",
-                            "F8"
+                            "F4",
+                            "F1",
+                            "Alt+P"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'प्रिंट रिपोर्ट' के लिए 'Alt+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'एक्सेप्ट/सेव' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Alt+P",
+                            "Alt+F1",
                             "Ctrl+A",
-                            "Ctrl+Enter",
-                            "F7",
-                            "F3"
+                            "F6"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "Tally में 'एक्सेप्ट/सेव' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'क्विट (Quit)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Q",
-                            "F5",
-                            "F7",
-                            "Alt+P"
+                            "Alt+F1",
+                            "F3",
+                            "F6",
+                            "Ctrl+Q"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'क्विट (Quit)' के लिए 'Ctrl+Q' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'इनवॉइस मोड' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F8",
+                            "F4",
+                            "Ctrl+Q",
                             "Alt+I",
-                            "Ctrl+F9",
                             "Alt+F1"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 2,
                         "explanation": "Tally में 'इनवॉइस मोड' के लिए 'Alt+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'लेजर बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Enter",
-                            "Alt+I",
-                            "Ctrl+F8",
-                            "F7"
+                            "F11",
+                            "F9",
+                            "Alt+F2",
+                            "Ctrl+Enter"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'लेजर बदलना' के लिए 'Ctrl+Enter' का उपयोग किया जाता है।"
                     }
                 ],
@@ -4480,64 +4480,64 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'नया डॉक्यूमेंट (New Document)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
                             "Ctrl+N",
-                            "Ctrl+U",
-                            "Ctrl+B"
+                            "Ctrl+B",
+                            "Ctrl+Z",
+                            "Ctrl+V"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'नया डॉक्यूमेंट (New Document)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
-                            "Ctrl+E",
-                            "Ctrl+A",
-                            "Ctrl+Z"
+                            "Ctrl+R",
+                            "Ctrl+S",
+                            "F12",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+E",
-                            "Ctrl+C",
-                            "Ctrl+S",
-                            "Ctrl+I"
+                            "Ctrl+I",
+                            "Ctrl+X",
+                            "Ctrl+Y",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "Ctrl+A",
                             "F12",
-                            "Ctrl+P"
+                            "Ctrl+P",
+                            "Ctrl+S",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+C",
-                            "Ctrl+K",
                             "Ctrl+P",
-                            "Ctrl+X"
+                            "Ctrl+J",
+                            "Ctrl+Z",
+                            "F12"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+Z",
-                            "Ctrl+A",
-                            "Ctrl+I",
+                            "Ctrl+N",
+                            "Ctrl+B",
                             "Ctrl+O"
                         ],
                         "correctAnswer": 0,
@@ -4546,133 +4546,133 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Ctrl+L",
                             "Ctrl+Y",
-                            "Ctrl+R"
+                            "Ctrl+L",
+                            "Ctrl+C",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+X",
                             "Ctrl+E",
-                            "Ctrl+N",
-                            "Ctrl+C",
-                            "Ctrl+X"
+                            "F12",
+                            "Ctrl+A"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
-                            "Ctrl+N",
-                            "Ctrl+U",
-                            "Ctrl+C"
+                            "Ctrl+K",
+                            "Ctrl+C",
+                            "Ctrl+L",
+                            "Ctrl+Z"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'कॉपी (Copy)' के लिए 'Ctrl+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+K",
                             "Ctrl+V",
-                            "F12",
                             "Ctrl+N",
-                            "Ctrl+Z"
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'पेस्ट (Paste)' के लिए 'Ctrl+V' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'सभी सिलेक्ट (Select All)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+L",
-                            "Ctrl+C",
-                            "Ctrl+O",
-                            "Ctrl+A"
+                            "Ctrl+I",
+                            "Ctrl+A",
+                            "Ctrl+F",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'सभी सिलेक्ट (Select All)' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+U",
+                            "Ctrl+B",
                             "Ctrl+Y",
-                            "Ctrl+C",
-                            "Ctrl+N",
-                            "Ctrl+B"
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'बोल्ड (Bold)' के लिए 'Ctrl+B' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+I",
+                            "Ctrl+Y",
                             "Ctrl+N",
-                            "Ctrl+J",
-                            "Ctrl+X"
+                            "Ctrl+F",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+U",
-                            "Ctrl+B",
-                            "F12",
-                            "Ctrl+L"
+                            "Ctrl+Z",
+                            "Ctrl+Y",
+                            "Ctrl+I",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'लेफ्ट एलाइन (Left Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+K",
-                            "Ctrl+E",
-                            "Ctrl+V",
-                            "Ctrl+L"
+                            "Ctrl+S",
+                            "Ctrl+L",
+                            "Ctrl+X",
+                            "F12"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'लेफ्ट एलाइन (Left Align)' के लिए 'Ctrl+L' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'सेंटर एलाइन (Center Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+L",
                             "Ctrl+E",
-                            "Ctrl+Z",
-                            "Ctrl+S",
-                            "Ctrl+X"
+                            "Ctrl+C",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'सेंटर एलाइन (Center Align)' के लिए 'Ctrl+E' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'राइट एलाइन (Right Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+J",
                             "Ctrl+R",
-                            "Ctrl+U",
-                            "Ctrl+N"
+                            "Ctrl+K",
+                            "Ctrl+C",
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'राइट एलाइन (Right Align)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'जस्टिफाई (Justify)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
                             "Ctrl+J",
-                            "Ctrl+P",
-                            "Ctrl+S"
+                            "Ctrl+Y",
+                            "Ctrl+F",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'जस्टिफाई (Justify)' के लिए 'Ctrl+J' का उपयोग किया जाता है।"
                     },
                     {
@@ -4680,8 +4680,8 @@ export const HINDI_QUIZ_DATA = {
                         "options": [
                             "Ctrl+U",
                             "Ctrl+K",
-                            "Ctrl+N",
-                            "Ctrl+B"
+                            "Ctrl+J",
+                            "Ctrl+A"
                         ],
                         "correctAnswer": 1,
                         "explanation": "Photoshop में 'हाइपरलिंक (Hyperlink)' के लिए 'Ctrl+K' का उपयोग किया जाता है।"
@@ -4689,12 +4689,12 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'ढूँढना (Find)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+E",
-                            "Ctrl+F",
-                            "Ctrl+C",
-                            "Ctrl+B"
+                            "Ctrl+K",
+                            "Ctrl+O",
+                            "Ctrl+S",
+                            "Ctrl+F"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'ढूँढना (Find)' के लिए 'Ctrl+F' का उपयोग किया जाता है।"
                     }
                 ]
@@ -5376,9 +5376,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Word में 'नया डॉक्यूमेंट (New Document)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+N",
-                            "Ctrl+S",
-                            "Ctrl+K",
-                            "Shift+F7"
+                            "Ctrl+P",
+                            "Ctrl+H",
+                            "Ctrl+Delete"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'नया डॉक्यूमेंट (New Document)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
@@ -5386,21 +5386,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
-                            "Ctrl+Alt+P",
+                            "Ctrl+S",
+                            "Ctrl+G",
                             "Ctrl+]",
-                            "Ctrl+G"
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+S",
-                            "Ctrl+Z",
-                            "Ctrl+O",
-                            "Ctrl+Alt+N"
+                            "Ctrl+Y",
+                            "F7",
+                            "Ctrl+G"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
@@ -5408,54 +5408,54 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F7",
+                            "F12",
                             "Ctrl+C",
-                            "Ctrl+A",
-                            "Ctrl+K",
-                            "F12"
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Shift+<",
                             "Ctrl+P",
-                            "Alt+F4",
-                            "Ctrl+End",
-                            "Shift+F3"
+                            "Ctrl+N",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+G",
-                            "Ctrl+U",
-                            "Ctrl+Shift+<"
+                            "Ctrl+]",
+                            "Ctrl+Y",
+                            "Ctrl+Backspace",
+                            "Ctrl+Z"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Y",
-                            "Ctrl+J",
-                            "Shift+F7",
-                            "Ctrl+Z"
+                            "Ctrl+L",
+                            "Ctrl+Enter",
+                            "Ctrl+C",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+X",
-                            "Shift+F7",
-                            "Ctrl+C",
-                            "Ctrl+F"
+                            "Ctrl+N",
+                            "Ctrl+S",
+                            "Ctrl+F1"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
@@ -5463,87 +5463,87 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+Alt+P",
+                            "Ctrl+C",
                             "Ctrl+Z",
-                            "Ctrl+C"
+                            "Ctrl+R",
+                            "Alt+Ctrl+S"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'कॉपी (Copy)' के लिए 'Ctrl+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+V",
+                            "Ctrl+Delete",
                             "Ctrl+P",
-                            "Ctrl+W",
-                            "Ctrl+A",
-                            "Ctrl+V"
+                            "Ctrl+End"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'पेस्ट (Paste)' के लिए 'Ctrl+V' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'सभी सिलेक्ट (Select All)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Shift+F3",
-                            "Ctrl+N",
                             "Ctrl+A",
-                            "Ctrl+Y"
+                            "Ctrl+Y",
+                            "Ctrl+]",
+                            "Ctrl+Alt+N"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'सभी सिलेक्ट (Select All)' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Home",
+                            "Ctrl+Shift+8",
+                            "Ctrl+B",
                             "F12",
-                            "Ctrl+Z",
-                            "Ctrl+B"
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'बोल्ड (Bold)' के लिए 'Ctrl+B' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Ctrl+R",
+                            "Ctrl+C",
+                            "Ctrl+I",
                             "Ctrl+X",
-                            "Ctrl+I"
+                            "Ctrl+K"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+U",
-                            "Ctrl+N",
+                            "Ctrl+S",
                             "Ctrl+I",
-                            "Ctrl+Z"
+                            "Ctrl+Z",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'लेफ्ट एलाइन (Left Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+R",
                             "Ctrl+L",
-                            "Ctrl+O"
+                            "Ctrl+R",
+                            "Ctrl+Z",
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'लेफ्ट एलाइन (Left Align)' के लिए 'Ctrl+L' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'सेंटर एलाइन (Center Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+U",
-                            "Ctrl+J",
+                            "F7",
+                            "Ctrl+5",
                             "Ctrl+E",
-                            "Ctrl+F1"
+                            "Ctrl+["
                         ],
                         "correctAnswer": 2,
                         "explanation": "MS Word में 'सेंटर एलाइन (Center Align)' के लिए 'Ctrl+E' का उपयोग किया जाता है।"
@@ -5552,9 +5552,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Word में 'राइट एलाइन (Right Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+R",
-                            "Ctrl+B",
-                            "Ctrl+N",
-                            "Ctrl+Backspace"
+                            "Ctrl+Z",
+                            "Ctrl+Shift+>",
+                            "Ctrl+1"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'राइट एलाइन (Right Align)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
@@ -5562,43 +5562,43 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'जस्टिफाई (Justify)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+F4",
                             "Ctrl+J",
-                            "Ctrl+C",
-                            "Ctrl+N"
+                            "Ctrl+Y",
+                            "F7",
+                            "Ctrl+B"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'जस्टिफाई (Justify)' के लिए 'Ctrl+J' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'हाइपरलिंक (Hyperlink)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+K",
-                            "Ctrl+1",
-                            "Ctrl+5",
-                            "Ctrl+Z"
+                            "Ctrl+[",
+                            "Ctrl+G",
+                            "Alt+F4",
+                            "Ctrl+K"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'हाइपरलिंक (Hyperlink)' के लिए 'Ctrl+K' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'ढूँढना (Find)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+P",
                             "Ctrl+F",
                             "Ctrl+X",
-                            "Ctrl+O",
-                            "Alt+Ctrl+S"
+                            "Ctrl+Home"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'ढूँढना (Find)' के लिए 'Ctrl+F' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'बदलना (Replace)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+H",
-                            "Ctrl+F",
-                            "Ctrl+N",
-                            "Ctrl+Y"
+                            "Ctrl+V",
+                            "F12",
+                            "Ctrl+U"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'बदलना (Replace)' के लिए 'Ctrl+H' का उपयोग किया जाता है।"
@@ -5607,9 +5607,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Word में 'गो टू (Go To)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+G",
-                            "Ctrl+X",
-                            "Ctrl+J",
-                            "Ctrl+W"
+                            "Ctrl+Alt+N",
+                            "Ctrl+P",
+                            "Ctrl+["
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'गो टू (Go To)' के लिए 'Ctrl+G' का उपयोग किया जाता है।"
@@ -5617,54 +5617,54 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'फॉन्ट साइज छोटा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Ctrl+5",
                             "Ctrl+[",
-                            "Ctrl+R"
+                            "F12",
+                            "Ctrl+O",
+                            "Ctrl+Shift+<"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'फॉन्ट साइज छोटा' के लिए 'Ctrl+[' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'फॉन्ट साइज बड़ा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+2",
-                            "Ctrl+Enter",
-                            "F7",
-                            "Ctrl+]"
+                            "Ctrl+]",
+                            "Ctrl+Shift+8",
+                            "Ctrl+K",
+                            "Ctrl+F1"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'फॉन्ट साइज बड़ा' के लिए 'Ctrl+]' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'फॉन्ट साइज बढ़ाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
-                            "Ctrl+G",
-                            "Ctrl+Shift+>",
-                            "Ctrl+["
+                            "Ctrl+U",
+                            "F12",
+                            "Ctrl+S",
+                            "Ctrl+Shift+>"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'फॉन्ट साइज बढ़ाना' के लिए 'Ctrl+Shift+>' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'फॉन्ट साइज घटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+<",
-                            "Ctrl+C",
+                            "Ctrl+Delete",
                             "Ctrl+Backspace",
-                            "F7"
+                            "Alt+Ctrl+S",
+                            "Ctrl+Shift+<"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'फॉन्ट साइज घटाना' के लिए 'Ctrl+Shift+<' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'केस बदलना (Change Case)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+X",
+                            "F12",
                             "Shift+F3",
-                            "Ctrl+Backspace",
-                            "Ctrl+Home"
+                            "Ctrl+[",
+                            "Ctrl+Z"
                         ],
                         "correctAnswer": 1,
                         "explanation": "MS Word में 'केस बदलना (Change Case)' के लिए 'Shift+F3' का उपयोग किया जाता है।"
@@ -5672,31 +5672,31 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'पेज ब्रेक (Page Break)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Enter",
-                            "F7",
-                            "Ctrl+E",
-                            "Ctrl+K"
+                            "Ctrl+Alt+N",
+                            "Alt+F4",
+                            "Ctrl+Y",
+                            "Ctrl+Enter"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'पेज ब्रेक (Page Break)' के लिए 'Ctrl+Enter' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'सिंगल लाइन स्पेसिंग' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+F",
-                            "Ctrl+N",
-                            "Ctrl+1",
-                            "Ctrl+L"
+                            "Alt+Ctrl+S",
+                            "Ctrl+]",
+                            "Ctrl+Shift+<",
+                            "Ctrl+1"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'सिंगल लाइन स्पेसिंग' के लिए 'Ctrl+1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'डबल लाइन स्पेसिंग' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+B",
-                            "Ctrl+X",
-                            "Ctrl+F",
+                            "Ctrl+[",
+                            "Ctrl+E",
+                            "Ctrl+A",
                             "Ctrl+2"
                         ],
                         "correctAnswer": 3,
@@ -5705,21 +5705,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में '1.5 लाइन स्पेसिंग' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+B",
-                            "Ctrl+Shift+>",
-                            "Ctrl+5"
+                            "Ctrl+5",
+                            "Ctrl+Shift+8",
+                            "Ctrl+C",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में '1.5 लाइन स्पेसिंग' के लिए 'Ctrl+5' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'वर्ड बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Y",
+                            "Ctrl+W",
                             "Alt+F4",
-                            "Ctrl+L",
-                            "Ctrl+N"
+                            "Ctrl+Z",
+                            "Ctrl+Backspace"
                         ],
                         "correctAnswer": 1,
                         "explanation": "MS Word में 'वर्ड बंद करना' के लिए 'Alt+F4' का उपयोग किया जाता है।"
@@ -5729,8 +5729,8 @@ export const HINDI_QUIZ_DATA = {
                         "options": [
                             "Ctrl+W",
                             "Ctrl+Alt+N",
-                            "Ctrl+F1",
-                            "Ctrl+X"
+                            "Ctrl+Delete",
+                            "F12"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'डॉक्यूमेंट बंद करना' के लिए 'Ctrl+W' का उपयोग किया जाता है।"
@@ -5738,20 +5738,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'रिबन दिखाना/छिपाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+J",
-                            "Ctrl+R",
-                            "Ctrl+E",
-                            "Ctrl+F1"
+                            "Ctrl+F1",
+                            "Ctrl+N",
+                            "Ctrl+U",
+                            "Ctrl+Shift+8"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'रिबन दिखाना/छिपाना' के लिए 'Ctrl+F1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'पैराग्राफ मार्क' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+P",
                             "Ctrl+U",
-                            "Ctrl+N",
-                            "Ctrl+1",
+                            "Ctrl+Z",
                             "Ctrl+Shift+8"
                         ],
                         "correctAnswer": 3,
@@ -5760,32 +5760,32 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'बाएं शब्द मिटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "Shift+F3",
-                            "Ctrl+Backspace",
-                            "Ctrl+Home"
+                            "Ctrl+Enter",
+                            "Ctrl+Home",
+                            "Ctrl+I",
+                            "Ctrl+Backspace"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'बाएं शब्द मिटाना' के लिए 'Ctrl+Backspace' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'दाएं शब्द मिटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+]",
                             "Ctrl+Delete",
-                            "Ctrl+G",
-                            "Ctrl+L"
+                            "Ctrl+Z",
+                            "Ctrl+F1",
+                            "Ctrl+J"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'दाएं शब्द मिटाना' के लिए 'Ctrl+Delete' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'शुरुआत में जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+Home",
-                            "Ctrl+R",
-                            "Ctrl+Shift+<",
-                            "Ctrl+Enter"
+                            "Ctrl+N",
+                            "Ctrl+Shift+>",
+                            "Ctrl+A"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'शुरुआत में जाना' के लिए 'Ctrl+Home' का उपयोग किया जाता है।"
@@ -5793,20 +5793,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'अंत में जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Y",
+                            "Ctrl+Delete",
                             "Shift+F7",
-                            "Ctrl+End",
-                            "Ctrl+Shift+<"
+                            "Ctrl+1",
+                            "Ctrl+End"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'अंत में जाना' के लिए 'Ctrl+End' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'स्पेलिंग चेक' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F7",
-                            "Ctrl+I",
-                            "Ctrl+Home",
+                            "Ctrl+X",
+                            "Ctrl+E",
                             "Ctrl+N"
                         ],
                         "correctAnswer": 0,
@@ -5815,9 +5815,9 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'थिसॉरस (Thesaurus)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+N",
                             "Ctrl+[",
-                            "Ctrl+V",
-                            "Ctrl+2",
+                            "F7",
                             "Shift+F7"
                         ],
                         "correctAnswer": 3,
@@ -5826,20 +5826,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'विंडो स्प्लिट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Alt+P",
-                            "Ctrl+Z",
-                            "Ctrl+R",
-                            "Alt+Ctrl+S"
+                            "Ctrl+H",
+                            "Alt+Ctrl+S",
+                            "Ctrl+Y",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'विंडो स्प्लिट' के लिए 'Alt+Ctrl+S' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'प्रिंट प्रीव्यू' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+H",
-                            "Ctrl+X",
                             "Ctrl+N",
+                            "Ctrl+X",
+                            "Ctrl+Shift+<",
                             "Ctrl+P"
                         ],
                         "correctAnswer": 3,
@@ -5848,9 +5848,9 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'नॉर्मल व्यू' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Home",
+                            "Ctrl+U",
                             "Ctrl+N",
-                            "Ctrl+S",
+                            "Ctrl+P",
                             "Ctrl+Alt+N"
                         ],
                         "correctAnswer": 3,
@@ -5859,12 +5859,12 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'प्रिंट लेआउट व्यू' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Enter",
-                            "Ctrl+Alt+P",
-                            "Ctrl+Delete",
-                            "Ctrl+Z"
+                            "Ctrl+S",
+                            "F12",
+                            "Ctrl+]",
+                            "Ctrl+Alt+P"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'प्रिंट लेआउट व्यू' के लिए 'Ctrl+Alt+P' का उपयोग किया जाता है।"
                     }
                 ],
@@ -6875,9 +6875,9 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'नई वर्कबुक (New Workbook)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+0",
+                            "Ctrl+S",
+                            "Ctrl+O",
                             "Alt+=",
-                            "Ctrl+Space",
                             "Ctrl+N"
                         ],
                         "correctAnswer": 3,
@@ -6886,56 +6886,56 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Space",
-                            "Ctrl+O",
-                            "Ctrl+;",
-                            "Alt+F1"
+                            "Ctrl+X",
+                            "Ctrl+9",
+                            "Ctrl+End",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "Ctrl+N",
-                            "Ctrl+Shift+%",
-                            "Shift+Space"
+                            "Ctrl+PageUp",
+                            "Ctrl+End",
+                            "Ctrl+A",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+U",
                             "F12",
-                            "Ctrl+N",
-                            "Ctrl+-",
-                            "Ctrl+X"
+                            "Ctrl+Home",
+                            "Ctrl+Shift+:"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'वर्कबुक बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+Shift+$",
+                            "Ctrl+PageUp",
                             "Ctrl+W",
-                            "Ctrl+C"
+                            "Ctrl+Z",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'वर्कबुक बंद करना' के लिए 'Ctrl+W' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+;",
                             "Ctrl+P",
-                            "Ctrl+PageDown",
-                            "F2",
-                            "Ctrl+C"
+                            "Ctrl+Shift+:",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
@@ -6943,8 +6943,8 @@ export const HINDI_QUIZ_DATA = {
                         "options": [
                             "Ctrl+Z",
                             "Ctrl+N",
-                            "Ctrl+9",
-                            "Ctrl+1"
+                            "F2",
+                            "Ctrl+Shift+L"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
@@ -6952,174 +6952,174 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "F2",
-                            "Ctrl+X",
-                            "Ctrl+Y"
+                            "Ctrl+Y",
+                            "Ctrl+Home",
+                            "Ctrl+N",
+                            "Ctrl+9"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Y",
+                            "F11",
                             "Ctrl+X",
-                            "F2",
-                            "Ctrl+W",
-                            "Ctrl+1"
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+C",
-                            "F11",
-                            "F12",
-                            "Ctrl+-"
+                            "Ctrl+Shift+:",
+                            "Ctrl+`",
+                            "Ctrl+R",
+                            "Ctrl+C"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'कॉपी (Copy)' के लिए 'Ctrl+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+V",
+                            "Alt+=",
                             "Ctrl++",
-                            "Ctrl+I",
-                            "Ctrl+N",
-                            "Ctrl+V"
+                            "Ctrl+B"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'पेस्ट (Paste)' के लिए 'Ctrl+V' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'पूरी शीट सिलेक्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl++",
                             "Ctrl+A",
-                            "Ctrl+Home",
-                            "Ctrl+Z"
+                            "Ctrl+T",
+                            "Shift+Space",
+                            "Ctrl+B"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'पूरी शीट सिलेक्ट' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Ctrl+B",
-                            "Ctrl+PageUp",
-                            "Ctrl+Shift+$"
+                            "Ctrl+T",
+                            "Alt+=",
+                            "Ctrl+I",
+                            "Ctrl+B"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'बोल्ड (Bold)' के लिए 'Ctrl+B' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F2",
                             "Ctrl+I",
-                            "Ctrl+PageUp",
-                            "Ctrl+R",
-                            "Ctrl+B"
+                            "Ctrl+Shift+%",
+                            "Ctrl+0"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "F12",
-                            "Ctrl+W",
-                            "Ctrl+U"
+                            "Ctrl+U",
+                            "Ctrl+T",
+                            "Ctrl+Space",
+                            "Ctrl+W"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'सेल एडिट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+T",
-                            "Ctrl+Space",
                             "F2",
-                            "Ctrl+Shift+L"
+                            "Shift+Space",
+                            "Ctrl+End",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'सेल एडिट करना' के लिए 'F2' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'ऑटो सम (AutoSum)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F2",
+                            "Ctrl+Z",
+                            "Ctrl+;",
                             "Alt+=",
-                            "Ctrl+Shift+L",
-                            "F12"
+                            "Ctrl+D"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'ऑटो सम (AutoSum)' के लिए 'Alt+=' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'आज की तारीख' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+1",
+                            "Ctrl+Home",
                             "Ctrl+;",
-                            "Ctrl+Z",
-                            "Ctrl+Space",
-                            "Ctrl+PageDown"
+                            "Ctrl+Z"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'आज की तारीख' के लिए 'Ctrl+;' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अभी का समय' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Ctrl+C",
-                            "Ctrl+W",
-                            "Ctrl+Shift+:"
+                            "Ctrl+Shift+:",
+                            "Ctrl+1",
+                            "F11",
+                            "Ctrl+V"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'अभी का समय' के लिए 'Ctrl+Shift+:' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'फॉर्मेट सेल्स' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
                             "Ctrl+1",
-                            "F12",
-                            "Ctrl+Shift+$"
+                            "Ctrl+B",
+                            "F11",
+                            "F12"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'फॉर्मेट सेल्स' के लिए 'Ctrl+1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'करेंसी फॉर्मेट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F2",
+                            "Ctrl+U",
+                            "Ctrl+1",
                             "Ctrl+Shift+$",
-                            "Ctrl+Z",
-                            "Ctrl+X"
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'करेंसी फॉर्मेट' के लिए 'Ctrl+Shift+$' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'परसेंटेज फॉर्मेट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+9",
                             "Ctrl+Shift+%",
-                            "Ctrl+Space"
+                            "Ctrl+`",
+                            "Ctrl+S",
+                            "F12"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'परसेंटेज फॉर्मेट' के लिए 'Ctrl+Shift+%' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'नीचे फिल (Fill Down)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+:",
-                            "Ctrl+PageDown",
-                            "Ctrl+C",
+                            "F12",
+                            "Ctrl+End",
+                            "Ctrl+B",
                             "Ctrl+D"
                         ],
                         "correctAnswer": 3,
@@ -7129,9 +7129,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Excel में 'दाएं फिल (Fill Right)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+R",
-                            "Ctrl+`",
-                            "Ctrl+X",
-                            "Ctrl+PageDown"
+                            "Shift+Space",
+                            "Ctrl+PageUp",
+                            "Ctrl+T"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'दाएं फिल (Fill Right)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
@@ -7139,42 +7139,42 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'नया चार्ट बनाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F11",
-                            "Ctrl+U",
+                            "Ctrl+PageUp",
+                            "Alt+F1",
                             "Ctrl+N",
-                            "Alt+F1"
+                            "F11"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'नया चार्ट बनाना' के लिए 'F11' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'सीट में चार्ट डालना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "F12",
                             "Alt+F1",
-                            "Ctrl+Space"
+                            "Ctrl+S",
+                            "Ctrl+0",
+                            "Ctrl+T"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'सीट में चार्ट डालना' के लिए 'Alt+F1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'टेबल बनाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+D",
                             "Ctrl+T",
-                            "Alt+F1",
-                            "Ctrl++",
-                            "Ctrl+PageUp"
+                            "Ctrl+U",
+                            "F12"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'टेबल बनाना' के लिए 'Ctrl+T' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'फिल्टर लगाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+:",
-                            "Ctrl+S",
-                            "F2",
+                            "Ctrl+N",
+                            "F12",
+                            "Ctrl+O",
                             "Ctrl+Shift+L"
                         ],
                         "correctAnswer": 3,
@@ -7183,43 +7183,43 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'A1 सेल पर जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+9",
-                            "Ctrl+Y",
                             "Ctrl+Home",
-                            "Ctrl+Shift+L"
+                            "Ctrl+N",
+                            "Ctrl+C",
+                            "Ctrl+1"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'A1 सेल पर जाना' के लिए 'Ctrl+Home' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अंतिम सेल पर जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+0",
-                            "Ctrl+Space",
-                            "Ctrl+End"
+                            "Ctrl+End",
+                            "Ctrl+V",
+                            "Ctrl+D",
+                            "Alt+F1"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'अंतिम सेल पर जाना' के लिए 'Ctrl+End' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कॉलम सिलेक्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+;",
-                            "Ctrl+P",
-                            "Ctrl+Home",
-                            "Ctrl+Space"
+                            "Ctrl+Shift+L",
+                            "Ctrl+Space",
+                            "Ctrl+O",
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'कॉलम सिलेक्ट' के लिए 'Ctrl+Space' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो सिलेक्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Shift+Space",
-                            "Ctrl+X",
+                            "F12",
                             "Ctrl+9",
-                            "Ctrl+P"
+                            "Ctrl+;"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'रो सिलेक्ट' के लिए 'Shift+Space' का उपयोग किया जाता है।"
@@ -7227,64 +7227,64 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'रो/कॉलम जोड़ना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F11",
-                            "Ctrl+U",
+                            "Ctrl+Shift+L",
                             "Ctrl++",
-                            "Ctrl+Shift+$"
+                            "Ctrl+0",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'रो/कॉलम जोड़ना' के लिए 'Ctrl++' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो/कॉलम हटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+-",
-                            "Ctrl+Y",
-                            "Ctrl+1",
-                            "Ctrl+S"
+                            "Ctrl+0",
+                            "Ctrl+W",
+                            "Ctrl+U",
+                            "Ctrl+-"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'रो/कॉलम हटाना' के लिए 'Ctrl+-' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कॉलम छिपाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
                             "Ctrl+0",
                             "Ctrl+End",
-                            "Ctrl+I"
+                            "Ctrl+Z",
+                            "Ctrl+Home"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'कॉलम छिपाना' के लिए 'Ctrl+0' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो छिपाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+1",
-                            "Ctrl+I",
                             "Ctrl+9",
-                            "Ctrl+0"
+                            "Ctrl+I",
+                            "Ctrl+Y",
+                            "Ctrl+Shift+$"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'रो छिपाना' के लिए 'Ctrl+9' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'पिछली शीट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "Ctrl+T",
                             "Ctrl+PageUp",
-                            "Ctrl+O"
+                            "Ctrl+;",
+                            "Ctrl+End",
+                            "Ctrl+C"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'पिछली शीट' के लिए 'Ctrl+PageUp' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अगली शीट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Shift+Space",
-                            "Ctrl+C",
-                            "Ctrl+U",
+                            "Ctrl+N",
+                            "Ctrl+X",
+                            "Ctrl+O",
                             "Ctrl+PageDown"
                         ],
                         "correctAnswer": 3,
@@ -7293,12 +7293,12 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'फॉर्मूला दिखाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Shift+Space",
                             "Ctrl+`",
-                            "Alt+F1",
-                            "Ctrl+Shift+:"
+                            "Ctrl+PageUp",
+                            "Alt+=",
+                            "Ctrl+Shift+%"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'फॉर्मूला दिखाना' के लिए 'Ctrl+`' का उपयोग किया जाता है।"
                     }
                 ],
@@ -7867,20 +7867,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'नया डॉक्यूमेंट (New Document)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+G",
-                            "Ctrl+O",
-                            "Ctrl+S",
-                            "Ctrl+N"
+                            "Ctrl+R",
+                            "Ctrl+X",
+                            "Ctrl+N",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'नया डॉक्यूमेंट (New Document)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Ctrl+L",
-                            "Ctrl+E",
+                            "Ctrl+N",
+                            "Ctrl+H",
+                            "Ctrl+R",
                             "Ctrl+O"
                         ],
                         "correctAnswer": 3,
@@ -7889,76 +7889,76 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
+                            "Ctrl+]",
+                            "Ctrl+N",
                             "Ctrl+C",
-                            "F12",
-                            "Ctrl+N"
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+U",
                             "F12",
-                            "Ctrl+I",
-                            "Ctrl+O",
-                            "Ctrl+P"
+                            "Ctrl+L",
+                            "Ctrl+F"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+E",
-                            "Ctrl+[",
-                            "Ctrl+S"
+                            "Ctrl+N",
+                            "Ctrl+Z",
+                            "Ctrl+U",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Shift+>",
                             "Ctrl+Z",
-                            "Ctrl+V",
-                            "Ctrl+H",
-                            "Ctrl+P"
+                            "Ctrl+N",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F12",
-                            "Ctrl+L",
-                            "Ctrl+N",
-                            "Ctrl+Y"
+                            "Ctrl+G",
+                            "Ctrl+Y",
+                            "Ctrl+C"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+X",
-                            "Ctrl+J",
-                            "Ctrl+Z",
-                            "Ctrl+N"
+                            "Ctrl+I",
+                            "Ctrl+]",
+                            "F12",
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+C",
-                            "Ctrl+L",
-                            "Ctrl+A",
-                            "Ctrl+N"
+                            "Ctrl+H",
+                            "Ctrl+G",
+                            "F12"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'कॉपी (Copy)' के लिए 'Ctrl+C' का उपयोग किया जाता है।"
@@ -7966,42 +7966,42 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
                             "Ctrl+V",
-                            "Ctrl+C",
-                            "Ctrl+O"
+                            "F12",
+                            "Ctrl+F",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'पेस्ट (Paste)' के लिए 'Ctrl+V' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सभी सिलेक्ट (Select All)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "Ctrl+S",
-                            "Ctrl+Shift+>",
-                            "F12"
+                            "Ctrl+B",
+                            "Ctrl+J",
+                            "Ctrl+I",
+                            "Ctrl+A"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'सभी सिलेक्ट (Select All)' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+P",
+                            "Ctrl+U",
                             "Ctrl+B",
-                            "Ctrl+I",
-                            "Ctrl+N",
-                            "Ctrl+Z"
+                            "F12"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'बोल्ड (Bold)' के लिए 'Ctrl+B' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
-                            "Ctrl+N",
-                            "Ctrl+E",
+                            "F12",
+                            "Ctrl+Shift+>",
+                            "Ctrl+S",
                             "Ctrl+I"
                         ],
                         "correctAnswer": 3,
@@ -8010,53 +8010,53 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+>",
                             "Ctrl+U",
-                            "Ctrl+V",
-                            "Ctrl+L"
+                            "F12",
+                            "Ctrl+[",
+                            "Ctrl+E"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'लेफ्ट एलाइन (Left Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+X",
-                            "Ctrl+E",
+                            "Ctrl+C",
+                            "Ctrl+L",
                             "F12",
-                            "Ctrl+L"
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'लेफ्ट एलाइन (Left Align)' के लिए 'Ctrl+L' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सेंटर एलाइन (Center Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+V",
-                            "Ctrl+S",
-                            "Ctrl+K",
-                            "Ctrl+E"
+                            "Ctrl+E",
+                            "Ctrl+I",
+                            "Ctrl+R",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'सेंटर एलाइन (Center Align)' के लिए 'Ctrl+E' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'राइट एलाइन (Right Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "Ctrl+H",
-                            "Ctrl+N",
-                            "Ctrl+R"
+                            "Ctrl+Y",
+                            "Ctrl+X",
+                            "Ctrl+R",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'राइट एलाइन (Right Align)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'जस्टिफाई (Justify)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
-                            "Ctrl+F",
-                            "Ctrl+E",
+                            "Ctrl+G",
+                            "Ctrl+Y",
+                            "Ctrl+B",
                             "Ctrl+J"
                         ],
                         "correctAnswer": 3,
@@ -8065,9 +8065,9 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'हाइपरलिंक (Hyperlink)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+V",
-                            "Ctrl+C",
-                            "Ctrl+H",
+                            "Ctrl+R",
+                            "F12",
+                            "Ctrl+X",
                             "Ctrl+K"
                         ],
                         "correctAnswer": 3,
@@ -8076,21 +8076,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'ढूँढना (Find)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Ctrl+X",
-                            "Ctrl+J",
-                            "Ctrl+F"
+                            "Ctrl+F",
+                            "Ctrl+A",
+                            "Ctrl+Y",
+                            "Ctrl+H"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'ढूँढना (Find)' के लिए 'Ctrl+F' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'बदलना (Replace)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+H",
-                            "F12",
-                            "Ctrl+[",
-                            "Ctrl+Z"
+                            "Ctrl+O",
+                            "Ctrl+K",
+                            "Ctrl+]"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'बदलना (Replace)' के लिए 'Ctrl+H' का उपयोग किया जाता है।"
@@ -8098,45 +8098,45 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'गो टू (Go To)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+U",
-                            "Ctrl+G",
-                            "Ctrl+B"
+                            "Ctrl+Y",
+                            "Ctrl+E",
+                            "Ctrl+[",
+                            "Ctrl+G"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'गो टू (Go To)' के लिए 'Ctrl+G' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'फॉन्ट साइज छोटा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+X",
-                            "Ctrl+L",
-                            "Ctrl+["
+                            "Ctrl+S",
+                            "Ctrl+[",
+                            "Ctrl+Z",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'फॉन्ट साइज छोटा' के लिए 'Ctrl+[' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'फॉन्ट साइज बड़ा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+I",
-                            "Ctrl+N",
-                            "Ctrl+B",
-                            "Ctrl+]"
+                            "Ctrl+U",
+                            "Ctrl+P",
+                            "Ctrl+]",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'फॉन्ट साइज बड़ा' के लिए 'Ctrl+]' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'फॉन्ट साइज बढ़ाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+X",
                             "Ctrl+Shift+>",
-                            "Ctrl+V"
+                            "Ctrl+I",
+                            "Ctrl+G",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'फॉन्ट साइज बढ़ाना' के लिए 'Ctrl+Shift+>' का उपयोग किया जाता है।"
                     }
                 ],
@@ -8483,20 +8483,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'कंपनी सिलेक्ट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F1",
+                            "F6",
+                            "F8",
                             "F3",
-                            "F2",
-                            "Alt+F1"
+                            "F1"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'कंपनी सिलेक्ट करना' के लिए 'F1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'कंपनी बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F8",
-                            "F7",
-                            "F2",
+                            "F6",
+                            "F3",
+                            "F5",
                             "Alt+F1"
                         ],
                         "correctAnswer": 3,
@@ -8505,12 +8505,12 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'तारीख बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F5",
+                            "F2",
                             "F6",
-                            "F3",
-                            "F7",
-                            "F2"
+                            "F7"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'तारीख बदलना' के लिए 'F2' का उपयोग किया जाता है।"
                     },
                     {
@@ -8527,67 +8527,67 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'कंपनी जानकारी' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F1",
                             "F3",
-                            "F5",
-                            "F7",
-                            "F6"
+                            "F2",
+                            "Alt+F1"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'कंपनी जानकारी' के लिए 'F3' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'कंट्रा वाउचर (Contra)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F4",
+                            "F7",
                             "Alt+F1",
-                            "F1",
-                            "F3"
+                            "F2",
+                            "F4"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'कंट्रा वाउचर (Contra)' के लिए 'F4' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'पेमेंट वाउचर (Payment)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F8",
-                            "F5",
+                            "F1",
                             "F2",
-                            "F6"
+                            "F7",
+                            "F5"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'पेमेंट वाउचर (Payment)' के लिए 'F5' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'रिसीप्ट वाउचर (Receipt)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F6",
+                            "F1",
                             "F4",
-                            "Alt+F2",
-                            "F3",
-                            "F6"
+                            "F8"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'रिसीप्ट वाउचर (Receipt)' के लिए 'F6' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'जर्नल वाउचर (Journal)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F8",
-                            "Alt+F1",
+                            "Alt+F2",
+                            "F7",
                             "F1",
-                            "F7"
+                            "F4"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'जर्नल वाउचर (Journal)' के लिए 'F7' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'सेल्स वाउचर (Sales)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F8",
-                            "Alt+F1",
-                            "F4",
-                            "F1"
+                            "F5",
+                            "F3",
+                            "F2",
+                            "F8"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'सेल्स वाउचर (Sales)' के लिए 'F8' का उपयोग किया जाता है।"
                     }
                 ],
@@ -8596,9 +8596,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "Tally में 'कंपनी सिलेक्ट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F1",
-                            "Ctrl+F8",
-                            "Alt+C",
-                            "F2"
+                            "Alt+D",
+                            "F7",
+                            "F6"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'कंपनी सिलेक्ट करना' के लिए 'F1' का उपयोग किया जाता है।"
@@ -8607,9 +8607,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "Tally में 'कंपनी बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Alt+F1",
-                            "F4",
-                            "F1",
-                            "Ctrl+F9"
+                            "F5",
+                            "Alt+C",
+                            "Ctrl+Enter"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'कंपनी बंद करना' के लिए 'Alt+F1' का उपयोग किया जाता है।"
@@ -8617,21 +8617,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'तारीख बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F2",
-                            "Ctrl+F9",
-                            "F3",
-                            "F6"
+                            "F4",
+                            "Ctrl+A",
+                            "Alt+C",
+                            "F2"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'तारीख बदलना' के लिए 'F2' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'पीरियड बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Alt+F2",
-                            "F12",
-                            "Alt+D",
-                            "F5"
+                            "F8",
+                            "F7",
+                            "F3"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'पीरियड बदलना' के लिए 'Alt+F2' का उपयोग किया जाता है।"
@@ -8640,9 +8640,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "Tally में 'कंपनी जानकारी' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F3",
-                            "F2",
+                            "Alt+F1",
                             "F7",
-                            "Alt+D"
+                            "Alt+I"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'कंपनी जानकारी' के लिए 'F3' का उपयोग किया जाता है।"
@@ -8650,21 +8650,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'कंट्रा वाउचर (Contra)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+F1",
-                            "F11",
-                            "Ctrl+Q",
-                            "F4"
+                            "F1",
+                            "F4",
+                            "Alt+C",
+                            "Ctrl+F8"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'कंट्रा वाउचर (Contra)' के लिए 'F4' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'पेमेंट वाउचर (Payment)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "F12",
+                            "Ctrl+Enter",
+                            "F1",
                             "F5",
-                            "Alt+F1"
+                            "F2"
                         ],
                         "correctAnswer": 2,
                         "explanation": "Tally में 'पेमेंट वाउचर (Payment)' के लिए 'F5' का उपयोग किया जाता है।"
@@ -8672,119 +8672,119 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'रिसीप्ट वाउचर (Receipt)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F5",
-                            "F7",
+                            "Alt+F1",
                             "Ctrl+F9",
-                            "F6"
+                            "F6",
+                            "F9"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "Tally में 'रिसीप्ट वाउचर (Receipt)' के लिए 'F6' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'जर्नल वाउचर (Journal)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Enter",
                             "F7",
-                            "Alt+F1",
-                            "F9",
-                            "F2"
+                            "Alt+I",
+                            "F5"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'जर्नल वाउचर (Journal)' के लिए 'F7' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'सेल्स वाउचर (Sales)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+F8",
                             "F8",
-                            "Ctrl+Q",
-                            "Ctrl+Enter"
+                            "Ctrl+F8",
+                            "Ctrl+F9",
+                            "F5"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'सेल्स वाउचर (Sales)' के लिए 'F8' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'पर्चेस वाउचर (Purchase)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+F9",
                             "F9",
-                            "Ctrl+Q",
-                            "Alt+F2"
+                            "Alt+P",
+                            "Ctrl+F9",
+                            "Alt+F1"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'पर्चेस वाउचर (Purchase)' के लिए 'F9' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'क्रेडिट नोट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+F1",
-                            "F1",
-                            "F12",
-                            "Ctrl+F8"
+                            "Ctrl+F8",
+                            "F8",
+                            "F3",
+                            "Alt+C"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'क्रेडिट नोट' के लिए 'Ctrl+F8' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'डेबिट नोट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F6",
-                            "Ctrl+F9",
-                            "Ctrl+Enter",
-                            "Alt+C"
+                            "F5",
+                            "F2",
+                            "F11",
+                            "Ctrl+F9"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'डेबिट नोट' के लिए 'Ctrl+F9' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'फीचर्स (Features)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F6",
+                            "F11",
                             "Alt+F2",
                             "F4",
-                            "F11"
+                            "Alt+C"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'फीचर्स (Features)' के लिए 'F11' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'कॉन्फ़िगरेशन' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F7",
                             "F12",
-                            "Alt+F1",
-                            "Alt+D",
-                            "F6"
+                            "F1",
+                            "Alt+F1"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'कॉन्फ़िगरेशन' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'नया लेजर बनाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+P",
-                            "F4",
-                            "Alt+C",
-                            "Alt+F2"
+                            "F1",
+                            "Ctrl+F8",
+                            "F6",
+                            "Alt+C"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'नया लेजर बनाना' के लिए 'Alt+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'डिलीट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F5",
-                            "F12",
+                            "F8",
                             "Alt+D",
-                            "Alt+F1"
+                            "F1",
+                            "F12"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'डिलीट करना' के लिए 'Alt+D' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'प्रिंट रिपोर्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+F1",
-                            "Ctrl+Enter",
-                            "F1",
+                            "F7",
+                            "Ctrl+F8",
+                            "Alt+F2",
                             "Alt+P"
                         ],
                         "correctAnswer": 3,
@@ -8793,42 +8793,42 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'एक्सेप्ट/सेव' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "F1",
-                            "Alt+P",
-                            "F4"
+                            "F3",
+                            "F8",
+                            "F6",
+                            "Ctrl+A"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'एक्सेप्ट/सेव' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'क्विट (Quit)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+F1",
-                            "Ctrl+F8",
-                            "F12",
-                            "Ctrl+Q"
+                            "Ctrl+Q",
+                            "Alt+P",
+                            "F9",
+                            "F11"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'क्विट (Quit)' के लिए 'Ctrl+Q' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'इनवॉइस मोड' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F8",
-                            "F3",
-                            "Alt+C",
-                            "Alt+I"
+                            "Alt+I",
+                            "Alt+F2",
+                            "Ctrl+A",
+                            "F4"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'इनवॉइस मोड' के लिए 'Alt+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'लेजर बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+Enter",
-                            "F9",
-                            "F11",
+                            "Ctrl+F8",
+                            "F6",
                             "Alt+I"
                         ],
                         "correctAnswer": 0,
@@ -9180,10 +9180,10 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'नया डॉक्यूमेंट (New Document)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+F",
+                            "Ctrl+O",
                             "Ctrl+N",
-                            "Ctrl+V",
-                            "Ctrl+O"
+                            "Ctrl+A",
+                            "F12"
                         ],
                         "correctAnswer": 1,
                         "explanation": "Photoshop में 'नया डॉक्यूमेंट (New Document)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
@@ -9191,42 +9191,42 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+K",
-                            "Ctrl+S",
+                            "Ctrl+C",
+                            "Ctrl+O",
                             "Ctrl+N",
-                            "Ctrl+O"
+                            "F12"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+E",
+                            "Ctrl+S",
                             "Ctrl+N",
-                            "Ctrl+I",
-                            "Ctrl+S"
+                            "Ctrl+C",
+                            "Ctrl+F"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "Ctrl+N",
-                            "Ctrl+L",
-                            "F12"
+                            "Ctrl+U",
+                            "Ctrl+C",
+                            "F12",
+                            "Ctrl+K"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "Photoshop में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+K",
-                            "Ctrl+I",
-                            "Ctrl+V",
+                            "F12",
+                            "Ctrl+B",
+                            "Ctrl+O",
                             "Ctrl+P"
                         ],
                         "correctAnswer": 3,
@@ -9235,31 +9235,31 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
-                            "Ctrl+P",
                             "Ctrl+Z",
-                            "Ctrl+K"
+                            "Ctrl+N",
+                            "Ctrl+V",
+                            "Ctrl+A"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Y",
-                            "Ctrl+F",
-                            "Ctrl+N",
-                            "Ctrl+V"
+                            "Ctrl+V",
+                            "Ctrl+Z",
+                            "Ctrl+I",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
+                            "Ctrl+A",
+                            "Ctrl+V",
                             "Ctrl+O",
-                            "Ctrl+S",
                             "Ctrl+X"
                         ],
                         "correctAnswer": 3,
@@ -9268,20 +9268,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+N",
+                            "Ctrl+U",
                             "Ctrl+C",
-                            "Ctrl+R",
-                            "Ctrl+L",
-                            "Ctrl+J"
+                            "Ctrl+K"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "Photoshop में 'कॉपी (Copy)' के लिए 'Ctrl+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+I",
-                            "Ctrl+P",
-                            "Ctrl+O",
+                            "Ctrl+Z",
+                            "Ctrl+Y",
+                            "Ctrl+A",
                             "Ctrl+V"
                         ],
                         "correctAnswer": 3,
@@ -9290,9 +9290,9 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'सभी सिलेक्ट (Select All)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+V",
+                            "F12",
                             "Ctrl+E",
-                            "Ctrl+S",
+                            "Ctrl+Y",
                             "Ctrl+A"
                         ],
                         "correctAnswer": 3,
@@ -9301,65 +9301,65 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+A",
-                            "Ctrl+R",
-                            "Ctrl+B"
+                            "Ctrl+J",
+                            "Ctrl+Y",
+                            "Ctrl+B",
+                            "Ctrl+V"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "Photoshop में 'बोल्ड (Bold)' के लिए 'Ctrl+B' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
                             "Ctrl+I",
-                            "Ctrl+K",
-                            "Ctrl+R"
+                            "Ctrl+J",
+                            "Ctrl+V",
+                            "F12"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+K",
-                            "Ctrl+Y",
-                            "F12",
-                            "Ctrl+U"
+                            "Ctrl+U",
+                            "Ctrl+X",
+                            "Ctrl+V",
+                            "Ctrl+E"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'लेफ्ट एलाइन (Left Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+B",
-                            "Ctrl+K",
-                            "Ctrl+L"
+                            "Ctrl+L",
+                            "Ctrl+X",
+                            "Ctrl+Y",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'लेफ्ट एलाइन (Left Align)' के लिए 'Ctrl+L' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'सेंटर एलाइन (Center Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+E",
-                            "Ctrl+J",
-                            "Ctrl+F"
+                            "Ctrl+R",
+                            "Ctrl+P",
+                            "Ctrl+Y",
+                            "Ctrl+E"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'सेंटर एलाइन (Center Align)' के लिए 'Ctrl+E' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'राइट एलाइन (Right Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+R",
-                            "Ctrl+U",
-                            "Ctrl+V",
-                            "F12"
+                            "Ctrl+N",
+                            "Ctrl+O",
+                            "Ctrl+A"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Photoshop में 'राइट एलाइन (Right Align)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
@@ -9367,34 +9367,34 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'जस्टिफाई (Justify)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+J",
-                            "Ctrl+Z",
-                            "Ctrl+Y",
-                            "F12"
+                            "Ctrl+X",
+                            "Ctrl+B",
+                            "F12",
+                            "Ctrl+J"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'जस्टिफाई (Justify)' के लिए 'Ctrl+J' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'हाइपरलिंक (Hyperlink)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+E",
-                            "Ctrl+B",
                             "Ctrl+K",
-                            "Ctrl+S"
+                            "Ctrl+O",
+                            "Ctrl+B",
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'हाइपरलिंक (Hyperlink)' के लिए 'Ctrl+K' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'ढूँढना (Find)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+F",
+                            "Ctrl+I",
                             "Ctrl+P",
-                            "Ctrl+Y",
-                            "Ctrl+E"
+                            "Ctrl+N",
+                            "Ctrl+F"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'ढूँढना (Find)' के लिए 'Ctrl+F' का उपयोग किया जाता है।"
                     }
                 ]
@@ -10075,32 +10075,32 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'नया डॉक्यूमेंट (New Document)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Delete",
                             "Ctrl+N",
-                            "F12",
-                            "Ctrl+H"
+                            "Ctrl+S",
+                            "Ctrl+Enter",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'नया डॉक्यूमेंट (New Document)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
-                            "Ctrl+Delete",
-                            "Ctrl+V",
-                            "Ctrl+["
+                            "Ctrl+K",
+                            "Ctrl+Enter",
+                            "Ctrl+Shift+8",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+S",
-                            "Ctrl+N",
-                            "Ctrl+U",
-                            "Shift+F7"
+                            "Alt+F4",
+                            "Ctrl+Backspace",
+                            "Ctrl+N"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
@@ -10108,9 +10108,9 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+K",
-                            "Ctrl+Backspace",
-                            "Ctrl+R",
+                            "Ctrl+Delete",
+                            "Ctrl+5",
+                            "Ctrl+C",
                             "F12"
                         ],
                         "correctAnswer": 3,
@@ -10119,53 +10119,53 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Alt+P",
-                            "Ctrl+End",
-                            "Ctrl+R",
-                            "Ctrl+P"
+                            "Ctrl+S",
+                            "Ctrl+P",
+                            "Ctrl+Z",
+                            "Ctrl+F1"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Word में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+[",
-                            "Ctrl+L",
-                            "Ctrl+O",
-                            "Ctrl+Z"
+                            "Ctrl+Z",
+                            "Ctrl+F",
+                            "Ctrl+5",
+                            "Ctrl+Shift+8"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Y",
-                            "Ctrl+Shift+8",
-                            "Ctrl+W",
-                            "Ctrl+A"
+                            "Ctrl+E",
+                            "Ctrl+L",
+                            "Shift+F3",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Home",
+                            "Ctrl+R",
                             "Ctrl+X",
-                            "Ctrl+P",
-                            "Ctrl+Shift+8",
-                            "Ctrl+A"
+                            "Ctrl+Backspace"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Word में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+G",
-                            "Ctrl+R",
-                            "Ctrl+E",
+                            "Ctrl+O",
+                            "Ctrl+U",
+                            "Ctrl+End",
                             "Ctrl+C"
                         ],
                         "correctAnswer": 3,
@@ -10174,9 +10174,9 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+]",
-                            "Alt+F4",
-                            "Ctrl+R",
+                            "Ctrl+N",
+                            "Alt+Ctrl+S",
+                            "Ctrl+L",
                             "Ctrl+V"
                         ],
                         "correctAnswer": 3,
@@ -10185,20 +10185,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'सभी सिलेक्ट (Select All)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+E",
+                            "Ctrl+Enter",
                             "Ctrl+A",
-                            "Ctrl+C",
-                            "Ctrl+1",
-                            "Ctrl+I"
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Word में 'सभी सिलेक्ट (Select All)' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+2",
-                            "Ctrl+E",
-                            "Ctrl+X",
+                            "Ctrl+A",
+                            "Ctrl+1",
+                            "Ctrl+C",
                             "Ctrl+B"
                         ],
                         "correctAnswer": 3,
@@ -10207,32 +10207,32 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
-                            "Ctrl+G",
-                            "Ctrl+I",
-                            "Ctrl+5"
+                            "Ctrl+Alt+N",
+                            "Ctrl+2",
+                            "Ctrl+L",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Y",
-                            "Ctrl+Shift+<",
-                            "Ctrl+Shift+8",
-                            "Ctrl+U"
+                            "Ctrl+N",
+                            "Ctrl+L",
+                            "Ctrl+U",
+                            "Ctrl+]"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "MS Word में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'लेफ्ट एलाइन (Left Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+L",
-                            "Ctrl+1",
-                            "Ctrl+Y",
-                            "Ctrl+X"
+                            "Ctrl+W",
+                            "Ctrl+V",
+                            "Ctrl+E"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'लेफ्ट एलाइन (Left Align)' के लिए 'Ctrl+L' का उपयोग किया जाता है।"
@@ -10240,21 +10240,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'सेंटर एलाइन (Center Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+X",
                             "Ctrl+E",
-                            "F7"
+                            "Ctrl+I",
+                            "Ctrl+Z",
+                            "Ctrl+1"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'सेंटर एलाइन (Center Align)' के लिए 'Ctrl+E' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'राइट एलाइन (Right Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Home",
-                            "Ctrl+Backspace",
+                            "Ctrl+Shift+8",
+                            "Ctrl+Delete",
                             "Ctrl+R",
-                            "Ctrl+]"
+                            "Ctrl+5"
                         ],
                         "correctAnswer": 2,
                         "explanation": "MS Word में 'राइट एलाइन (Right Align)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
@@ -10262,75 +10262,75 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'जस्टिफाई (Justify)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+J",
+                            "Ctrl+E",
                             "Ctrl+A",
-                            "Shift+F3",
-                            "Ctrl+Alt+P"
+                            "Ctrl+R",
+                            "Ctrl+J"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'जस्टिफाई (Justify)' के लिए 'Ctrl+J' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'हाइपरलिंक (Hyperlink)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+<",
-                            "Ctrl+X",
                             "Ctrl+K",
-                            "Alt+F4"
+                            "Ctrl+Home",
+                            "Ctrl+Shift+>",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'हाइपरलिंक (Hyperlink)' के लिए 'Ctrl+K' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'ढूँढना (Find)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+L",
-                            "Ctrl+C",
-                            "Ctrl+5",
-                            "Ctrl+F"
+                            "Ctrl+F",
+                            "Ctrl+End",
+                            "F7",
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'ढूँढना (Find)' के लिए 'Ctrl+F' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'बदलना (Replace)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Alt+P",
-                            "Ctrl+[",
                             "Ctrl+H",
-                            "Ctrl+1"
+                            "Ctrl+C",
+                            "Ctrl+W",
+                            "Ctrl+Delete"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'बदलना (Replace)' के लिए 'Ctrl+H' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'गो टू (Go To)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+G",
+                            "Ctrl+F",
+                            "Ctrl+K",
                             "Ctrl+N",
-                            "Ctrl+P",
-                            "F12"
+                            "Ctrl+G"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'गो टू (Go To)' के लिए 'Ctrl+G' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'फॉन्ट साइज छोटा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+Ctrl+S",
-                            "Ctrl+I",
-                            "Ctrl+H",
-                            "Ctrl+["
+                            "Ctrl+[",
+                            "Ctrl+U",
+                            "Ctrl+Shift+8",
+                            "Ctrl+W"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'फॉन्ट साइज छोटा' के लिए 'Ctrl+[' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'फॉन्ट साइज बड़ा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
-                            "Shift+F3",
-                            "Ctrl+Y",
+                            "Ctrl+U",
+                            "Ctrl+Z",
+                            "Ctrl+A",
                             "Ctrl+]"
                         ],
                         "correctAnswer": 3,
@@ -10340,9 +10340,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Word में 'फॉन्ट साइज बढ़ाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+Shift+>",
-                            "Ctrl+End",
-                            "Ctrl+F1",
-                            "Ctrl+J"
+                            "Ctrl+Alt+N",
+                            "Ctrl+B",
+                            "Ctrl+N"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'फॉन्ट साइज बढ़ाना' के लिए 'Ctrl+Shift+>' का उपयोग किया जाता है।"
@@ -10351,9 +10351,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Word में 'फॉन्ट साइज घटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+Shift+<",
-                            "Ctrl+2",
-                            "Ctrl+X",
-                            "Ctrl+W"
+                            "Ctrl+Alt+P",
+                            "Ctrl+S",
+                            "Ctrl+E"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'फॉन्ट साइज घटाना' के लिए 'Ctrl+Shift+<' का उपयोग किया जाता है।"
@@ -10362,9 +10362,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Word में 'केस बदलना (Change Case)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Shift+F3",
-                            "Ctrl+Delete",
-                            "Ctrl+P",
-                            "Ctrl+Home"
+                            "Ctrl+N",
+                            "Ctrl+End",
+                            "Ctrl+Y"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'केस बदलना (Change Case)' के लिए 'Shift+F3' का उपयोग किया जाता है।"
@@ -10372,20 +10372,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'पेज ब्रेक (Page Break)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Enter",
-                            "Ctrl+Y",
                             "Ctrl+X",
-                            "Ctrl+U"
+                            "Ctrl+J",
+                            "Ctrl+Shift+>",
+                            "Ctrl+Enter"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'पेज ब्रेक (Page Break)' के लिए 'Ctrl+Enter' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'सिंगल लाइन स्पेसिंग' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+>",
-                            "Ctrl+N",
-                            "Ctrl+U",
+                            "Ctrl+X",
+                            "F7",
+                            "Ctrl+Alt+N",
                             "Ctrl+1"
                         ],
                         "correctAnswer": 3,
@@ -10394,76 +10394,76 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'डबल लाइन स्पेसिंग' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+8",
-                            "Ctrl+F",
                             "Ctrl+2",
-                            "Ctrl+5"
+                            "Ctrl+1",
+                            "Ctrl+Backspace",
+                            "Ctrl+Enter"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'डबल लाइन स्पेसिंग' के लिए 'Ctrl+2' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में '1.5 लाइन स्पेसिंग' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+E",
-                            "Ctrl+5",
-                            "Ctrl+N",
-                            "Ctrl+U"
+                            "F12",
+                            "Ctrl+Z",
+                            "Ctrl+Shift+>",
+                            "Ctrl+5"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में '1.5 लाइन स्पेसिंग' के लिए 'Ctrl+5' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'वर्ड बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+U",
-                            "Ctrl+End",
-                            "Alt+F4"
+                            "Alt+F4",
+                            "Ctrl+Alt+N",
+                            "F12",
+                            "Ctrl+R"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'वर्ड बंद करना' के लिए 'Alt+F4' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'डॉक्यूमेंट बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+W",
-                            "Ctrl+A",
-                            "Ctrl+Shift+>",
-                            "Ctrl+L"
+                            "Ctrl+B",
+                            "Ctrl+5",
+                            "Ctrl+V",
+                            "Ctrl+W"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'डॉक्यूमेंट बंद करना' के लिए 'Ctrl+W' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'रिबन दिखाना/छिपाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
                             "Ctrl+F1",
-                            "Ctrl+F",
-                            "Ctrl+Shift+>"
+                            "Ctrl+S",
+                            "Ctrl+Delete",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'रिबन दिखाना/छिपाना' के लिए 'Ctrl+F1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'पैराग्राफ मार्क' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F12",
+                            "Shift+F7",
                             "Ctrl+S",
-                            "Ctrl+Shift+8",
-                            "Ctrl+2",
-                            "Ctrl+Home"
+                            "Ctrl+Shift+8"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'पैराग्राफ मार्क' के लिए 'Ctrl+Shift+8' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'बाएं शब्द मिटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+C",
-                            "Ctrl+X",
+                            "Ctrl+E",
                             "Ctrl+Backspace",
-                            "Ctrl+V"
+                            "Ctrl+F"
                         ],
                         "correctAnswer": 2,
                         "explanation": "MS Word में 'बाएं शब्द मिटाना' के लिए 'Ctrl+Backspace' का उपयोग किया जाता है।"
@@ -10471,43 +10471,43 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'दाएं शब्द मिटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+F4",
-                            "Ctrl+Y",
-                            "Ctrl+A",
-                            "Ctrl+Delete"
+                            "Ctrl+Delete",
+                            "Shift+F3",
+                            "Ctrl+V",
+                            "F12"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'दाएं शब्द मिटाना' के लिए 'Ctrl+Delete' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'शुरुआत में जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Home",
+                            "Ctrl+Shift+>",
                             "Ctrl+B",
-                            "Ctrl+Y",
-                            "Ctrl+L"
+                            "F12",
+                            "Ctrl+Home"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'शुरुआत में जाना' के लिए 'Ctrl+Home' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'अंत में जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+End",
-                            "Ctrl+Y",
-                            "Ctrl+E",
-                            "Ctrl+P"
+                            "Ctrl+O",
+                            "Ctrl+Shift+8",
+                            "Ctrl+R",
+                            "Ctrl+End"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'अंत में जाना' के लिए 'Ctrl+End' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'स्पेलिंग चेक' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F7",
-                            "Ctrl+N",
-                            "Ctrl+X",
-                            "Ctrl+["
+                            "Ctrl+H",
+                            "Ctrl+]",
+                            "Ctrl+Shift+>"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Word में 'स्पेलिंग चेक' के लिए 'F7' का उपयोग किया जाता है।"
@@ -10515,43 +10515,43 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'थिसॉरस (Thesaurus)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+B",
-                            "Ctrl+F1",
-                            "Alt+F4",
-                            "Shift+F7"
+                            "Shift+F7",
+                            "Ctrl+Alt+N",
+                            "Ctrl+2",
+                            "Shift+F3"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Word में 'थिसॉरस (Thesaurus)' के लिए 'Shift+F7' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'विंडो स्प्लिट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+I",
                             "Ctrl+2",
-                            "Ctrl+X",
-                            "Alt+Ctrl+S"
+                            "Ctrl+B",
+                            "Alt+Ctrl+S",
+                            "Ctrl+E"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "MS Word में 'विंडो स्प्लिट' के लिए 'Alt+Ctrl+S' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'प्रिंट प्रीव्यू' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Enter",
-                            "F12",
-                            "Ctrl+L",
-                            "Ctrl+P"
+                            "Ctrl+5",
+                            "Ctrl+X",
+                            "Ctrl+P",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "MS Word में 'प्रिंट प्रीव्यू' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Word में 'नॉर्मल व्यू' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+5",
+                            "Ctrl+]",
                             "Ctrl+Alt+N",
-                            "Ctrl+S",
-                            "Ctrl+Enter"
+                            "Ctrl+End",
+                            "Ctrl+Shift+>"
                         ],
                         "correctAnswer": 1,
                         "explanation": "MS Word में 'नॉर्मल व्यू' के लिए 'Ctrl+Alt+N' का उपयोग किया जाता है।"
@@ -10559,12 +10559,12 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Word में 'प्रिंट लेआउट व्यू' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Alt+P",
-                            "Ctrl+Y",
-                            "Ctrl+U",
-                            "Ctrl+Shift+8"
+                            "Ctrl+E",
+                            "Ctrl+B",
+                            "Ctrl+S",
+                            "Ctrl+Alt+P"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Word में 'प्रिंट लेआउट व्यू' के लिए 'Ctrl+Alt+P' का उपयोग किया जाता है।"
                     }
                 ],
@@ -11575,30 +11575,30 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'नई वर्कबुक (New Workbook)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Home",
                             "Ctrl+N",
-                            "Alt+F1",
-                            "Ctrl+R",
-                            "Ctrl+P"
+                            "Ctrl+PageUp",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'नई वर्कबुक (New Workbook)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Space",
-                            "Ctrl+O",
-                            "Shift+Space",
-                            "Ctrl+A"
+                            "Ctrl+Shift+$",
+                            "Ctrl+Shift+L",
+                            "Ctrl+1",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl++",
                             "Ctrl+`",
-                            "Ctrl+End",
                             "Ctrl+PageUp",
                             "Ctrl+S"
                         ],
@@ -11609,9 +11609,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Excel में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F12",
-                            "Ctrl+Z",
-                            "F2",
-                            "Ctrl+N"
+                            "Ctrl+Shift+$",
+                            "Ctrl+N",
+                            "Ctrl+O"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
@@ -11620,9 +11620,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "MS Excel में 'वर्कबुक बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+W",
-                            "Ctrl+Y",
-                            "F12",
-                            "Ctrl+A"
+                            "Ctrl+`",
+                            "Ctrl+Shift+$",
+                            "Ctrl+N"
                         ],
                         "correctAnswer": 0,
                         "explanation": "MS Excel में 'वर्कबुक बंद करना' के लिए 'Ctrl+W' का उपयोग किया जाता है।"
@@ -11630,76 +11630,76 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "Ctrl+P",
-                            "Ctrl+Z",
-                            "Ctrl+N"
+                            "Ctrl+Shift+L",
+                            "Alt+=",
+                            "F2",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+X",
                             "Ctrl+Z",
-                            "Ctrl+A",
-                            "F2"
+                            "Ctrl+PageDown",
+                            "Ctrl+X",
+                            "Ctrl+Shift+:"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Alt+=",
-                            "Ctrl+Shift+L",
-                            "Ctrl+Y",
-                            "Ctrl+W"
+                            "Ctrl+X",
+                            "Ctrl+`",
+                            "Ctrl+P",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+X",
-                            "Ctrl+D",
-                            "Ctrl+W",
-                            "Ctrl+N"
+                            "Ctrl+Z",
+                            "Ctrl+N",
+                            "Ctrl+O",
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+N",
+                            "Ctrl+C",
                             "Ctrl+O",
-                            "Ctrl+S",
-                            "F11",
-                            "Ctrl+C"
+                            "Ctrl+Shift+$"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'कॉपी (Copy)' के लिए 'Ctrl+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+1",
-                            "Ctrl+V",
                             "F12",
-                            "Alt+F1"
+                            "Ctrl+I",
+                            "Ctrl+V",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'पेस्ट (Paste)' के लिए 'Ctrl+V' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'पूरी शीट सिलेक्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Home",
-                            "Ctrl+O",
+                            "Alt+=",
+                            "Ctrl+V",
                             "Ctrl+A",
-                            "Ctrl+N"
+                            "Shift+Space"
                         ],
                         "correctAnswer": 2,
                         "explanation": "MS Excel में 'पूरी शीट सिलेक्ट' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
@@ -11707,64 +11707,64 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Home",
+                            "Ctrl+S",
                             "Ctrl+B",
-                            "Ctrl+O",
-                            "Shift+Space",
-                            "Ctrl+U"
+                            "F2"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'बोल्ड (Bold)' के लिए 'Ctrl+B' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+I",
-                            "F2",
-                            "Ctrl+Z",
-                            "Ctrl+S"
+                            "Ctrl+Shift+:",
+                            "F12",
+                            "Ctrl+W",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+U",
-                            "Ctrl+`",
-                            "Ctrl+Shift+%"
+                            "Alt+=",
+                            "Ctrl+Shift+$",
+                            "Ctrl+Shift+L",
+                            "Ctrl+U"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'सेल एडिट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+`",
-                            "Ctrl+Shift+$",
-                            "F2",
-                            "Ctrl+Shift+L"
+                            "Ctrl+C",
+                            "Ctrl+A",
+                            "Ctrl+Space",
+                            "F2"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'सेल एडिट करना' के लिए 'F2' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'ऑटो सम (AutoSum)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "Ctrl+Shift+:",
-                            "F2",
-                            "Alt+="
+                            "Alt+=",
+                            "Ctrl+T",
+                            "Ctrl+V",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'ऑटो सम (AutoSum)' के लिए 'Alt+=' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'आज की तारीख' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+%",
-                            "Ctrl+Shift+L",
-                            "Ctrl+X",
+                            "Ctrl+-",
+                            "Ctrl+PageDown",
+                            "Ctrl+Shift+:",
                             "Ctrl+;"
                         ],
                         "correctAnswer": 3,
@@ -11773,119 +11773,119 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'अभी का समय' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+-",
-                            "Ctrl+Shift+:",
-                            "Ctrl+P",
-                            "Ctrl+;"
+                            "Ctrl+1",
+                            "Ctrl+I",
+                            "Alt+=",
+                            "Ctrl+Shift+:"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'अभी का समय' के लिए 'Ctrl+Shift+:' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'फॉर्मेट सेल्स' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+-",
-                            "Shift+Space",
                             "Ctrl+1",
-                            "Ctrl+Shift+L"
+                            "Ctrl+T",
+                            "Ctrl+Y",
+                            "Ctrl+Home"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'फॉर्मेट सेल्स' के लिए 'Ctrl+1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'करेंसी फॉर्मेट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+PageDown",
                             "Ctrl+Shift+$",
-                            "Ctrl+N",
-                            "Ctrl+Z",
-                            "Ctrl+C"
+                            "Ctrl+W",
+                            "Ctrl+9"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'करेंसी फॉर्मेट' के लिए 'Ctrl+Shift+$' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'परसेंटेज फॉर्मेट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+W",
-                            "Ctrl+P",
-                            "Ctrl+A",
-                            "Ctrl+Shift+%"
+                            "Ctrl+Shift+%",
+                            "Ctrl+N",
+                            "Ctrl+Z",
+                            "F11"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'परसेंटेज फॉर्मेट' के लिए 'Ctrl+Shift+%' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'नीचे फिल (Fill Down)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+A",
-                            "Ctrl+Shift+:",
-                            "Ctrl+N",
-                            "Ctrl+D"
+                            "F2",
+                            "Shift+Space",
+                            "Ctrl+D",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'नीचे फिल (Fill Down)' के लिए 'Ctrl+D' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'दाएं फिल (Fill Right)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+PageUp",
-                            "Ctrl+Y",
-                            "Ctrl+R"
+                            "Ctrl+U",
+                            "Ctrl+R",
+                            "Ctrl++",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'दाएं फिल (Fill Right)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'नया चार्ट बनाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Space",
                             "F11",
-                            "Ctrl+W",
-                            "Ctrl+Y"
+                            "Ctrl+Y",
+                            "Ctrl+I",
+                            "F2"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'नया चार्ट बनाना' के लिए 'F11' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'सीट में चार्ट डालना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+I",
-                            "Shift+Space",
-                            "Alt+F1",
-                            "Ctrl+V"
+                            "Ctrl+9",
+                            "Ctrl+Space",
+                            "Ctrl+PageUp",
+                            "Alt+F1"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'सीट में चार्ट डालना' के लिए 'Alt+F1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'टेबल बनाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+L",
-                            "Shift+Space",
                             "Ctrl+T",
-                            "Ctrl+Shift+:"
+                            "Ctrl+End",
+                            "F2",
+                            "Ctrl+B"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'टेबल बनाना' के लिए 'Ctrl+T' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'फिल्टर लगाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Shift+L",
+                            "F12",
                             "Ctrl+PageUp",
-                            "Ctrl+C",
-                            "Ctrl+V",
-                            "Ctrl+Shift+L"
+                            "F2"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'फिल्टर लगाना' के लिए 'Ctrl+Shift+L' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'A1 सेल पर जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+Y",
-                            "Ctrl+N",
-                            "Ctrl+D",
+                            "Ctrl+Z",
+                            "Ctrl+Shift+:",
                             "Ctrl+Home"
                         ],
                         "correctAnswer": 3,
@@ -11894,111 +11894,111 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "MS Excel में 'अंतिम सेल पर जाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F2",
                             "Ctrl+End",
-                            "Ctrl+X",
-                            "Ctrl+Shift+L",
-                            "Ctrl+Y"
+                            "Ctrl+Shift+$",
+                            "Shift+Space"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'अंतिम सेल पर जाना' के लिए 'Ctrl+End' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कॉलम सिलेक्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Shift+Space",
-                            "Ctrl+D",
-                            "Ctrl+-",
-                            "Ctrl+Space"
+                            "Ctrl+Space",
+                            "Ctrl+P",
+                            "Ctrl+T",
+                            "Ctrl+PageDown"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'कॉलम सिलेक्ट' के लिए 'Ctrl+Space' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो सिलेक्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+-",
                             "Shift+Space",
-                            "Ctrl+End",
-                            "Ctrl+R",
-                            "Ctrl+Shift+$"
+                            "F11",
+                            "Ctrl+T"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'रो सिलेक्ट' के लिए 'Shift+Space' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो/कॉलम जोड़ना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+U",
-                            "Ctrl++",
-                            "F2",
-                            "Ctrl+V"
+                            "Ctrl+Home",
+                            "F12",
+                            "Ctrl+Shift+%",
+                            "Ctrl++"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "MS Excel में 'रो/कॉलम जोड़ना' के लिए 'Ctrl++' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो/कॉलम हटाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+`",
                             "Ctrl+-",
-                            "Ctrl+X",
-                            "Ctrl+W",
-                            "Ctrl+C"
+                            "Ctrl+PageUp",
+                            "Ctrl+Shift+%"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'रो/कॉलम हटाना' के लिए 'Ctrl+-' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'कॉलम छिपाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+-",
-                            "Ctrl+O",
                             "Ctrl+0",
-                            "Ctrl+N"
+                            "Ctrl+O",
+                            "Ctrl+W",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'कॉलम छिपाना' के लिए 'Ctrl+0' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'रो छिपाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+%",
-                            "Ctrl+Shift+L",
-                            "Ctrl+N",
-                            "Ctrl+9"
+                            "F12",
+                            "Ctrl+9",
+                            "Alt+=",
+                            "Ctrl+P"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "MS Excel में 'रो छिपाना' के लिए 'Ctrl+9' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'पिछली शीट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+PageDown",
+                            "Ctrl+Shift+:",
                             "Ctrl+PageUp",
-                            "Ctrl+`",
-                            "Ctrl+U",
-                            "Ctrl+Z"
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "MS Excel में 'पिछली शीट' के लिए 'Ctrl+PageUp' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'अगली शीट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+L",
-                            "Ctrl+O",
-                            "Ctrl+1",
-                            "Ctrl+PageDown"
+                            "Ctrl+PageDown",
+                            "Ctrl+9",
+                            "Ctrl+W",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'अगली शीट' के लिए 'Ctrl+PageDown' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "MS Excel में 'फॉर्मूला दिखाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
                             "Ctrl+`",
-                            "Ctrl+0",
-                            "Ctrl++"
+                            "F12",
+                            "Ctrl+O",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "MS Excel में 'फॉर्मूला दिखाना' के लिए 'Ctrl+`' का उपयोग किया जाता है।"
                     }
                 ],
@@ -12567,76 +12567,76 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'नया डॉक्यूमेंट (New Document)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+S",
+                            "Ctrl+[",
                             "Ctrl+O",
-                            "Ctrl+F"
+                            "Ctrl+N",
+                            "Ctrl+B"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'नया डॉक्यूमेंट (New Document)' के लिए 'Ctrl+N' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
                             "Ctrl+O",
                             "Ctrl+I",
-                            "Ctrl+F"
+                            "Ctrl+Y",
+                            "Ctrl+Shift+>"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+>",
                             "Ctrl+S",
-                            "Ctrl+L",
-                            "Ctrl+Z"
+                            "Ctrl+P",
+                            "Ctrl+C",
+                            "Ctrl+F"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+C",
                             "F12",
-                            "Ctrl+G",
+                            "Ctrl+Z",
+                            "Ctrl+N",
                             "Ctrl+O"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "Ctrl+H",
+                            "F12",
                             "Ctrl+P",
-                            "Ctrl+]"
+                            "Ctrl+O",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+H",
-                            "Ctrl+Z",
-                            "Ctrl+C",
-                            "Ctrl+P"
+                            "Ctrl+I",
+                            "Ctrl+Shift+>",
+                            "F12",
+                            "Ctrl+Z"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
+                            "Ctrl+C",
                             "Ctrl+Y",
                             "Ctrl+F",
-                            "F12"
+                            "Ctrl+J"
                         ],
                         "correctAnswer": 1,
                         "explanation": "PowerPoint में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
@@ -12644,10 +12644,10 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+H",
-                            "Ctrl+R",
+                            "Ctrl+]",
+                            "Ctrl+I",
                             "Ctrl+X",
-                            "Ctrl+]"
+                            "Ctrl+N"
                         ],
                         "correctAnswer": 2,
                         "explanation": "PowerPoint में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
@@ -12655,42 +12655,42 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "Ctrl+N",
-                            "Ctrl+Y",
-                            "Ctrl+C"
+                            "Ctrl+X",
+                            "Ctrl+C",
+                            "Ctrl+H",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'कॉपी (Copy)' के लिए 'Ctrl+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+J",
-                            "Ctrl+V",
-                            "Ctrl+P",
-                            "F12"
+                            "Ctrl+Y",
+                            "Ctrl+U",
+                            "Ctrl+K",
+                            "Ctrl+V"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'पेस्ट (Paste)' के लिए 'Ctrl+V' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सभी सिलेक्ट (Select All)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "Ctrl+G",
                             "Ctrl+A",
-                            "Ctrl+X"
+                            "Ctrl+S",
+                            "Ctrl+L",
+                            "Ctrl+Shift+>"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'सभी सिलेक्ट (Select All)' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Z",
                             "Ctrl+N",
-                            "Ctrl+R",
-                            "Ctrl+S",
+                            "Ctrl+X",
                             "Ctrl+B"
                         ],
                         "correctAnswer": 3,
@@ -12699,21 +12699,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+G",
+                            "Ctrl+X",
+                            "F12",
                             "Ctrl+I",
-                            "Ctrl+J",
-                            "Ctrl+C"
+                            "Ctrl+J"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+U",
-                            "Ctrl+[",
-                            "Ctrl+K",
-                            "Ctrl+V"
+                            "Ctrl+N",
+                            "Ctrl+J",
+                            "Ctrl+I"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
@@ -12721,43 +12721,43 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'लेफ्ट एलाइन (Left Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Shift+>",
-                            "Ctrl+X",
-                            "Ctrl+]",
-                            "Ctrl+L"
+                            "Ctrl+A",
+                            "Ctrl+L",
+                            "Ctrl+P",
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'लेफ्ट एलाइन (Left Align)' के लिए 'Ctrl+L' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'सेंटर एलाइन (Center Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+I",
+                            "Ctrl+Shift+>",
                             "Ctrl+E",
-                            "F12"
+                            "F12",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'सेंटर एलाइन (Center Align)' के लिए 'Ctrl+E' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'राइट एलाइन (Right Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+X",
-                            "F12",
-                            "Ctrl+R"
+                            "Ctrl+R",
+                            "Ctrl+H",
+                            "Ctrl+N",
+                            "Ctrl+["
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'राइट एलाइन (Right Align)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'जस्टिफाई (Justify)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+J",
-                            "Ctrl+I",
-                            "Ctrl+F",
-                            "Ctrl+P"
+                            "Ctrl+[",
+                            "Ctrl+G",
+                            "Ctrl+F"
                         ],
                         "correctAnswer": 0,
                         "explanation": "PowerPoint में 'जस्टिफाई (Justify)' के लिए 'Ctrl+J' का उपयोग किया जाता है।"
@@ -12765,20 +12765,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'हाइपरलिंक (Hyperlink)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+V",
+                            "Ctrl+A",
+                            "Ctrl+N",
                             "Ctrl+K",
-                            "Ctrl+U",
-                            "Ctrl+]"
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'हाइपरलिंक (Hyperlink)' के लिए 'Ctrl+K' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'ढूँढना (Find)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
-                            "Ctrl+N",
-                            "Ctrl+]",
+                            "Ctrl+[",
+                            "Ctrl+G",
+                            "Ctrl+A",
                             "Ctrl+F"
                         ],
                         "correctAnswer": 3,
@@ -12787,56 +12787,56 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "PowerPoint में 'बदलना (Replace)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+N",
-                            "F12",
-                            "Ctrl+H",
-                            "Ctrl+]"
+                            "Ctrl+Shift+>",
+                            "Ctrl+P",
+                            "Ctrl+L",
+                            "Ctrl+H"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'बदलना (Replace)' के लिए 'Ctrl+H' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'गो टू (Go To)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
-                            "Ctrl+P",
-                            "F12",
-                            "Ctrl+G"
+                            "Ctrl+G",
+                            "Ctrl+Y",
+                            "Ctrl+E",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "PowerPoint में 'गो टू (Go To)' के लिए 'Ctrl+G' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'फॉन्ट साइज छोटा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+[",
-                            "Ctrl+X",
-                            "Ctrl+Y",
-                            "F12"
+                            "Ctrl+N",
+                            "Ctrl+B",
+                            "Ctrl+H",
+                            "Ctrl+["
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "PowerPoint में 'फॉन्ट साइज छोटा' के लिए 'Ctrl+[' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'फॉन्ट साइज बड़ा' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+Shift+>",
+                            "F12",
                             "Ctrl+]",
-                            "Ctrl+X",
-                            "Ctrl+N",
-                            "Ctrl+U"
+                            "Ctrl+N"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "PowerPoint में 'फॉन्ट साइज बड़ा' के लिए 'Ctrl+]' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "PowerPoint में 'फॉन्ट साइज बढ़ाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+L",
                             "Ctrl+]",
-                            "Ctrl+X",
-                            "Ctrl+Shift+>"
+                            "Ctrl+Shift+>",
+                            "Ctrl+H",
+                            "Ctrl+R"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "PowerPoint में 'फॉन्ट साइज बढ़ाना' के लिए 'Ctrl+Shift+>' का उपयोग किया जाता है।"
                     }
                 ],
@@ -13183,20 +13183,20 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'कंपनी सिलेक्ट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F2",
-                            "F6",
-                            "Alt+F1",
-                            "F1"
+                            "Alt+F2",
+                            "F3",
+                            "F1",
+                            "Alt+F1"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "Tally में 'कंपनी सिलेक्ट करना' के लिए 'F1' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'कंपनी बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F4",
-                            "F6",
-                            "F7",
+                            "F1",
+                            "F2",
+                            "F8",
                             "Alt+F1"
                         ],
                         "correctAnswer": 3,
@@ -13206,9 +13206,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "Tally में 'तारीख बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F2",
-                            "F4",
-                            "Alt+F2",
-                            "F7"
+                            "F6",
+                            "F1",
+                            "Alt+F1"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'तारीख बदलना' के लिए 'F2' का उपयोग किया जाता है।"
@@ -13216,122 +13216,10 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'पीरियड बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F1",
-                            "F2",
-                            "F5",
-                            "Alt+F2"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "Tally में 'पीरियड बदलना' के लिए 'Alt+F2' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'कंपनी जानकारी' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
                             "F3",
-                            "F5",
-                            "F4",
-                            "Alt+F1"
-                        ],
-                        "correctAnswer": 0,
-                        "explanation": "Tally में 'कंपनी जानकारी' के लिए 'F3' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'कंट्रा वाउचर (Contra)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F8",
-                            "F6",
                             "F2",
-                            "F4"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "Tally में 'कंट्रा वाउचर (Contra)' के लिए 'F4' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'पेमेंट वाउचर (Payment)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F7",
                             "Alt+F2",
-                            "F2",
                             "F5"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "Tally में 'पेमेंट वाउचर (Payment)' के लिए 'F5' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'रिसीप्ट वाउचर (Receipt)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F2",
-                            "Alt+F2",
-                            "F8",
-                            "F6"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "Tally में 'रिसीप्ट वाउचर (Receipt)' के लिए 'F6' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'जर्नल वाउचर (Journal)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F5",
-                            "F7",
-                            "F1",
-                            "Alt+F1"
-                        ],
-                        "correctAnswer": 1,
-                        "explanation": "Tally में 'जर्नल वाउचर (Journal)' के लिए 'F7' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'सेल्स वाउचर (Sales)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F2",
-                            "F4",
-                            "Alt+F1",
-                            "F8"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "Tally में 'सेल्स वाउचर (Sales)' के लिए 'F8' का उपयोग किया जाता है।"
-                    }
-                ],
-                "Shortcuts Pro": [
-                    {
-                        "question": "Tally में 'कंपनी सिलेक्ट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "Alt+D",
-                            "F1",
-                            "Alt+C",
-                            "Alt+F2"
-                        ],
-                        "correctAnswer": 1,
-                        "explanation": "Tally में 'कंपनी सिलेक्ट करना' के लिए 'F1' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'कंपनी बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "Alt+F1",
-                            "F1",
-                            "Alt+P",
-                            "F2"
-                        ],
-                        "correctAnswer": 0,
-                        "explanation": "Tally में 'कंपनी बंद करना' के लिए 'Alt+F1' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'तारीख बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F2",
-                            "Ctrl+Enter",
-                            "F8",
-                            "Alt+P"
-                        ],
-                        "correctAnswer": 0,
-                        "explanation": "Tally में 'तारीख बदलना' के लिए 'F2' का उपयोग किया जाता है।"
-                    },
-                    {
-                        "question": "Tally में 'पीरियड बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
-                        "options": [
-                            "F3",
-                            "Ctrl+Enter",
-                            "Alt+F2",
-                            "F7"
                         ],
                         "correctAnswer": 2,
                         "explanation": "Tally में 'पीरियड बदलना' के लिए 'Alt+F2' का उपयोग किया जाता है।"
@@ -13339,21 +13227,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'कंपनी जानकारी' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F6",
+                            "F2",
                             "F3",
-                            "Ctrl+F8",
-                            "Alt+D",
-                            "Ctrl+A"
+                            "Alt+F2"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 2,
                         "explanation": "Tally में 'कंपनी जानकारी' के लिए 'F3' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'कंट्रा वाउचर (Contra)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F4",
-                            "F8",
-                            "F7",
-                            "Alt+D"
+                            "Alt+F1",
+                            "F1",
+                            "F6"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'कंट्रा वाउचर (Contra)' के लिए 'F4' का उपयोग किया जाता है।"
@@ -13362,8 +13250,8 @@ export const HINDI_QUIZ_DATA = {
                         "question": "Tally में 'पेमेंट वाउचर (Payment)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F5",
-                            "F11",
-                            "Alt+C",
+                            "Alt+F2",
+                            "F6",
                             "F1"
                         ],
                         "correctAnswer": 0,
@@ -13374,7 +13262,7 @@ export const HINDI_QUIZ_DATA = {
                         "options": [
                             "F5",
                             "Alt+F2",
-                            "F1",
+                            "F8",
                             "F6"
                         ],
                         "correctAnswer": 3,
@@ -13384,9 +13272,9 @@ export const HINDI_QUIZ_DATA = {
                         "question": "Tally में 'जर्नल वाउचर (Journal)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F7",
-                            "Ctrl+F8",
-                            "F3",
-                            "Ctrl+A"
+                            "F5",
+                            "F2",
+                            "Alt+F2"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'जर्नल वाउचर (Journal)' के लिए 'F7' का उपयोग किया जाता है।"
@@ -13395,9 +13283,121 @@ export const HINDI_QUIZ_DATA = {
                         "question": "Tally में 'सेल्स वाउचर (Sales)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "F8",
-                            "F9",
+                            "Alt+F1",
                             "F5",
-                            "Ctrl+F9"
+                            "F7"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Tally में 'सेल्स वाउचर (Sales)' के लिए 'F8' का उपयोग किया जाता है।"
+                    }
+                ],
+                "Shortcuts Pro": [
+                    {
+                        "question": "Tally में 'कंपनी सिलेक्ट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F11",
+                            "Alt+D",
+                            "F3",
+                            "F1"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Tally में 'कंपनी सिलेक्ट करना' के लिए 'F1' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'कंपनी बंद करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "Alt+F1",
+                            "Alt+D",
+                            "Ctrl+F8",
+                            "F4"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Tally में 'कंपनी बंद करना' के लिए 'Alt+F1' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'तारीख बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F7",
+                            "F12",
+                            "F2",
+                            "Ctrl+Q"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "Tally में 'तारीख बदलना' के लिए 'F2' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'पीरियड बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F3",
+                            "Ctrl+F8",
+                            "F9",
+                            "Alt+F2"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Tally में 'पीरियड बदलना' के लिए 'Alt+F2' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'कंपनी जानकारी' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F3",
+                            "F1",
+                            "Alt+F1",
+                            "F11"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Tally में 'कंपनी जानकारी' के लिए 'F3' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'कंट्रा वाउचर (Contra)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F4",
+                            "Alt+F1",
+                            "Alt+F2",
+                            "F1"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Tally में 'कंट्रा वाउचर (Contra)' के लिए 'F4' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'पेमेंट वाउचर (Payment)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F5",
+                            "F7",
+                            "F4",
+                            "F8"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Tally में 'पेमेंट वाउचर (Payment)' के लिए 'F5' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'रिसीप्ट वाउचर (Receipt)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F6",
+                            "Ctrl+F8",
+                            "Ctrl+F9",
+                            "Alt+C"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Tally में 'रिसीप्ट वाउचर (Receipt)' के लिए 'F6' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'जर्नल वाउचर (Journal)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "Alt+D",
+                            "Alt+P",
+                            "F2",
+                            "F7"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Tally में 'जर्नल वाउचर (Journal)' के लिए 'F7' का उपयोग किया जाता है।"
+                    },
+                    {
+                        "question": "Tally में 'सेल्स वाउचर (Sales)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
+                        "options": [
+                            "F8",
+                            "Ctrl+A",
+                            "Alt+D",
+                            "F3"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'सेल्स वाउचर (Sales)' के लिए 'F8' का उपयोग किया जाता है।"
@@ -13405,31 +13405,31 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'पर्चेस वाउचर (Purchase)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F5",
-                            "F9",
-                            "Alt+C",
-                            "F11"
+                            "Alt+D",
+                            "Ctrl+A",
+                            "F2",
+                            "F9"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'पर्चेस वाउचर (Purchase)' के लिए 'F9' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'क्रेडिट नोट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F6",
-                            "F1",
-                            "F4",
-                            "Ctrl+F8"
+                            "Ctrl+F8",
+                            "Alt+P",
+                            "Alt+D",
+                            "F9"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'क्रेडिट नोट' के लिए 'Ctrl+F8' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'डेबिट नोट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F6",
-                            "Ctrl+F8",
-                            "Alt+F1",
+                            "Alt+P",
+                            "F1",
+                            "Ctrl+Q",
                             "Ctrl+F9"
                         ],
                         "correctAnswer": 3,
@@ -13438,56 +13438,56 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'फीचर्स (Features)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F1",
-                            "Alt+F1",
                             "F11",
-                            "F8"
+                            "Ctrl+Q",
+                            "F6",
+                            "Alt+D"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'फीचर्स (Features)' के लिए 'F11' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'कॉन्फ़िगरेशन' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F3",
-                            "F4",
-                            "F5",
-                            "F12"
+                            "Alt+C",
+                            "F12",
+                            "F6",
+                            "Ctrl+F9"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'कॉन्फ़िगरेशन' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'नया लेजर बनाना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F1",
-                            "F8",
-                            "F5",
-                            "Alt+C"
+                            "F2",
+                            "Alt+C",
+                            "Ctrl+F8",
+                            "F3"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'नया लेजर बनाना' के लिए 'Alt+C' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'डिलीट करना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F2",
-                            "Alt+F2",
-                            "Alt+C",
-                            "Alt+D"
+                            "Alt+D",
+                            "Alt+I",
+                            "F9",
+                            "Ctrl+F9"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'डिलीट करना' के लिए 'Alt+D' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'प्रिंट रिपोर्ट' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "F4",
                             "Alt+P",
-                            "Ctrl+Q",
                             "F1",
-                            "F8"
+                            "F9"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "Tally में 'प्रिंट रिपोर्ट' के लिए 'Alt+P' का उपयोग किया जाता है।"
                     },
                     {
@@ -13495,8 +13495,8 @@ export const HINDI_QUIZ_DATA = {
                         "options": [
                             "Ctrl+A",
                             "Alt+F1",
-                            "Ctrl+Q",
-                            "Ctrl+F9"
+                            "F3",
+                            "F7"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Tally में 'एक्सेप्ट/सेव' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
@@ -13504,34 +13504,34 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Tally में 'क्विट (Quit)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F4",
-                            "Alt+C",
-                            "F1",
-                            "Ctrl+Q"
+                            "F5",
+                            "F11",
+                            "Ctrl+Q",
+                            "F1"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "Tally में 'क्विट (Quit)' के लिए 'Ctrl+Q' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'इनवॉइस मोड' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F9",
-                            "Alt+I",
                             "Ctrl+Enter",
-                            "Alt+F1"
+                            "Alt+F2",
+                            "Alt+C",
+                            "Alt+I"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "Tally में 'इनवॉइस मोड' के लिए 'Alt+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Tally में 'लेजर बदलना' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F6",
                             "Ctrl+Enter",
-                            "Alt+C",
-                            "F3"
+                            "F11",
+                            "F8",
+                            "F7"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "Tally में 'लेजर बदलना' के लिए 'Ctrl+Enter' का उपयोग किया जाता है।"
                     }
                 ],
@@ -13880,9 +13880,9 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'नया डॉक्यूमेंट (New Document)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+J",
                             "Ctrl+K",
-                            "Ctrl+L",
+                            "Ctrl+S",
+                            "Ctrl+B",
                             "Ctrl+N"
                         ],
                         "correctAnswer": 3,
@@ -13891,21 +13891,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'ओपन (Open)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+K",
-                            "Ctrl+N",
-                            "Ctrl+S",
-                            "Ctrl+O"
+                            "Ctrl+Y",
+                            "F12",
+                            "Ctrl+O",
+                            "Ctrl+A"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 2,
                         "explanation": "Photoshop में 'ओपन (Open)' के लिए 'Ctrl+O' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'सेव (Save)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+S",
-                            "Ctrl+K",
-                            "Ctrl+N",
-                            "Ctrl+A"
+                            "Ctrl+P",
+                            "Ctrl+Y",
+                            "Ctrl+L"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Photoshop में 'सेव (Save)' के लिए 'Ctrl+S' का उपयोग किया जाता है।"
@@ -13913,54 +13913,54 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'सेव एज़ (Save As)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+J",
-                            "Ctrl+C",
-                            "Ctrl+F",
-                            "F12"
+                            "F12",
+                            "Ctrl+N",
+                            "Ctrl+U",
+                            "Ctrl+Y"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'सेव एज़ (Save As)' के लिए 'F12' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'प्रिंट (Print)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+J",
                             "Ctrl+P",
-                            "Ctrl+N",
-                            "Ctrl+U",
-                            "Ctrl+K"
+                            "Ctrl+K",
+                            "Ctrl+Z"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'प्रिंट (Print)' के लिए 'Ctrl+P' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'अनडू (Undo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+N",
-                            "Ctrl+O",
-                            "Ctrl+S"
+                            "Ctrl+S",
+                            "Ctrl+R",
+                            "Ctrl+X",
+                            "Ctrl+Z"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'अनडू (Undo)' के लिए 'Ctrl+Z' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'रीडू (Redo)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+P",
-                            "Ctrl+N",
+                            "Ctrl+V",
                             "Ctrl+Y",
-                            "Ctrl+V"
+                            "Ctrl+Z",
+                            "Ctrl+I"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'रीडू (Redo)' के लिए 'Ctrl+Y' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'कट (Cut)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+X",
-                            "Ctrl+I",
-                            "Ctrl+L",
-                            "Ctrl+J"
+                            "Ctrl+N",
+                            "Ctrl+Y",
+                            "Ctrl+B"
                         ],
                         "correctAnswer": 0,
                         "explanation": "Photoshop में 'कट (Cut)' के लिए 'Ctrl+X' का उपयोग किया जाता है।"
@@ -13968,9 +13968,9 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'कॉपी (Copy)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+O",
-                            "Ctrl+Y",
-                            "Ctrl+B",
+                            "Ctrl+N",
+                            "Ctrl+E",
+                            "Ctrl+K",
                             "Ctrl+C"
                         ],
                         "correctAnswer": 3,
@@ -13979,65 +13979,65 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'पेस्ट (Paste)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
+                            "Ctrl+S",
+                            "Ctrl+V",
                             "Ctrl+U",
-                            "Ctrl+N",
-                            "Ctrl+P",
-                            "Ctrl+V"
+                            "Ctrl+F"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'पेस्ट (Paste)' के लिए 'Ctrl+V' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'सभी सिलेक्ट (Select All)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
                             "Ctrl+Z",
-                            "Ctrl+R",
                             "Ctrl+A",
-                            "Ctrl+C"
+                            "Ctrl+N",
+                            "Ctrl+O"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'सभी सिलेक्ट (Select All)' के लिए 'Ctrl+A' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'बोल्ड (Bold)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+B",
-                            "Ctrl+L",
-                            "Ctrl+U",
-                            "Ctrl+N"
+                            "Ctrl+V",
+                            "Ctrl+I",
+                            "Ctrl+F",
+                            "Ctrl+B"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'बोल्ड (Bold)' के लिए 'Ctrl+B' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'इटैलिक (Italic)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+S",
-                            "Ctrl+B",
+                            "Ctrl+Y",
                             "Ctrl+I",
-                            "Ctrl+C"
+                            "F12",
+                            "Ctrl+S"
                         ],
-                        "correctAnswer": 2,
+                        "correctAnswer": 1,
                         "explanation": "Photoshop में 'इटैलिक (Italic)' के लिए 'Ctrl+I' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'अंडरलाइन (Underline)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+X",
                             "Ctrl+U",
-                            "F12",
-                            "Ctrl+E"
+                            "Ctrl+A",
+                            "Ctrl+O",
+                            "F12"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'अंडरलाइन (Underline)' के लिए 'Ctrl+U' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'लेफ्ट एलाइन (Left Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+R",
+                            "Ctrl+N",
                             "Ctrl+L",
                             "Ctrl+O",
-                            "Ctrl+I"
+                            "Ctrl+U"
                         ],
                         "correctAnswer": 1,
                         "explanation": "Photoshop में 'लेफ्ट एलाइन (Left Align)' के लिए 'Ctrl+L' का उपयोग किया जाता है।"
@@ -14045,21 +14045,21 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'सेंटर एलाइन (Center Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+E",
-                            "Ctrl+A",
-                            "Ctrl+V",
-                            "Ctrl+X"
+                            "Ctrl+J",
+                            "Ctrl+F",
+                            "F12",
+                            "Ctrl+E"
                         ],
-                        "correctAnswer": 0,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'सेंटर एलाइन (Center Align)' के लिए 'Ctrl+E' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'राइट एलाइन (Right Align)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+I",
-                            "Ctrl+P",
+                            "Ctrl+O",
+                            "Ctrl+N",
                             "Ctrl+R",
-                            "Ctrl+N"
+                            "Ctrl+I"
                         ],
                         "correctAnswer": 2,
                         "explanation": "Photoshop में 'राइट एलाइन (Right Align)' के लिए 'Ctrl+R' का उपयोग किया जाता है।"
@@ -14067,34 +14067,34 @@ export const HINDI_QUIZ_DATA = {
                     {
                         "question": "Photoshop में 'जस्टिफाई (Justify)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+X",
-                            "Ctrl+J",
                             "Ctrl+P",
-                            "F12"
+                            "Ctrl+S",
+                            "Ctrl+C",
+                            "Ctrl+J"
                         ],
-                        "correctAnswer": 1,
+                        "correctAnswer": 3,
                         "explanation": "Photoshop में 'जस्टिफाई (Justify)' के लिए 'Ctrl+J' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'हाइपरलिंक (Hyperlink)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "Ctrl+Z",
-                            "Ctrl+A",
-                            "Ctrl+Y",
-                            "Ctrl+K"
+                            "Ctrl+K",
+                            "Ctrl+N",
+                            "Ctrl+S",
+                            "Ctrl+X"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'हाइपरलिंक (Hyperlink)' के लिए 'Ctrl+K' का उपयोग किया जाता है।"
                     },
                     {
                         "question": "Photoshop में 'ढूँढना (Find)' की शॉर्टकट कुंजी (Shortcut Key) क्या है?",
                         "options": [
-                            "F12",
-                            "Ctrl+B",
-                            "Ctrl+V",
-                            "Ctrl+F"
+                            "Ctrl+F",
+                            "Ctrl+Y",
+                            "Ctrl+L",
+                            "F12"
                         ],
-                        "correctAnswer": 3,
+                        "correctAnswer": 0,
                         "explanation": "Photoshop में 'ढूँढना (Find)' के लिए 'Ctrl+F' का उपयोग किया जाता है।"
                     }
                 ]
@@ -14105,336 +14105,1000 @@ export const HINDI_QUIZ_DATA = {
             "icon": "monitor",
             "color": "blue",
             "modules": {
-                "Basics": [
+                "Basics & Theory": [
                     {
-                        "question": "PYTHON: MS Word क्या है?",
+                        "question": "Python फाइल का एक्सटेंशन क्या है?",
                         "options": [
-                            "सॉफ्टवेयर",
-                            "हार्डवेयर",
-                            "प्रिंटर",
-                            "माउस"
+                            ".py",
+                            ".python",
+                            ".p",
+                            ".txt"
                         ],
                         "correctAnswer": 0,
-                        "explanation": "यह एक वर्ड प्रोसेसिंग सॉफ्टवेयर है।"
+                        "explanation": "Python फाइलें .py एक्सटेंशन के साथ सेव होती हैं।"
                     },
                     {
-                        "question": "PYTHON: वर्ड में अधिकतम ज़ूम कितना होता है?",
+                        "question": "Python में आउटपुट दिखाने के लिए क्या उपयोग होता है?",
                         "options": [
-                            "100%",
-                            "200%",
-                            "400%",
-                            "500%"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "अधिकतम 500% तक ज़ूम कर सकते हैं।"
-                    },
-                    {
-                        "question": "PYTHON: डिफ़ॉल्ट रूप से डॉक्यूमेंट का नाम क्या होता है?",
-                        "options": [
-                            "Document1",
-                            "Sheet1",
-                            "Slide1",
-                            "Untitled"
-                        ],
-                        "correctAnswer": 0,
-                        "explanation": "यह Document1 के नाम से शुरू होता है।"
-                    },
-                    {
-                        "question": "PYTHON: सुपरस्क्रिप्ट (X²) के लिए सही उदाहरण है?",
-                        "options": [
-                            "H2O",
-                            "X2",
-                            "Math",
-                            "Science"
+                            "echo",
+                            "print()",
+                            "console.log",
+                            "write"
                         ],
                         "correctAnswer": 1,
-                        "explanation": "पावर में लिखने को सुपरस्क्रिप्ट कहते हैं।"
+                        "explanation": "print() फंक्शन का उपयोग टेक्स्ट आउटपुट के लिए होता है।"
                     },
                     {
-                        "question": "PYTHON: मेल मर्ज (Mail Merge) किस काम आता है?",
+                        "question": "Python के जनक (Founder) कौन हैं?",
                         "options": [
-                            "ईमेल के लिए",
-                            "एक लेटर कई लोगों को भेजने के लिए",
-                            "पेंटिंग के लिए",
-                            "गेमिंग"
+                            "James Gosling",
+                            "Guido van Rossum",
+                            "Dennis Ritchie",
+                            "Bill Gates"
                         ],
                         "correctAnswer": 1,
-                        "explanation": "यह बल्क लेटर टाइपिंग के लिए है।"
+                        "explanation": "Python को 1991 में Guido van Rossum ने बनाया था।"
                     },
                     {
-                        "question": "PYTHON: पेज ओरिएंटेशन (Orientation) के दो प्रकार कौन से हैं?",
+                        "question": "Python में कमेंट (Comment) के लिए क्या उपयोग होता है?",
                         "options": [
-                            "Portrait & Landscape",
-                            "Top & Bottom",
-                            "Left & Right",
-                            "Inside & Outside"
+                            "//",
+                            "/* */",
+                            "#",
+                            "--"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "सिंगल लाइन कमेंट के लिए # का उपयोग होता है।"
+                    },
+                    {
+                        "question": "Python किस प्रकार की प्रोग्रामिंग भाषा है?",
+                        "options": [
+                            "Interpreted",
+                            "Compiled",
+                            "Low-level",
+                            "Machine"
                         ],
                         "correctAnswer": 0,
-                        "explanation": "पेज का टेढ़ा या सीधा होना।"
+                        "explanation": "Python कोड को सीधे इंटरप्रेटर द्वारा रन किया जाता है।"
                     },
                     {
-                        "question": "PYTHON: हेडर (Header) पेज में कहाँ होता है?",
+                        "question": "List बनाने के लिए किस ब्रैकेट का उपयोग होता है?",
                         "options": [
-                            "Top",
-                            "Bottom",
-                            "Middle",
-                            "Left"
+                            "()",
+                            "{}",
+                            "[]",
+                            "<>"
                         ],
-                        "correctAnswer": 0,
-                        "explanation": "हेडर हमेशा पेज के सबसे ऊपर होता है।"
+                        "correctAnswer": 2,
+                        "explanation": "Python में List के लिए स्कवायर ब्रैकेट [] का उपयोग होता है।"
                     },
                     {
-                        "question": "PYTHON: फुटर (Footer) पेज में कहाँ होता है?",
+                        "question": "Python में यूज़र से इनपुट लेने के लिए फंक्शन?",
                         "options": [
-                            "Top",
-                            "Bottom",
-                            "Left",
-                            "Right"
+                            "get()",
+                            "scanf()",
+                            "input()",
+                            "read()"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "input() फंक्शन यूज़र से वैल्यू लेता है।"
+                    },
+                    {
+                        "question": "इनमें से कौन सा Python का डेटा टाइप नहीं है?",
+                        "options": [
+                            "int",
+                            "string",
+                            "float",
+                            "pointer"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python में पॉइंटर्स सीधे उपयोग नहीं होते।"
+                    },
+                    {
+                        "question": "Python में इंडेंटेशन (Indentation) क्यों जरूरी है?",
+                        "options": [
+                            "सुंदरता के लिए",
+                            "कोड ब्लॉक दिखाने के लिए",
+                            "जरूरी नहीं",
+                            "एरर हटाने के लिए"
                         ],
                         "correctAnswer": 1,
-                        "explanation": "फुटर हमेशा पेज के सबसे नीचे होता है।"
+                        "explanation": "Python में 'scope' के लिए इंडेंटेशन अनिवार्य है।"
                     },
                     {
-                        "question": "PYTHON: वाटरमार्क (Watermark) क्यों उपयोग करते हैं?",
+                        "question": "Tuple और List में क्या अंतर है?",
                         "options": [
-                            "बैकग्राउंड में हल्का टेक्स्ट दिखाने के लिए",
-                            "फोटो के लिए",
-                            "डिलीट करने के लिए",
-                            "कलर के लिए"
+                            "List बदल सकते हैं, Tuple नहीं",
+                            "Tuple बदल सकते हैं, List नहीं",
+                            "कोई अंतर नहीं",
+                            "दोनों समान हैं"
                         ],
                         "correctAnswer": 0,
-                        "explanation": "सुरक्षा या ब्रांडिंग के लिए।"
+                        "explanation": "List 'mutable' है जबकि Tuple 'immutable' है।"
                     },
                     {
-                        "question": "PYTHON: हाइपरलिंक (Hyperlink) का क्या काम है?",
+                        "question": "Python Theory Q11: Python में Variables का क्या महत्व है?",
                         "options": [
-                            "फाइल जोड़ने के लिए",
-                            "लिंक बनाने के लिए",
-                            "वेबसाइट खोलने के लिए",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "यह अन्य रिसोर्स से जोड़ने का काम करता है।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q11: वर्ड में Macro का क्या महत्व है?",
+                        "question": "Python Theory Q12: Python में Keywords का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q12: वर्ड में Template का क्या महत्व है?",
+                        "question": "Python Theory Q13: Python में Loops का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q13: वर्ड में Style का क्या महत्व है?",
+                        "question": "Python Theory Q14: Python में Functions का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q14: वर्ड में Theme का क्या महत्व है?",
+                        "question": "Python Theory Q15: Python में Classes का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q15: वर्ड में Margins का क्या महत्व है?",
+                        "question": "Python Theory Q16: Python में Modules का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q16: वर्ड में Columns का क्या महत्व है?",
+                        "question": "Python Theory Q17: Python में Pip का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q17: वर्ड में Table का क्या महत्व है?",
+                        "question": "Python Theory Q18: Python में Virtualenv का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q18: वर्ड में Shapes का क्या महत्व है?",
+                        "question": "Python Theory Q19: Python में Lists का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q19: वर्ड में SmartArt का क्या महत्व है?",
+                        "question": "Python Theory Q20: Python में Dictionaries का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q20: वर्ड में Chart का क्या महत्व है?",
+                        "question": "Python Theory Q21: Python में Sets का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q21: वर्ड में Caption का क्या महत्व है?",
+                        "question": "Python Theory Q22: Python में Exception Handling का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q22: वर्ड में Footnote का क्या महत्व है?",
+                        "question": "Python Theory Q23: Python में File I/O का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q23: वर्ड में Endnote का क्या महत्व है?",
+                        "question": "Python Theory Q24: Python में Lambdas का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q24: वर्ड में Citation का क्या महत्व है?",
+                        "question": "Python Theory Q25: Python में Decorators का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q25: वर्ड में Bibliography का क्या महत्व है?",
+                        "question": "Python Theory Q26: Python में Generators का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q26: वर्ड में Index का क्या महत्व है?",
+                        "question": "Python Theory Q27: Python में Iterators का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q27: वर्ड में TOC का क्या महत्व है?",
+                        "question": "Python Theory Q28: Python में Inheritance का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q28: वर्ड में Cover Page का क्या महत्व है?",
+                        "question": "Python Theory Q29: Python में Polymorphism का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     },
                     {
-                        "question": "PYTHON: MS Word Theory Q29: वर्ड में Blank Page का क्या महत्व है?",
+                        "question": "Python Theory Q30: Python में API Integration का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    }
+                ],
+                "Advanced Concepts": [
                     {
-                        "question": "PYTHON: MS Word Theory Q30: वर्ड में Page Break का क्या महत्व है?",
+                        "question": "Python Theory Q31: Python में Variables का क्या महत्व है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q32: Python में Keywords का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q33: Python में Loops का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q34: Python में Functions का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q35: Python में Classes का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q36: Python में Modules का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q37: Python में Pip का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q38: Python में Virtualenv का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q39: Python में Lists का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q40: Python में Dictionaries का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q41: Python में Sets का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q42: Python में Exception Handling का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q43: Python में File I/O का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q44: Python में Lambdas का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q45: Python में Decorators का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q46: Python में Generators का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q47: Python में Iterators का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q48: Python में Inheritance का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q49: Python में Polymorphism का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q50: Python में API Integration का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q51: Python में Variables का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q52: Python में Keywords का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q53: Python में Loops का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q54: Python में Functions का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q55: Python में Classes का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q56: Python में Modules का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q57: Python में Pip का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q58: Python में Virtualenv का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q59: Python में Lists का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q60: Python में Dictionaries का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    }
+                ],
+                "Project logic": [
+                    {
+                        "question": "Python Theory Q61: Python में Sets का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q62: Python में Exception Handling का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q63: Python में File I/O का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q64: Python में Lambdas का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q65: Python में Decorators का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q66: Python में Generators का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q67: Python में Iterators का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q68: Python में Inheritance का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q69: Python में Polymorphism का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q70: Python में API Integration का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q71: Python में Variables का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q72: Python में Keywords का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q73: Python में Loops का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q74: Python में Functions का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q75: Python में Classes का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q76: Python में Modules का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q77: Python में Pip का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q78: Python में Virtualenv का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q79: Python में Lists का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q80: Python में Dictionaries का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q81: Python में Sets का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q82: Python में Exception Handling का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q83: Python में File I/O का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q84: Python में Lambdas का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q85: Python में Decorators का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q86: Python में Generators का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q87: Python में Iterators का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q88: Python में Inheritance का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q89: Python में Polymorphism का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
+                    },
+                    {
+                        "question": "Python Theory Q90: Python में API Integration का क्या महत्व है?",
+                        "options": [
+                            "कोडिंग लॉजिक",
+                            "डाटा मैनेजमेंट",
+                            "प्रोग्रामिंग स्ट्रक्चर",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "Python डेवलपर बनने के लिए ये सभी कांसेप्ट बहुत जरूरी हैं।"
                     }
                 ]
             }
@@ -14444,336 +15108,1000 @@ export const HINDI_QUIZ_DATA = {
             "icon": "monitor",
             "color": "rose",
             "modules": {
-                "Basics": [
+                "Basics & Tools": [
                     {
-                        "question": "CORELDRAW: MS Word Theory Q31: वर्ड में Macro का क्या महत्व है?",
+                        "question": "CorelDraw किस प्रकार का सॉफ्टवेयर है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            "Video Editing",
+                            "Vector Graphics",
+                            "Accounting",
+                            "Operating System"
                         ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "correctAnswer": 1,
+                        "explanation": "यह एक वेक्टर ग्राफिक्स डिजाइनिंग सॉफ्टवेयर है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q32: वर्ड में Template का क्या महत्व है?",
+                        "question": "CorelDraw फाइल का डिफ़ॉल्ट एक्सटेंशन क्या है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            ".cdr",
+                            ".psd",
+                            ".pdf",
+                            ".ai"
                         ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "correctAnswer": 0,
+                        "explanation": ".cdr कोरेलड्रॉ की मुख्य फाइल फॉर्मेट है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q33: वर्ड में Style का क्या महत्व है?",
+                        "question": "ऑब्जेक्ट्स को सिलेक्ट और मूव करने के लिए कौन सा टूल है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            "Pick Tool",
+                            "Zoom Tool",
+                            "Shape Tool",
+                            "Crop Tool"
                         ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "correctAnswer": 0,
+                        "explanation": "Pick Tool मुख्य टूल है जिससे हम ऑब्जेक्ट्स को पकड़ते हैं।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q34: वर्ड में Theme का क्या महत्व है?",
+                        "question": "कर्व्स (Curves) को एडिट करने के लिए कौन सा टूल है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            "Pick Tool",
+                            "Shape Tool",
+                            "Hand Tool",
+                            "Eraser"
                         ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "correctAnswer": 1,
+                        "explanation": "Shape Tool (F10) से नोड्स को एडिट किया जाता है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q35: वर्ड में Margins का क्या महत्व है?",
+                        "question": "ऑब्जेक्ट को 'Group' करने की शॉर्टकट की क्या है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            "Ctrl+A",
+                            "Ctrl+G",
+                            "Ctrl+U",
+                            "Ctrl+D"
                         ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "correctAnswer": 1,
+                        "explanation": "Ctrl+G से कई ऑब्जेक्ट्स को एक साथ जोड़ा जा सकता है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q36: वर्ड में Columns का क्या महत्व है?",
+                        "question": "कोरेलड्रॉ में 'Zoom' की शॉर्टकट की क्या है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            "Z",
+                            "X",
+                            "V",
+                            "C"
                         ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "correctAnswer": 0,
+                        "explanation": "Z प्रेस करके ज़ूम टूल एक्टिवेट होता है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q37: वर्ड में Table का क्या महत्व है?",
+                        "question": "इनमें से कौन सा वेक्टर ग्राफ़िक नहीं है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            "SVG",
+                            "CDR",
+                            "EPS",
+                            "JPEG"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "JPEG एक राष्ट्र (Raster) ग्राफ़िक है, वेक्टर नहीं।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q38: वर्ड में Shapes का क्या महत्व है?",
+                        "question": "ऑब्जेक्ट को पेज के बीच में (Center) करने की शॉर्टकट?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            "C",
+                            "E",
+                            "P",
+                            "T"
                         ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "correctAnswer": 2,
+                        "explanation": "P दबाने से कोई भी ऑब्जेक्ट पेज के सेंटर में आ जाता है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q39: वर्ड में SmartArt का क्या महत्व है?",
+                        "question": "स्मार्ट फिल टूल (Smart Fill) क्या करता है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            "मिटाता है",
+                            "कलर भरता है",
+                            "नया ऑब्जेक्ट बनाता है",
+                            "दोनों 2 और 3"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "यह किसी बंद एरिया में नया ऑब्जेक्ट बनाकर कलर भरता है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q40: वर्ड में Chart का क्या महत्व है?",
+                        "question": "कलर पाइपेट (Eyedropper) टूल का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
+                            "कलर पिक करना",
+                            "पेंट करना",
+                            "डिजाइन बनाना",
+                            "लिखना"
                         ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "correctAnswer": 0,
+                        "explanation": "इससे किसी फोटो या ऑब्जेक्ट से कलर कॉपी किया जाता है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q41: वर्ड में Caption का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q11: कोरेलड्रॉ में Layers का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q42: वर्ड में Footnote का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q12: कोरेलड्रॉ में PowerClip का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q43: वर्ड में Endnote का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q13: कोरेलड्रॉ में Blending का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q44: वर्ड में Citation का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q14: कोरेलड्रॉ में Contours का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q45: वर्ड में Bibliography का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q15: कोरेलड्रॉ में Transparency का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q46: वर्ड में Index का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q16: कोरेलड्रॉ में Artistic Media का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q47: वर्ड में TOC का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q17: कोरेलड्रॉ में Text on Path का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q48: वर्ड में Cover Page का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q18: कोरेलड्रॉ में Color Docker का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q49: वर्ड में Blank Page का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q19: कोरेलड्रॉ में Guidelines का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q50: वर्ड में Page Break का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q20: कोरेलड्रॉ में Snapping का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q51: वर्ड में Macro का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q21: कोरेलड्रॉ में Transformations का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q52: वर्ड में Template का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q22: कोरेलड्रॉ में Grids का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q53: वर्ड में Style का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q23: कोरेलड्रॉ में Symbols का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q54: वर्ड में Theme का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q24: कोरेलड्रॉ में Print Merge का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q55: वर्ड में Margins का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q25: कोरेलड्रॉ में Effects का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q56: वर्ड में Columns का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q26: कोरेलड्रॉ में Bitmaps का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q57: वर्ड में Table का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q27: कोरेलड्रॉ में Tracing का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q58: वर्ड में Shapes का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q28: कोरेलड्रॉ में Exporting का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q59: वर्ड में SmartArt का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q29: कोरेलड्रॉ में PDF Settings का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     },
                     {
-                        "question": "CORELDRAW: MS Word Theory Q60: वर्ड में Chart का क्या महत्व है?",
+                        "question": "CorelDraw Theory Q30: कोरेलड्रॉ में Color Palettes का क्या काम है?",
                         "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
                             "सभी"
                         ],
                         "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    }
+                ],
+                "Design Effects": [
+                    {
+                        "question": "CorelDraw Theory Q31: कोरेलड्रॉ में Layers का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q32: कोरेलड्रॉ में PowerClip का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q33: कोरेलड्रॉ में Blending का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q34: कोरेलड्रॉ में Contours का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q35: कोरेलड्रॉ में Transparency का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q36: कोरेलड्रॉ में Artistic Media का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q37: कोरेलड्रॉ में Text on Path का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q38: कोरेलड्रॉ में Color Docker का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q39: कोरेलड्रॉ में Guidelines का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q40: कोरेलड्रॉ में Snapping का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q41: कोरेलड्रॉ में Transformations का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q42: कोरेलड्रॉ में Grids का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q43: कोरेलड्रॉ में Symbols का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q44: कोरेलड्रॉ में Print Merge का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q45: कोरेलड्रॉ में Effects का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q46: कोरेलड्रॉ में Bitmaps का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q47: कोरेलड्रॉ में Tracing का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q48: कोरेलड्रॉ में Exporting का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q49: कोरेलड्रॉ में PDF Settings का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q50: कोरेलड्रॉ में Color Palettes का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q51: कोरेलड्रॉ में Layers का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q52: कोरेलड्रॉ में PowerClip का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q53: कोरेलड्रॉ में Blending का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q54: कोरेलड्रॉ में Contours का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q55: कोरेलड्रॉ में Transparency का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q56: कोरेलड्रॉ में Artistic Media का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q57: कोरेलड्रॉ में Text on Path का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q58: कोरेलड्रॉ में Color Docker का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q59: कोरेलड्रॉ में Guidelines का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q60: कोरेलड्रॉ में Snapping का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    }
+                ],
+                "Pro Output": [
+                    {
+                        "question": "CorelDraw Theory Q61: कोरेलड्रॉ में Transformations का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q62: कोरेलड्रॉ में Grids का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q63: कोरेलड्रॉ में Symbols का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q64: कोरेलड्रॉ में Print Merge का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q65: कोरेलड्रॉ में Effects का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q66: कोरेलड्रॉ में Bitmaps का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q67: कोरेलड्रॉ में Tracing का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q68: कोरेलड्रॉ में Exporting का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q69: कोरेलड्रॉ में PDF Settings का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q70: कोरेलड्रॉ में Color Palettes का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q71: कोरेलड्रॉ में Layers का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q72: कोरेलड्रॉ में PowerClip का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q73: कोरेलड्रॉ में Blending का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q74: कोरेलड्रॉ में Contours का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q75: कोरेलड्रॉ में Transparency का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q76: कोरेलड्रॉ में Artistic Media का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q77: कोरेलड्रॉ में Text on Path का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q78: कोरेलड्रॉ में Color Docker का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q79: कोरेलड्रॉ में Guidelines का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q80: कोरेलड्रॉ में Snapping का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q81: कोरेलड्रॉ में Transformations का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q82: कोरेलड्रॉ में Grids का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q83: कोरेलड्रॉ में Symbols का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q84: कोरेलड्रॉ में Print Merge का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q85: कोरेलड्रॉ में Effects का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q86: कोरेलड्रॉ में Bitmaps का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q87: कोरेलड्रॉ में Tracing का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q88: कोरेलड्रॉ में Exporting का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q89: कोरेलड्रॉ में PDF Settings का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
+                    },
+                    {
+                        "question": "CorelDraw Theory Q90: कोरेलड्रॉ में Color Palettes का क्या काम है?",
+                        "options": [
+                            "डिजाइनिंग",
+                            "फॉर्मेटिंग",
+                            "क्रिएटिविटी",
+                            "सभी"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "प्रोफेशनल डिजाइनिंग के लिए इन सभी टूल्स की जानकारी जरूरी है।"
                     }
                 ]
             }

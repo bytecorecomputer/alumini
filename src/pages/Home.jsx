@@ -4,8 +4,10 @@ import Lottie from 'lottie-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowRight, Users, CheckCircle, Database, Loader2, Zap,
-    Laptop, GraduationCap, Award, MapPin, Building, Star
+    Laptop, GraduationCap, Award, MapPin, Building, Star, Settings, Image as ImageIcon
 } from 'lucide-react';
+import { collection, query, orderBy, limit as firestoreLimit, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import heroGraphic from '../assets/images/hero_graphic.png';
 import DomeGallery from '../components/ui/DomeGallery';
@@ -20,86 +22,96 @@ import webLottie from '../assets/lottie/web.json';
 import dataLottie from '../assets/lottie/data.json';
 import pythonLottie from '../assets/lottie/python.json';
 
-// Import Lab Assets
-import labVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
-import labImg1 from '../assets/images/computer lab/students (1).jpg';
-import labImg2 from '../assets/images/computer lab/students (2).jpg';
 
 const LabGallery = () => {
+    const { role } = useAuth();
+    const isAdmin = role === 'admin' || role === 'super_admin';
+    const [dynamicImages, setDynamicImages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const q = query(collection(db, 'lab_gallery'), orderBy('createdAt', 'desc'), firestoreLimit(4));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setDynamicImages(items);
+            setLoading(false);
+        });
+        return () => unsubscribe();
+    }, []);
+
+    if (loading) return (
+        <div className="flex justify-center py-20">
+            <Loader2 className="animate-spin text-blue-500" size={40} />
+        </div>
+    );
+
     return (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 md:p-8 max-w-7xl mx-auto h-auto md:h-[600px]">
-            {/* Main Video Feature */}
-            <motion.div
-                whileHover={{ scale: 1.01 }}
-                className="md:col-span-2 md:row-span-2 relative group rounded-[2.5rem] overflow-hidden bg-slate-800 border-2 border-slate-700 shadow-2xl"
-            >
-                <div className="absolute top-6 left-6 z-20 flex items-center gap-2 bg-red-600/90 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg animate-pulse">
-                    <span className="w-2 h-2 bg-white rounded-full"></span>
-                    Live Teaching Lab
-                </div>
-                <video
-                    src={labVideo}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
-                <div className="absolute bottom-10 left-10 z-20">
-                    <h3 className="text-2xl font-black text-white tracking-tight mb-2">Rahul Sir Teaching</h3>
-                    <p className="text-slate-300 text-sm font-medium">Hands-on offline guidance for complex tech concepts.</p>
-                </div>
-            </motion.div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 h-auto md:h-[650px]">
+                {dynamicImages.map((img, idx) => (
+                    <motion.div
+                        key={img.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: idx * 0.1 }}
+                        whileHover={{ scale: 1.01 }}
+                        className={cn(
+                            "relative group rounded-[2.5rem] overflow-hidden bg-slate-800 border-2 border-slate-700/50 shadow-2xl cursor-pointer",
+                            idx === 0 ? "md:col-span-2 md:row-span-2" : "md:col-span-1 md:row-span-1"
+                        )}
+                        onClick={() => navigate('/gallery')}
+                    >
+                        <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                        
+                        {img.type === 'video' || img.imageUrl?.endsWith('.mp4') ? (
+                            <video
+                                src={img.imageUrl}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-700 scale-110 group-hover:scale-100"
+                            />
+                        ) : (
+                            <div className="w-full h-full relative">
+                                <img 
+                                    src={img.imageUrl} 
+                                    alt="" 
+                                    className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-125"
+                                />
+                                <img
+                                    src={img.imageUrl}
+                                    alt={img.title}
+                                    className="w-full h-full object-contain relative z-10 opacity-70 group-hover:opacity-100 transition-opacity duration-700 scale-100 group-hover:scale-105"
+                                />
+                            </div>
+                        )}
 
-            {/* Photo 1 */}
-            <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="md:col-span-2 relative group rounded-[2.5rem] overflow-hidden bg-slate-800 border border-slate-700/50 shadow-xl"
-            >
-                <img
-                    src={labImg1}
-                    alt="Students in Lab"
-                    className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent"></div>
-                <div className="absolute bottom-6 left-8 z-20">
-                    <span className="text-blue-400 text-[10px] font-black uppercase tracking-widest mb-1 block">Nariyawal HQ</span>
-                    <h4 className="text-xl font-black text-white">Student Lab Focus</h4>
-                </div>
-            </motion.div>
+                        <div className="absolute bottom-8 left-8 z-20">
+                            <span className="text-blue-400 text-[9px] font-black uppercase tracking-[0.3em] mb-2 block group-hover:translate-x-1 transition-transform">
+                                {img.category === 'lab' ? 'ByteCore Lab' : img.category === 'trip' ? 'Campus Trip' : 'Achievement'}
+                            </span>
+                            <h3 className="text-xl md:text-2xl font-black text-white tracking-tight leading-tight group-hover:text-blue-200 transition-colors uppercase">
+                                {img.title}
+                            </h3>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
 
-            {/* Photo 2 */}
-            <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="md:col-span-1 relative group rounded-[2.5rem] overflow-hidden bg-slate-800 border border-slate-700/50 shadow-xl"
-            >
-                <img
-                    src={labImg2}
-                    alt="Lab Atmosphere"
-                    className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 to-transparent"></div>
-                <div className="absolute bottom-6 left-8 z-20">
-                    <h4 className="text-lg font-black text-white">Learning Hub</h4>
+            {isAdmin && (
+                <div className="flex justify-center mt-12">
+                    <button 
+                        onClick={() => navigate('/gallery')}
+                        className="flex items-center gap-3 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-slate-400 hover:text-white hover:bg-white/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-xl group"
+                    >
+                        <Settings size={16} className="group-hover:rotate-90 transition-transform duration-500" />
+                        Admin: Manage Gallery Records
+                    </button>
                 </div>
-            </motion.div>
-
-            {/* Stats / Branding Card */}
-            <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="md:col-span-1 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] p-8 flex flex-col justify-between items-center text-center shadow-2xl relative overflow-hidden group"
-            >
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20 bg-[length:20px_20px]"></div>
-                <Laptop className="w-12 h-12 text-white/50 mb-4 relative z-10 group-hover:scale-110 transition-transform" />
-                <div className="relative z-10">
-                    <div className="text-4xl font-black text-white mb-2 tracking-tighter italic">2024</div>
-                    <p className="text-blue-100 text-[10px] font-black uppercase tracking-widest leading-relaxed">Redefining Tech Education</p>
-                </div>
-                <div className="mt-4 relative z-10 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 w-full">
-                    <p className="text-xs text-white font-medium italic">"Best Lab in Bareilly"</p>
-                </div>
-            </motion.div>
+            )}
         </div>
     );
 };

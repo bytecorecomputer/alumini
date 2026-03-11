@@ -11,8 +11,8 @@ import QuizModule from '../components/student/QuizModule';
 import { COURSE_CURRICULUM, QUIZ_BANK } from '../lib/quizData';
 import { uploadToSupabase } from '../lib/supabase';
 import { db } from '../firebase/firestore';
-import { doc, updateDoc } from 'firebase/firestore';
-import { Camera, Loader2, ImagePlus } from 'lucide-react';
+import { doc, updateDoc, collection, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
+import { Camera, Loader2, ImagePlus, Globe, Link } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 import { compressImage } from '../lib/imageCompression';
@@ -31,6 +31,27 @@ export default function StudentPortal() {
         }
         const modules = COURSE_CURRICULUM[courseKey] || [];
         return modules.map(id => ({ id, ...QUIZ_BANK[id] })).filter(m => m.title);
+    }, [student?.course]);
+
+    const [resources, setResources] = useState([]);
+    const [resourcesLoading, setResourcesLoading] = useState(true);
+
+    useEffect(() => {
+        if (!student?.course) return;
+
+        // Fetch resources for this specific course OR 'All'
+        const q = query(
+            collection(db, "resources"), 
+            where("course", "in", [student.course, "All"]),
+            orderBy("createdAt", "desc")
+        );
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            setResources(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            setResourcesLoading(false);
+        });
+
+        return () => unsubscribe();
     }, [student?.course]);
 
     const [isUploading, setIsUploading] = useState(false);
@@ -279,10 +300,53 @@ export default function StudentPortal() {
                                         <h2 className="text-3xl font-black text-slate-900">Your Curriculum</h2>
                                         <p className="text-slate-500 font-bold">Comprehensive breakdown of your {student.course} modules.</p>
                                     </div>
-                                    <button className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-[10px] hover:bg-blue-600 transition-colors">
-                                        <FileText size={16} /> Download Syllabus
-                                    </button>
+                                    <a 
+                                        href={resources.find(r => r.category === 'Syllabus')?.fileUrl || '#'} 
+                                        target="_blank" 
+                                        rel="noreferrer"
+                                        className={cn(
+                                            "flex items-center gap-2 px-6 py-3 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-colors",
+                                            resources.some(r => r.category === 'Syllabus') 
+                                                ? "bg-slate-900 text-white hover:bg-blue-600" 
+                                                : "bg-slate-100 text-slate-400 cursor-not-allowed"
+                                        )}
+                                    >
+                                        <FileText size={16} /> {resources.some(r => r.category === 'Syllabus') ? 'Download Syllabus' : 'Syllabus Pending'}
+                                    </a>
                                 </div>
+
+                                {/* Dynamic Resources Section */}
+                                {resources.filter(r => r.category !== 'Syllabus').length > 0 && (
+                                    <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm mb-12">
+                                        <div className="flex items-center gap-3 mb-8">
+                                            <div className="p-2 bg-blue-600 rounded-lg text-white"><Globe size={18} /></div>
+                                            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Digital Library</h3>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {resources.filter(r => r.category !== 'Syllabus').map(res => (
+                                                <div key={res.id} className="p-6 bg-slate-50 rounded-3xl border border-slate-100 group hover:bg-white hover:shadow-xl transition-all duration-300">
+                                                    <div className="flex items-center gap-4 mb-4">
+                                                        <div className="h-10 w-10 bg-white shadow-sm rounded-xl flex items-center justify-center text-blue-600">
+                                                            <FileText size={20} />
+                                                        </div>
+                                                        <div className="flex-1 overflow-hidden">
+                                                            <p className="font-black text-slate-900 text-sm truncate uppercase tracking-tight">{res.title}</p>
+                                                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{res.category}</p>
+                                                        </div>
+                                                    </div>
+                                                    <a 
+                                                        href={res.fileUrl} 
+                                                        target="_blank" 
+                                                        rel="noreferrer"
+                                                        className="w-full py-3 bg-white text-slate-900 border border-slate-100 rounded-2xl font-black uppercase tracking-widest text-[9px] hover:bg-slate-900 hover:text-white transition-all flex items-center justify-center gap-2 shadow-sm"
+                                                    >
+                                                        <Download size={14} /> Get Resource
+                                                    </a>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {courseModules.map((mod, idx) => (

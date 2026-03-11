@@ -4,9 +4,9 @@ import {
     Camera, Upload, Trash2, X, Plus, 
     Shield, Eye, Image as ImageIcon, 
     Loader2, AlertCircle, CheckCircle2,
-    Lock
+    Lock, Edit3
 } from 'lucide-react';
-import { collection, query, orderBy, onSnapshot, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, addDoc, deleteDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { useAuth } from '../app/common/AuthContext';
 import { uploadToSupabase, deleteFromSupabase } from '../lib/supabase';
@@ -32,6 +32,7 @@ const LabGallery = () => {
     const [uploading, setUploading] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [editingImage, setEditingImage] = useState(null);
     
     // Static Records
     const staticRecords = [
@@ -165,6 +166,29 @@ const LabGallery = () => {
         } catch (error) {
             console.error('Upload failed:', error);
             alert('Upload failed: ' + error.message);
+        } finally {
+            setUploading(false);
+        }
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        if (!editingImage.title) return;
+
+        setUploading(true);
+        try {
+            await updateDoc(doc(db, 'lab_gallery', editingImage.id), {
+                title: editingImage.title,
+                description: editingImage.description,
+                category: editingImage.category,
+                updatedAt: serverTimestamp()
+            });
+
+            setEditingImage(null);
+            alert('Moment synchronized successfully.');
+        } catch (error) {
+            console.error('Update failed:', error);
+            alert('Update failed: ' + error.message);
         } finally {
             setUploading(false);
         }
@@ -343,12 +367,20 @@ const LabGallery = () => {
                                         </div>
 
                                         {isAdmin && (
-                                            <button 
-                                                onClick={(e) => { e.stopPropagation(); handleDelete(img); }}
-                                                className="absolute top-6 right-6 p-4 bg-red-500/20 hover:bg-red-500 backdrop-blur-md rounded-2xl text-white transition-all z-20"
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
+                                            <div className="absolute top-6 right-6 flex gap-2 z-20">
+                                                <button 
+                                                    onClick={(e) => { e.stopPropagation(); setEditingImage(img); }}
+                                                    className="p-4 bg-blue-500/20 hover:bg-blue-500 backdrop-blur-md rounded-2xl text-white transition-all shadow-xl"
+                                                >
+                                                    <Edit3 size={18} />
+                                                </button>
+                                                <button 
+                                                    onClick={(e) => { e.stopPropagation(); handleDelete(img); }}
+                                                    className="p-4 bg-red-500/20 hover:bg-red-500 backdrop-blur-md rounded-2xl text-white transition-all shadow-xl"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
                                         )}
                                     </div>
 
@@ -483,6 +515,88 @@ const LabGallery = () => {
                                         </label>
                                     </div>
                                 </div>
+            {/* Edit Modal */}
+            <AnimatePresence>
+                {editingImage && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl"
+                            onClick={() => !uploading && setEditingImage(null)}
+                        />
+                        <motion.div 
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="relative bg-slate-900 w-full max-w-xl rounded-[3rem] border border-white/10 shadow-2xl p-10 overflow-hidden"
+                        >
+                            <div className="flex justify-between items-center mb-10">
+                                <h3 className="text-3xl font-black text-white tracking-tight">Edit <span className="text-blue-400">Moment</span></h3>
+                                <button 
+                                    onClick={() => setEditingImage(null)}
+                                    className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl transition-all"
+                                >
+                                    <X size={20} />
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleUpdate} className="space-y-8">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Photo Title</label>
+                                    <input 
+                                        type="text"
+                                        required
+                                        className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-bold text-white"
+                                        value={editingImage.title}
+                                        onChange={e => setEditingImage({ ...editingImage, title: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-4">
+                                    {categories.filter(c => c.id !== 'all').map(cat => (
+                                        <button
+                                            key={cat.id}
+                                            type="button"
+                                            onClick={() => setEditingImage({ ...editingImage, category: cat.id })}
+                                            className={cn(
+                                                "flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all",
+                                                editingImage.category === cat.id 
+                                                    ? "bg-blue-600/20 border-blue-500 text-blue-400 shadow-xl shadow-blue-500/10" 
+                                                    : "bg-white/5 border-white/10 text-slate-500 hover:border-white/20"
+                                            )}
+                                        >
+                                            <cat.icon size={20} />
+                                            <span className="text-[8px] font-black uppercase tracking-widest">{cat.label}</span>
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Deep Context</label>
+                                    <textarea 
+                                        className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all font-bold text-white min-h-[100px]"
+                                        value={editingImage.description}
+                                        onChange={e => setEditingImage({ ...editingImage, description: e.target.value })}
+                                    />
+                                </div>
+
+                                <button 
+                                    disabled={uploading}
+                                    className="w-full py-5 bg-white text-slate-950 rounded-[2rem] font-black uppercase text-xs tracking-widest shadow-2xl disabled:opacity-50 flex items-center justify-center gap-3 active:scale-95 transition-all"
+                                >
+                                    {uploading ? (
+                                        <>Synchronizing... <Loader2 size={18} className="animate-spin" /></>
+                                    ) : (
+                                        <>Save Changes <CheckCircle2 size={18} /></>
+                                    )}
+                                </button>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
                                 <button 
                                     disabled={uploading || !form.file}
