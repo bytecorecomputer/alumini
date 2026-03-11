@@ -11,6 +11,7 @@ import {
 import { uploadToSupabase } from "../lib/supabase";
 import { compressImage } from "../lib/imageCompression";
 import { syncAggregateStats } from "../lib/migrateStudents";
+import { cn } from "../lib/utils";
 
 export default function StudentDetails() {
     const { id } = useParams();
