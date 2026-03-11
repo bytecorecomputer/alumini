@@ -14,24 +14,58 @@ import { compressImage } from '../lib/imageCompression';
 import SEO from '../components/common/SEO';
 import { cn } from '../lib/utils';
 
+// Import Static Assets
+import lab1 from '../assets/images/computer lab/students (1).jpg';
+import lab2 from '../assets/images/computer lab/students (2).jpg';
+import trip1 from '../assets/images/computer lab/agra trip.jpg';
+import exam1 from '../assets/images/computer lab/scholership exam topper.jpg';
+import exam2 from '../assets/images/computer lab/scholership exam topper (2).jpg';
+import labVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
+
 const LabGallery = () => {
     const { user, role } = useAuth();
     const isAdmin = role === 'admin' || role === 'super_admin';
     const [images, setImages] = useState([]);
+    const [firebaseImages, setFirebaseImages] = useState([]);
+    const [activeCategory, setActiveCategory] = useState('all');
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     
+    // Static Records
+    const staticRecords = [
+        { id: 's0', title: 'Interactive Lab Session', description: 'Rahul Sir demonstrating real-world coding challenges.', category: 'lab', src: labVideo, type: 'video', localRecord: true },
+        { id: 's1', title: 'Agra Educational Trip', description: 'Exploring history and architecture with the ByteCore squad.', category: 'trip', imageUrl: trip1, localRecord: true },
+        { id: 's2', title: 'Advanced Lab Session', description: 'Intensive coding session at the Command Center.', category: 'lab', imageUrl: lab1, localRecord: true },
+        { id: 's3', title: 'Collaborative Learning', description: 'Students working together on real-world projects.', category: 'lab', imageUrl: lab2, localRecord: true },
+        { id: 's4', title: 'Scholarship Topper', description: 'Celebrating academic excellence at ByteCore.', category: 'exam', imageUrl: exam1, localRecord: true },
+        { id: 's5', title: 'Top Performer', description: 'Exceptional performance in the monthly technical evaluation.', category: 'exam', imageUrl: exam2, localRecord: true },
+    ];
+
+    // Categories Configuration
+    const categories = [
+        { id: 'all', label: 'All Records', icon: Shield },
+        { id: 'lab', label: 'Computer Lab', icon: Camera },
+        { id: 'trip', label: 'Trips & Tours', icon: ImageIcon },
+        { id: 'exam', label: 'Exams & Toppers', icon: CheckCircle2 }
+    ];
+
     // New Image Form
     const [form, setForm] = useState({
         title: '',
         description: '',
+        category: 'lab',
         file: null,
         preview: null
     });
 
     const galleryRef = useRef(null);
+
+    // Combine Static and Cloud Images
+    useEffect(() => {
+        setImages([...staticRecords, ...firebaseImages]);
+    }, [firebaseImages]);
 
     // Security: Anti-Screenshot & Anti-Download
     useEffect(() => {
@@ -65,11 +99,18 @@ const LabGallery = () => {
     // Fetch Images from Firestore
     useEffect(() => {
         const q = query(collection(db, 'lab_gallery'), orderBy('createdAt', 'desc'));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setImages(items);
-            setLoading(false);
-        });
+        const unsubscribe = onSnapshot(q, 
+            (snapshot) => {
+                const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setFirebaseImages(items);
+                setLoading(false);
+            },
+            (error) => {
+                console.error('Firestore Gallery Error:', error);
+                // If permission fails, we still show loading false so static images appear
+                setLoading(false);
+            }
+        );
         return () => unsubscribe();
     }, []);
 
@@ -110,13 +151,14 @@ const LabGallery = () => {
             await addDoc(collection(db, 'lab_gallery'), {
                 title: form.title,
                 description: form.description,
+                category: form.category,
                 imageUrl: publicUrl,
                 storagePath: filePath,
                 createdAt: serverTimestamp(),
                 uploader: user.uid
             });
 
-            setForm({ title: '', description: '', file: null, preview: null });
+            setForm({ title: '', description: '', category: 'lab', file: null, preview: null });
             setShowUploadModal(false);
             alert('Moment captured and secured.');
         } catch (error) {
@@ -160,46 +202,74 @@ const LabGallery = () => {
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]"></div>
             </div>
 
-            <div className="max-w-7xl mx-auto px-6">
-                {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-20">
-                    <div className="max-w-3xl">
-                        <motion.div 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.3em] mb-6"
-                        >
-                            <Shield size={14} className="animate-pulse" />
-                            Content Protected Lab Showcase
-                        </motion.div>
-                        <motion.h1 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
-                            className="text-6xl md:text-8xl font-black tracking-tighter italic mb-8"
-                        >
-                            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Command Center</span>
-                        </motion.h1>
-                        <motion.p 
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="text-slate-400 text-xl font-medium leading-relaxed max-w-2xl"
-                        >
-                            Where complex logic meets high-performance hardware. Explore the environment designed for professional tech excellence.
-                        </motion.p>
-                    </div>
+            <div className="max-w-7xl mx-auto px-6 relative">
+                {/* Header Banner Section */}
+                <div className="relative mb-20 p-12 md:p-20 rounded-[4rem] overflow-hidden">
+                    {/* Glass Banner Background */}
+                    <div className="absolute inset-0 bg-white/5 backdrop-blur-3xl border border-white/10 -z-10" />
+                    <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-600/20 to-transparent -z-10" />
+                    <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
 
-                    {isAdmin && (
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                        <div className="max-w-3xl">
+                            <motion.div 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.3em] mb-6"
+                            >
+                                <Shield size={14} className="animate-pulse" />
+                                Content Protected Lab Showcase
+                            </motion.div>
+                            <motion.h1 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.1 }}
+                                className="text-6xl md:text-8xl font-black tracking-tighter italic mb-8 leading-[0.85]"
+                            >
+                                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">Command Center</span>
+                            </motion.h1>
+                            <motion.p 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.2 }}
+                                className="text-slate-400 text-xl font-medium leading-relaxed max-w-2xl"
+                            >
+                                Where complex logic meets high-performance hardware. Explore the environment designed for professional tech excellence.
+                            </motion.p>
+                        </div>
+
+                        {isAdmin && (
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setShowUploadModal(true)}
+                                className="px-8 py-5 bg-white text-slate-950 rounded-[2rem] font-black uppercase text-xs tracking-widest shadow-2xl flex items-center gap-3 hover:bg-blue-50 transition-all self-start md:self-end"
+                            >
+                                <Plus size={20} /> Add Moment
+                            </motion.button>
+                        )}
+                    </div>
+                </div>
+
+                {/* Category Filters */}
+                <div className="flex flex-wrap justify-center md:justify-start gap-4 mb-16 overflow-x-auto pb-4 no-scrollbar">
+                    {categories.map((cat) => (
                         <motion.button
-                            whileHover={{ scale: 1.05 }}
+                            key={cat.id}
+                            whileHover={{ y: -2 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => setShowUploadModal(true)}
-                            className="px-8 py-5 bg-white text-slate-950 rounded-[2rem] font-black uppercase text-xs tracking-widest shadow-2xl flex items-center gap-3 hover:bg-blue-50 transition-all"
+                            onClick={() => setActiveCategory(cat.id)}
+                            className={cn(
+                                "flex items-center gap-3 px-8 py-4 rounded-2xl transition-all font-black text-[10px] uppercase tracking-[0.2em] border",
+                                activeCategory === cat.id 
+                                    ? "bg-blue-600 border-blue-400 text-white shadow-[0_0_30px_rgba(37,99,235,0.4)]" 
+                                    : "bg-white/5 border-white/10 text-slate-500 hover:text-white hover:bg-white/10"
+                            )}
                         >
-                            <Plus size={20} /> Add Moment
+                            <cat.icon size={16} className={activeCategory === cat.id ? "animate-pulse" : ""} />
+                            {cat.label}
                         </motion.button>
-                    )}
+                    ))}
                 </div>
 
                 {/* Gallery Grid */}
@@ -208,16 +278,18 @@ const LabGallery = () => {
                         <Loader2 size={60} className="text-blue-500 animate-spin mb-6" />
                         <p className="text-slate-500 font-black uppercase tracking-widest animate-pulse">Synchronizing Visual Records</p>
                     </div>
-                ) : images.length === 0 ? (
+                ) : images.filter(img => activeCategory === 'all' || img.category === activeCategory).length === 0 ? (
                     <div className="text-center py-40 bg-white/5 rounded-[4rem] border border-white/5 border-dashed">
                         <Camera size={80} className="mx-auto text-slate-800 mb-8" />
-                        <h2 className="text-2xl font-black text-slate-500 uppercase tracking-tighter">No visual archives found</h2>
+                        <h2 className="text-2xl font-black text-slate-500 uppercase tracking-tighter">No visual archives in this sector</h2>
                         <p className="text-slate-600 mt-2 font-bold">The history is waiting to be written.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" ref={galleryRef}>
                         <AnimatePresence mode="popLayout">
-                            {images.map((img, idx) => (
+                            {images
+                                .filter(img => activeCategory === 'all' || img.category === activeCategory)
+                                .map((img, idx) => (
                                 <motion.div
                                     key={img.id}
                                     layout
@@ -231,12 +303,23 @@ const LabGallery = () => {
                                     <div className="absolute inset-0 z-10 pointer-events-auto bg-transparent" />
                                     
                                     <div className="aspect-[4/5] relative overflow-hidden">
-                                        <img 
-                                            src={img.imageUrl} 
-                                            alt={img.title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
-                                            loading="lazy"
-                                        />
+                                        {img.type === 'video' || img.src?.endsWith('.mp4') ? (
+                                            <video 
+                                                src={img.imageUrl || img.src} 
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                                                autoPlay
+                                                muted
+                                                loop
+                                                playsInline
+                                            />
+                                        ) : (
+                                            <img 
+                                                src={img.imageUrl} 
+                                                alt={img.title}
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                                                loading="lazy"
+                                            />
+                                        )}
                                         
                                         {/* Security Banner on hover */}
                                         <div className="absolute top-6 left-6 px-3 py-1 bg-black/60 backdrop-blur-md rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-20 flex items-center gap-2">
@@ -258,9 +341,17 @@ const LabGallery = () => {
                                     <div className="p-8 relative">
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400">
-                                                <Camera size={14} />
+                                                {categories.find(c => c.id === img.category)?.icon ? 
+                                                    React.createElement(categories.find(c => c.id === img.category).icon, { size: 14 }) : 
+                                                    <Camera size={14} />
+                                                }
                                             </div>
-                                            <h3 className="text-2xl font-black text-white tracking-tight truncate">{img.title}</h3>
+                                            <div className="flex flex-col">
+                                                <span className="text-[8px] font-black text-blue-400 uppercase tracking-widest">
+                                                    {categories.find(c => c.id === img.category)?.label || "Lab Record"}
+                                                </span>
+                                                <h3 className="text-2xl font-black text-white tracking-tight truncate">{img.title}</h3>
+                                            </div>
                                         </div>
                                         <p className="text-slate-400 font-medium text-sm line-clamp-2 mb-6">
                                             {img.description || "The atmosphere of professional growth at ByteCore Lab."}
@@ -318,6 +409,25 @@ const LabGallery = () => {
                                         value={form.title}
                                         onChange={e => setForm({ ...form, title: e.target.value })}
                                     />
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-4">
+                                    {categories.filter(c => c.id !== 'all').map(cat => (
+                                        <button
+                                            key={cat.id}
+                                            type="button"
+                                            onClick={() => setForm({ ...form, category: cat.id })}
+                                            className={cn(
+                                                "flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all",
+                                                form.category === cat.id 
+                                                    ? "bg-blue-600/20 border-blue-500 text-blue-400 shadow-xl shadow-blue-500/10" 
+                                                    : "bg-white/5 border-white/10 text-slate-500 hover:border-white/20"
+                                            )}
+                                        >
+                                            <cat.icon size={20} />
+                                            <span className="text-[8px] font-black uppercase tracking-widest">{cat.label}</span>
+                                        </button>
+                                    ))}
                                 </div>
 
                                 <div className="space-y-2">
@@ -395,7 +505,11 @@ const LabGallery = () => {
                             {/* Protection Shield */}
                             <div className="absolute inset-0 z-20" />
                             
-                            <img src={selectedImage.imageUrl} alt={selectedImage.title} className="w-full h-full object-contain" />
+                            {selectedImage.type === 'video' || selectedImage.src?.endsWith('.mp4') ? (
+                                <video src={selectedImage.imageUrl || selectedImage.src} autoPlay controls className="w-full h-full object-contain" />
+                            ) : (
+                                <img src={selectedImage.imageUrl} alt={selectedImage.title} className="w-full h-full object-contain" />
+                            )}
                             
                             <div className="absolute bottom-0 left-0 right-0 p-12 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent z-30">
                                 <div className="flex items-center gap-4 mb-4">
