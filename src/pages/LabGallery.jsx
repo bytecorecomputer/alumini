@@ -220,6 +220,26 @@ const LabGallery = () => {
                 description="Explore the heart of ByteCore Computer Centre. Professional lab environment, advanced workstations, and the creative pulse of Bareilly's tech hub."
             />
 
+            {/* Structured Data for Images SEO */}
+            <script type="application/ld+json">
+                {JSON.stringify({
+                    "@context": "https://schema.org/",
+                    "@type": "ImageGallery",
+                    "name": "ByteCore Computer Lab Gallery",
+                    "description": "Visual record of ByteCore Computer Centre's lab and events.",
+                    "image": images.map(img => ({
+                        "@type": "ImageObject",
+                        "contentUrl": img.imageUrl || img.src,
+                        "name": img.title,
+                        "description": img.description,
+                        "author": {
+                            "@type": "Organization",
+                            "name": "ByteCore Computer Centre"
+                        }
+                    }))
+                })}
+            </script>
+
             {/* Background Aesthetics */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
                 <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-blue-600/5 rounded-full blur-[150px] animate-pulse"></div>
@@ -310,7 +330,7 @@ const LabGallery = () => {
                         <p className="text-slate-600 mt-2 font-bold">The history is waiting to be written.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" ref={galleryRef}>
+                    <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8" ref={galleryRef}>
                         <AnimatePresence mode="popLayout">
                             {images
                                 .filter(img => activeCategory === 'all' || img.category === activeCategory)
@@ -318,43 +338,48 @@ const LabGallery = () => {
                                 <motion.div
                                     key={img.id}
                                     layout
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
                                     exit={{ opacity: 0, scale: 0.9 }}
-                                    transition={{ delay: idx * 0.1 }}
-                                    className="group relative rounded-[3rem] overflow-hidden bg-slate-900 border border-white/5 shadow-2xl transition-all hover:bg-slate-800/50"
+                                    transition={{ duration: 0.5, delay: idx * 0.05 }}
+                                    className="break-inside-avoid mb-8 group relative rounded-[3rem] overflow-hidden bg-slate-900 border border-white/5 shadow-2xl transition-all hover:bg-slate-800/50 hover:shadow-blue-500/10"
                                 >
                                     {/* Security Layer: Protective Overlay */}
                                     <div className="absolute inset-0 z-10 pointer-events-auto bg-transparent" />
                                     
                                     <div 
-                                        className="aspect-video relative overflow-hidden bg-black/40 cursor-pointer"
+                                        className="relative overflow-hidden bg-black/40 cursor-pointer"
                                         onClick={() => setSelectedImage(img)}
                                     >
                                         {/* Blurred Background for Full Photo Effect */}
                                         {!img.type?.includes('video') && !img.src?.endsWith('.mp4') && (
                                             <img 
                                                 src={img.imageUrl || img.src} 
-                                                alt=""
+                                                alt={`${img.title} - ByteCore Computer Centre`}
+                                                title={img.title}
                                                 className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110"
                                                 loading="lazy"
                                             />
                                         )}
-
+                                        {/* Main Media */}
                                         {img.type === 'video' || img.src?.endsWith('.mp4') ? (
                                             <video 
                                                 src={img.imageUrl || img.src} 
-                                                className="w-full h-full object-contain relative z-10 transition-transform duration-700 group-hover:scale-110"
+                                                className="w-full h-auto relative z-10 transition-transform duration-700 group-hover:scale-110"
                                                 autoPlay
                                                 muted
                                                 loop
                                                 playsInline
+                                                poster={img.imageUrl}
+                                                aria-label={img.title}
                                             />
                                         ) : (
                                             <img 
                                                 src={img.imageUrl || img.src} 
-                                                alt={img.title}
-                                                className="w-full h-full object-contain relative z-10 transition-transform duration-700 group-hover:scale-105"
+                                                alt={`${img.title} | ${img.description || 'ByteCore Lab Showcase'}`}
+                                                title={img.title}
+                                                className="w-full h-auto relative z-10 transition-transform duration-700 group-hover:scale-105"
                                                 loading={idx < 6 ? "eager" : "lazy"}
                                                 {...(idx < 3 ? { fetchpriority: "high" } : {})}
                                             />
@@ -397,18 +422,18 @@ const LabGallery = () => {
                                                 <span className="text-[8px] font-black text-blue-400 uppercase tracking-widest">
                                                     {categories.find(c => c.id === img.category)?.label || "Lab Record"}
                                                 </span>
-                                                <h3 className="text-2xl font-black text-white tracking-tight truncate">{img.title}</h3>
+                                                <h3 className="text-xl font-black text-white tracking-tight leading-tight group-hover:text-blue-400 transition-colors uppercase">{img.title}</h3>
                                             </div>
                                         </div>
-                                        <p className="text-slate-400 font-medium text-sm line-clamp-2 mb-6">
+                                        <p className="text-slate-400 font-medium text-xs line-clamp-2 md:line-clamp-3 mb-6">
                                             {img.description || "The atmosphere of professional growth at ByteCore Lab."}
                                         </p>
                                         
                                         <button 
                                             onClick={() => setSelectedImage(img)}
-                                            className="w-full py-4 bg-slate-800 hover:bg-slate-700 rounded-2xl text-white font-black uppercase text-[10px] tracking-widest transition-all flex items-center justify-center gap-2"
+                                            className="w-full py-4 bg-slate-800 hover:bg-slate-700 rounded-2xl text-white font-black uppercase text-[9px] tracking-widest transition-all flex items-center justify-center gap-2"
                                         >
-                                            Inspect Details <Eye size={14} />
+                                            Inspect Sector <Eye size={14} />
                                         </button>
                                     </div>
                                 </motion.div>

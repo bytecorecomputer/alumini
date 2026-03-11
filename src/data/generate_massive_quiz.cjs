@@ -198,6 +198,30 @@ const getCourseContent = () => ({
 const finalData = {
     "ADCA": getCourseContent(),
     "DCA": getCourseContent(),
+    "Python": {
+        "Python": {
+            description: "Python Programming",
+            icon: "monitor",
+            color: "blue",
+            modules: {
+                "Basics & Theory": pythonTheories.slice(0, 30),
+                "Advanced Concepts": pythonTheories.slice(30, 60),
+                "Project logic": pythonTheories.slice(60)
+            }
+        }
+    },
+    "CorelDraw": {
+        "CorelDraw": {
+            description: "CorelDraw Design",
+            icon: "monitor",
+            color: "rose",
+            modules: {
+                "Basics & Tools": corelTheories.slice(0, 30),
+                "Design Effects": corelTheories.slice(30, 60),
+                "Pro Output": corelTheories.slice(60)
+            }
+        }
+    },
     "MDCA": {
         ...getCourseContent(),
         "Python": {

@@ -161,49 +161,58 @@ export default function Home() {
         { name: "Coder Afroj", role: "Lead Instructor & Web Dev", image: "/images/cd/coderafroj.jpg" }
     ];
 
-    const AuroraBackground = () => {
+    const OrbEffect = () => {
         return (
-            <div className="absolute inset-0 overflow-hidden bg-white pointer-events-none z-0">
-                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay z-10"></div>
-
-                {/* Massive Watermark Text */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none z-0">
-                    <h1 className="text-[20vw] font-[1000] text-slate-900 tracking-tighter uppercase whitespace-nowrap">
-                        BYTECORE
-                    </h1>
+            <div className="absolute inset-0 overflow-hidden bg-white pointer-events-none z-0 flex items-center justify-center">
+                {/* Massive Animated Orb */}
+                <div className="relative w-[140vw] h-[140vw] md:w-[80vw] md:h-[80vw] flex items-center justify-center translate-y-[-10%] md:translate-y-0">
+                    <motion.div 
+                        animate={{ 
+                            rotate: 360,
+                            scale: [1, 1.05, 1]
+                        }}
+                        transition={{ 
+                            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+                            scale: { duration: 8, repeat: Infinity, ease: "easeInOut" }
+                        }}
+                        className="absolute inset-0 rounded-full border-[1px] border-blue-500/10 shadow-[0_0_100px_rgba(59,130,246,0.1)]"
+                    />
+                    <motion.div 
+                        animate={{ 
+                            rotate: -360,
+                            scale: [1.05, 1, 1.05]
+                        }}
+                        transition={{ 
+                            rotate: { duration: 25, repeat: Infinity, ease: "linear" },
+                            scale: { duration: 10, repeat: Infinity, ease: "easeInOut" }
+                        }}
+                        className="absolute inset-[10%] rounded-full border-[1px] border-indigo-500/10 shadow-[inner_0_0_80px_rgba(99,102,241,0.05)]"
+                    />
+                    
+                    {/* Glowing Core */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-purple-500/5 rounded-full blur-[120px]" />
+                    
+                    {/* Watermark Logo */}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 0.08, scale: 1 }}
+                        transition={{ duration: 2, ease: "easeOut" }}
+                        className="relative z-10 w-1/3 md:w-1/4 opacity-[0.08] grayscale select-none"
+                    >
+                        <img src="/logo.png" alt="ByteCore Watermark" className="w-full h-full object-contain" />
+                    </motion.div>
                 </div>
 
-                <div className="absolute -inset-[20%] opacity-30">
-                    <motion.div
-                        animate={{
-                            x: ["-5%", "5%", "-5%"],
-                            y: ["5%", "-5%", "5%"]
-                        }}
-                        transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute h-[60vh] w-[60vw] rounded-full bg-blue-400/20 blur-[100px] top-[-5%] left-[-5%] will-change-transform"
-                    />
-                    <motion.div
-                        animate={{
-                            x: ["5%", "-5%", "5%"],
-                            y: ["-5%", "5%", "-5%"]
-                        }}
-                        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute h-[70vh] w-[70vw] rounded-full bg-indigo-300/20 blur-[110px] top-[15%] right-[-5%] will-change-transform"
-                    />
-                    <motion.div
-                        animate={{
-                            x: ["-10%", "10%", "-10%"],
-                            y: ["-10%", "10%", "-10%"]
-                        }}
-                        transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute h-[50vh] w-[50vw] rounded-full bg-purple-300/10 blur-[100px] bottom-[-5%] right-[15%] will-change-transform"
-                    />
+                {/* Subtle Grid & Grain */}
+                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] bg-[length:50px_50px]"></div>
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay"></div>
+                
+                {/* Massive Floating Text (Hidden on small screens) */}
+                <div className="absolute bottom-10 left-10 opacity-[0.02] font-black text-[15vw] leading-none tracking-tighter text-slate-950 uppercase hidden lg:block select-none">
+                    ENGINEER
                 </div>
-
-                {/* Subtle Grid for Tech Feel */}
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] bg-[length:40px_40px]"></div>
-
-                {/* Soft Bottom Grain / Glow */}
+                
+                {/* Bottom Protection Gradient */}
                 <div className="absolute bottom-0 left-0 w-full h-[30vh] bg-gradient-to-t from-white via-white/80 to-transparent z-10"></div>
             </div>
         );
@@ -257,7 +266,7 @@ export default function Home() {
             />
             {/* --- ULTIMATE TECH HERO SECTION --- */}
             <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-12">
-                <AuroraBackground />
+                <OrbEffect />
 
                 <div className="max-w-7xl mx-auto w-full relative z-20 px-6 pt-12">
                     <div className="flex flex-col items-center justify-center text-center">
