@@ -361,7 +361,7 @@ export default function StudentDetails() {
                                                         setIsUpdating(true);
                                                         try {
                                                             const compressed = await compressImage(file, 50);
-                                                            const url = await uploadToSupabase(compressed, id, 'student bcc');
+                                                            const { publicUrl: url } = await uploadToSupabase(compressed, id, 'student bcc');
                                                             setEditForm({ ...editForm, photoUrl: url });
                                                         } catch (err) {
                                                             alert("Photo upload failed: " + err.message);

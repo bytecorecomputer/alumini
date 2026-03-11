@@ -749,7 +749,7 @@ export default function CoachingAdmin() {
                                                     setIsUpdating(true);
                                                     try {
                                                         const compressed = await compressImage(file, 50); // Target 50KB
-                                                        const url = await uploadToSupabase(compressed, studentForm.registration, 'student-photos');
+                                                        const { publicUrl: url } = await uploadToSupabase(compressed, studentForm.registration, 'student-photos');
                                                         setStudentForm({ ...studentForm, photoUrl: url });
                                                     } catch (err) {
                                                         alert("Photo upload failed: " + err.message);

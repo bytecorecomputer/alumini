@@ -33,6 +33,7 @@ const CertificateGenerator = lazy(() => import("./pages/CertificateGenerator"));
 const CertificateDownload = lazy(() => import("./pages/CertificateDownload"));
 const AdminCertificateUpload = lazy(() => import("./pages/AdminCertificateUpload"));
 const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
+const LabGallery = lazy(() => import("./pages/LabGallery"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -58,7 +59,7 @@ export default function App() {
               <Route path="/courses/:id" element={<CourseDetails />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/gallery" element={<LabGallery />} />
               <Route path="/certificate" element={<CertificateDownload />} />
               <Route path="/donate" element={<Donate />} />
               <Route path="/terms" element={<Terms />} />
@@ -130,6 +131,7 @@ export default function App() {
                   <AdminNotifications />
                 </AdminRoute>
               } />
+              <Route path="/lab-gallery" element={<LabGallery />} />
 
             </Routes>
           </Suspense>

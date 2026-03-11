@@ -45,7 +45,7 @@ export default function StudentPortal() {
             const compressedFile = await compressImage(file, 50);
 
             // 2. Upload to Supabase
-            const imageUrl = await uploadToSupabase(compressedFile, student.registration, 'student bcc');
+            const { publicUrl: imageUrl } = await uploadToSupabase(compressedFile, student.registration, 'student bcc');
 
             // 3. Update Firestore
             const studentRef = doc(db, 'students', student.registration);
@@ -299,7 +299,7 @@ export default function StudentPortal() {
                                                     mod.color === 'blue' ? 'bg-blue-600' :
                                                         mod.color === 'emerald' ? 'bg-emerald-600' :
                                                             mod.color === 'orange' ? 'bg-orange-600' :
-                                                                mod.color === 'green' ? 'bg-green-600' :
+                                                            mod.color === 'green' ? 'bg-green-600' :
                                                                     mod.color === 'yellow' ? 'bg-yellow-500' :
                                                                         mod.color === 'slate' ? 'bg-slate-600' :
                                                                             mod.color === 'indigo' ? 'bg-indigo-600' :

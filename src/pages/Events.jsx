@@ -72,7 +72,7 @@ export default function Events() {
             const compressedFile = await compressImage(file, 50);
 
             // 2. Upload to Supabase
-            const imageUrl = await uploadToSupabase(compressedFile, user.uid, 'student bcc');
+            const { publicUrl: imageUrl } = await uploadToSupabase(compressedFile, user.uid, 'student bcc');
             setFormData({ ...formData, image: imageUrl });
         } catch (error) {
             alert(error.message || "Event graphic sync failed.");

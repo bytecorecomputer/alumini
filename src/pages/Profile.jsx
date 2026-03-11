@@ -62,7 +62,7 @@ export default function Profile() {
             const compressedFile = await compressImage(file, 50);
 
             // 2. Advanced Supabase Upload
-            const imageUrl = await uploadToSupabase(compressedFile, user.uid, 'student bcc');
+            const { publicUrl: imageUrl } = await uploadToSupabase(compressedFile, user.uid, 'student bcc');
 
             if (imageUrl) {
                 // Update Firestore user document with the public URL

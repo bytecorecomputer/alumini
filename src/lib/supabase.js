@@ -68,9 +68,37 @@ export const uploadToSupabase = async (file, registration, bucketName = 'student
             .getPublicUrl(filePath);
 
         console.log('Generated Supabase URL:', publicUrl);
-        return publicUrl;
+        return { publicUrl, filePath };
     } catch (error) {
         console.error('Supabase protocol error:', error);
+        throw error;
+    }
+};
+
+/**
+ * Deletes a file from Supabase Storage.
+ * @param {string} filePath - The path to the file in the bucket.
+ * @param {string} bucketName - The target bucket name (default: 'student bcc').
+ */
+export const deleteFromSupabase = async (filePath, bucketName = 'student bcc') => {
+    if (!supabase) {
+        console.error('Supabase client is not initialized. Cannot delete.');
+        throw new Error('Supabase client is not initialized.');
+    }
+
+    try {
+        console.log(`Deleting from Supabase bucket: ${bucketName}, path: ${filePath}`);
+        const { error } = await supabase.storage
+            .from(bucketName)
+            .remove([filePath]);
+
+        if (error) {
+            console.error('Supabase Deletion Error:', error);
+            throw new Error(`Supabase deletion failed: ${error.message}`);
+        }
+        return true;
+    } catch (error) {
+        console.error('Supabase deletion protocol error:', error);
         throw error;
     }
 };
