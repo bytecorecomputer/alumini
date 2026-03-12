@@ -16,8 +16,11 @@ import SEO from '../components/common/SEO';
 import { cn } from '../lib/utils';
 
 // Import Static Assets
-import lab1 from '../assets/images/computer lab/students (1).jpg';
+import students1 from '../assets/images/computer lab/students (1).jpg';
+import students2 from '../assets/images/computer lab/students (2).jpg';
 import topper2 from '../assets/images/computer lab/scholership exam topper (2).jpg';
+import topper1 from '../assets/images/computer lab/scholership exam topper.jpg';
+import agraTrip from '../assets/images/computer lab/agra trip.jpg';
 import rahulSirVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
 
 const LabGallery = () => {
@@ -66,8 +69,59 @@ const LabGallery = () => {
     useEffect(() => {
         const q = query(collection(db, 'lab_gallery'), orderBy('createdAt', 'desc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setImages(items);
+            const firestoreItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Define Static Items
+            const staticItems = [
+                {
+                    id: 'static-1',
+                    title: 'Students at Work',
+                    description: 'Direct hands-on training session at ByteCore Lab.',
+                    category: 'lab',
+                    imageUrl: students1,
+                    type: 'image',
+                    isStatic: true
+                },
+                {
+                    id: 'static-2',
+                    title: 'Innovation Hub',
+                    description: 'Exploring new technologies in our state-of-the-art lab.',
+                    category: 'lab',
+                    imageUrl: students2,
+                    type: 'image',
+                    isStatic: true
+                },
+                {
+                    id: 'static-3',
+                    title: 'Scholarship Toppers',
+                    description: 'Celebrating the achievements of our dedicated students.',
+                    category: 'exam',
+                    imageUrl: topper1,
+                    type: 'image',
+                    isStatic: true
+                },
+                {
+                    id: 'static-4',
+                    title: 'Agra Tech Expedition',
+                    description: 'Learning through exploration during our campus trips.',
+                    category: 'trip',
+                    imageUrl: agraTrip,
+                    type: 'image',
+                    isStatic: true
+                },
+                {
+                    id: 'static-5',
+                    title: 'Practical Guidance',
+                    description: 'Interactive session with Rahul Sir.',
+                    category: 'lab',
+                    imageUrl: rahulSirVideo,
+                    type: 'video',
+                    isStatic: true
+                }
+            ];
+
+            // Merge items: Static first, then firestore
+            setImages([...staticItems, ...firestoreItems]);
             setLoading(false);
         });
         return () => unsubscribe();
@@ -221,18 +275,30 @@ const LabGallery = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ delay: idx * 0.05 }}
                                     className="break-inside-avoid group relative rounded-[3rem] overflow-hidden bg-slate-900 border border-white/5 transition-all hover:border-blue-500/30"
                                 >
                                     <div className="relative aspect-[4/5] overflow-hidden bg-black/40">
-                                        <img 
-                                            src={img.imageUrl} 
-                                            alt=""
-                                            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000"
-                                        />
+                                        {img.type === 'video' ? (
+                                            <video 
+                                                src={img.imageUrl} 
+                                                autoPlay 
+                                                muted 
+                                                loop 
+                                                playsInline
+                                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000"
+                                            />
+                                        ) : (
+                                            <img 
+                                                src={img.imageUrl} 
+                                                alt={img.title}
+                                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-1000"
+                                            />
+                                        )}
                                         
                                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
                                         
-                                        {isAdmin && (
+                                        {isAdmin && !img.isStatic && (
                                             <div className="absolute top-6 right-6 flex gap-2 z-20">
                                                 <button 
                                                     onClick={() => setEditingImage(img)}
@@ -248,14 +314,26 @@ const LabGallery = () => {
                                                 </button>
                                             </div>
                                         )}
+
+                                        {img.isStatic && (
+                                            <div className="absolute top-6 right-6 z-20">
+                                                <div className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-lg text-[8px] font-black uppercase tracking-widest text-blue-400 backdrop-blur-md">
+                                                    Original Archive
+                                                </div>
+                                            </div>
+                                        )}
                                         
                                         <div className="absolute bottom-8 left-8 right-8">
                                             <div className="flex items-center gap-2 mb-3">
                                                 <span className="px-3 py-1 bg-white/10 border border-white/10 rounded-lg text-[8px] font-black uppercase tracking-widest">
                                                     {img.category}
                                                 </span>
+                                                {img.type === 'video' && <Play size={10} className="text-blue-400" />}
                                             </div>
-                                            <h3 className="text-xl font-black text-white italic uppercase">{img.title}</h3>
+                                            <h3 className="text-xl font-black text-white italic uppercase leading-tight group-hover:text-blue-400 transition-colors">{img.title}</h3>
+                                            <p className="text-[10px] text-slate-500 font-bold mt-2 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                                                {img.description}
+                                            </p>
                                         </div>
                                     </div>
                                 </motion.div>

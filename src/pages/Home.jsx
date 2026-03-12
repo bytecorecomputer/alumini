@@ -33,8 +33,29 @@ const LabGallery = () => {
     useEffect(() => {
         const q = query(collection(db, 'lab_gallery'), orderBy('createdAt', 'desc'), firestoreLimit(4));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setDynamicImages(items);
+            const firestoreItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Define Static Items for Preview
+            const staticItems = [
+                {
+                    id: 'static-1',
+                    title: 'Students at Work',
+                    category: 'lab',
+                    imageUrl: '/src/assets/images/computer lab/students (1).jpg',
+                    type: 'image'
+                },
+                {
+                    id: 'static-2',
+                    title: 'Practical Guidance',
+                    category: 'lab',
+                    imageUrl: '/src/assets/images/computer lab/rahul sir teach student.mp4',
+                    type: 'video'
+                }
+            ];
+
+            // Show static first in the home preview
+            const combined = [...staticItems, ...firestoreItems].slice(0, 4);
+            setDynamicImages(combined);
             setLoading(false);
         });
         return () => unsubscribe();

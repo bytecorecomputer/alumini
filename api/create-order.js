@@ -76,6 +76,11 @@ export default async function handler(req, res) {
             errorCode = error.code || 'INTERNAL_ERROR';
         }
 
+        // Catch Authentication specifically
+        if (detailedError.toLowerCase().includes('authentication') || error.statusCode === 401) {
+            detailedError = "Razorpay Authentication Failed: The API key or secret is invalid for this environment.";
+        }
+
         return res.status(500).json({ 
             error: 'Razorpay API Connection Failed', 
             details: detailedError,
@@ -85,7 +90,8 @@ export default async function handler(req, res) {
                 keySecretProvided: !!keySecret,
                 keyIdPreview: keyId ? `${keyId.substring(0, 8)}...` : 'None',
                 keySecretPreview: keySecret ? `***${keySecret.substring(keySecret.length - 4)}` : 'None',
-                envKeys: Object.keys(process.env).filter(k => k.includes('RAZORPAY'))
+                envKeys: Object.keys(process.env).filter(k => k.includes('RAZORPAY')),
+                requestId: error.headers?.['x-request-id']
             },
             raw: error
         });
