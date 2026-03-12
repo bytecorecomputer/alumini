@@ -16,10 +16,17 @@ export default function Donate() {
 
     const loadScript = (src) => {
         return new Promise((resolve) => {
+            if (document.querySelector(`script[src="${src}"]`)) {
+                resolve(true);
+                return;
+            }
             const script = document.createElement('script');
             script.src = src;
             script.onload = () => resolve(true);
-            script.onerror = () => resolve(false);
+            script.onerror = () => {
+                console.error(`Dynamic script load error: ${src}`);
+                resolve(false);
+            };
             document.body.appendChild(script);
         });
     };
@@ -45,12 +52,13 @@ export default function Donate() {
         const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
 
         if (!res) {
-            alert('Razorpay SDK failed to load. Are you online?');
+            alert('DNS/Network Error: Razorpay SDK failed to load. Please check your internet connection or try again later. (The domain checkout.razorpay.com might be unreachable)');
             setIsLoading(false);
             return;
         }
 
         try {
+
             // 1. Create Order on Backend
             const orderRes = await fetch('/api/create-order', {
                 method: 'POST',
