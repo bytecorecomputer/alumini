@@ -16,6 +16,7 @@ import labImg2 from '../assets/images/computer lab/students (2).jpg';
 import agraTrip from '../assets/images/computer lab/agra trip.jpg';
 import topper1 from '../assets/images/computer lab/scholership exam topper.jpg';
 import topper2 from '../assets/images/computer lab/scholership exam topper (2).jpg';
+import rahulSirVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
 
 const Gallery = () => {
     const [selectedId, setSelectedId] = useState(null);
@@ -62,6 +63,7 @@ const Gallery = () => {
                     { id: 's2', title: 'Collaborative Learning', description: 'Students working together on real-world projects.', category: 'lab', imageUrl: labImg2, type: 'image' },
                     { id: 's3', title: 'Agra Educational Trip', description: 'Exploring the heritage and building memories.', category: 'trip', imageUrl: agraTrip, type: 'image' },
                     { id: 's4', title: 'Toppers Celebration', description: 'Honoring excellence in the scholarship exam.', category: 'exam', imageUrl: topper1, type: 'image' },
+                    { id: 's5', title: 'Interactive Learning', description: 'Expert guidance by Rahul Sir in the command center.', category: 'lab', imageUrl: rahulSirVideo, type: 'video' },
                 ]);
             } else {
                 setImages(items);

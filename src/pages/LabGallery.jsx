@@ -17,7 +17,8 @@ import { cn } from '../lib/utils';
 
 // Import Static Assets
 import lab1 from '../assets/images/computer lab/students (1).jpg';
-import lab2 from '../assets/images/computer lab/students (2).jpg';
+import topper2 from '../assets/images/computer lab/scholership exam topper (2).jpg';
+import rahulSirVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
 
 const LabGallery = () => {
     const { user, role } = useAuth();
@@ -42,7 +43,7 @@ const LabGallery = () => {
         { id: 'all', label: 'All Records', icon: Shield },
         { id: 'lab', label: 'Computer Lab', icon: Monitor },
         { id: 'trip', label: 'Trips & Tours', icon: Globe },
-        { id: 'exam', label: 'Exams & Toppers', icon: zap }
+        { id: 'exam', label: 'Exams & Toppers', icon: Zap }
     ];
 
     // Form State
