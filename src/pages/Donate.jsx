@@ -35,12 +35,6 @@ export default function Donate() {
 
         setIsLoading(true);
 
-        if (!import.meta.env.VITE_RAZORPAY_KEY_ID) {
-            alert("Razorpay Key is missing. Please check your environment configuration.");
-            setIsLoading(false);
-            return;
-        }
-
         const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
 
         if (!res) {
@@ -49,116 +43,179 @@ export default function Donate() {
             return;
         }
 
-        const options = {
-            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-            amount: parseFloat(finalAmount) * 100, // amount in the smallest currency unit (paise)
-            currency: "INR",
-            name: "Alumni Association",
-            description: "Empowering the Legacy Donation",
-            image: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-            handler: async function (response) {
-                setPaymentId(response.razorpay_payment_id);
-                setIsSuccess(true);
+        try {
+            // 1. Create Order on Backend
+            const orderRes = await fetch('/api/create-order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: finalAmount })
+            });
+            const orderData = await orderRes.json();
 
-                // Send Telegram Notification
-                await sendTelegramNotification('donation', {
-                    name,
-                    email,
-                    amount: finalAmount,
-                    paymentId: response.razorpay_payment_id
-                });
-            },
-            prefill: {
-                name: name,
-                email: email,
-            },
-            theme: {
-                color: "#E11D48", // Rose-600
-            },
-            modal: {
-                ondismiss: function () {
-                    setIsLoading(false);
+            if (!orderRes.ok) throw new Error(orderData.error || 'Failed to create order');
+
+            // 2. Open Razorpay Checkout
+            const options = {
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+                amount: orderData.amount,
+                currency: orderData.currency,
+                name: "Alumni Association",
+                description: "Empowering the Legacy Donation",
+                image: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+                order_id: orderData.id,
+                handler: async function (response) {
+                    setIsLoading(true);
+                    try {
+                        // 3. Verify Payment on Backend
+                        const verifyRes = await fetch('/api/verify-payment', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature
+                            })
+                        });
+                        const verifyData = await verifyRes.json();
+
+                        if (verifyRes.ok && verifyData.success) {
+                            setPaymentId(response.razorpay_payment_id);
+                            setIsSuccess(true);
+                            setIsLoading(false);
+
+                            // Send Telegram Notification
+                            await sendTelegramNotification('donation', {
+                                name,
+                                email,
+                                amount: finalAmount,
+                                paymentId: response.razorpay_payment_id
+                            });
+                        } else {
+                            throw new Error(verifyData.message || 'Payment verification failed');
+                        }
+                    } catch (err) {
+                        alert(err.message);
+                        setIsLoading(false);
+                    }
+                },
+                prefill: {
+                    name: name,
+                    email: email,
+                },
+                theme: {
+                    color: "#E11D48", // Rose-600
+                },
+                modal: {
+                    ondismiss: function () {
+                        setIsLoading(false);
+                    }
                 }
-            }
-        };
+            };
 
-        const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
-        setIsLoading(false);
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
+        } catch (error) {
+            alert(error.message);
+            setIsLoading(false);
+        }
     };
 
     if (isSuccess) {
         return (
-            <div className="min-h-screen pt-24 pb-20 px-4 md:px-8 bg-slate-50 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-30">
-                    <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-rose-100 rounded-full blur-[120px]"></div>
-                    <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-50 rounded-full blur-[120px]"></div>
+            <div className="min-h-screen pt-24 pb-20 px-4 md:px-8 bg-slate-950 flex items-center justify-center relative overflow-hidden">
+                {/* Matrix-like background effect */}
+                <div className="absolute inset-0 opacity-20 pointer-events-none">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-rose-900/20 via-slate-950 to-slate-950"></div>
+                    <div className="grid grid-cols-12 h-full w-full">
+                        {[...Array(12)].map((_, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ y: -100, opacity: 0 }}
+                                animate={{ y: ['0%', '100%'], opacity: [0, 1, 0] }}
+                                transition={{ duration: Math.random() * 5 + 5, repeat: Infinity, ease: "linear" }}
+                                className="w-px bg-gradient-to-b from-transparent via-rose-500/50 to-transparent h-40 mx-auto"
+                            />
+                        ))}
+                    </div>
                 </div>
 
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ type: "spring", stiffness: 100 }}
-                    className="max-w-2xl w-full premium-card bg-white p-12 text-center shadow-2xl relative overflow-hidden"
+                    initial={{ opacity: 0, scale: 0.8, rotateX: 20 }}
+                    animate={{ opacity: 1, scale: 1, rotateX: 0 }}
+                    transition={{ type: "spring", stiffness: 100, damping: 15 }}
+                    className="max-w-2xl w-full bg-white/5 backdrop-blur-3xl p-1 md:p-1 rounded-[3rem] border border-white/10 shadow-3xl perspective-1000"
                 >
-                    <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rose-600 to-orange-600"></div>
+                    <div className="bg-white rounded-[2.9rem] p-12 text-center shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-rose-600 via-orange-500 to-rose-600 animate-gradient-x"></div>
 
-                    <div className="w-24 h-24 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-8 text-rose-600 border-2 border-rose-100 relative">
-                        <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ type: "spring", damping: 12, delay: 0.2 }}
+                        <div className="w-24 h-24 bg-rose-50 rounded-full flex items-center justify-center mx-auto mb-10 text-rose-600 border-2 border-rose-100 relative shadow-lg shadow-rose-100/50">
+                            <motion.div
+                                initial={{ scale: 0, rotate: -45 }}
+                                animate={{ scale: 1, rotate: 0 }}
+                                transition={{ type: "spring", damping: 10, stiffness: 100, delay: 0.2 }}
+                            >
+                                <ShieldCheck size={48} strokeWidth={2.5} />
+                            </motion.div>
+                            <motion.div
+                                animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }}
+                                transition={{ repeat: Infinity, duration: 3 }}
+                                className="absolute inset-0 rounded-full bg-rose-400/20"
+                            />
+                        </div>
+
+                        <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tighter italic">
+                            Protocol <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-orange-600 font-black not-italic uppercase">Successful.</span>
+                        </h1>
+                        <p className="text-slate-500 font-bold text-lg mb-12 max-w-md mx-auto leading-relaxed">
+                            Your legacy contribution has been securely processed and integrated into the global network.
+                        </p>
+
+                        <div className="bg-slate-50 rounded-3xl p-8 mb-12 border border-slate-100 space-y-6 text-left relative overflow-hidden group">
+                            <div className="absolute top-0 left-0 w-full h-full bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-0"></div>
+                            
+                            <div className="relative z-10 space-y-4">
+                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                                    <span className="flex items-center gap-2"><Zap size={10} className="text-rose-500" /> Transaction Hash</span>
+                                    <span className="text-slate-900 select-all font-mono bg-white px-3 py-1 rounded-full border border-slate-100">{paymentId}</span>
+                                </div>
+                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                                    <span className="flex items-center gap-2"><Target size={10} className="text-blue-500" /> Status</span>
+                                    <span className="text-emerald-600 flex items-center gap-1.5 font-black">
+                                        <span className="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
+                                        VERIFIED_BY_SYSTEM
+                                    </span>
+                                </div>
+                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                                    <span className="flex items-center gap-2"><Building size={10} className="text-purple-500" /> Network Node</span>
+                                    <span className="text-slate-900 font-black">{name}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={() => {
+                                setIsSuccess(false);
+                                setAmount('100');
+                            }}
+                            className="w-full py-6 bg-slate-950 text-white rounded-2xl shadow-xl shadow-slate-900/20 active:scale-95 group flex items-center justify-center gap-4 transition-all hover:bg-slate-900 hover:-translate-y-1"
                         >
-                            <ShieldCheck size={48} />
-                        </motion.div>
-                        <motion.div
-                            animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ repeat: Infinity, duration: 2 }}
-                            className="absolute inset-0 rounded-full bg-rose-200/20"
-                        />
-                    </div>
+                            <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                            <span className="uppercase tracking-[0.5em] font-black text-sm">Return to Command Center</span>
+                        </button>
 
-                    <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tighter italic">Connection <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-orange-600 font-black not-italic uppercase">Verified.</span></h1>
-                    <p className="text-slate-500 font-bold text-lg mb-10 max-w-md mx-auto">
-                        Your contribution has been successfully initialized and incorporated into the legacy network.
-                    </p>
-
-                    <div className="bg-slate-50 rounded-3xl p-8 mb-10 border border-slate-100 space-y-4 text-left">
-                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
-                            <span>Payment ID</span>
-                            <span className="text-slate-900 select-all font-mono">{paymentId}</span>
-                        </div>
-                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
-                            <span>Status</span>
-                            <span className="text-emerald-600 flex items-center gap-1">
-                                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                                Success_Confirmed
-                            </span>
-                        </div>
-                        <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-400">
-                            <span>Network Node</span>
-                            <span className="text-slate-900">{name}</span>
+                        <div className="mt-10 flex items-center justify-center gap-3">
+                            <span className="h-px w-8 bg-slate-100"></span>
+                            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300">
+                                End of Transmission
+                            </p>
+                            <span className="h-px w-8 bg-slate-100"></span>
                         </div>
                     </div>
-
-                    <button
-                        onClick={() => {
-                            setIsSuccess(false);
-                            setAmount('100');
-                        }}
-                        className="btn-premium w-full py-6 bg-slate-900 text-white shadow-2xl shadow-rose-950/20 active:scale-95 group flex items-center justify-center gap-4 transition-all hover:bg-slate-800"
-                    >
-                        <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
-                        <span className="uppercase tracking-[0.4em] font-black">Return to Core</span>
-                    </button>
-
-                    <p className="mt-8 text-[10px] font-black uppercase tracking-widest text-slate-300">
-                        Thank you for empowering the next generation of excellence.
-                    </p>
                 </motion.div>
             </div>
         );
     }
+
 
     return (
         <div className="min-h-screen pt-24 pb-20 px-4 md:px-8 bg-slate-50 relative overflow-hidden">
@@ -233,13 +290,38 @@ export default function Donate() {
                         viewport={{ once: true }}
                         className="premium-card bg-white shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)]"
                     >
-                        <div className="bg-slate-900 p-12 text-center relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-rose-600/20 to-transparent"></div>
-                            <div className="relative z-10">
-                                <h2 className="text-3xl font-black text-white tracking-widest uppercase mb-2 italic">Initialization Terminal</h2>
-                                <p className="text-slate-400 font-black uppercase tracking-[0.3em] text-[10px]">Secure Contribution Protocol v4.0</p>
+                        <div className="bg-slate-950 p-12 text-center relative overflow-hidden group">
+                            {/* Animated background lines */}
+                            <div className="absolute inset-0 opacity-10">
+                                <div className="absolute top-0 left-0 w-full h-[1px] bg-rose-500 animate-scanline"></div>
+                                <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_bottom,transparent_0%,rgba(225,29,72,0.1)_50%,transparent_100%)] bg-[length:100%_4px]"></div>
+                            </div>
+                            
+                            <div className="absolute inset-0 bg-gradient-to-br from-rose-600/30 via-transparent to-blue-600/10"></div>
+                            
+                            {/* Glowing corner accents */}
+                            <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-rose-500/30 rounded-tl-3xl group-hover:border-rose-500 transition-colors duration-500"></div>
+                            <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-blue-500/30 rounded-br-3xl group-hover:border-blue-500 transition-colors duration-500"></div>
+
+                            <div className="relative z-10 space-y-2">
+                                <motion.div
+                                    animate={{ opacity: [0.5, 1, 0.5] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                    className="inline-block px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-[8px] text-rose-500 font-black tracking-[0.3em] uppercase mb-2"
+                                >
+                                    System Status: Online
+                                </motion.div>
+                                <h2 className="text-4xl font-black text-white tracking-widest uppercase mb-1 italic leading-none">
+                                    Initialization <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-orange-400 font-black not-italic uppercase">Terminal</span>
+                                </h2>
+                                <div className="flex items-center justify-center gap-4 text-slate-500 font-black uppercase tracking-[0.3em] text-[10px]">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-700 animate-pulse"></span>
+                                    Contribution Protocol v5.0.4
+                                    <span className="w-1.5 h-1.5 rounded-full bg-slate-700 animate-pulse"></span>
+                                </div>
                             </div>
                         </div>
+
 
                         <div className="p-12 md:p-16">
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
