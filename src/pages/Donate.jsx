@@ -77,8 +77,14 @@ export default function Donate() {
             });
             
             if (!orderRes.ok) {
-                const errorData = await orderRes.json().catch(() => ({}));
-                throw new Error(`API Error (${orderRes.status}): ${errorData.details || errorData.error || 'Failed to create order'}`);
+                const text = await orderRes.text();
+                let errorData = {};
+                try {
+                    errorData = JSON.parse(text);
+                } catch (e) {
+                    console.error("Non-JSON Error Response:", text);
+                }
+                throw new Error(`API Error (${orderRes.status}): ${errorData.details || errorData.error || text || 'Failed to create order'}`);
             }
 
             const orderData = await orderRes.json();

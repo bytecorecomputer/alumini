@@ -7,6 +7,9 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
+    let keyId = '';
+    let keySecret = '';
+
     try {
         const { amount } = req.body;
 
@@ -14,8 +17,8 @@ export default async function handler(req, res) {
         const rawKeyId = process.env.VITE_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID || '';
         const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || '';
         
-        const keyId = rawKeyId.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
-        const keySecret = rawKeySecret.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
+        keyId = rawKeyId.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
+        keySecret = rawKeySecret.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
 
 
         console.log('Checking Credentials:', {
