@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
         // Vercel might have VITE_ prefixes or not. Let's check both for maximal robustness.
         const rawKeyId = process.env.VITE_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID || '';
-        const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || '';
+        const rawKeySecret = process.env.VITE_RAZORPAY_KEY_SECRET || process.env.RAZORPAY_KEY_SECRET || '';
         
         keyId = rawKeyId.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
         keySecret = rawKeySecret.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
@@ -89,7 +89,9 @@ export default async function handler(req, res) {
                 keyIdProvided: !!keyId,
                 keySecretProvided: !!keySecret,
                 keyIdPreview: keyId ? `${keyId.substring(0, 8)}...` : 'None',
-                keySecretPreview: keySecret ? `***${keySecret.substring(keySecret.length - 4)}` : 'None',
+                keyIdLength: keyId.length,
+                keySecretLength: keySecret.length,
+                keySecretPreview: keySecret ? `***${keySecret.substring(Math.max(0, keySecret.length - 4))}` : 'None',
                 envKeys: Object.keys(process.env).filter(k => k.includes('RAZORPAY')),
                 requestId: error.headers?.['x-request-id']
             },
