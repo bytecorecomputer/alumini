@@ -11,8 +11,12 @@ export default async function handler(req, res) {
         const { amount } = req.body;
 
         // Vercel might have VITE_ prefixes or not. Let's check both for maximal robustness.
-        const keyId = process.env.VITE_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID;
-        const keySecret = process.env.RAZORPAY_KEY_SECRET;
+        const rawKeyId = process.env.VITE_RAZORPAY_KEY_ID || process.env.RAZORPAY_KEY_ID || '';
+        const rawKeySecret = process.env.RAZORPAY_KEY_SECRET || '';
+        
+        const keyId = rawKeyId.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
+        const keySecret = rawKeySecret.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
+
 
         console.log('Checking Credentials:', {
             hasKeyId: !!keyId,
