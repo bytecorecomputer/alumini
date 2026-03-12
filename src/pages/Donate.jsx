@@ -35,6 +35,13 @@ export default function Donate() {
 
         setIsLoading(true);
 
+        // Validate Key Presence
+        if (!import.meta.env.VITE_RAZORPAY_KEY_ID) {
+            alert("Razorpay Key is missing in client configuration. If you are testing online, please add VITE_RAZORPAY_KEY_ID to Vercel Environment Variables.");
+            setIsLoading(false);
+            return;
+        }
+
         const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
 
         if (!res) {
@@ -50,9 +57,13 @@ export default function Donate() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount: finalAmount })
             });
-            const orderData = await orderRes.json();
+            
+            if (!orderRes.ok) {
+                const errorText = await orderRes.text();
+                throw new Error(`API Error (${orderRes.status}): ${errorText || 'Failed to create order'}`);
+            }
 
-            if (!orderRes.ok) throw new Error(orderData.error || 'Failed to create order');
+            const orderData = await orderRes.json();
 
             // 2. Open Razorpay Checkout
             const options = {

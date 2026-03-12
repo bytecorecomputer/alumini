@@ -52,5 +52,14 @@ export default defineConfig({
   },
   esbuild: {
     drop: ['console', 'debugger'],
-  }
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
+  },
 })
+
