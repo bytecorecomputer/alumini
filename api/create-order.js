@@ -77,6 +77,13 @@ export default async function handler(req, res) {
             error: 'Razorpay API Connection Failed', 
             details: detailedError,
             code: errorCode,
+            debug: {
+                keyIdProvided: !!keyId,
+                keySecretProvided: !!keySecret,
+                keyIdPreview: keyId ? `${keyId.substring(0, 8)}...` : 'None',
+                keySecretPreview: keySecret ? `***${keySecret.substring(keySecret.length - 4)}` : 'None',
+                envKeys: Object.keys(process.env).filter(k => k.includes('RAZORPAY'))
+            },
             raw: error
         });
     }
