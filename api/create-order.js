@@ -31,8 +31,16 @@ export default async function handler(req, res) {
             });
         }
 
-        if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-            return res.status(400).json({ error: 'Invalid amount provided' });
+        // IMPROVEMENT: Robust amount parsing for paise
+        let cleanedAmount = 0;
+        if (typeof amount === 'string') {
+            cleanedAmount = parseFloat(amount.replace(/,/g, ''));
+        } else {
+            cleanedAmount = amount;
+        }
+
+        if (!cleanedAmount || isNaN(cleanedAmount) || cleanedAmount <= 0) {
+            return res.status(400).json({ error: 'Invalid amount provided', received: amount });
         }
 
         const razorpay = new Razorpay({
@@ -41,12 +49,12 @@ export default async function handler(req, res) {
         });
 
         const options = {
-            amount: Math.round(parseFloat(amount) * 100),
+            amount: Math.round(cleanedAmount * 100), // Convert to paise
             currency: "INR",
             receipt: `receipt_${Date.now()}`,
         };
 
-        console.log('Sending request to Razorpay API...');
+        console.log('Sending request to Razorpay API with options:', { ...options, amount: options.amount });
         const order = await razorpay.orders.create(options);
         
         console.log('Order created successfully:', order.id);
@@ -55,18 +63,20 @@ export default async function handler(req, res) {
         console.error('CRITICAL FAILURE in create-order:', error);
         
         let detailedError = 'Unknown error occurred';
+        let errorCode = 'UNKNOWN_ERROR';
+
         if (error.error && error.error.description) {
             detailedError = error.error.description; // Razorpay specific error format
+            errorCode = error.error.code || 'RAZORPAY_ERROR';
         } else if (error.message) {
             detailedError = error.message;
-        } else {
-            detailedError = JSON.stringify(error);
+            errorCode = error.code || 'INTERNAL_ERROR';
         }
 
         return res.status(500).json({ 
             error: 'Razorpay API Connection Failed', 
             details: detailedError,
-            code: error.statusCode || error.code || 'UNKNOWN_ERROR',
+            code: errorCode,
             raw: error
         });
     }

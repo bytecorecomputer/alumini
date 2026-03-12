@@ -34,7 +34,17 @@ export default function Donate() {
     const handlePayment = async (e) => {
         e.preventDefault();
 
-        const finalAmount = amount === 'Custom' ? customAmount : amount.replace('$', '').replace('k', '000');
+        let finalAmount = '0';
+        if (amount === 'Custom') {
+            finalAmount = customAmount;
+        } else {
+            // Fix: Correctly handle $2.5k and other formats
+            finalAmount = amount.replace('$', '').toLowerCase();
+            if (finalAmount.includes('k')) {
+                finalAmount = (parseFloat(finalAmount.replace('k', '')) * 1000).toString();
+            }
+        }
+
         if (!finalAmount || isNaN(finalAmount) || parseFloat(finalAmount) <= 0) {
             alert("Please enter a valid amount");
             return;
