@@ -49,12 +49,24 @@ export default async function handler(req, res) {
         return res.status(200).json(order);
     } catch (error) {
         console.error('CRITICAL FAILURE in create-order:', error);
+        
+        let detailedError = 'Unknown error occurred';
+        if (error.error && error.error.description) {
+            detailedError = error.error.description; // Razorpay specific error format
+        } else if (error.message) {
+            detailedError = error.message;
+        } else {
+            detailedError = JSON.stringify(error);
+        }
+
         return res.status(500).json({ 
             error: 'Razorpay API Connection Failed', 
-            details: error.message,
-            code: error.code || 'UNKNOWN_ERROR'
+            details: detailedError,
+            code: error.statusCode || error.code || 'UNKNOWN_ERROR',
+            raw: error
         });
     }
 }
+
 
 
