@@ -22,6 +22,12 @@ import webLottie from '../assets/lottie/web.json';
 import dataLottie from '../assets/lottie/data.json';
 import pythonLottie from '../assets/lottie/python.json';
 
+// Import Lab Assets
+import rahulSirVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
+import students1 from '../assets/images/computer lab/students (1).jpg';
+import students2 from '../assets/images/computer lab/students (2).jpg';
+import topper1 from '../assets/images/computer lab/scholership exam topper.jpg';
+
 
 const LabGallery = () => {
     const { role } = useAuth();
@@ -31,33 +37,56 @@ const LabGallery = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setLoading(true);
         const q = query(collection(db, 'lab_gallery'), orderBy('createdAt', 'desc'), firestoreLimit(4));
+        
+        // Define Static Items for Preview immediately
+        const staticItems = [
+            {
+                id: 'static-video',
+                title: 'Practical Guidance: Rahul Sir',
+                category: 'lab',
+                imageUrl: rahulSirVideo,
+                type: 'video',
+                featured: true
+            },
+            {
+                id: 'static-1',
+                title: 'Professional Environment',
+                category: 'lab',
+                imageUrl: students1,
+                type: 'image'
+            },
+            {
+                id: 'static-2',
+                title: 'Industry Standards',
+                category: 'lab',
+                imageUrl: students2,
+                type: 'image'
+            },
+            {
+                id: 'static-3',
+                title: 'Achievement Hub',
+                category: 'exam',
+                imageUrl: topper1,
+                type: 'image'
+            }
+        ];
+
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const firestoreItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             
-            // Define Static Items for Preview
-            const staticItems = [
-                {
-                    id: 'static-1',
-                    title: 'Students at Work',
-                    category: 'lab',
-                    imageUrl: '/src/assets/images/computer lab/students (1).jpg',
-                    type: 'image'
-                },
-                {
-                    id: 'static-2',
-                    title: 'Practical Guidance',
-                    category: 'lab',
-                    imageUrl: '/src/assets/images/computer lab/rahul sir teach student.mp4',
-                    type: 'video'
-                }
-            ];
-
-            // Show static first in the home preview
+            // Merge: Static items first to ensure they are always there
+            // We want to make sure the Rahul Sir video is always in the grid
             const combined = [...staticItems, ...firestoreItems].slice(0, 4);
             setDynamicImages(combined);
             setLoading(false);
+        }, (error) => {
+            console.error("Firestore loading error, falling back to static:", error);
+            setDynamicImages(staticItems.slice(0, 4));
+            setLoading(false);
         });
+        
         return () => unsubscribe();
     }, []);
 
