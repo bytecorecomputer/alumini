@@ -59,8 +59,8 @@ export default function Donate() {
             });
             
             if (!orderRes.ok) {
-                const errorText = await orderRes.text();
-                throw new Error(`API Error (${orderRes.status}): ${errorText || 'Failed to create order'}`);
+                const errorData = await orderRes.json().catch(() => ({}));
+                throw new Error(`API Error (${orderRes.status}): ${errorData.details || errorData.error || 'Failed to create order'}`);
             }
 
             const orderData = await orderRes.json();

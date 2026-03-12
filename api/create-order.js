@@ -9,30 +9,40 @@ export default async function handler(req, res) {
     try {
         const { amount } = req.body;
 
+        const keyId = process.env.VITE_RAZORPAY_KEY_ID;
+        const keySecret = process.env.RAZORPAY_KEY_SECRET;
+
+        if (!keyId || !keySecret) {
+            return res.status(500).json({ 
+                error: 'Configuration Error', 
+                details: `Razorpay keys are missing on the server. KeyID: ${!!keyId}, Secret: ${!!keySecret}` 
+            });
+        }
+
         if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
             return res.status(400).json({ error: 'Invalid amount' });
         }
 
         const razorpay = new Razorpay({
-            key_id: process.env.VITE_RAZORPAY_KEY_ID,
-            key_secret: process.env.RAZORPAY_KEY_SECRET,
+            key_id: keyId,
+            key_secret: keySecret,
         });
 
         const options = {
-            amount: Math.round(parseFloat(amount) * 100), // amount in the smallest currency unit (paise)
+            amount: Math.round(parseFloat(amount) * 100),
             currency: "INR",
             receipt: `receipt_${Date.now()}`,
         };
 
         const order = await razorpay.orders.create(options);
-
-        if (!order) {
-            return res.status(500).json({ error: 'Failed to create Razorpay order' });
-        }
-
         return res.status(200).json(order);
     } catch (error) {
         console.error('Error in create-order:', error);
-        return res.status(500).json({ error: 'Internal Server Error', details: error.message });
+        return res.status(500).json({ 
+            error: 'Razorpay Order Creation Failed', 
+            details: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
     }
 }
+
