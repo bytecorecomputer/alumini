@@ -132,19 +132,21 @@ export default function QuizModule({ student }) {
 
         const moduleIdentifier = `${studentCourse}|${activeCourseKey}|${activeSubModule}`;
 
-        if (passed && student?.registration) {
+        const allSubModules = Object.keys(courseData[activeCourseKey].modules);
+        const isFirstModule = allSubModules.indexOf(activeSubModule) === 0;
+
+        if ((passed || isFirstModule) && student?.registration) {
             await markModuleCompleted(student.registration, moduleIdentifier, finalScore);
             // Refresh local state
             const newData = await getStudentQuizProgress(student.registration);
             if (newData) setProgress(newData);
 
             // Check if entire topic (e.g., MS Word) is completed
-            const allSubModules = Object.keys(courseData[activeCourseKey].modules);
-            const completedCount = allSubModules.filter(sub => newData.completedModules.includes(`${studentCourse}|${activeCourseKey}|${sub}`)).length;
+            const completedCount = allSubModules.filter(sub => (newData.completedModules || []).includes(`${studentCourse}|${activeCourseKey}|${sub}`)).length;
 
             if (completedCount === allSubModules.length) {
                 const badgeIdentifier = `${studentCourse} - ${activeCourseKey} Master`;
-                if (!newData.unlockedBadges.includes(badgeIdentifier)) {
+                if (!(newData.unlockedBadges || []).includes(badgeIdentifier)) {
                     await awardMasterBadge(student.registration, badgeIdentifier);
                     setView('badge'); // Show the reward
                     setSaving(false);

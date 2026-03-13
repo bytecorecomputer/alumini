@@ -9,666 +9,126 @@ export const HINDI_QUIZ_DATA = {
             "modules": {
                 "Home & Edit": [
                     {
-                        "question": "MS Word क्या है?",
-                        "options": [
-                            "सॉफ्टवेयर",
-                            "हार्डवेयर",
-                            "प्रिंटर",
-                            "माउस"
-                        ],
+                        "question": "MS Word में टेक्स्ट को बोल्ड (Bold) करने के लिए कौन सी शॉर्टकट की है?",
+                        "options": ["Ctrl+B", "Ctrl+I", "Ctrl+U", "Ctrl+X"],
                         "correctAnswer": 0,
-                        "explanation": "यह एक वर्ड प्रोसेसिंग सॉफ्टवेयर है।"
+                        "explanation": "Ctrl+B टेक्स्ट को बोल्ड (मोटा) करने के लिए उपयोग किया जाता है।"
                     },
                     {
-                        "question": "वर्ड में अधिकतम ज़ूम कितना होता है?",
-                        "options": [
-                            "100%",
-                            "200%",
-                            "400%",
-                            "500%"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "अधिकतम 500% तक ज़ूम कर सकते हैं।"
-                    },
-                    {
-                        "question": "डिफ़ॉल्ट रूप से डॉक्यूमेंट का नाम क्या होता है?",
-                        "options": [
-                            "Document1",
-                            "Sheet1",
-                            "Slide1",
-                            "Untitled"
-                        ],
+                        "question": "किसी टेक्स्ट को तिरछा (Italic) करने के लिए कौन सी कुंजी दबाते हैं?",
+                        "options": ["Ctrl+I", "Ctrl+B", "Ctrl+U", "Ctrl+Z"],
                         "correctAnswer": 0,
-                        "explanation": "यह Document1 के नाम से शुरू होता है।"
+                        "explanation": "Ctrl+I टेक्स्ट को इटैलिक बनाने के लिए है।"
                     },
                     {
-                        "question": "सुपरस्क्रिप्ट (X²) के लिए सही उदाहरण है?",
-                        "options": [
-                            "H2O",
-                            "X2",
-                            "Math",
-                            "Science"
-                        ],
-                        "correctAnswer": 1,
-                        "explanation": "पावर में लिखने को सुपरस्क्रिप्ट कहते हैं।"
-                    },
-                    {
-                        "question": "मेल मर्ज (Mail Merge) किस काम आता है?",
-                        "options": [
-                            "ईमेल के लिए",
-                            "एक लेटर कई लोगों को भेजने के लिए",
-                            "पेंटिंग के लिए",
-                            "गेमिंग"
-                        ],
-                        "correctAnswer": 1,
-                        "explanation": "यह बल्क लेटर टाइपिंग के लिए है।"
-                    },
-                    {
-                        "question": "पेज ओरिएंटेशन (Orientation) के दो प्रकार कौन से हैं?",
-                        "options": [
-                            "Portrait & Landscape",
-                            "Top & Bottom",
-                            "Left & Right",
-                            "Inside & Outside"
-                        ],
+                        "question": "टेक्स्ट के नीचे लाइन (Underline) खींचने के लिए शॉर्टकट क्या है?",
+                        "options": ["Ctrl+U", "Ctrl+S", "Ctrl+L", "Ctrl+R"],
                         "correctAnswer": 0,
-                        "explanation": "पेज का टेढ़ा या सीधा होना।"
+                        "explanation": "Ctrl+U से अंडरलाइन आती है।"
                     },
                     {
-                        "question": "हेडर (Header) पेज में कहाँ होता है?",
-                        "options": [
-                            "Top",
-                            "Bottom",
-                            "Middle",
-                            "Left"
-                        ],
+                        "question": "MS Word में 'Center Align' के लिए कौन सी शॉर्टकट की है?",
+                        "options": ["Ctrl+E", "Ctrl+C", "Ctrl+R", "Ctrl+L"],
                         "correctAnswer": 0,
-                        "explanation": "हेडर हमेशा पेज के सबसे ऊपर होता है।"
+                        "explanation": "Ctrl+E टेक्स्ट को बीच में अलाइन करता है।"
                     },
                     {
-                        "question": "फुटर (Footer) पेज में कहाँ होता है?",
-                        "options": [
-                            "Top",
-                            "Bottom",
-                            "Left",
-                            "Right"
-                        ],
-                        "correctAnswer": 1,
-                        "explanation": "फुटर हमेशा पेज के सबसे नीचे होता है।"
-                    },
-                    {
-                        "question": "वाटरमार्क (Watermark) क्यों उपयोग करते हैं?",
-                        "options": [
-                            "बैकग्राउंड में हल्का टेक्स्ट दिखाने के लिए",
-                            "फोटो के लिए",
-                            "डिलीट करने के लिए",
-                            "कलर के लिए"
-                        ],
+                        "question": "कॉपी किए गए टेक्स्ट को चिपकाने (Paste) के लिए क्या दबाते हैं?",
+                        "options": ["Ctrl+V", "Ctrl+P", "Ctrl+X", "Ctrl+C"],
                         "correctAnswer": 0,
-                        "explanation": "सुरक्षा या ब्रांडिंग के लिए।"
+                        "explanation": "Ctrl+V का उपयोग पेस्ट करने के लिए होता है।"
                     },
                     {
-                        "question": "हाइपरलिंक (Hyperlink) का क्या काम है?",
-                        "options": [
-                            "फाइल जोड़ने के लिए",
-                            "लिंक बनाने के लिए",
-                            "वेबसाइट खोलने के लिए",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "यह अन्य रिसोर्स से जोड़ने का काम करता है।"
+                        "question": "पूरे डॉक्यूमेंट को एक साथ सिलेक्ट (Select All) करने की की क्या है?",
+                        "options": ["Ctrl+A", "Ctrl+S", "Alt+A", "Shift+A"],
+                        "correctAnswer": 0,
+                        "explanation": "Ctrl+A से सब कुछ सिलेक्ट हो जाता है।"
                     },
                     {
-                        "question": "MS Word Theory Q11: वर्ड में Macro का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "फोंट साइज (Font Size) बढ़ाने के लिए कौन सी शॉर्टकट की है?",
+                        "options": ["Ctrl+Shift+>", "Ctrl+Shift+<", "Ctrl+F", "Ctrl+H"],
+                        "correctAnswer": 0,
+                        "explanation": "Ctrl+Shift+> से फोंट साइज बढ़ता है।"
                     },
                     {
-                        "question": "MS Word Theory Q12: वर्ड में Template का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "गलती सुधारने (Undo) के लिए क्या दबाते हैं?",
+                        "options": ["Ctrl+Z", "Ctrl+Y", "Ctrl+U", "Ctrl+D"],
+                        "correctAnswer": 0,
+                        "explanation": "Ctrl+Z पिछली क्रिया को वापस लाता है।"
                     },
                     {
-                        "question": "MS Word Theory Q13: वर्ड में Style का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "किसी शब्द को ढूंढने (Find) के लिए शॉर्टकट क्या है?",
+                        "options": ["Ctrl+F", "Ctrl+H", "Ctrl+G", "Ctrl+K"],
+                        "correctAnswer": 0,
+                        "explanation": "Ctrl+F का उपयोग शब्द खोजने के लिए होता है।"
                     },
                     {
-                        "question": "MS Word Theory Q14: वर्ड में Theme का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q15: वर्ड में Margins का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q16: वर्ड में Columns का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q17: वर्ड में Table का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q18: वर्ड में Shapes का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q19: वर्ड में SmartArt का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q20: वर्ड में Chart का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q21: वर्ड में Caption का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q22: वर्ड में Footnote का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q23: वर्ड में Endnote का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q24: वर्ड में Citation का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q25: वर्ड में Bibliography का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q26: वर्ड में Index का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q27: वर्ड में TOC का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q28: वर्ड में Cover Page का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q29: वर्ड में Blank Page का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q30: वर्ड में Page Break का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "शब्द को बदलने (Replace) के लिए कौन सी कुंजी है?",
+                        "options": ["Ctrl+H", "Ctrl+F", "Ctrl+R", "Ctrl+B"],
+                        "correctAnswer": 0,
+                        "explanation": "Ctrl+H से फाइंड एंड रिप्लेस खुलता है।"
                     }
                 ],
                 "Insert & Layout": [
                     {
-                        "question": "MS Word Theory Q31: वर्ड में Macro का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "टेबल (Table) इंसर्ट करने का विकल्प किस टैब में होता है?",
+                        "options": ["Insert", "Home", "Layout", "Design"],
+                        "correctAnswer": 0,
+                        "explanation": "टेबल इंसर्ट करने के लिए 'Insert' टैब का उपयोग करते हैं।"
                     },
                     {
-                        "question": "MS Word Theory Q32: वर्ड में Template का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "हेडर और फुटर (Header & Footer) किस टैब में मिलते हैं?",
+                        "options": ["Insert", "View", "Home", "Design"],
+                        "correctAnswer": 0,
+                        "explanation": "ये विकल्प Insert टैब में उपलब्ध हैं।"
                     },
                     {
-                        "question": "MS Word Theory Q33: वर्ड में Style का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "पेज ओरिएंटेशन (Orientation) के दो प्रकार कौन से हैं?",
+                        "options": ["Portrait & Landscape", "Top & Bottom", "Left & Right", "Inside & Outside"],
+                        "correctAnswer": 0,
+                        "explanation": "पेज को सीधा या लेटा हुआ रखने के लिए ये दो विकल्प होते हैं।"
                     },
                     {
-                        "question": "MS Word Theory Q34: वर्ड में Theme का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "नया पेज शुरू करने (Page Break) की शॉर्टकट की क्या है?",
+                        "options": ["Ctrl+Enter", "Alt+Enter", "Shift+Enter", "Ctrl+N"],
+                        "correctAnswer": 0,
+                        "explanation": "Ctrl+Enter से नया पेज तुरंत शुरू हो जाता है।"
                     },
                     {
-                        "question": "MS Word Theory Q35: वर्ड में Margins का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "पेज मार्जिन (Margins) सेटिंग किस टैब में होती है?",
+                        "options": ["Layout", "Insert", "Home", "Review"],
+                        "correctAnswer": 0,
+                        "explanation": "Layout टैब में पेज की मार्जिन सेट की जाती है।"
                     },
                     {
-                        "question": "MS Word Theory Q36: वर्ड में Columns का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "डॉक्यूमेंट के बैकग्राउंड में हल्का टेक्स्ट (Watermark) कहाँ से लगाते हैं?",
+                        "options": ["Design/Layout", "Home", "View", "References"],
+                        "correctAnswer": 0,
+                        "explanation": "वाटरमार्क Design या Layout टैब में मिलता है।"
                     },
                     {
-                        "question": "MS Word Theory Q37: वर्ड में Table का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "न्यूज़पेपर की तरह टेक्स्ट को 2 या 3 Columns में कहाँ से बदलते हैं?",
+                        "options": ["Layout", "Insert", "Design", "Review"],
+                        "correctAnswer": 0,
+                        "explanation": "Layout टैब में Columns का विकल्प होता है।"
                     },
                     {
-                        "question": "MS Word Theory Q38: वर्ड में Shapes का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "पिक्चर (Picture) इंसर्ट करने के लिए कौन सा टैब बेस्ट है?",
+                        "options": ["Insert", "Home", "View", "Format"],
+                        "correctAnswer": 0,
+                        "explanation": "Insert टैब से फोटो या चित्र जोड़ सकते हैं।"
                     },
                     {
-                        "question": "MS Word Theory Q39: वर्ड में SmartArt का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "पेज नंबर (Page Number) डालने का विकल्प कहाँ मिलता है?",
+                        "options": ["Insert", "Home", "Layout", "File"],
+                        "correctAnswer": 0,
+                        "explanation": "Insert टैब में Header/Footer के साथ Page Number होता है।"
                     },
                     {
-                        "question": "MS Word Theory Q40: वर्ड में Chart का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q41: वर्ड में Caption का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q42: वर्ड में Footnote का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q43: वर्ड में Endnote का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q44: वर्ड में Citation का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q45: वर्ड में Bibliography का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q46: वर्ड में Index का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q47: वर्ड में TOC का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q48: वर्ड में Cover Page का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q49: वर्ड में Blank Page का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q50: वर्ड में Page Break का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q51: वर्ड में Macro का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q52: वर्ड में Template का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q53: वर्ड में Style का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q54: वर्ड में Theme का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q55: वर्ड में Margins का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q56: वर्ड में Columns का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q57: वर्ड में Table का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q58: वर्ड में Shapes का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q59: वर्ड में SmartArt का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
-                    },
-                    {
-                        "question": "MS Word Theory Q60: वर्ड में Chart का क्या महत्व है?",
-                        "options": [
-                            "महत्वपूर्ण टूल",
-                            "डिजाइन टूल",
-                            "फॉर्मेटिंग टूल",
-                            "सभी"
-                        ],
-                        "correctAnswer": 3,
-                        "explanation": "MS Word में कुशलता के लिए ये सभी टूल्स जरूरी हैं।"
+                        "question": "किताबों की तरह इंडेक्स बनाने के लिए (Table of Contents) किस टैब का उपयोग होता है?",
+                        "options": ["References", "Insert", "Layout", "Review"],
+                        "correctAnswer": 0,
+                        "explanation": "References टैब का उपयोग इंडेक्स (TOC) बनाने के लिए किया जाता है।"
                     }
                 ],
                 "Shortcut Keys": [
