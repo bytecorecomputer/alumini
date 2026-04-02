@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../app/common/AuthContext';
 import QuizModule from '../components/student/QuizModule';
-import { COURSE_CURRICULUM, QUIZ_BANK } from '../lib/quizData';
+import { QUIZ_BANK } from '../lib/quizData';
 import { uploadToSupabase } from '../lib/supabase';
 import { db } from '../firebase/firestore';
 import { doc, updateDoc, collection, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
@@ -17,21 +17,23 @@ import { cn } from '../lib/utils';
 
 import { compressImage } from '../lib/imageCompression';
 
+// Remove unused imports like COURSE_CURRICULUM from quizData inside StudentPortal.
+import { useDispatch, useSelector } from 'react-redux';
+import { setStudentCourse, selectActiveCourseModules } from '../app/store/courseSlice';
+
 export default function StudentPortal() {
     const { student, logoutStudent } = useAuth();
     const [activeTab, setActiveTab] = useState('overview');
+    
+    // REDUX SETUP
+    const dispatch = useDispatch();
+    const courseModules = useSelector(selectActiveCourseModules) || [];
 
-    // Resolve course modules
-    const courseModules = useMemo(() => {
-        if (!student?.course) return [];
-        // Support both exact match and fuzzy match (like ADCA+ or ADCA)
-        let courseKey = student.course;
-        if (!COURSE_CURRICULUM[courseKey]) {
-            courseKey = Object.keys(COURSE_CURRICULUM).find(k => student.course.includes(k)) || "DCA";
+    useEffect(() => {
+        if (student?.course) {
+            dispatch(setStudentCourse(student.course));
         }
-        const modules = COURSE_CURRICULUM[courseKey] || [];
-        return modules.map(id => ({ id, ...QUIZ_BANK[id] })).filter(m => m.title);
-    }, [student?.course]);
+    }, [student?.course, dispatch]);
 
     const [resources, setResources] = useState([]);
     const [resourcesLoading, setResourcesLoading] = useState(true);

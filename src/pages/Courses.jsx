@@ -199,6 +199,8 @@ const Courses = () => {
                                                 <img
                                                     src={course.image.startsWith('/') || course.image.startsWith('http') ? course.image : `/${course.image}`}
                                                     alt={course.title}
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                                 />
                                             ) : (

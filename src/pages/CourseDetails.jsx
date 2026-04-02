@@ -136,7 +136,7 @@ const CourseDetails = () => {
                 <div className="absolute inset-0 z-0">
                     {course.image ? (
                         <>
-                            <img src={course.image.startsWith('/') || course.image.startsWith('http') ? course.image : `/${course.image}`} alt={course.title} className="w-full h-full object-cover opacity-20" />
+                            <img src={course.image.startsWith('/') || course.image.startsWith('http') ? course.image : `/${course.image}`} alt={course.title} loading="lazy" decoding="async" className="w-full h-full object-cover opacity-20" />
                             <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900/70"></div>
                         </>
                     ) : (
@@ -293,7 +293,7 @@ const CourseDetails = () => {
                             {/* Card Image */}
                             <div className="h-56 bg-slate-100 relative">
                                 {course.image ? (
-                                    <img src={course.image.startsWith('/') || course.image.startsWith('http') ? course.image : `/${course.image}`} alt={course.title} className="w-full h-full object-cover" />
+                                    <img src={course.image.startsWith('/') || course.image.startsWith('http') ? course.image : `/${course.image}`} alt={course.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                                 ) : (
                                     <div className="w-full h-full bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
                                         <BookMarked className="w-20 h-20 text-slate-200" />

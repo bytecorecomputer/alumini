@@ -1,23 +1,24 @@
-
-export const COURSE_CURRICULUM = {
-    "MDCA": ["ms_office", "tally", "photoshop", "coreldraw", "python", "internet_basics", "hardware"],
-    "ADCA": ["ms_office", "tally", "photoshop", "internet_basics", "hardware"],
-    "ADCA+": ["ms_office", "tally", "photoshop", "coreldraw", "python", "web_design", "internet_basics", "hardware"],
-    "Accounting": ["tally", "busy", "marg", "advanced_excel", "taxation"],
-    "CCC": ["libreoffice", "iot_fundamentals", "internet_basics", "digital_financial"],
-    "DCST": ["ms_office", "internet_basics"],
-    "DCA": ["ms_office", "typing_theory", "internet_basics"],
-    "C": ["c_programming"],
-    "Special": ["ms_office", "tally", "photoshop", "coreldraw", "python", "libreoffice", "iot_fundamentals", "busy", "marg", "hardware"]
-};
-
-export const MODULE_EXPANSION = {
-    "ms_office": ["ms_word", "ms_excel", "ms_powerpoint"],
-    "libreoffice": ["libre_writer", "libre_calc", "libre_impress"],
-    "internet_basics": ["internet_basics"]
-};
+// Course curriculums are now managed via Redux globally.
 
 export const QUIZ_BANK = {
+    // --- FUNDAMENTALS & OS ---
+    "intro_windows": {
+        title: "Windows Intro", description: "Operating System Basics", icon: "Monitor", color: "blue", questions: []
+    },
+    "typing": {
+        title: "Hindi & English Typing", description: "Keyboard Layouts", icon: "Keyboard", color: "slate", questions: []
+    },
+    
+    // --- LIBRE OFFICE ---
+    "libre_writer": {
+        title: "Libre Writer", description: "Word Processing", icon: "FileText", color: "blue", questions: []
+    },
+    "libre_calc": {
+        title: "Libre Calc", description: "Spreadsheets", icon: "Table", color: "emerald", questions: []
+    },
+    "libre_impress": {
+        title: "Libre Impress", description: "Presentations", icon: "Presentation", color: "orange", questions: []
+    },
     // --- MS OFFICE (Word, Excel, PPT) ---
     "ms_word": {
         title: "MS Word", description: "Document Processing", icon: "FileText", color: "blue", questions: [
