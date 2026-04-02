@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
     Clock, Users, BookOpen, Star, CheckCircle, Target,
-    ArrowRight, BookMarked, Download, FileText, Link as LinkIcon, AlertCircle, Loader2
+    ArrowRight, BookMarked, Download, FileText, Link as LinkIcon, AlertCircle, Loader2,
+    Laptop, Code, Table, Presentation, Image as ImageIcon, PenTool, Calculator, Activity, Wifi, ShoppingBag, Book, Monitor, Keyboard
 } from 'lucide-react';
 import { courses as localCourses } from '../data/courses';
 import { doc, getDoc } from 'firebase/firestore';
@@ -11,7 +12,6 @@ import { db } from '../firebase/firestore';
 import SEO from '../components/common/SEO';
 import { COURSE_MODULES_MAP } from '../data/curriculum';
 import { QUIZ_BANK } from '../lib/quizData';
-import { Laptop, Code, FileText, Table, Presentation, Image as ImageIcon, PenTool, Calculator, Activity, Wifi, ShoppingBag, Book, Monitor, Keyboard } from 'lucide-react';
 
 const ICON_MAP = {
     Monitor, Keyboard, FileText, Table, Presentation, ImageIcon, PenTool, Code, Activity, Wifi, Calculator, ShoppingBag, Book
