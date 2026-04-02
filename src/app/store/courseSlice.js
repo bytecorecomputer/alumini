@@ -1,17 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { QUIZ_BANK } from '../../lib/quizData';
-
-// Explicit curriculum definitions map based on the exact user requirements.
-export const COURSE_MODULES_MAP = {
-    ADCA: ['ms_word', 'ms_excel', 'ms_powerpoint', 'tally', 'photoshop', 'intro_windows'],
-    MDCA: ['ms_word', 'ms_excel', 'ms_powerpoint', 'tally', 'photoshop', 'coreldraw', 'python', 'typing'],
-    DCA: ['ms_word', 'ms_excel', 'ms_powerpoint', 'typing'],
-    DCST: ['ms_word', 'ms_excel', 'ms_powerpoint'],
-    CCC: ['libre_writer', 'libre_impress', 'libre_calc', 'iot_fundamentals'],
-    'O Level': ['python', 'web_design', 'iot_fundamentals'],
-    // For fuzzy matching like ADCA+ or just defaults
-    default: ['ms_word', 'internet_basics'] 
-};
+import { COURSE_MODULES_MAP } from '../../data/curriculum';
 
 // Initial state
 const initialState = {

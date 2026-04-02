@@ -9,6 +9,13 @@ import { courses as localCourses } from '../data/courses';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import SEO from '../components/common/SEO';
+import { COURSE_MODULES_MAP } from '../data/curriculum';
+import { QUIZ_BANK } from '../lib/quizData';
+import { Laptop, Code, FileText, Table, Presentation, Image as ImageIcon, PenTool, Calculator, Activity, Wifi, ShoppingBag, Book, Monitor, Keyboard } from 'lucide-react';
+
+const ICON_MAP = {
+    Monitor, Keyboard, FileText, Table, Presentation, ImageIcon, PenTool, Code, Activity, Wifi, Calculator, ShoppingBag, Book
+};
 
 const CourseDetails = () => {
     const { id } = useParams();
@@ -248,39 +255,76 @@ const CourseDetails = () => {
                             </div>
                         </div>
 
-                        {/* Syllabus Accordion / Outline */}
-                        <div className="bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-slate-100">
-                            <div className="flex items-center justify-between mb-8">
-                                <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-                                    <FileText className="text-blue-600 w-8 h-8" />
-                                    Course Syllabus
-                                </h2>
-                                <span className="text-xs font-black uppercase tracking-widest text-slate-400 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                                    {(course.syllabus?.length || 0)} Modules
+                        {/* Syllabus / Module Grid */}
+                        <div className="bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-slate-100 mb-10">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
+                                <div className="max-w-xl">
+                                    <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-none mb-4">
+                                        Course <span className="text-blue-600">Syllabus</span>.
+                                    </h2>
+                                    <p className="text-slate-500 font-medium text-sm">Comprehensive modules designed to take you from absolute beginner to industry expert.</p>
+                                </div>
+                                <span className="px-5 py-2.5 bg-blue-50 text-blue-600 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-blue-100 self-start md:self-center">
+                                    {(() => {
+                                        let courseKey = id.toUpperCase();
+                                        if (!COURSE_MODULES_MAP[courseKey]) {
+                                            courseKey = Object.keys(COURSE_MODULES_MAP).find(k => id.toLowerCase().includes(k.toLowerCase())) || "default";
+                                        }
+                                        return COURSE_MODULES_MAP[courseKey].length;
+                                    })()} Core Modules
                                 </span>
                             </div>
 
-                            <div className="space-y-4">
-                                {course.syllabus && course.syllabus.length > 0 ? (
-                                    course.syllabus.map((syl, idx) => (
-                                        <div key={idx} className="border border-slate-100 rounded-2xl p-6 hover:shadow-md hover:border-blue-200 transition-all group bg-slate-50/50 hover:bg-white">
-                                            <div className="flex gap-6 items-start">
-                                                <div className="w-12 h-12 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center font-black text-xl group-hover:bg-blue-600 group-hover:text-white transition-colors shrink-0">
-                                                    {idx + 1}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {(() => {
+                                    let courseKey = id.toUpperCase();
+                                    if (!COURSE_MODULES_MAP[courseKey]) {
+                                        courseKey = Object.keys(COURSE_MODULES_MAP).find(k => id.toLowerCase().includes(k.toLowerCase())) || "default";
+                                    }
+                                    const modulesList = COURSE_MODULES_MAP[courseKey] || [];
+                                    
+                                    return modulesList.map((modId, idx) => {
+                                        const modData = QUIZ_BANK[modId] || { title: modId.replace('_', ' ').toUpperCase(), description: 'Study material', icon: 'Book', color: 'blue' };
+                                        const IconComponent = ICON_MAP[modData.icon] || Book;
+
+                                        return (
+                                            <motion.div
+                                                key={modId}
+                                                initial={{ opacity: 0, y: 20 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                viewport={{ once: true }}
+                                                transition={{ delay: idx * 0.05 }}
+                                                className="group p-8 rounded-[2.5rem] bg-slate-50 border border-slate-100 hover:bg-white hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1 transition-all duration-300"
+                                            >
+                                                <div className="flex items-start gap-6">
+                                                    <div className={cn(
+                                                        "h-14 w-14 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:rotate-6 transition-transform",
+                                                        modData.color === 'blue' ? 'bg-blue-600' :
+                                                        modData.color === 'emerald' ? 'bg-emerald-600' :
+                                                        modData.color === 'orange' ? 'bg-orange-600' :
+                                                        modData.color === 'green' ? 'bg-green-600' :
+                                                        modData.color === 'yellow' ? 'bg-yellow-500' :
+                                                        modData.color === 'slate' ? 'bg-slate-600' :
+                                                        modData.color === 'indigo' ? 'bg-indigo-600' :
+                                                        modData.color === 'cyan' ? 'bg-cyan-600' :
+                                                        modData.color === 'teal' ? 'bg-teal-600' :
+                                                        modData.color === 'red' ? 'bg-red-600' : 'bg-blue-600'
+                                                    )}>
+                                                        <IconComponent size={28} />
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Module {idx + 1}</span>
+                                                            {idx === 0 && <span className="px-2 py-0.5 bg-emerald-100 text-emerald-600 text-[8px] font-black rounded-md uppercase tracking-tighter">Foundation</span>}
+                                                        </div>
+                                                        <h4 className="text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors">{modData.title}</h4>
+                                                        <p className="text-slate-500 text-sm font-medium mt-2 leading-relaxed">{modData.description}</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h4 className="text-lg font-black text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">{syl.module || `Module ${idx + 1}`}</h4>
-                                                    <p className="text-slate-500 text-sm font-medium leading-relaxed">{syl.details || "Comprehensive practical covering essential foundations and advanced problem solving patterns."}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="text-center py-12 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                                        <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                                        <p className="text-slate-500 font-bold max-w-sm mx-auto">Detailed curriculum information is being updated by the instructors. Check back soon for full module breakdowns.</p>
-                                    </div>
-                                )}
+                                            </motion.div>
+                                        );
+                                    });
+                                })()}
                             </div>
                         </div>
 

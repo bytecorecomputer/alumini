@@ -15,6 +15,14 @@ import { useAuth } from '../app/common/AuthContext';
 import { runMigration } from '../lib/migrateStudents';
 import { cn } from '../lib/utils';
 import { courses as localCourses } from '../data/courses';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import 'swiper/css/effect-fade';
 
 // Import Lottie Animations
 import heroLottie from '../assets/lottie/hero.json';
@@ -374,83 +382,105 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* --- BENTO GRID FEATURES (Modern Feature) --- */}
-            <div className="py-32 bg-white px-6">
-                <div className="max-w-7xl mx-auto">
+            {/* --- PREMIUM FEATURE SLIDER (Replacement for Bento Grid) --- */}
+            <div className="py-32 bg-white relative overflow-hidden">
+                <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
                         <div className="max-w-3xl">
-                            <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em] mb-4 block underline underline-offset-8 decoration-2 decoration-blue-100">Why Choose The Lab?</span>
-                            <h2 className="text-4xl md:text-6xl font-[1000] text-slate-900 tracking-tight leading-[0.95]">Design your future with <span className="text-blue-600">Enterprise Standards</span>.</h2>
+                            <motion.span 
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em] mb-4 block underline underline-offset-8 decoration-2 decoration-blue-100"
+                            >
+                                Why Choose The Lab?
+                            </motion.span>
+                            <motion.h2 
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                className="text-4xl md:text-6xl font-[1000] text-slate-900 tracking-tight leading-[0.95]"
+                            >
+                                Design your future with <span className="text-blue-600">Enterprise Standards</span>.
+                            </motion.h2>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                        {/* Big Card 1 */}
-                        <motion.div
-                            whileHover={{ y: -8 }}
-                            className="md:col-span-2 md:row-span-2 p-12 rounded-[3.5rem] bg-slate-50 text-slate-900 relative overflow-hidden group border border-slate-100 shadow-sm"
-                        >
-                            <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity duration-700">
-                                <Database size={240} />
-                            </div>
-                            <div className="relative z-10 flex flex-col h-full">
-                                <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-10 shadow-xl shadow-blue-500/20 text-white">
-                                    <Zap size={32} />
-                                </div>
-                                <h3 className="text-4xl font-black mb-6 tracking-tight">Enterprise Lab Facility</h3>
-                                <p className="text-slate-500 font-medium text-xl leading-relaxed max-w-sm mb-12">Access high-performance workstations and professional dev environments used by top tech firms.</p>
-                                <div className="mt-auto flex items-center gap-6">
-                                    <div className="flex -space-x-4">
-                                        {[1, 2, 3].map(i => <div key={i} className="w-12 h-12 rounded-full border-4 border-white bg-slate-200 flex items-center justify-center text-[10px] font-black text-slate-400">ST</div>)}
+                    <Swiper
+                        spaceBetween={30}
+                        centeredSlides={true}
+                        autoplay={{
+                            delay: 4000,
+                            disableOnInteraction: false,
+                        }}
+                        pagination={{
+                            clickable: true,
+                            dynamicBullets: true,
+                        }}
+                        navigation={true}
+                        modules={[Autoplay, Pagination, Navigation]}
+                        className="featureSwiper rounded-[3.5rem] !pb-16"
+                    >
+                        {[
+                            {
+                                title: "Enterprise Lab Facility",
+                                desc: "Access high-performance workstations and professional dev environments used by top tech firms with dedicated gigabit connectivity.",
+                                icon: <Zap size={32} />,
+                                color: "bg-blue-600",
+                                shadow: "shadow-blue-500/20",
+                                extra: "30+ High-End Workstations"
+                            },
+                            {
+                                title: "ISO Certified Excellence",
+                                desc: "Global recognition for your technical skills with our ISO verified certifications that opening doors to international career opportunities.",
+                                icon: <Award size={32} />,
+                                color: "bg-indigo-600",
+                                shadow: "shadow-indigo-500/20",
+                                extra: "Verified Professional Credential"
+                            },
+                            {
+                                title: "Direct Industry Mentorship",
+                                desc: "Learn from instructors with 10+ years of industry experience building software for fortune 500 companies and leading startups.",
+                                icon: <Users size={32} />,
+                                color: "bg-purple-600",
+                                shadow: "shadow-purple-500/20",
+                                extra: "Personalized Career Coaching"
+                            },
+                            {
+                                title: "Real-World Architecture",
+                                desc: "Build production-grade applications to populate your professional engineering portfolio with code reviews and deployment cycles.",
+                                icon: <Laptop size={32} />,
+                                color: "bg-slate-900",
+                                shadow: "shadow-slate-500/20",
+                                extra: "Build-to-Learn Philosophy"
+                            }
+                        ].map((feature, idx) => (
+                            <SwiperSlide key={idx}>
+                                <div className="p-10 md:p-16 rounded-[3.5rem] bg-slate-50 border border-slate-100 flex flex-col md:flex-row items-center gap-12 min-h-[450px]">
+                                    <div className="flex-1">
+                                        <div className={cn("w-20 h-20 rounded-2xl flex items-center justify-center mb-10 text-white shadow-2xl", feature.color, feature.shadow)}>
+                                            {feature.icon}
+                                        </div>
+                                        <h3 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">{feature.title}</h3>
+                                        <p className="text-slate-500 font-medium text-xl leading-relaxed max-w-xl mb-10">
+                                            {feature.desc}
+                                        </p>
+                                        <div className="flex items-center gap-4">
+                                            <div className="px-5 py-2 bg-white/80 backdrop-blur-md rounded-full border border-slate-200 text-[10px] font-black uppercase tracking-widest text-blue-600 shadow-sm">
+                                                {feature.extra}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Trusted by over 1,000 students</span>
+                                    <div className="hidden md:block flex-1 h-full">
+                                        <div className="w-full h-full bg-white rounded-[3rem] border border-slate-100 shadow-inner overflow-hidden relative group">
+                                            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-purple-600/5 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                                            <div className="absolute inset-0 flex items-center justify-center p-12">
+                                                {React.cloneElement(feature.icon, { size: 180, className: "text-slate-100 group-hover:scale-110 transition-transform duration-1000" })}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Small Card 1 */}
-                        <motion.div
-                            whileHover={{ y: -8 }}
-                            className="p-10 rounded-[3rem] bg-white border border-slate-100 shadow-sm flex flex-col justify-between group hover:shadow-xl transition-all"
-                        >
-                            <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                                <Award size={28} />
-                            </div>
-                            <div>
-                                <h3 className="text-2xl font-black text-slate-900 mb-3 mt-8 tracking-tight">ISO Certified</h3>
-                                <p className="text-slate-500 text-[15px] font-medium leading-relaxed">Global recognition for your technical skills with our ISO verified certifications.</p>
-                            </div>
-                        </motion.div>
-
-                        {/* Small Card 2 */}
-                        <motion.div
-                            whileHover={{ y: -8 }}
-                            className="p-10 rounded-[3rem] bg-white border border-slate-100 shadow-sm flex flex-col justify-between group hover:shadow-xl transition-all"
-                        >
-                            <div className="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
-                                <Users size={28} />
-                            </div>
-                            <div>
-                                <h3 className="text-2xl font-black text-slate-900 mb-3 mt-8 tracking-tight">Direct Mentorship</h3>
-                                <p className="text-slate-500 text-[15px] font-medium leading-relaxed">Learn from instructors with 10+ years of industry experience building software.</p>
-                            </div>
-                        </motion.div>
-
-                        {/* Horizontal Card */}
-                        <motion.div
-                            whileHover={{ y: -8 }}
-                            className="md:col-span-2 p-10 rounded-[3.5rem] bg-slate-900 text-white flex items-center gap-10 relative overflow-hidden group"
-                        >
-                            <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000"></div>
-                            <div className="flex-1 relative z-10">
-                                <h3 className="text-3xl font-black mb-4 tracking-tight">Real-World Projects</h3>
-                                <p className="text-slate-400 text-lg font-medium leading-relaxed">Build production-grade applications to populate your professional engineering portfolio.</p>
-                            </div>
-                            <div className="hidden sm:flex w-28 h-28 bg-white/10 backdrop-blur-xl rounded-3xl items-center justify-center border border-white/10 group-hover:rotate-12 transition-transform shadow-2xl">
-                                <Laptop size={48} className="text-blue-400" />
-                            </div>
-                        </motion.div>
-                    </div>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
                 </div>
             </div>
 
