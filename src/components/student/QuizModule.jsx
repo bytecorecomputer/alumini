@@ -287,7 +287,7 @@ export default function QuizModule({ student }) {
 
                         // Progression logic: require previous to be completed, unless it's the first one
                         const prevIdentifier = idx > 0 ? `${studentCourse}|${activeCourseKey}|${subModules[idx - 1]}` : null;
-                        const isLocked = prevIdentifier ? !progress.completedModules.includes(prevIdentifier) : false;
+                        const isLocked = false; // Unlocked all as requested
 
                         return (
                             <motion.div

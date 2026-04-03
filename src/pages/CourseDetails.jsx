@@ -12,6 +12,7 @@ import { db } from '../firebase/firestore';
 import SEO from '../components/common/SEO';
 import { COURSE_MODULES_MAP } from '../data/curriculum';
 import { QUIZ_BANK } from '../lib/quizData';
+import { cn } from '../lib/utils';
 
 const ICON_MAP = {
     Monitor, Keyboard, FileText, Table, Presentation, ImageIcon, PenTool, Code, Activity, Wifi, Calculator, ShoppingBag, Book
