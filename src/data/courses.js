@@ -12,7 +12,7 @@ export const courses = [
         detailed_description: "Our Full Stack Development program is an intensive, industry-aligned course that transforms you into 360-degree developer. You will master the MERN stack—MongoDB, Express, React, and Node.js—along with modern DevOps practices to build scalable, high-performance web applications.",
         duration: "6 Months",
         enrolled: "150+",
-        price: 35000,
+        price: 20000,
         rating: "4.9",
         tags: ["popular", "career"],
         category: "Web Development",
@@ -51,7 +51,7 @@ export const courses = [
         detailed_description: "Unlock the power of data. This course covers the entire data science lifecycle, from statistics and data wrangling to building complex machine learning models. You'll work on real-world datasets to extract actionable insights and build AI systems.",
         duration: "8 Months",
         enrolled: "95+",
-        price: 45000,
+        price: 24999,
         rating: "4.8",
         tags: ["high-demand", "ai"],
         category: "Data Science",
@@ -90,7 +90,7 @@ export const courses = [
         detailed_description: "Master the world's most versatile language. From simple scripts to complex web backends and data automation, this course covers Python in its entirety. Ideal for beginners and those looking to diversify their tech stack.",
         duration: "4 Months",
         enrolled: "220+",
-        price: 18000,
+        price: 8000,
         rating: "4.9",
         tags: ["beginner-friendly", "popular"],
         category: "Programming",
@@ -125,7 +125,7 @@ export const courses = [
         detailed_description: "Build secure, robust, and scalable applications with Java. This course is essential for enterprise-level development. You'll master everything from core syntax to high-level multithreading and database connectivity.",
         duration: "5 Months",
         enrolled: "110+",
-        price: 20000,
+        price: 8000,
         rating: "4.7",
         tags: ["enterprise", "stable"],
         category: "Programming",
@@ -159,7 +159,7 @@ export const courses = [
         detailed_description: "Tally Prime is the industry standard for accounting in India. This course provides comprehensive training in GST, TDS, Payroll, and sophisticated inventory management, making you ready for accounting roles in any business.",
         duration: "4 Months",
         enrolled: "180+",
-        price: 16000,
+        price: 2000,
         rating: "4.9",
         tags: ["popular", "job-oriented"],
         category: "Accounting",
@@ -194,7 +194,7 @@ export const courses = [
         detailed_description: "ADCA is our most popular one-year diploma. It prepares you for a wide range of office roles by combining computer fundamentals, graphic design, accounting, and basic programming into one powerful certificate.",
         duration: "12 Months",
         enrolled: "250+",
-        price: 36000,
+        price: 6000,
         rating: "4.8",
         tags: ["diploma", "comprehensive"],
         category: "Certification",
@@ -205,19 +205,19 @@ export const courses = [
         lottieUrl: "https://lottie.host/67e80a5e-8561-4648-9f33-65775f0f353a/5yP0t4YOnS.json",
         what_you_will_learn: [
             "Expert Level MS-Office (Word/Excel/PowerPoint)",
-            "Desktop Publishing (Photoshop & PageMaker)",
-            "Tally Accounting Essentials",
-            "Basic Web Technologies (HTML/CSS)",
-            "Operating Systems & Hardware Basics"
+            "Tally Prime Professional Accounting",
+            "Desktop Publishing (Photoshop Basics)",
+            "Windows Operating System Basics",
+            "Computer Fundamentals & Hardware"
         ],
         syllabus: [
             {
-                module: "Semester 1",
-                topics: ["Computer Fundamentals", "Operating Systems (Win/Linux)", "Office Suite Mastery", "Excel Data Analysis"]
+                module: "Module 1: Productivity Suite",
+                topics: ["MS Word", "MS Excel", "MS PowerPoint"]
             },
             {
-                module: "Semester 2",
-                topics: ["Graphic Design (CorelDraw/Photoshop)", "Tally Prime Basics", "Web Design Foundations", "Final Project"]
+                module: "Module 2: Professional Tools",
+                topics: ["Tally Prime", "Adobe Photoshop", "Windows Introduction"]
             }
         ],
         requirements: ["High school qualification"]
@@ -229,7 +229,7 @@ export const courses = [
         detailed_description: "The 'O' Level course is essential for many government positions in India. We provide intensive coaching for all four modules (M1-M4), ensuring you pass the NIELIT exams with flying colors.",
         duration: "6-12 Months",
         enrolled: "300+",
-        price: 22000,
+        price: 20999,
         rating: "4.8",
         tags: ["govt-certified", "popular"],
         category: "Certification",
@@ -263,7 +263,7 @@ export const courses = [
         detailed_description: "Stop just consuming content; start creating it. This course covers the artistic and technical aspects of design, focusing on the industry's most powerful software to build a stunning professional portfolio.",
         duration: "6 Months",
         enrolled: "80+",
-        price: 25000,
+        price: 6000,
         rating: "4.9",
         tags: ["creative", "design"],
         category: "Design",
@@ -399,7 +399,7 @@ export const courses = [
         detailed_description: "Our most advanced diploma program. MDCA builds upon ADCA with more complex software engineering modules, database management, and advanced project work to make you a tech expert.",
         duration: "15 Months",
         enrolled: "85+",
-        price: 48000,
+        price: 10999,
         rating: "4.7",
         tags: ["master-diploma", "advanced"],
         category: "Certification",
@@ -409,20 +409,20 @@ export const courses = [
         illustration: "/images/courseimg/mdca.jpg",
         lottieUrl: "https://lottie.host/67e80a5e-8561-4648-9f33-65775f0f353a/5yP0t4YOnS.json",
         what_you_will_learn: [
-            "Advanced Software System Analysis",
-            "Relational Database Management (RDBMS)",
-            "Enterprise Office Automation",
-            "Web Development Masterclass",
-            "Project Management Foundations"
+            "Expert MS Office (Word/Excel/PowerPoint)",
+            "Professional Tally & Accounting",
+            "Creative Design (Photoshop & CorelDraw)",
+            "Programming Foundations with Python",
+            "Typing & Office Automation"
         ],
         syllabus: [
             {
-                module: "Advanced Systems",
-                topics: ["Database Management Systems", "Advanced C++ Concepts", "Financial Modeling with Excel"]
+                module: "Module 1: Office & Accounting",
+                topics: ["MS Word", "MS Excel", "MS PowerPoint", "Tally Prime"]
             },
             {
-                module: "Professional Portfolio",
-                topics: ["Content Management Systems (CMS)", "Digital Presence", "Industry Internship/Project"]
+                module: "Module 2: Design & Development",
+                topics: ["Adobe Photoshop", "CorelDraw Graphics", "Python Programming", "Typing (Hindi/English)"]
             }
         ],
         requirements: ["12th pass with basic IT knowledge"]
@@ -502,7 +502,7 @@ export const courses = [
         detailed_description: "The cornerstone of system software. Master the language used in game engines, operating systems, and high-performance financial systems. Focus on memory management and high-level logic building.",
         duration: "4 Months",
         enrolled: "70+",
-        price: 15000,
+        price: 8000,
         rating: "4.8",
         tags: ["foundation", "advanced"],
         category: "Programming",
@@ -536,7 +536,7 @@ export const courses = [
         detailed_description: "Every great developer starts here. Learn the mother of all modern languages. We focus heavily on pointers, structures, and building logical efficiency from the ground up.",
         duration: "3 Months",
         enrolled: "125+",
-        price: 12000,
+        price: 8000,
         rating: "4.7",
         tags: ["essential", "beginner"],
         category: "Programming",
@@ -604,7 +604,7 @@ export const courses = [
         detailed_description: "Specifically designed for the finance sector. This six-month diploma covers the practical and theoretical aspects of computerized bookkeeping, GST filing, and financial reporting.",
         duration: "6 Months",
         enrolled: "95+",
-        price: 18000,
+        price: 6000,
         rating: "4.9",
         tags: ["finance", "professional"],
         category: "Accounting",
@@ -638,7 +638,7 @@ export const courses = [
         detailed_description: "DCST is for those who want to specialize in the technical architecture of software. Learn database management, advanced software engineering principles, and modular programming logic.",
         duration: "12 Months",
         enrolled: "55+",
-        price: 28000,
+        price: 6000,
         rating: "4.7",
         tags: ["software", "technical"],
         category: "Certification",
@@ -647,20 +647,15 @@ export const courses = [
         image: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=600&auto=format&fit=crop",
         illustration: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=600&auto=format&fit=crop",
         what_you_will_learn: [
-            "System Development Life Cycle (SDLC)",
-            "Advanced Database Models",
-            "C# or Java Development basics",
-            "Quality Assurance Foundations",
-            "Team Development with Git"
+            "Core Microsoft Productivity Suite",
+            "Spreadsheet Analysis fundamentals",
+            "Professional Presentation skills",
+            "Document Processing Mastery"
         ],
         syllabus: [
             {
-                module: "Engineering Foundations",
-                topics: ["UML Diagrams", "Database Normalization", "Software Testing basics", "Requirement Engineering"]
-            },
-            {
-                module: "Applied Dev",
-                topics: ["Entity Relationship Modeling", "SQL Server usage", "Object oriented concepts", "Final Capstone Project"]
+                module: "Core Components",
+                topics: ["MS Word", "MS Excel", "MS PowerPoint"]
             }
         ],
         requirements: ["Intermediate qualification", "Strong logical thinking"]
@@ -672,7 +667,7 @@ export const courses = [
         detailed_description: "The basic requirement for almost every government job in India. We provide intensive coaching based on the latest NIELIT syllabus to ensure you get an 'S' grade in your certification.",
         duration: "3 Months",
         enrolled: "500+",
-        price: 8000,
+        price: 3000,
         rating: "4.8",
         tags: ["govt-essential", "digital-literacy"],
         category: "Certification",
@@ -707,7 +702,7 @@ export const courses = [
         detailed_description: "The perfect starting point for any web career. Learn how the internet works and build your first responsive website using industry-standard HTML5 and CSS3 practices.",
         duration: "3 Months",
         enrolled: "160+",
-        price: 12000,
+        price: 8000,
         rating: "4.7",
         tags: ["beginner", "web"],
         category: "Web Development",
@@ -737,7 +732,7 @@ export const courses = [
         detailed_description: "The most requested skill in the job market. Master React.js from hooks to complex state management and build high-performance single page applications.",
         duration: "4 Months",
         enrolled: "120+",
-        price: 24000,
+        price: 9999,
         rating: "4.8",
         tags: ["high-demand", "framework"],
         category: "Web Development",
@@ -759,6 +754,40 @@ export const courses = [
             }
         ],
         requirements: ["Intermediate JavaScript knowledge"]
+    },
+    {
+        id: 23,
+        title: "DCA (Diploma in Computer Applications)",
+        description: "Essential computer applications and office productivity tools.",
+        detailed_description: "DCA is a foundational diploma that covers computer basics, operating systems, and the full Microsoft Office suite. It's the perfect entry point for students looking to build essential digital skills for clerical and administrative roles.",
+        duration: "6 Months",
+        enrolled: "120+",
+        price: 2100,
+        rating: "4.7",
+        tags: ["foundation", "essential"],
+        category: "Certification",
+        level: "Beginner",
+        color: "from-emerald-500 to-green-700",
+        image: "/images/courseimg/adca.jpg",
+        illustration: "/images/courseimg/adca.jpg",
+        what_you_will_learn: [
+            "Computer Fundamentals & OS",
+            "Professional Document Processing",
+            "Sreadsheet Data Management",
+            "Presentation Design Basics",
+            "Hindi & English Typing Mastery"
+        ],
+        syllabus: [
+            {
+                module: "Core Office Tools",
+                topics: ["MS Word Mastery", "MS Excel Foundations", "MS PowerPoint Presentations"]
+            },
+            {
+                module: "Technical Skills",
+                topics: ["Hindi & English Typing", "Internet & Email Basics"]
+            }
+        ],
+        requirements: ["10th or 12th pass"]
     }
 ];
 
