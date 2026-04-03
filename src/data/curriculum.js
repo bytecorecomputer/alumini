@@ -2,11 +2,14 @@
 // This matches the IDs in QUIZ_BANK inside quizData.js
 
 export const COURSE_MODULES_MAP = {
+    "PYTHON": ["python"],
     "ADCA": ["ms_word", "ms_excel", "ms_powerpoint", "tally", "photoshop", "intro_windows"],
     "MDCA": ["ms_word", "ms_excel", "ms_powerpoint", "tally", "photoshop", "coreldraw", "python", "typing"],
     "DCA": ["ms_word", "ms_excel", "ms_powerpoint", "typing"],
     "DCST": ["ms_word", "ms_excel", "ms_powerpoint"],
     "CCC": ["libre_writer", "libre_calc", "libre_impress", "iot_fundamentals"],
+    "ACCOUNTING": ["tally", "busy", "marg"],
+    "DFA": ["tally", "busy", "marg"],
     "O Level": ["python", "web_design", "iot_fundamentals"],
     // Fuzzy matching fallback
     "default": ["ms_word", "internet_basics"]

@@ -277,7 +277,7 @@ export const QUIZ_BANK = {
 
     // --- ACCOUNTING ---
     "tally": {
-        title: "Tally Prime", description: "Accounting", icon: "Calculator", color: "teal", questions: [
+        title: "Tally Prime & ERP 9", description: "Professional Accounting with GST", icon: "Calculator", color: "teal", questions: [
             { q: "Payment Voucher?", options: ["F5", "F6", "F4", "F8"], correct: 0, explanation: "F5." },
             { q: "Receipt Voucher?", options: ["F6", "F5", "F9", "F8"], correct: 0, explanation: "F6." },
             { q: "Contra Voucher?", options: ["F4", "F2", "F3", "F5"], correct: 0, explanation: "F4 (Bank/Cash)." },
