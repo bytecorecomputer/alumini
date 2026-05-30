@@ -7,6 +7,8 @@ import {
 import { cn } from '../../lib/utils';
 import { HINDI_QUIZ_DATA } from '../../data/hindiQuizData';
 import { studentQuizProfileInit, getStudentQuizProgress, markModuleCompleted, awardMasterBadge } from '../../lib/quizDb';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 // Icon Map for dynamic rendering
 const ICONS = {
@@ -34,6 +36,35 @@ export default function QuizModule({ student }) {
         selectedOption: null
     });
     const [saving, setSaving] = useState(false);
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    const downloadCertificate = async () => {
+        setIsDownloading(true);
+        const certElement = document.getElementById('certificate-node');
+        if (certElement) {
+            try {
+                const canvas = await html2canvas(certElement, {
+                    scale: 3, // High resolution
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+                
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                const pdf = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+                
+                pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
+                pdf.save(`${student.studentName || 'Student'}_${activeCourseKey}_Certificate.pdf`);
+            } catch (error) {
+                console.error("Failed to generate certificate", error);
+                alert("Failed to download certificate. Please try again.");
+            }
+        }
+        setIsDownloading(false);
+    };
 
     // 1. Determine student's master course name to fetch data
     const studentCourse = React.useMemo(() => {
@@ -478,36 +509,107 @@ export default function QuizModule({ student }) {
 
     if (view === 'badge') {
         const Icon = ICONS[courseData[activeCourseKey]?.icon] || Trophy;
+        const currentDate = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+        
         return (
-            <div className="flex flex-col items-center justify-center py-10 min-h-[60vh] text-center animate-in zoom-in-95 duration-700">
-                <motion.div
-                    initial={{ scale: 0.5, rotateY: 180 }}
-                    animate={{ scale: 1, rotateY: 0 }}
-                    transition={{ type: "spring", damping: 15, duration: 2 }}
-                    className="relative mb-12"
-                >
-                    <div className="absolute inset-0 bg-amber-400 blur-[80px] opacity-30 rounded-full animate-pulse" />
-                    <div className="h-64 w-64 bg-gradient-to-br from-amber-300 via-amber-500 to-orange-600 rounded-full flex flex-col items-center justify-center shadow-2xl shadow-amber-900/20 border-[8px] border-amber-100 relative z-10">
-                        <Icon size={80} className="text-white drop-shadow-md mb-4" />
-                        <span className="text-white font-black uppercase tracking-[0.3em] text-xs opacity-90">Mastery</span>
-                    </div>
-                </motion.div>
-
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5 }}>
-                    <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tighter uppercase">
-                        {activeCourseKey} <span className="text-amber-500">Master!</span>
-                    </h2>
-                    <p className="text-slate-500 font-bold text-lg max-w-xl mx-auto mb-10">
-                        You have successfully completed every Hindi module inside {activeCourseKey}. Your Mastery Badge has been recorded to your profile!
-                    </p>
-
+            <div className="flex flex-col items-center justify-center py-10 min-h-[60vh] animate-in zoom-in-95 duration-700 relative w-full">
+                {/* Actions */}
+                <div className="flex gap-4 mb-8 relative z-50">
                     <button
                         onClick={() => setView('courses')}
-                        className="px-12 py-5 rounded-[2rem] bg-slate-900 text-white font-black uppercase tracking-[0.2em] shadow-2xl hover:bg-blue-600 hover:-translate-y-1 transition-all"
+                        className="px-8 py-4 rounded-xl bg-slate-100 text-slate-700 font-black uppercase tracking-widest hover:bg-slate-200 transition-all text-xs"
                     >
-                        Continue Journey
+                        Back to Hub
                     </button>
-                </motion.div>
+                    <button
+                        onClick={downloadCertificate}
+                        disabled={isDownloading}
+                        className="px-8 py-4 rounded-xl bg-blue-600 text-white font-black uppercase tracking-widest hover:bg-blue-700 transition-all text-xs shadow-xl shadow-blue-500/20 flex items-center gap-2"
+                    >
+                        {isDownloading ? <span className="animate-pulse">Generating HD PDF...</span> : 'Download Certificate'}
+                    </button>
+                </div>
+
+                {/* --- CERTIFICATE RENDER NODE (HIDDEN FROM RESPONSIVE SCALING, FIXED SIZE FOR EXPORT) --- */}
+                <div className="w-full overflow-hidden flex justify-center pb-10">
+                    <div 
+                        id="certificate-node" 
+                        className="relative bg-white text-slate-900 shadow-2xl flex-shrink-0"
+                        style={{ width: '1122px', height: '793px', border: '20px solid #1e293b' }} // A4 Landscape roughly
+                    >
+                        {/* Intricate Borders */}
+                        <div className="absolute inset-2 border-[4px] border-amber-500/30"></div>
+                        <div className="absolute inset-4 border-[1px] border-amber-600/50"></div>
+                        
+                        {/* Corner Ornaments */}
+                        <div className="absolute top-4 left-4 w-16 h-16 border-t-4 border-l-4 border-amber-500"></div>
+                        <div className="absolute top-4 right-4 w-16 h-16 border-t-4 border-r-4 border-amber-500"></div>
+                        <div className="absolute bottom-4 left-4 w-16 h-16 border-b-4 border-l-4 border-amber-500"></div>
+                        <div className="absolute bottom-4 right-4 w-16 h-16 border-b-4 border-r-4 border-amber-500"></div>
+
+                        {/* Background Watermark */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] grayscale pointer-events-none">
+                            <img src="/logo.png" alt="" className="w-2/3 object-contain" />
+                        </div>
+
+                        {/* Certificate Content */}
+                        <div className="relative z-10 w-full h-full flex flex-col items-center pt-20 px-24 text-center">
+                            
+                            {/* Header */}
+                            <div className="flex items-center gap-6 mb-12">
+                                <img src="/logo.png" alt="ByteCore" className="h-20" />
+                                <div className="text-left border-l-2 border-slate-200 pl-6">
+                                    <h1 className="text-3xl font-black text-slate-900 tracking-tighter uppercase leading-none">ByteCore</h1>
+                                    <p className="text-sm font-bold text-amber-600 tracking-[0.3em] uppercase mt-1">Computer Centre</p>
+                                </div>
+                            </div>
+
+                            <h2 className="text-6xl font-[1000] text-amber-500 tracking-widest uppercase mb-4 font-serif">Certificate of Mastery</h2>
+                            <p className="text-slate-500 font-medium tracking-[0.2em] uppercase mb-12">This acknowledges that</p>
+
+                            <h3 className="text-7xl font-black text-slate-900 mb-10 capitalize italic border-b-2 border-slate-200 pb-4 px-20">
+                                {student?.studentName || 'Esteemed Student'}
+                            </h3>
+
+                            <p className="text-xl text-slate-600 max-w-3xl leading-relaxed mb-6">
+                                has successfully completed all advanced assessments and demonstrated outstanding proficiency in the 
+                                <strong className="text-slate-900 px-2">{activeCourseKey}</strong> curriculum.
+                            </p>
+
+                            <div className="flex items-center gap-2 bg-amber-50 px-6 py-2 rounded-full border border-amber-200 mb-16">
+                                <Icon className="text-amber-600" size={24} />
+                                <span className="font-black text-amber-700 tracking-widest uppercase text-sm">Verified Professional Skill</span>
+                            </div>
+
+                            {/* Footer / Signatures */}
+                            <div className="w-full flex justify-between items-end mt-auto pb-16 px-10">
+                                <div className="text-center">
+                                    <div className="w-48 h-12 flex items-center justify-center font-serif text-3xl text-slate-800 border-b border-slate-400 mb-2">
+                                        Rahul
+                                    </div>
+                                    <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Rahul Sir<br/>Director, ByteCore</p>
+                                </div>
+
+                                <div className="w-40 h-40 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-2xl relative">
+                                    <div className="absolute inset-2 border-2 border-dashed border-white/50 rounded-full"></div>
+                                    <div className="text-center">
+                                        <Award className="text-white mx-auto mb-1" size={32} />
+                                        <div className="text-white font-black text-[10px] tracking-[0.2em] uppercase">Official<br/>Seal</div>
+                                    </div>
+                                </div>
+
+                                <div className="text-center">
+                                    <div className="w-48 h-12 flex items-center justify-center text-lg font-medium text-slate-800 border-b border-slate-400 mb-2">
+                                        {currentDate}
+                                    </div>
+                                    <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Date of Issue</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
         );
     }
