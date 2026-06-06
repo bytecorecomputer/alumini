@@ -277,6 +277,48 @@ export default function CoachingAdmin() {
         total: globalStats?.totalEnrollments || 0
     };
 
+    const calculateCourseExpiry = (student) => {
+        if (!student.admissionDate || !student.course) return null;
+        
+        let durationMonths = 6; // Default fallback
+        const course = student.course.toUpperCase();
+        const totalFees = student.totalFees || 0;
+
+        if (course.includes('DCST')) {
+            durationMonths = 3;
+        } else if (course.includes('ACCOUNTING') || course.includes('DFA') || course === 'DCA') {
+            durationMonths = 6;
+        } else if (course.includes('ADCA') || course.includes('MDCA')) {
+            // High-level logic based on fees (e.g. 500/mo = ~6000 for 1 yr, 1000/mo = ~6000 for 6mo)
+            // Heuristic: If total fee is less than 4000, assume 6 months. If >4000, 1 year.
+            if (totalFees >= 4500) {
+                durationMonths = 12;
+            } else {
+                durationMonths = 6;
+            }
+        } else if (course.includes('O LEVEL')) {
+            durationMonths = 12;
+        } else if (course.includes('CCC')) {
+            durationMonths = 3;
+        } else if (course.includes('GRAPHIC')) {
+            durationMonths = 6;
+        }
+
+        const admission = new Date(student.admissionDate);
+        if (isNaN(admission.getTime())) return null;
+
+        const expiryDate = new Date(admission);
+        expiryDate.setMonth(expiryDate.getMonth() + durationMonths);
+        
+        const isCompleted = new Date() > expiryDate;
+        
+        return {
+            duration: durationMonths,
+            expiryDate: expiryDate.toLocaleDateString(),
+            isCompleted: isCompleted
+        };
+    };
+
     if (!isOwner) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-slate-50">
@@ -541,7 +583,9 @@ export default function CoachingAdmin() {
                             <tbody className="divide-y divide-slate-50">
                                 {loading ? (
                                     <tr><td colSpan="4" className="py-24 text-center"><Loader2 size={40} className="animate-spin mx-auto text-blue-200" /></td></tr>
-                                ) : filteredStudents.map(student => (
+                                ) : filteredStudents.map(student => {
+                                    const expiryInfo = calculateCourseExpiry(student);
+                                    return (
                                     <tr
                                         key={student.id}
                                         className="hover:bg-blue-50/30 transition-all group cursor-pointer"
@@ -579,11 +623,27 @@ export default function CoachingAdmin() {
                                                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-100 rounded-xl w-fit">
                                                     <BookOpen size={12} className="text-blue-500" />
                                                     <span className="text-xs font-black text-slate-700">{student.course}</span>
+                                                    {expiryInfo && (
+                                                        <span className="text-[9px] text-slate-400 font-bold ml-1">({expiryInfo.duration}m)</span>
+                                                    )}
                                                 </div>
-                                                <span className={cn(
-                                                    "text-[9px] font-black uppercase tracking-widest px-2",
-                                                    student.status === 'pass' ? "text-emerald-500" : "text-amber-500"
-                                                )}>{student.status}</span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className={cn(
+                                                        "text-[9px] font-black uppercase tracking-widest px-2 rounded-full",
+                                                        student.status === 'pass' ? "text-emerald-500 bg-emerald-50" : "text-amber-500 bg-amber-50"
+                                                    )}>{student.status}</span>
+
+                                                    {expiryInfo?.isCompleted && (
+                                                        <span className="flex items-center gap-1 text-[9px] font-black text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100" title="Course Duration Completed">
+                                                            <AlertCircle size={10} /> FINISHED
+                                                        </span>
+                                                    )}
+                                                    {expiryInfo && !expiryInfo.isCompleted && (
+                                                        <span className="flex items-center gap-1 text-[9px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                                                            <CheckCircle size={10} /> ACTIVE
+                                                        </span>
+                                                    )}
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="px-4 md:px-10 py-6">
@@ -609,7 +669,7 @@ export default function CoachingAdmin() {
                                             </div>
                                         </td>
                                     </tr>
-                                ))}
+                                )})}
                             </tbody>
                         </table>
                     </div>

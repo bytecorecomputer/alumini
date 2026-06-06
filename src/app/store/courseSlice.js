@@ -21,8 +21,9 @@ const courseSlice = createSlice({
             
             // Fuzzy match (e.g., ADCA+ -> ADCA, O-Level -> O Level)
             if (!matchedModules) {
+                const normalizedCourseTitle = courseTitle.toLowerCase().replace(/-/g, ' ');
                 const fuzzyMatchKey = Object.keys(COURSE_MODULES_MAP).find(key => 
-                    courseTitle.toLowerCase().includes(key.toLowerCase())
+                    normalizedCourseTitle.includes(key.toLowerCase().replace(/-/g, ' '))
                 );
                 matchedModules = COURSE_MODULES_MAP[fuzzyMatchKey] || COURSE_MODULES_MAP['default'];
             }

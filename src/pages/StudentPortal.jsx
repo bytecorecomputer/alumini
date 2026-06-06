@@ -12,8 +12,9 @@ import { QUIZ_BANK } from '../lib/quizData';
 import { uploadToSupabase } from '../lib/supabase';
 import { db } from '../firebase/firestore';
 import { doc, updateDoc, collection, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
-import { Camera, Loader2, ImagePlus, Globe, Link } from 'lucide-react';
+import { Camera, Loader2, ImagePlus, Globe, Link, Download } from 'lucide-react';
 import { cn } from '../lib/utils';
+import toast from 'react-hot-toast';
 
 import { compressImage } from '../lib/imageCompression';
 
@@ -77,9 +78,10 @@ export default function StudentPortal() {
                 updatedAt: Date.now()
             });
             // AuthContext's onSnapshot handle refresh
+            toast.success('Profile photo updated successfully!');
         } catch (error) {
             console.error('Photo upload failed:', error);
-            alert(error.message || 'Failed to update profile photo.');
+            toast.error(error.message || 'Failed to update profile photo.');
         } finally {
             setIsUploading(false);
         }

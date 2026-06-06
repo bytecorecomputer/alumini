@@ -1,195 +1,23 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import SEO from '../components/common/SEO';
-import Lottie from 'lottie-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-    ArrowRight, Users, CheckCircle, Database, Loader2, Zap,
-    Laptop, GraduationCap, Award, MapPin, Building, Star, Settings, Image as ImageIcon
-} from 'lucide-react';
-import { collection, query, orderBy, limit as firestoreLimit, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase/firestore';
+import { motion } from 'framer-motion';
+import { Database, Loader2, Zap, Building, ArrowRight, CheckCircle, Star } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import heroGraphic from '../assets/images/hero_graphic.png';
-import DomeGallery from '../components/ui/DomeGallery';
 import { useAuth } from '../app/common/AuthContext';
 import { runMigration } from '../lib/migrateStudents';
 import { cn } from '../lib/utils';
-import { courses as localCourses } from '../data/courses';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
+import toast from 'react-hot-toast';
+import DomeGallery from '../components/ui/DomeGallery';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import 'swiper/css/effect-fade';
-
-// Import Lottie Animations
-import heroLottie from '../assets/lottie/hero.json';
-import webLottie from '../assets/lottie/web.json';
-import dataLottie from '../assets/lottie/data.json';
-import pythonLottie from '../assets/lottie/python.json';
-
-// Import Lab Assets
-import rahulSirVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
-import students1 from '../assets/images/computer lab/students (1).jpg';
-import students2 from '../assets/images/computer lab/students (2).jpg';
-import topper1 from '../assets/images/computer lab/scholership exam topper.jpg';
-
-
-const LabGallery = () => {
-    const { role } = useAuth();
-    const isAdmin = role === 'admin' || role === 'super_admin';
-    const [dynamicImages, setDynamicImages] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        setLoading(true);
-        const q = query(collection(db, 'lab_gallery'), orderBy('createdAt', 'desc'), firestoreLimit(4));
-        
-        // Define Static Items for Preview immediately
-        const staticItems = [
-            {
-                id: 'static-video',
-                title: 'Practical Guidance: Rahul Sir',
-                category: 'lab',
-                imageUrl: rahulSirVideo,
-                type: 'video',
-                featured: true
-            },
-            {
-                id: 'static-1',
-                title: 'Professional Environment',
-                category: 'lab',
-                imageUrl: students1,
-                type: 'image'
-            },
-            {
-                id: 'static-2',
-                title: 'Industry Standards',
-                category: 'lab',
-                imageUrl: students2,
-                type: 'image'
-            },
-            {
-                id: 'static-3',
-                title: 'Achievement Hub',
-                category: 'exam',
-                imageUrl: topper1,
-                type: 'image'
-            }
-        ];
-
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const firestoreItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            
-            // Merge: Static items first to ensure they are always there
-            // We want to make sure the Rahul Sir video is always in the grid
-            const combined = [...staticItems, ...firestoreItems].slice(0, 4);
-            setDynamicImages(combined);
-            setLoading(false);
-        }, (error) => {
-            console.error("Firestore loading error, falling back to static:", error);
-            setDynamicImages(staticItems.slice(0, 4));
-            setLoading(false);
-        });
-        
-        return () => unsubscribe();
-    }, []);
-
-    if (loading) return (
-        <div className="flex justify-center py-20">
-            <Loader2 className="animate-spin text-blue-500" size={40} />
-        </div>
-    );
-
-    return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 h-auto md:h-[650px]">
-                {dynamicImages.map((img, idx) => (
-                    <motion.div
-                        key={img.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: idx * 0.1 }}
-                        whileHover={{ scale: 1.01 }}
-                        className={cn(
-                            "relative group rounded-[2.5rem] overflow-hidden bg-slate-800 border-2 border-slate-700/50 shadow-2xl cursor-pointer",
-                            idx === 0 ? "md:col-span-2 md:row-span-2" : "md:col-span-1 md:row-span-1"
-                        )}
-                        onClick={() => navigate('/gallery')}
-                    >
-                        <div className="absolute inset-0 z-10 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                        
-                        {img.type === 'video' || img.imageUrl?.endsWith('.mp4') ? (
-                            <video
-                                src={img.imageUrl}
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-700 scale-110 group-hover:scale-100"
-                            />
-                        ) : (
-                            <div className="w-full h-full relative">
-                                <img 
-                                    src={img.imageUrl} 
-                                    alt="" 
-                                    className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-30 scale-125"
-                                />
-                                <img
-                                    src={img.imageUrl}
-                                    alt={img.title}
-                                    className="w-full h-full object-contain relative z-10 opacity-70 group-hover:opacity-100 transition-opacity duration-700 scale-100 group-hover:scale-105"
-                                />
-                            </div>
-                        )}
-
-                        <div className="absolute bottom-8 left-8 z-20">
-                            <span className="text-blue-400 text-[9px] font-black uppercase tracking-[0.3em] mb-2 block group-hover:translate-x-1 transition-transform">
-                                {img.category === 'lab' ? 'ByteCore Lab' : img.category === 'trip' ? 'Campus Trip' : 'Achievement'}
-                            </span>
-                            <h3 className="text-xl md:text-2xl font-black text-white tracking-tight leading-tight group-hover:text-blue-200 transition-colors uppercase">
-                                {img.title}
-                            </h3>
-                        </div>
-                    </motion.div>
-                ))}
-            </div>
-
-            {isAdmin && (
-                <div className="flex justify-center mt-12">
-                    <button 
-                        onClick={() => navigate('/gallery')}
-                        className="flex items-center gap-3 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-slate-400 hover:text-white hover:bg-white/10 transition-all font-black text-[10px] uppercase tracking-widest shadow-xl group"
-                    >
-                        <Settings size={16} className="group-hover:rotate-90 transition-transform duration-500" />
-                        Admin: Manage Gallery Records
-                    </button>
-                </div>
-            )}
-        </div>
-    );
-};
-
+import HeroSection from '../components/home/HeroSection';
+import FeatureSlider from '../components/home/FeatureSlider';
+import CourseCarousel from '../components/home/CourseCarousel';
+import LabGalleryPreview from '../components/home/LabGalleryPreview';
+import ROICalculator from '../components/home/ROICalculator';
+import CourseAssessment from '../components/home/CourseAssessment';
+import AlumniTimeline from '../components/home/AlumniTimeline';
 
 export default function Home() {
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.1, delayChildren: 0.2 }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } }
-    };
-
     const { user } = useAuth();
     const [isMigrating, setIsMigrating] = useState(false);
     const [migrationDone, setMigrationDone] = useState(false);
@@ -204,10 +32,10 @@ export default function Home() {
             const csvText = await response.text();
             const count = await runMigration(csvText);
             setMigrationDone(true);
-            alert(`Success! ${count} students migrated to database.`);
+            toast.success(`Success! ${count} students migrated to database.`);
         } catch (err) {
             console.error("Migration failed:", err);
-            alert("Migration failed. Check console.");
+            toast.error("Migration failed. Check console.");
         } finally {
             setIsMigrating(false);
         }
@@ -218,63 +46,6 @@ export default function Home() {
         { name: "Rahul", role: "Founder & CEO", image: "/images/cd/rahul.jfif" },
         { name: "Coder Afroj", role: "Lead Instructor & Web Dev", image: "/images/cd/coderafroj.jpg" }
     ];
-
-    const OrbEffect = () => {
-        return (
-            <div className="absolute inset-0 overflow-hidden bg-white pointer-events-none z-0 flex items-center justify-center">
-                {/* Massive Animated Orb */}
-                <div className="relative w-[140vw] h-[140vw] md:w-[80vw] md:h-[80vw] flex items-center justify-center translate-y-[-10%] md:translate-y-0">
-                    <motion.div 
-                        animate={{ 
-                            rotate: 360,
-                            scale: [1, 1.05, 1]
-                        }}
-                        transition={{ 
-                            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-                            scale: { duration: 8, repeat: Infinity, ease: "easeInOut" }
-                        }}
-                        className="absolute inset-0 rounded-full border-[1px] border-blue-500/10 shadow-[0_0_100px_rgba(59,130,246,0.1)]"
-                    />
-                    <motion.div 
-                        animate={{ 
-                            rotate: -360,
-                            scale: [1.05, 1, 1.05]
-                        }}
-                        transition={{ 
-                            rotate: { duration: 25, repeat: Infinity, ease: "linear" },
-                            scale: { duration: 10, repeat: Infinity, ease: "easeInOut" }
-                        }}
-                        className="absolute inset-[10%] rounded-full border-[1px] border-indigo-500/10 shadow-[inner_0_0_80px_rgba(99,102,241,0.05)]"
-                    />
-                    
-                    {/* Glowing Core */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-purple-500/5 rounded-full blur-[120px]" />
-                    
-                    {/* Watermark Logo */}
-                    <motion.div 
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 0.08, scale: 1 }}
-                        transition={{ duration: 2, ease: "easeOut" }}
-                        className="relative z-10 w-1/3 md:w-1/4 opacity-[0.08] grayscale select-none"
-                    >
-                        <img src="/logo.png" alt="ByteCore Watermark" className="w-full h-full object-contain" />
-                    </motion.div>
-                </div>
-
-                {/* Subtle Grid & Grain */}
-                <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] bg-[length:50px_50px]"></div>
-                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay"></div>
-                
-                {/* Massive Floating Text (Hidden on small screens) */}
-                <div className="absolute bottom-10 left-10 opacity-[0.02] font-black text-[15vw] leading-none tracking-tighter text-slate-950 uppercase hidden lg:block select-none">
-                    ENGINEER
-                </div>
-                
-                {/* Bottom Protection Gradient */}
-                <div className="absolute bottom-0 left-0 w-full h-[30vh] bg-gradient-to-t from-white via-white/80 to-transparent z-10"></div>
-            </div>
-        );
-    };
 
     return (
         <div className="bg-white overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
@@ -305,66 +76,15 @@ export default function Home() {
                     },
                     "openingHoursSpecification": {
                         "@type": "OpeningHoursSpecification",
-                        "dayOfWeek": [
-                            "Monday",
-                            "Tuesday",
-                            "Wednesday",
-                            "Thursday",
-                            "Friday",
-                            "Saturday"
-                        ],
+                        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
                         "opens": "09:00",
                         "closes": "18:00"
                     },
-                    "sameAs": [
-                        "https://www.facebook.com/bytecore",
-                        "https://www.instagram.com/bytecore"
-                    ]
+                    "sameAs": ["https://www.facebook.com/bytecore", "https://www.instagram.com/bytecore"]
                 }}
             />
-            {/* --- ULTIMATE TECH HERO SECTION --- */}
-            <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-12">
-                <OrbEffect />
 
-                <div className="max-w-7xl mx-auto w-full relative z-20 px-6 pt-12">
-                    <div className="flex flex-col items-center justify-center text-center">
-                        {/* Content */}
-                        <motion.div
-                            initial="hidden"
-                            animate="visible"
-                            variants={containerVariants}
-                            className="max-w-5xl mx-auto flex flex-col items-center"
-                        >
-                            <motion.div variants={itemVariants} className="mb-4">
-                                <h1 className="text-6xl md:text-[120px] font-[1000] text-slate-900 leading-[0.95] tracking-[-0.04em] mb-4">
-                                    TECH <span className="text-blue-600">MASTERY</span><br />
-                                    <span className="text-slate-900">STARTS HERE.</span>
-                                </h1>
-                            </motion.div>
-
-                            <motion.p
-                                variants={itemVariants}
-                                className="text-xl md:text-2xl text-slate-500 max-w-2xl mx-auto mb-12 leading-relaxed font-medium"
-                            >
-                                Experience Bareilly's most advanced offline coding lab. We don't just teach courses; we build <strong className="text-slate-900 border-b-4 border-blue-500/20">Future Architects</strong>.
-                            </motion.p>
-
-                            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto">
-                                <Link to="/courses" className="group relative w-full sm:w-auto">
-                                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur opacity-25 group-hover:opacity-60 transition duration-500"></div>
-                                    <div className="relative px-12 py-5 bg-slate-900 rounded-xl text-white font-black uppercase tracking-[0.2em] text-[12px] flex items-center justify-center gap-4 active:scale-95 transition-all shadow-xl">
-                                        Join The Network
-                                        <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
-                                    </div>
-                                </Link>
-                                <Link to="/about" className="w-full sm:w-auto px-12 py-5 rounded-xl bg-white text-slate-900 font-black uppercase tracking-[0.2em] text-[12px] border border-slate-200 hover:border-blue-600 hover:bg-slate-50 transition-all shadow-sm active:scale-95 text-center">
-                                    Explore Lab
-                                </Link>
-                            </motion.div>
-                        </motion.div>
-                    </div>
-                </div>
-            </div>
+            <HeroSection />
 
             {/* --- TECH MARQUEE (Modern Feature) --- */}
             <div className="py-12 bg-white border-y border-slate-100 overflow-hidden relative">
@@ -382,197 +102,13 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* --- PREMIUM FEATURE SLIDER (Replacement for Bento Grid) --- */}
-            <div className="py-32 bg-white relative overflow-hidden">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
-                        <div className="max-w-3xl">
-                            <motion.span 
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                className="text-blue-600 text-[10px] font-black uppercase tracking-[0.3em] mb-4 block underline underline-offset-8 decoration-2 decoration-blue-100"
-                            >
-                                Why Choose The Lab?
-                            </motion.span>
-                            <motion.h2 
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                className="text-4xl md:text-6xl font-[1000] text-slate-900 tracking-tight leading-[0.95]"
-                            >
-                                Design your future with <span className="text-blue-600">Enterprise Standards</span>.
-                            </motion.h2>
-                        </div>
-                    </div>
+            <ROICalculator />
 
-                    <Swiper
-                        spaceBetween={30}
-                        centeredSlides={true}
-                        autoplay={{
-                            delay: 4000,
-                            disableOnInteraction: false,
-                        }}
-                        pagination={{
-                            clickable: true,
-                            dynamicBullets: true,
-                        }}
-                        navigation={true}
-                        modules={[Autoplay, Pagination, Navigation]}
-                        className="featureSwiper rounded-[3.5rem] !pb-16"
-                    >
-                        {[
-                            {
-                                title: "Enterprise Lab Facility",
-                                desc: "Access high-performance workstations and professional dev environments used by top tech firms with dedicated gigabit connectivity.",
-                                icon: <Zap size={32} />,
-                                color: "bg-blue-600",
-                                shadow: "shadow-blue-500/20",
-                                extra: "30+ High-End Workstations"
-                            },
-                            {
-                                title: "ISO Certified Excellence",
-                                desc: "Global recognition for your technical skills with our ISO verified certifications that opening doors to international career opportunities.",
-                                icon: <Award size={32} />,
-                                color: "bg-indigo-600",
-                                shadow: "shadow-indigo-500/20",
-                                extra: "Verified Professional Credential"
-                            },
-                            {
-                                title: "Direct Industry Mentorship",
-                                desc: "Learn from instructors with 10+ years of industry experience building software for fortune 500 companies and leading startups.",
-                                icon: <Users size={32} />,
-                                color: "bg-purple-600",
-                                shadow: "shadow-purple-500/20",
-                                extra: "Personalized Career Coaching"
-                            },
-                            {
-                                title: "Real-World Architecture",
-                                desc: "Build production-grade applications to populate your professional engineering portfolio with code reviews and deployment cycles.",
-                                icon: <Laptop size={32} />,
-                                color: "bg-slate-900",
-                                shadow: "shadow-slate-500/20",
-                                extra: "Build-to-Learn Philosophy"
-                            }
-                        ].map((feature, idx) => (
-                            <SwiperSlide key={idx}>
-                                <div className="p-10 md:p-16 rounded-[3.5rem] bg-slate-50 border border-slate-100 flex flex-col md:flex-row items-center gap-12 min-h-[450px]">
-                                    <div className="flex-1">
-                                        <div className={cn("w-20 h-20 rounded-2xl flex items-center justify-center mb-10 text-white shadow-2xl", feature.color, feature.shadow)}>
-                                            {feature.icon}
-                                        </div>
-                                        <h3 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">{feature.title}</h3>
-                                        <p className="text-slate-500 font-medium text-xl leading-relaxed max-w-xl mb-10">
-                                            {feature.desc}
-                                        </p>
-                                        <div className="flex items-center gap-4">
-                                            <div className="px-5 py-2 bg-white/80 backdrop-blur-md rounded-full border border-slate-200 text-[10px] font-black uppercase tracking-widest text-blue-600 shadow-sm">
-                                                {feature.extra}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="hidden md:block flex-1 h-full">
-                                        <div className="w-full h-full bg-white rounded-[3rem] border border-slate-100 shadow-inner overflow-hidden relative group">
-                                            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-purple-600/5 opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                                            <div className="absolute inset-0 flex items-center justify-center p-12">
-                                                {React.cloneElement(feature.icon, { size: 180, className: "text-slate-100 group-hover:scale-110 transition-transform duration-1000" })}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </div>
-            </div>
+            <FeatureSlider />
 
-            {/* --- POPULAR COURSES PREVIEW --- */}
-            <div className="py-24 bg-white border-b border-slate-100 relative">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-                        <div>
-                            <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4 block">Accelerate Your Coding Career</span>
-                            <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">
-                                World-Class <span className="text-purple-600">IT Training</span>.
-                            </h2>
-                        </div>
-                        <button onClick={() => navigate('/courses')} className="px-6 py-3 rounded-full bg-slate-50 text-slate-600 font-black uppercase tracking-widest text-xs border border-slate-200 hover:border-slate-300 transition-all flex items-center gap-2 group active:scale-95">
-                            Check All Fees & Syllabus <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                        </button>
-                    </div>
-
-                    <div className="relative mt-8 group course-slider-container">
-                        <Swiper
-                            slidesPerView={1}
-                            spaceBetween={30}
-                            breakpoints={{
-                                640: { slidesPerView: 1, spaceBetween: 20 },
-                                768: { slidesPerView: 2, spaceBetween: 30 },
-                                1024: { slidesPerView: 3, spaceBetween: 40 },
-                            }}
-                            autoplay={{
-                                delay: 3000,
-                                disableOnInteraction: false,
-                                pauseOnMouseEnter: true
-                            }}
-                            pagination={{
-                                clickable: true,
-                                dynamicBullets: true,
-                            }}
-                            modules={[Autoplay, Pagination]}
-                            className="!pb-16 px-4"
-                        >
-                            {localCourses.filter(c => [1, 10, 8, 18, 7, 6, 21, 20].includes(c.id)).map((course) => (
-                                <SwiperSlide key={course.id} className="h-auto">
-                                    <div
-                                        onClick={() => navigate(`/courses/${course.id || course.title.toLowerCase().replace(/\s+/g, '-')}`)}
-                                        className="h-full bg-white rounded-[3rem] p-8 border border-slate-100 hover:border-blue-300 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(59,130,246,0.15)] transition-all duration-500 flex flex-col relative overflow-hidden group/card cursor-pointer transform hover:-translate-y-2"
-                                    >
-                                        <div className="h-64 rounded-[2.5rem] bg-gradient-to-br from-slate-50 to-blue-50/30 mb-8 overflow-hidden relative shadow-inner border border-slate-100/50 flex items-center justify-center group-hover/card:bg-blue-50 transition-colors duration-500">
-                                            <div className="w-full h-full p-6 relative z-10 flex items-center justify-center">
-                                                <img
-                                                    src={course.illustration || `/images/courses/adca.png`}
-                                                    alt={course.title}
-                                                    className="w-full h-full object-contain group-hover/card:scale-110 transition-transform duration-700 pointer-events-none drop-shadow-xl"
-                                                    loading="lazy"
-                                                    onError={(e) => {
-                                                        e.target.src = "https://storyset.com/illustration/web-development-amico.svg";
-                                                    }}
-                                                />
-                                            </div>
-
-                                            <div className="absolute top-5 left-5 bg-white/90 backdrop-blur-md px-5 py-2 rounded-xl border border-white/50 shadow-sm text-[10px] font-[1000] uppercase tracking-widest text-blue-600 z-20">
-                                                {course.category}
-                                            </div>
-                                        </div>
-
-                                        <div className="flex-grow">
-                                            <h3 className="text-2xl font-black text-slate-900 mb-4 group-hover/card:text-blue-600 transition-colors tracking-tight line-clamp-2 leading-tight">
-                                                {course.title}
-                                            </h3>
-                                            <p className="text-slate-500 text-sm font-medium line-clamp-3 mb-8 leading-relaxed">
-                                                {course.description}
-                                            </p>
-                                        </div>
-
-                                        <div className="flex items-center justify-between pt-6 border-t border-slate-100 mt-auto">
-                                            <div className="flex flex-col">
-                                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Status</span>
-                                                <span className="text-emerald-600 font-black text-xs uppercase tracking-widest flex items-center gap-1.5 bg-emerald-50 px-3 py-1 rounded-full">
-                                                    <CheckCircle size={12} className="fill-emerald-100" /> Active
-                                                </span>
-                                            </div>
-                                            <div className="w-14 h-14 bg-slate-900 rounded-full flex items-center justify-center text-white group-hover/card:bg-blue-600 group-hover/card:shadow-lg group-hover/card:shadow-blue-500/30 transition-all duration-300">
-                                                <ArrowRight size={22} className="group-hover/card:-rotate-45 transition-transform duration-300" />
-                                            </div>
-                                        </div>
-
-                                        <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-600/5 rounded-full blur-3xl group-hover/card:bg-blue-600/10 transition-colors duration-700"></div>
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
-                </div>
-            </div>
+            <CourseCarousel />
+            
+            <CourseAssessment />
 
             {/* --- OUR INSTRUCTORS / TEAM --- */}
             <div className="py-24 bg-[#f8fafc]" >
@@ -610,6 +146,8 @@ export default function Home() {
                 </div>
             </div >
 
+            <AlumniTimeline />
+
             {/* --- STUDENT LAB GALLERY (Bento Grid) --- */}
             <div className="py-32 bg-slate-950 border-t border-slate-900 relative overflow-hidden">
                 <div className="absolute top-0 left-1/2 w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[200px] -z-10 transform -translate-x-1/2"></div>
@@ -634,9 +172,8 @@ export default function Home() {
                     </motion.div>
                 </div>
 
-                <LabGallery />
+                <LabGalleryPreview />
 
-                {/* Added CTA Button to Full Gallery */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -653,7 +190,6 @@ export default function Home() {
                     </Link>
                 </motion.div>
 
-                {/* Dynamic Student Dome Gallery  */}
                 <div className="mt-24 transition-all hover:opacity-100 group">
                     <div className="text-center mb-10 px-6">
                         <motion.span

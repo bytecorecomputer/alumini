@@ -3,7 +3,7 @@ import { collection, query, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { useAuth } from '../app/common/AuthContext';
 import { motion } from 'framer-motion';
-import { Search, MapPin, Briefcase, GraduationCap, Award, User, Linkedin, Github, Edit, Shield, ArrowRight, Zap, Target } from 'lucide-react';
+import { Search, MapPin, Briefcase, GraduationCap, Award, User, Linkedin, Github, Edit, Shield, ArrowRight, Zap, Target, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { getOptimizedUrl } from '../lib/cloudinary';
@@ -174,14 +174,30 @@ export default function Directory() {
                                         </p>
 
                                         <div className="space-y-4 pt-10 border-t-2 border-slate-50">
-                                            {profile.company && (
+                                            {(profile.company || profile.currentSalary) && (
                                                 <div className="flex items-center gap-5">
-                                                    <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-sm shadow-blue-100">
+                                                    <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shadow-sm shadow-blue-100 shrink-0">
                                                         <Briefcase size={18} />
                                                     </div>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1.5">Affiliation</p>
-                                                        <span className="font-black text-slate-700 text-sm tracking-tight">{profile.company}</span>
+                                                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1.5">Affiliation & Package</p>
+                                                        <span className="font-black text-slate-700 text-sm tracking-tight">
+                                                            {profile.company || "Independent"} 
+                                                            {profile.currentSalary && <span className="ml-2 px-2 py-0.5 bg-emerald-50 text-emerald-600 text-xs rounded-full border border-emerald-100">{profile.currentSalary}</span>}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {profile.portfolioUrl && (
+                                                <div className="flex items-center gap-5">
+                                                    <div className="p-3 bg-purple-50 text-purple-600 rounded-2xl group-hover:bg-purple-600 group-hover:text-white transition-all duration-500 shadow-sm shadow-purple-100 shrink-0">
+                                                        <Zap size={18} />
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1.5 flex items-center gap-1">Proof of Work <Award size={10} className="text-amber-500"/></p>
+                                                        <a href={profile.portfolioUrl} target="_blank" rel="noreferrer" className="font-black text-blue-600 text-sm tracking-tight truncate block hover:underline flex items-center gap-1">
+                                                            Live Project <ExternalLink size={12} />
+                                                        </a>
                                                     </div>
                                                 </div>
                                             )}

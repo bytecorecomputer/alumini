@@ -101,6 +101,7 @@ export default function Navbar() {
                     <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 bg-slate-100/50 backdrop-blur-md rounded-full p-1 border border-slate-200/50">
                         <NavLink to="/">Home</NavLink>
                         <NavLink to="/courses">Courses</NavLink>
+                        <NavLink to="/quizzes">Quizzes</NavLink>
                         <NavLink to="/contact">Contact</NavLink>
                         {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
                         {(role === 'admin' || role === 'super_admin') && (
@@ -210,6 +211,7 @@ export default function Navbar() {
                                     <MobileNavLink to="/" onClick={() => setIsOpen(false)}>Home Landing</MobileNavLink>
                                     <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink>
                                     <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Professional Courses</MobileNavLink>
+                                    <MobileNavLink to="/quizzes" onClick={() => setIsOpen(false)}>Skill Quizzes</MobileNavLink>
                                     <MobileNavLink to="/gallery" onClick={() => setIsOpen(false)}>Dome Gallery</MobileNavLink>
                                     {(role === 'admin' || role === 'super_admin') && (
                                         <>

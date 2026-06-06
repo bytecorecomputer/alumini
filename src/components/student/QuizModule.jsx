@@ -7,8 +7,7 @@ import {
 import { cn } from '../../lib/utils';
 import { HINDI_QUIZ_DATA } from '../../data/hindiQuizData';
 import { studentQuizProfileInit, getStudentQuizProgress, markModuleCompleted, awardMasterBadge } from '../../lib/quizDb';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
+import toast from 'react-hot-toast';
 
 // Icon Map for dynamic rendering
 const ICONS = {
@@ -40,9 +39,14 @@ export default function QuizModule({ student }) {
 
     const downloadCertificate = async () => {
         setIsDownloading(true);
+        toast.loading('Generating high-resolution certificate...', { id: 'certGen' });
         const certElement = document.getElementById('certificate-node');
         if (certElement) {
             try {
+                const [html2canvas, { default: jsPDF }] = await Promise.all([
+                    import('html2canvas').then(m => m.default),
+                    import('jspdf')
+                ]);
                 const canvas = await html2canvas(certElement, {
                     scale: 3, // High resolution
                     useCORS: true,
@@ -58,10 +62,13 @@ export default function QuizModule({ student }) {
                 
                 pdf.addImage(imgData, 'JPEG', 0, 0, canvas.width, canvas.height);
                 pdf.save(`${student.studentName || 'Student'}_${activeCourseKey}_Certificate.pdf`);
+                toast.success('Certificate downloaded successfully!', { id: 'certGen' });
             } catch (error) {
                 console.error("Failed to generate certificate", error);
-                alert("Failed to download certificate. Please try again.");
+                toast.error("Failed to download certificate. Please try again.", { id: 'certGen' });
             }
+        } else {
+            toast.dismiss('certGen');
         }
         setIsDownloading(false);
     };

@@ -6,11 +6,13 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminRoute from "./components/auth/AdminRoute";
 import InstallPWA from "./components/common/InstallPWA";
 import NotificationHandler from "./components/common/NotificationHandler";
+import { Toaster } from "react-hot-toast";
 
 // Lazy load pages for performance
 const Home = lazy(() => import("./pages/Home"));
 const Courses = lazy(() => import("./pages/Courses"));
 const CourseDetails = lazy(() => import("./pages/CourseDetails"));
+const QuizHub = lazy(() => import("./pages/QuizHub"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
@@ -35,6 +37,7 @@ const AdminCertificateUpload = lazy(() => import("./pages/AdminCertificateUpload
 const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
 const LabGallery = lazy(() => import("./pages/LabGallery"));
 const ResourceManager = lazy(() => import("./pages/ResourceManager"));
+const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -51,6 +54,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Layout>
+          <Toaster position="top-right" toastOptions={{ duration: 4000, style: { background: '#333', color: '#fff' } }} />
           <InstallPWA />
           <NotificationHandler />
           <Suspense fallback={<PageLoader />}>
@@ -60,9 +64,10 @@ export default function App() {
               <Route path="/courses/:id" element={<CourseDetails />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/gallery" element={<LabGallery />} />
-              <Route path="/certificate" element={<CertificateDownload />} />
-              <Route path="/donate" element={<Donate />} />
+              <Route path="/student-portal" element={<StudentPortal />} />
+            <Route path="/certificate" element={<CertificateDownload />} />
+            <Route path="/quizzes" element={<QuizHub />} />
+            <Route path="/fee-check" element={<Donate />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
 
@@ -135,6 +140,11 @@ export default function App() {
               <Route path="/admin/resources" element={
                 <AdminRoute>
                   <ResourceManager />
+                </AdminRoute>
+              } />
+              <Route path="/admin/analytics" element={
+                <AdminRoute>
+                  <AdminAnalytics />
                 </AdminRoute>
               } />
               <Route path="/lab-gallery" element={<LabGallery />} />

@@ -26,7 +26,9 @@ export default function Profile() {
         skills: '',
         phoneNumber: '',
         linkedin: '',
-        github: ''
+        github: '',
+        portfolioUrl: '',
+        currentSalary: ''
     });
 
     useEffect(() => {
@@ -42,7 +44,9 @@ export default function Profile() {
                 skills: userData.skills ? userData.skills.join(', ') : '',
                 phoneNumber: userData.phoneNumber || '',
                 linkedin: userData.linkedin || '',
-                github: userData.github || ''
+                github: userData.github || '',
+                portfolioUrl: userData.portfolioUrl || '',
+                currentSalary: userData.currentSalary || ''
             });
         }
     }, [userData]);
@@ -347,6 +351,32 @@ export default function Profile() {
                                                 onChange={handleChange}
                                                 className="w-full pl-14 pr-6 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-100 focus:bg-white focus:ring-4 focus:ring-emerald-50 outline-none transition-all text-slate-800 font-bold"
                                                 placeholder="City, Country"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Current Package / Salary</label>
+                                        <div className="relative">
+                                            <Briefcase className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                            <input
+                                                name="currentSalary"
+                                                value={formData.currentSalary}
+                                                onChange={handleChange}
+                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-100 focus:bg-white focus:ring-4 focus:ring-emerald-50 outline-none transition-all text-slate-800 font-bold"
+                                                placeholder="e.g. 12 LPA (Optional)"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-black text-slate-500 uppercase tracking-widest ml-1">Live Project / Portfolio (Proof of Work)</label>
+                                        <div className="relative">
+                                            <BookOpen className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                            <input
+                                                name="portfolioUrl"
+                                                value={formData.portfolioUrl}
+                                                onChange={handleChange}
+                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-slate-50 border-2 border-transparent focus:border-emerald-100 focus:bg-white focus:ring-4 focus:ring-emerald-50 outline-none transition-all text-slate-800 font-bold text-blue-600"
+                                                placeholder="https://my-live-project.com"
                                             />
                                         </div>
                                     </div>

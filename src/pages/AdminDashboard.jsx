@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     Users, GraduationCap, Briefcase, Shield, Trash2, Search,
     Award, ShieldAlert, ShieldOff, X, MapPin, Linkedin, Github,
-    ChevronRight, ExternalLink, Mail, Edit3, Database, UploadCloud, Calendar, Zap, ArrowUpRight, Bell, Image as ImageIcon, FileText
+    ChevronRight, ExternalLink, Mail, Edit3, Database, UploadCloud, Calendar, Zap, ArrowUpRight, Bell, Image as ImageIcon, FileText, BarChart3
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { getOptimizedUrl } from "../lib/cloudinary";
@@ -133,6 +133,13 @@ export default function AdminDashboard() {
                         <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Quick Terminal</h2>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                        <ActionCard
+                            title="PowerBI Analytics"
+                            subtitle="Financial & Stats"
+                            icon={<BarChart3 />}
+                            href="/admin/analytics"
+                            color="purple"
+                        />
                         <ActionCard
                             title="Manage Students"
                             subtitle="Coaching System"

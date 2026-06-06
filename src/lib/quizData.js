@@ -322,5 +322,43 @@ export const QUIZ_BANK = {
             { q: "Search Menu?", options: ["Ctrl+F", "F7", "F3", "Space"], correct: 0, explanation: "Differs, but Search is core." },
             { q: "Marg popular for?", options: ["Pharma", "Civil", "Games", "Music"], correct: 0, explanation: "Pharma." }
         ]
+    },
+    
+    // --- NEWLY ADDED COURSE MODULES ---
+    "advance_excel": {
+        title: "Advance Excel", description: "Macros & VLOOKUP", icon: "Activity", color: "emerald", questions: [
+            { q: "VLOOKUP stands for?", options: ["Vertical Lookup", "Visual Lookup", "Value Lookup", "Variable Lookup"], correct: 0, explanation: "Vertical Lookup." },
+            { q: "Pivot tables are used for?", options: ["Summarizing Data", "Drawing", "Printing", "Emailing"], correct: 0, explanation: "Summarizing data." }
+        ]
+    },
+    "adobe_illustrator": {
+        title: "Illustrator", description: "Vector Pro", icon: "PenTool", color: "orange", questions: [
+            { q: "Illustrator creates?", options: ["Vector Graphics", "Raster Graphics", "3D Models", "Databases"], correct: 0, explanation: "Vector Graphics." },
+            { q: "Main tool for curves?", options: ["Pen Tool", "Brush Tool", "Pencil", "Eraser"], correct: 0, explanation: "Pen Tool." }
+        ]
+    },
+    "canva": {
+        title: "Canva Pro", description: "Digital Design", icon: "Image", color: "purple", questions: [
+            { q: "Canva is primarily?", options: ["Web-based", "Offline Only", "Command Line", "Hardware"], correct: 0, explanation: "Web-based design tool." },
+            { q: "Elements can be?", options: ["Grouped", "Compiled", "Executed", "Cooked"], correct: 0, explanation: "Grouped together." }
+        ]
+    },
+    "html": {
+        title: "HTML5", description: "Web Structure", icon: "Code", color: "orange", questions: [
+            { q: "HTML stands for?", options: ["Hyper Text Markup Language", "Hyper Tool Link", "Home Text Mark", "None"], correct: 0, explanation: "Hyper Text Markup Language." },
+            { q: "Tag for largest heading?", options: ["h1", "h6", "head", "header"], correct: 0, explanation: "<h1>." }
+        ]
+    },
+    "css": {
+        title: "CSS3", description: "Web Styling", icon: "Layout", color: "blue", questions: [
+            { q: "CSS stands for?", options: ["Cascading Style Sheets", "Creative Style Sheet", "Computer Style System", "Color Style Sheet"], correct: 0, explanation: "Cascading Style Sheets." },
+            { q: "Select element by ID?", options: ["#id", ".id", "id", "*id"], correct: 0, explanation: "#." }
+        ]
+    },
+    "js": {
+        title: "JavaScript", description: "Web Logic", icon: "Terminal", color: "yellow", questions: [
+            { q: "JS is for?", options: ["Web Interaction", "Database Storage", "Styling", "OS Building"], correct: 0, explanation: "Making web pages interactive." },
+            { q: "To declare variable?", options: ["let/const/var", "int", "string", "declare"], correct: 0, explanation: "let or const." }
+        ]
     }
 };
