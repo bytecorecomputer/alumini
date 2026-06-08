@@ -97,16 +97,18 @@ export default function Navbar() {
                         </div>
                     </Link>
 
-                    {/* Minimal Desktop Nav - Center Aligned */}
-                    <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 bg-slate-100/50 backdrop-blur-md rounded-full p-1 border border-slate-200/50">
-                        <NavLink to="/">Home</NavLink>
-                        <NavLink to="/courses">Courses</NavLink>
-                        <NavLink to="/quizzes">Quizzes</NavLink>
-                        <NavLink to="/contact">Contact</NavLink>
-                        {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
-                        {(role === 'admin' || role === 'super_admin') && (
-                            <NavLink to="/admin/dashboard">Admin Hub</NavLink>
-                        )}
+                    {/* Minimal Desktop Nav - Responsive Center Aligned */}
+                    <div className="hidden lg:flex flex-1 justify-center items-center px-4">
+                        <div className="flex items-center bg-slate-100/50 backdrop-blur-md rounded-full p-1 border border-slate-200/50 overflow-hidden shadow-sm">
+                            <NavLink to="/">Home</NavLink>
+                            <NavLink to="/courses">Courses</NavLink>
+                            <NavLink to="/quizzes">Quizzes</NavLink>
+                            <NavLink to="/contact">Contact</NavLink>
+                            {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
+                            {(role === 'admin' || role === 'super_admin') && (
+                                <NavLink to="/admin/dashboard">Admin Hub</NavLink>
+                            )}
+                        </div>
                     </div>
 
                     {/* Actions (Responsive) */}

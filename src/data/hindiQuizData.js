@@ -1,4 +1,3 @@
-// Auto-generated High Quality 30-Question Quiz Data
 export const HINDI_QUIZ_DATA = {
     "ADCA": {
         "MS Word": {
@@ -18662,6 +18661,362 @@ export const HINDI_QUIZ_DATA = {
                         ],
                         "correctAnswer": 1,
                         "explanation": "जीएसटी रिटर्न भरते समय माल की पहचान HSN कोड से और सर्विस की पहचान SAC कोड से होती है, जिस पर टैक्स रेट निर्भर करता है।"
+                    }
+                ]
+            }
+        },
+        "Python": {
+            "description": "Python Programming & Problem Solving (M3-R5)",
+            "icon": "code",
+            "color": "amber",
+            "modules": {
+                "Python Basics & Variables": [
+                    {
+                        "question": "Python में Variable declare करने का सही तरीका क्या है?",
+                        "options": [
+                            "int x = 5;",
+                            "x = 5",
+                            "let x = 5;",
+                            "var x = 5;"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Python dynamically typed language है। आपको datatype बताने की जरूरत नहीं होती, सीधा x = 5 लिख सकते हैं।"
+                    },
+                    {
+                        "question": "Python के संस्थापक (Founder) कौन हैं?",
+                        "options": [
+                            "Dennis Ritchie",
+                            "James Gosling",
+                            "Guido van Rossum",
+                            "Bjarne Stroustrup"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "Python को 1991 में Guido van Rossum ने develop किया था।"
+                    },
+                    {
+                        "question": "Python में List को किस bracket से दर्शाया जाता है?",
+                        "options": [
+                            "{ } (Curly Brackets)",
+                            "[ ] (Square Brackets)",
+                            "( ) (Parentheses)",
+                            "< > (Angle Brackets)"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "List को Square brackets [ ] से दर्शाते हैं, जैसे my_list = [1, 2, 3]."
+                    },
+                    {
+                        "question": "Python में Single-line comment के लिए किस symbol का उपयोग होता है?",
+                        "options": [
+                            "//",
+                            "/*",
+                            "#",
+                            "--"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "Python में single-line comment लिखने के लिए Hash (#) का इस्तेमाल किया जाता है।"
+                    },
+                    {
+                        "question": "type() function का क्या उपयोग है?",
+                        "options": [
+                            "Variable का data type पता करने के लिए",
+                            "Variable delete करने के लिए",
+                            "Error check करने के लिए",
+                            "Print करने के लिए"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "type() function का इस्तेमाल किसी भी object या variable का data type (जैसे int, str, list) जानने के लिए किया जाता है।"
+                    }
+                ],
+                "Control Flow (If-Else & Loops)": [
+                    {
+                        "question": "Python में 'for' loop का इस्तेमाल मुख्य रूप से किसलिए होता है?",
+                        "options": [
+                            "Condition check करने के लिए",
+                            "Sequence (List, String) पर iterate करने के लिए",
+                            "Program रोकने के लिए",
+                            "Variable define करने के लिए"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "for loop का उपयोग किसी sequence (जैसे list, tuple, dictionary, set, या string) के elements पर एक-एक करके iterate करने के लिए होता है।"
+                    },
+                    {
+                        "question": "if-elif-else statement में 'elif' का क्या मतलब है?",
+                        "options": [
+                            "End of if",
+                            "Else If",
+                            "Every Loop",
+                            "Exception Loop"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "'elif' असल में 'Else If' का short form है। यह multiple conditions check करने के काम आता है।"
+                    },
+                    {
+                        "question": "while loop तब तक चलता है जब तक: ",
+                        "options": [
+                            "Condition True रहती है",
+                            "Condition False रहती है",
+                            "Break statement नहीं आता",
+                            "A और C दोनों"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "while loop तब तक execute होता है जब तक condition True हो, या फिर loop के अंदर break statement trigger ना हो जाए।"
+                    },
+                    {
+                        "question": "loop को बीच में रोकने (terminate) के लिए किस keyword का प्रयोग होता है?",
+                        "options": [
+                            "continue",
+                            "pass",
+                            "break",
+                            "stop"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "break keyword का इस्तेमाल loop को तुरंत रोक कर बाहर निकलने के लिए किया जाता है।"
+                    },
+                    {
+                        "question": "range(5) कौन सी values generate करेगा?",
+                        "options": [
+                            "1, 2, 3, 4, 5",
+                            "0, 1, 2, 3, 4",
+                            "0, 1, 2, 3, 4, 5",
+                            "5, 4, 3, 2, 1"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "range(n) हमेशा 0 से शुरू होकर n-1 तक चलता है। इसलिए range(5) 0, 1, 2, 3, 4 generate करेगा।"
+                    }
+                ],
+                "Functions & Modules": [
+                    {
+                        "question": "Python में Function define करने के लिए किस keyword का उपयोग होता है?",
+                        "options": [
+                            "func",
+                            "def",
+                            "function",
+                            "define"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Python में function बनाने के लिए 'def' keyword का इस्तेमाल होता है, जैसे def my_func():"
+                    },
+                    {
+                        "question": "Function से कोई value वापस (return) भेजने के लिए कौन सा keyword यूज़ करते हैं?",
+                        "options": [
+                            "send",
+                            "output",
+                            "return",
+                            "give"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "return keyword का उपयोग function से result वापस caller को भेजने के लिए किया जाता है।"
+                    },
+                    {
+                        "question": "Lambda function क्या है?",
+                        "options": [
+                            "एक बहुत बड़ा function",
+                            "Anonymous (बिना नाम का) single-line function",
+                            "Inbuilt module",
+                            "Error handling technique"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "Lambda function एक छोटा, anonymous (बिना नाम का) function होता है जिसे एक ही लाइन में लिखा जा सकता है। (e.g. x = lambda a : a + 10)"
+                    },
+                    {
+                        "question": "किसी external module या library को अपने प्रोग्राम में जोड़ने के लिए कौन सा keyword यूज़ होता है?",
+                        "options": [
+                            "include",
+                            "require",
+                            "import",
+                            "fetch"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "Python में modules या packages को load करने के लिए 'import' keyword का इस्तेमाल होता है। जैसे: import math"
+                    },
+                    {
+                        "question": "len() function क्या करता है?",
+                        "options": [
+                            "List या String की लम्बाई (length) बताता है",
+                            "Variable का type बताता है",
+                            "Memory address बताता है",
+                            "Random number generate करता है"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "len() function किसी भी object (जैसे string, list, tuple) में मौजूद items की कुल संख्या या लम्बाई (length) return करता है।"
+                    }
+                ]
+            }
+        },
+        "Web Design": {
+            "description": "Web Design & Publishing (M2-R5)",
+            "icon": "layout",
+            "color": "purple",
+            "modules": {
+                "HTML5 Basics": [
+                    {
+                        "question": "HTML का Full Form क्या है?",
+                        "options": [
+                            "Hyper Text Markup Language",
+                            "High Text Machine Language",
+                            "Hyper Tabular Markup Language",
+                            "None of these"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "HTML का पूरा नाम Hyper Text Markup Language है, जो वेब पेज बनाने के लिए इस्तेमाल होती है।"
+                    },
+                    {
+                        "question": "किसी भी HTML document का root tag कौन सा होता है?",
+                        "options": [
+                            "<body>",
+                            "<head>",
+                            "<html>",
+                            "<title>"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "<html> टैग किसी भी HTML पेज का सबसे मुख्य (root) टैग होता है जिसके अंदर सारा कोड आता है।"
+                    },
+                    {
+                        "question": "सबसे बड़ी Heading के लिए किस HTML टैग का उपयोग होता है?",
+                        "options": [
+                            "<heading>",
+                            "<h6>",
+                            "<head>",
+                            "<h1>"
+                        ],
+                        "correctAnswer": 3,
+                        "explanation": "HTML में headings <h1> से लेकर <h6> तक होती हैं, जिसमें <h1> सबसे बड़ी और <h6> सबसे छोटी heading होती है।"
+                    },
+                    {
+                        "question": "Line break (नई लाइन) के लिए कौन सा टैग उपयोग होता है?",
+                        "options": [
+                            "<break>",
+                            "<lb>",
+                            "<br>",
+                            "<newline>"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "<br> टैग का इस्तेमाल लाइन को ब्रेक करने (नई लाइन शुरू करने) के लिए किया जाता है।"
+                    },
+                    {
+                        "question": "वेबपेज में Image (चित्र) लगाने के लिए कौन सा टैग उपयोग किया जाता है?",
+                        "options": [
+                            "<picture>",
+                            "<img>",
+                            "<image>",
+                            "<src>"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "<img> टैग का इस्तेमाल इमेज लगाने के लिए होता है। इसमें src attribute से इमेज का पथ (path) दिया जाता है।"
+                    }
+                ],
+                "CSS3 Styling": [
+                    {
+                        "question": "CSS का Full Form क्या है?",
+                        "options": [
+                            "Colorful Style Sheets",
+                            "Computer Style Sheets",
+                            "Cascading Style Sheets",
+                            "Creative Style Sheets"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "CSS का पूरा नाम Cascading Style Sheets है, जो HTML elements को डिज़ाइन करने के काम आती है।"
+                    },
+                    {
+                        "question": "Internal CSS लिखने के लिए HTML के <head> में कौन सा टैग इस्तेमाल होता है?",
+                        "options": [
+                            "<css>",
+                            "<script>",
+                            "<style>",
+                            "<design>"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "HTML डॉक्यूमेंट के अंदर ही CSS लिखने (Internal CSS) के लिए <head> सेक्शन में <style> टैग का प्रयोग होता है।"
+                    },
+                    {
+                        "question": "CSS में किसी 'id' को select करने के लिए किस symbol का उपयोग होता है?",
+                        "options": [
+                            ". (Dot)",
+                            "# (Hash)",
+                            "* (Asterisk)",
+                            "> (Greater than)"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "CSS में id सिलेक्टर को दर्शाने के लिए '#' (Hash) का उपयोग होता है (e.g. #header), जबकि class के लिए '.' (Dot) का उपयोग होता है।"
+                    },
+                    {
+                        "question": "टेक्स्ट का रंग (text color) बदलने के लिए किस CSS property का इस्तेमाल होता है?",
+                        "options": [
+                            "text-color",
+                            "font-color",
+                            "color",
+                            "background-color"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "टेक्स्ट का रंग बदलने के लिए 'color' property का इस्तेमाल होता है (जैसे: color: red;)।"
+                    },
+                    {
+                        "question": "Flexbox में elements को center में अलाइन करने के लिए कौन सी property यूज़ होती है?",
+                        "options": [
+                            "align-items: center; justify-content: center;",
+                            "text-align: center;",
+                            "margin: auto;",
+                            "position: absolute;"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "Flex container में items को horizontally और vertically center करने के लिए 'justify-content: center' और 'align-items: center' का इस्तेमाल होता है।"
+                    }
+                ],
+                "JavaScript Fundamentals": [
+                    {
+                        "question": "JavaScript में Variable declare करने के लिए किन keywords का उपयोग होता है?",
+                        "options": [
+                            "var, let, const",
+                            "int, float, string",
+                            "dim, set, get",
+                            "declare, def, var"
+                        ],
+                        "correctAnswer": 0,
+                        "explanation": "JavaScript में variables बनाने के लिए var, let, और const का इस्तेमाल किया जाता है।"
+                    },
+                    {
+                        "question": "Browser console में मैसेज प्रिंट करने के लिए कौन सा function यूज़ होता है?",
+                        "options": [
+                            "print()",
+                            "echo()",
+                            "console.log()",
+                            "document.write()"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "Debugging या output देखने के लिए console.log() का सबसे ज़्यादा उपयोग होता है।"
+                    },
+                    {
+                        "question": "JavaScript में '===' ऑपरेटर क्या चेक करता है?",
+                        "options": [
+                            "सिर्फ Value",
+                            "Value और Data Type दोनों",
+                            "सिर्फ Data Type",
+                            "Memory Address"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "'===' (Strict Equality Operator) दोनों तरफ की values और उनके Data Types को चेक करता है।"
+                    },
+                    {
+                        "question": "DOM का फुल फॉर्म क्या है?",
+                        "options": [
+                            "Data Object Model",
+                            "Document Object Model",
+                            "Design Object Model",
+                            "Document Oriented Model"
+                        ],
+                        "correctAnswer": 1,
+                        "explanation": "DOM का मतलब Document Object Model है। यह HTML डॉक्यूमेंट का एक tree structure होता है जिसे JS द्वारा manipulate किया जा सकता है।"
+                    },
+                    {
+                        "question": "JavaScript में Array बनाने का सही सिंटेक्स क्या है?",
+                        "options": [
+                            "let arr = (1, 2, 3);",
+                            "let arr = {1, 2, 3};",
+                            "let arr = [1, 2, 3];",
+                            "let arr = <1, 2, 3>;"
+                        ],
+                        "correctAnswer": 2,
+                        "explanation": "JavaScript में Array बनाने के लिए Square brackets [ ] का उपयोग होता है।"
                     }
                 ]
             }
