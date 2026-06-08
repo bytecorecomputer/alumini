@@ -224,7 +224,7 @@ export default function StudentDetails() {
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="premium-card bg-slate-900 p-10 text-white relative overflow-hidden"
+                            className="premium-card bg-slate-900 p-6 md:p-10 text-white relative overflow-hidden"
                         >
                             <div className="absolute -top-10 -right-10 opacity-10 blur-2xl">
                                 <GraduationCap size={200} />
@@ -271,7 +271,7 @@ export default function StudentDetails() {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="premium-card bg-white p-8 md:p-10 border border-slate-100"
+                            className="premium-card bg-white p-6 md:p-10 border border-slate-100"
                         >
                             <div className="flex justify-between items-center mb-10">
                                 <div>
@@ -316,7 +316,7 @@ export default function StudentDetails() {
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.98 }}
                                     onSubmit={handleUpdate}
-                                    className="premium-card bg-white p-10 border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-8"
+                                    className="premium-card bg-white p-6 md:p-10 border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
                                 >
                                     <div className="md:col-span-2 flex justify-between items-center border-b border-slate-50 pb-6 mb-2">
                                         <h4 className="text-xl font-black text-slate-900 tracking-tight">Modify Student Profile</h4>
@@ -405,7 +405,7 @@ export default function StudentDetails() {
                                     key="view"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
-                                    className="premium-card bg-white p-10 border border-slate-100"
+                                    className="premium-card bg-white p-6 md:p-10 border border-slate-100"
                                 >
                                     <div className="flex items-center gap-4 mb-10">
                                         <div className="h-10 w-10 bg-slate-900 text-white rounded-xl flex items-center justify-center shadow-lg">
@@ -467,7 +467,7 @@ export default function StudentDetails() {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white w-full max-w-md p-10 rounded-[3.5rem] shadow-2xl relative z-10 border border-slate-100"
+                            className="bg-white w-full max-w-md p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl relative z-10 border border-slate-100 max-h-[90vh] overflow-y-auto custom-scrollbar"
                         >
                             <div className="flex justify-between items-center mb-8">
                                 <h3 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Collect <span className="text-blue-600">Payment</span></h3>

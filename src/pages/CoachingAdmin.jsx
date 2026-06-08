@@ -568,16 +568,71 @@ export default function CoachingAdmin() {
                     </div>
                 </div>
 
-                {/* Table View */}
+                {/* Responsive Data View: Cards on Mobile, Table on Desktop */}
                 <div className="premium-card bg-white border border-slate-100 shadow-2xl shadow-slate-200/40 overflow-hidden">
-                    <div className="overflow-x-auto">
+                    
+                    {/* Mobile Card View */}
+                    <div className="md:hidden flex flex-col divide-y divide-slate-50">
+                        {loading ? (
+                            <div className="py-24 text-center"><Loader2 size={40} className="animate-spin mx-auto text-blue-200" /></div>
+                        ) : filteredStudents.map(student => {
+                            const expiryInfo = calculateCourseExpiry(student);
+                            return (
+                                <div 
+                                    key={student.id} 
+                                    onClick={() => navigate(`/admin/coaching/student/${student.id}`)}
+                                    className="p-5 hover:bg-blue-50/30 active:bg-blue-50 transition-all cursor-pointer"
+                                >
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <div className="h-12 w-12 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black text-xs shadow-lg shrink-0 overflow-hidden border-2 border-white">
+                                            {student.photoUrl ? <img src={student.photoUrl} alt="" className="w-full h-full object-cover" /> : student.registration}
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <h4 className="font-black text-slate-900 text-base tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
+                                                <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3 mb-4">
+                                        <div className="bg-slate-50 rounded-xl p-3">
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Course</p>
+                                            <div className="flex items-center gap-1.5">
+                                                <BookOpen size={12} className="text-blue-500" />
+                                                <span className="text-[10px] font-black text-slate-700 truncate">{student.course}</span>
+                                            </div>
+                                        </div>
+                                        <div className="bg-slate-50 rounded-xl p-3">
+                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                                            <div className="flex items-center gap-1.5">
+                                                {expiryInfo?.isCompleted ? <span className="text-[9px] font-black text-red-600">FINISHED</span> : <span className="text-[9px] font-black text-emerald-600">ACTIVE</span>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-[10px] font-black text-slate-500">
+                                            <span>₹{(student.paidFees || 0) + (student.oldPaidFees || 0)}</span>
+                                            <span className="opacity-40">/ {student.totalFees || 0}</span>
+                                        </div>
+                                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
+                                            <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(100, (((student.paidFees || 0) + (student.oldPaidFees || 0)) / (student.totalFees || 1)) * 100)}%` }} className="h-full bg-blue-500 rounded-full" />
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+
+                    {/* Desktop Table View */}
+                    <div className="hidden md:block overflow-x-auto">
                         <table className="w-full text-left">
                             <thead className="bg-slate-50/50 border-b border-slate-100">
                                 <tr>
-                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Student Identity</th>
-                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 hidden sm:table-cell">Course & Progression</th>
-                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Financial Status</th>
-                                    <th className="px-4 md:px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 text-right">Actions</th>
+                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Student Identity</th>
+                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Course & Progression</th>
+                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Financial Status</th>
+                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-50">
@@ -586,86 +641,49 @@ export default function CoachingAdmin() {
                                 ) : filteredStudents.map(student => {
                                     const expiryInfo = calculateCourseExpiry(student);
                                     return (
-                                    <tr
-                                        key={student.id}
-                                        className="hover:bg-blue-50/30 transition-all group cursor-pointer"
-                                        onClick={() => navigate(`/admin/coaching/student/${student.id}`)}
-                                    >
-                                        <td className="px-4 md:px-10 py-6">
-                                            <div className="flex items-center gap-3 md:gap-5">
-                                                <div className="h-10 w-10 md:h-14 md:w-14 bg-slate-900 text-white rounded-xl md:rounded-2xl flex items-center justify-center font-black text-[10px] md:text-xs shadow-lg group-hover:scale-110 transition-transform shrink-0 overflow-hidden border-2 border-white">
-                                                    {student.photoUrl ? (
-                                                        <img src={student.photoUrl} alt="" className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        student.registration
-                                                    )}
+                                    <tr key={student.id} className="hover:bg-blue-50/30 transition-all group cursor-pointer" onClick={() => navigate(`/admin/coaching/student/${student.id}`)}>
+                                        <td className="px-10 py-6">
+                                            <div className="flex items-center gap-5">
+                                                <div className="h-14 w-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-black text-xs shadow-lg group-hover:scale-110 transition-transform shrink-0 overflow-hidden border-2 border-white">
+                                                    {student.photoUrl ? <img src={student.photoUrl} alt="" className="w-full h-full object-cover" /> : student.registration}
                                                 </div>
                                                 <div className="min-w-0">
-                                                    <h4 className="font-black text-slate-900 text-sm md:text-lg tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
+                                                    <h4 className="font-black text-slate-900 text-lg tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
                                                     <div className="flex items-center gap-2">
-                                                        <p className="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
-                                                        <span className={cn(
-                                                            "text-[8px] font-black uppercase px-2 py-0.5 rounded-full border",
-                                                            student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100"
-                                                        )}>
-                                                            {student.center || 'Nariyawal'}
-                                                        </span>
-                                                    </div>
-                                                    <div className="sm:hidden mt-1 inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md">
-                                                        <BookOpen size={8} />
-                                                        <span className="text-[8px] font-black uppercase">{student.course}</span>
+                                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
+                                                        <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-4 md:px-10 py-6 hidden sm:table-cell">
+                                        <td className="px-10 py-6">
                                             <div className="flex flex-col gap-2">
                                                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-100 rounded-xl w-fit">
                                                     <BookOpen size={12} className="text-blue-500" />
                                                     <span className="text-xs font-black text-slate-700">{student.course}</span>
-                                                    {expiryInfo && (
-                                                        <span className="text-[9px] text-slate-400 font-bold ml-1">({expiryInfo.duration}m)</span>
-                                                    )}
+                                                    {expiryInfo && <span className="text-[9px] text-slate-400 font-bold ml-1">({expiryInfo.duration}m)</span>}
                                                 </div>
                                                 <div className="flex items-center gap-2">
-                                                    <span className={cn(
-                                                        "text-[9px] font-black uppercase tracking-widest px-2 rounded-full",
-                                                        student.status === 'pass' ? "text-emerald-500 bg-emerald-50" : "text-amber-500 bg-amber-50"
-                                                    )}>{student.status}</span>
-
-                                                    {expiryInfo?.isCompleted && (
-                                                        <span className="flex items-center gap-1 text-[9px] font-black text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100" title="Course Duration Completed">
-                                                            <AlertCircle size={10} /> FINISHED
-                                                        </span>
-                                                    )}
-                                                    {expiryInfo && !expiryInfo.isCompleted && (
-                                                        <span className="flex items-center gap-1 text-[9px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
-                                                            <CheckCircle size={10} /> ACTIVE
-                                                        </span>
-                                                    )}
+                                                    <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 rounded-full", student.status === 'pass' ? "text-emerald-500 bg-emerald-50" : "text-amber-500 bg-amber-50")}>{student.status}</span>
+                                                    {expiryInfo?.isCompleted && <span className="flex items-center gap-1 text-[9px] font-black text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100"><AlertCircle size={10} /> FINISHED</span>}
+                                                    {expiryInfo && !expiryInfo.isCompleted && <span className="flex items-center gap-1 text-[9px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100"><CheckCircle size={10} /> ACTIVE</span>}
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-4 md:px-10 py-6">
+                                        <td className="px-10 py-6">
                                             <div className="space-y-2 min-w-[80px]">
-                                                <div className="flex justify-between text-[8px] md:text-[10px] font-black text-slate-500">
+                                                <div className="flex justify-between text-[10px] font-black text-slate-500">
                                                     <span>₹{(student.paidFees || 0) + (student.oldPaidFees || 0)}</span>
                                                     <span className="opacity-40">/ {student.totalFees || 0}</span>
                                                 </div>
-                                                <div className="h-1.5 md:h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
-                                                    <motion.div
-                                                        initial={{ width: 0 }}
-                                                        animate={{ width: `${Math.min(100, (((student.paidFees || 0) + (student.oldPaidFees || 0)) / (student.totalFees || 1)) * 100)}%` }}
-                                                        className="h-full bg-blue-500 rounded-full"
-                                                    />
+                                                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
+                                                    <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(100, (((student.paidFees || 0) + (student.oldPaidFees || 0)) / (student.totalFees || 1)) * 100)}%` }} className="h-full bg-blue-500 rounded-full" />
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="px-4 md:px-10 py-6 text-right">
+                                        <td className="px-10 py-6 text-right">
                                             <div className="flex justify-end gap-2">
-                                                <button className="p-2 md:p-3 bg-white text-slate-400 group-hover:text-blue-600 border border-slate-100 rounded-xl transition-all shadow-sm">
-                                                    <ChevronRight size={16} />
-                                                </button>
+                                                <button className="p-3 bg-white text-slate-400 group-hover:text-blue-600 border border-slate-100 rounded-xl transition-all shadow-sm"><ChevronRight size={16} /></button>
                                             </div>
                                         </td>
                                     </tr>

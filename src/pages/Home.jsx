@@ -7,15 +7,10 @@ import { useAuth } from '../app/common/AuthContext';
 import { runMigration } from '../lib/migrateStudents';
 import { cn } from '../lib/utils';
 import toast from 'react-hot-toast';
-import DomeGallery from '../components/ui/DomeGallery';
 
 import HeroSection from '../components/home/HeroSection';
-import FeatureSlider from '../components/home/FeatureSlider';
 import CourseCarousel from '../components/home/CourseCarousel';
 import LabGalleryPreview from '../components/home/LabGalleryPreview';
-import ROICalculator from '../components/home/ROICalculator';
-import CourseAssessment from '../components/home/CourseAssessment';
-import AlumniTimeline from '../components/home/AlumniTimeline';
 
 export default function Home() {
     const { user } = useAuth();
@@ -41,47 +36,11 @@ export default function Home() {
         }
     };
 
-    const team = [
-        { name: "Maisar Hussain", role: "Senior Teacher (Thiriya)", image: "/images/cd/maisar.jpg" },
-        { name: "Rahul", role: "Founder & CEO", image: "/images/cd/rahul.jfif" },
-        { name: "Coder Afroj", role: "Lead Instructor & Web Dev", image: "/images/cd/coderafroj.jpg" }
-    ];
-
     return (
         <div className="bg-white overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
             <SEO
                 title="#1 Rank Offline Tech Lab in Bareilly"
-                description="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime. Contact Nariyawal and Thiriya centers."
-                keywords="ByteCore, ByteCore Computer Centre, Computer Centre Bareilly, Coding classes Bareilly, Nariyawal computer centre, Thiriya computer centre, Best IT institute in Bareilly, Nariyawal hub, offline computer courses"
-                schema={{
-                    "@context": "https://schema.org",
-                    "@type": "LocalBusiness",
-                    "name": "ByteCore Computer Centre",
-                    "image": "https://bytecores.in/banner-og.png",
-                    "@id": "https://bytecores.in",
-                    "url": "https://bytecores.in",
-                    "telephone": "+91XXXXXXXXXX",
-                    "address": {
-                        "@type": "PostalAddress",
-                        "streetAddress": "Nariyawal & Thiriya",
-                        "addressLocality": "Bareilly",
-                        "addressRegion": "UP",
-                        "postalCode": "243001",
-                        "addressCountry": "IN"
-                    },
-                    "geo": {
-                        "@type": "GeoCoordinates",
-                        "latitude": 28.3670,
-                        "longitude": 79.4322
-                    },
-                    "openingHoursSpecification": {
-                        "@type": "OpeningHoursSpecification",
-                        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-                        "opens": "09:00",
-                        "closes": "18:00"
-                    },
-                    "sameAs": ["https://www.facebook.com/bytecore", "https://www.instagram.com/bytecore"]
-                }}
+                description="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime."
             />
 
             <HeroSection />
@@ -102,51 +61,9 @@ export default function Home() {
                 </div>
             </div>
 
-            <ROICalculator />
-
-            <FeatureSlider />
-
-            <CourseCarousel />
-            
-            <CourseAssessment />
-
-            {/* --- OUR INSTRUCTORS / TEAM --- */}
-            <div className="py-24 bg-[#f8fafc]" >
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4 block">Mentorship</span>
-                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-4">Meet The <span className="text-blue-600">Experts</span>.</h2>
-                        <p className="text-slate-500 font-medium max-w-xl mx-auto">Learn from industry veterans who have built real-world applications and managed successful businesses.</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                        {team.map((t, i) => (
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
-                                key={i}
-                                className="group relative"
-                            >
-                                <div className="absolute inset-0 bg-blue-100 rounded-[3rem] transform translate-y-4 group-hover:translate-y-2 transition-transform -z-10"></div>
-                                <div className="bg-white p-6 rounded-[3rem] border border-slate-100 shadow-sm text-center">
-                                    <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-slate-50 shadow-inner mb-6 relative">
-                                        <img src={t.image} alt={t.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
-                                    </div>
-                                    <h3 className="text-xl font-black text-slate-900 mb-1">{t.name}</h3>
-                                    <p className="text-[10px] uppercase tracking-widest font-black text-blue-600 mb-4">{t.role}</p>
-                                    <div className="flex justify-center gap-1 text-amber-400 mb-2">
-                                        {[1, 2, 3, 4, 5].map(star => <Star key={star} size={12} className="fill-current" />)}
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </div >
-
-            <AlumniTimeline />
+            <div className="py-24 bg-slate-50">
+                <CourseCarousel />
+            </div>
 
             {/* --- STUDENT LAB GALLERY (Bento Grid) --- */}
             <div className="py-32 bg-slate-950 border-t border-slate-900 relative overflow-hidden">
@@ -189,22 +106,6 @@ export default function Home() {
                         <div className="absolute inset-x-10 bottom-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
                     </Link>
                 </motion.div>
-
-                <div className="mt-24 transition-all hover:opacity-100 group">
-                    <div className="text-center mb-10 px-6">
-                        <motion.span
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-4"
-                        >
-                            Our Growing Tech Family
-                        </motion.span>
-                        <h3 className="text-3xl md:text-5xl font-black text-white tracking-tighter">
-                            The <span className="text-blue-500">ByteCore</span> Faces.
-                        </h3>
-                    </div>
-                    <DomeGallery />
-                </div>
             </div>
 
             {/* --- CTA BANNER --- */}

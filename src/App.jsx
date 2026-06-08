@@ -39,6 +39,8 @@ const LabGallery = lazy(() => import("./pages/LabGallery"));
 const ResourceManager = lazy(() => import("./pages/ResourceManager"));
 const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
 
+const PublicQuiz = lazy(() => import("./pages/PublicQuiz"));
+
 // Loading fallback
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-slate-950">
@@ -65,9 +67,10 @@ export default function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/student-portal" element={<StudentPortal />} />
-            <Route path="/certificate" element={<CertificateDownload />} />
-            <Route path="/quizzes" element={<QuizHub />} />
-            <Route path="/fee-check" element={<Donate />} />
+              <Route path="/certificate" element={<CertificateDownload />} />
+              <Route path="/quizzes" element={<QuizHub />} />
+              <Route path="/quiz/:courseId/:topicId" element={<PublicQuiz />} />
+              <Route path="/fee-check" element={<Donate />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
 
