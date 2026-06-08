@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import { 
     BarChart3, TrendingUp, Users, Wallet, AlertCircle, 
-    MapPin, ChevronLeft, Download, ShieldCheck, PieChart as PieChartIcon, Calendar, Zap, AlertTriangle
+    MapPin, ChevronLeft, Download, ShieldCheck, PieChart as PieChartIcon, Calendar, Zap, AlertTriangle, Building, Activity
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -81,6 +81,7 @@ export default function AdminAnalytics() {
     const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedMonth, setSelectedMonth] = useState('all');
+    const [selectedCenter, setSelectedCenter] = useState('all');
 
     const isOwner = user?.email === 'coderafroj@gmail.com' || role === 'super_admin';
 
@@ -114,17 +115,26 @@ export default function AdminAnalytics() {
         let totalRevenue = 0;
         let totalArrears = 0;
         let totalEnrolled = 0;
+        let totalBilled = 0; // For Recovery Rate
+        
         let branchStats = { Nariyawal: { rev: 0, arr: 0, stu: 0 }, Thiriya: { rev: 0, arr: 0, stu: 0 } };
-        let courseCount = {};
+        let courseRevenue = {};
         let defaulters = [];
         let highRiskCount = 0;
-        let projectedPipeline = 0; // Money expected from active students
-        let badDebtRisk = 0; // Money stuck with completed students
+        let projectedPipeline = 0; 
+        let badDebtRisk = 0; 
+        let activeStudentsCount = 0;
         
         let monthlyTrends = {}; 
 
         students.forEach(s => {
             const branch = s.center || 'Nariyawal';
+            
+            // --- BRANCH FILTERING LOGIC ---
+            if (selectedCenter !== 'all' && branch.toLowerCase() !== selectedCenter.toLowerCase()) {
+                return; // Skip this student entirely if they don't belong to the selected center
+            }
+
             const course = s.course || 'Unknown';
             const admMonth = parseDateToYYYYMM(s.admissionDate);
             const expiryInfo = calculateCourseExpiry(s.admissionDate, s.course, s.totalFees);
@@ -135,22 +145,30 @@ export default function AdminAnalytics() {
             }
 
             let stuTotalPaidAllTime = (s.paidFees || 0) + (s.oldPaidFees || 0);
-            const stuArrearsAllTime = Math.max(0, (s.totalFees || 0) - stuTotalPaidAllTime);
+            const stuTotalBilledAllTime = s.totalFees || 0;
+            const stuArrearsAllTime = Math.max(0, stuTotalBilledAllTime - stuTotalPaidAllTime);
 
             if (selectedMonth === 'all') {
                 totalEnrolled++;
                 totalRevenue += stuTotalPaidAllTime;
                 totalArrears += stuArrearsAllTime;
+                totalBilled += stuTotalBilledAllTime;
+
+                if (!expiryInfo?.isCompleted) {
+                    activeStudentsCount++;
+                }
 
                 if (branchStats[branch]) {
                     branchStats[branch].stu++;
                     branchStats[branch].rev += stuTotalPaidAllTime;
                     branchStats[branch].arr += stuArrearsAllTime;
                 }
-                courseCount[course] = (courseCount[course] || 0) + 1;
+                
+                // Track Course Distribution by REVENUE, not just headcount
+                courseRevenue[course] = (courseRevenue[course] || 0) + stuTotalPaidAllTime;
 
                 if (stuArrearsAllTime > 0) {
-                    const isHighRisk = expiryInfo?.isCompleted && stuArrearsAllTime > ((s.totalFees || 0) * 0.3);
+                    const isHighRisk = expiryInfo?.isCompleted && stuArrearsAllTime > (stuTotalBilledAllTime * 0.3);
                     if (isHighRisk) highRiskCount++;
                     
                     if (expiryInfo?.isCompleted) {
@@ -171,9 +189,11 @@ export default function AdminAnalytics() {
                 const isAdmittedThisMonth = admMonth === selectedMonth;
                 if (isAdmittedThisMonth) {
                     totalEnrolled++;
+                    totalBilled += stuTotalBilledAllTime;
                     if (branchStats[branch]) branchStats[branch].stu++;
-                    courseCount[course] = (courseCount[course] || 0) + 1;
                 }
+
+                if (!expiryInfo?.isCompleted) activeStudentsCount++;
 
                 let paidThisMonth = 0;
                 if (s.installments && s.installments.length > 0) {
@@ -186,6 +206,8 @@ export default function AdminAnalytics() {
                 }
 
                 totalRevenue += paidThisMonth;
+                courseRevenue[course] = (courseRevenue[course] || 0) + paidThisMonth;
+
                 if (branchStats[branch]) branchStats[branch].rev += paidThisMonth;
                 
                 if (paidThisMonth > 0 && monthlyTrends[selectedMonth]) {
@@ -193,11 +215,11 @@ export default function AdminAnalytics() {
                 }
 
                 if (admMonth && admMonth <= selectedMonth) {
-                    totalArrears += stuArrearsAllTime;
+                    totalArrears += stuArrearsAllTime; // Snapshot of current arrears
                     if (branchStats[branch]) branchStats[branch].arr += stuArrearsAllTime;
 
                     if (stuArrearsAllTime > 0) {
-                        const isHighRisk = expiryInfo?.isCompleted && stuArrearsAllTime > ((s.totalFees || 0) * 0.3);
+                        const isHighRisk = expiryInfo?.isCompleted && stuArrearsAllTime > (stuTotalBilledAllTime * 0.3);
                         if (isHighRisk) highRiskCount++;
                         defaulters.push({ ...s, pending: stuArrearsAllTime, paidInPeriod: paidThisMonth, isHighRisk });
                     }
@@ -209,7 +231,7 @@ export default function AdminAnalytics() {
             name: k, Revenue: branchStats[k].rev, Arrears: branchStats[k].arr, Students: branchStats[k].stu
         }));
 
-        const courseData = Object.keys(courseCount).map(k => ({ name: k, value: courseCount[k] })).sort((a,b) => b.value - a.value);
+        const courseData = Object.keys(courseRevenue).map(k => ({ name: k, value: courseRevenue[k] })).sort((a,b) => b.value - a.value);
         const trendData = Object.values(monthlyTrends).sort((a,b) => a.month.localeCompare(b.month)).slice(-12);
 
         // Sort defaulters: High Risk first, then by pending amount
@@ -219,13 +241,15 @@ export default function AdminAnalytics() {
             return b.pending - a.pending;
         });
 
+        const recoveryRate = totalBilled > 0 ? ((totalRevenue / totalBilled) * 100).toFixed(1) : 0;
+
         return {
-            totalRevenue, totalArrears, totalEnrolled,
-            branchData, courseData, trendData, 
+            totalRevenue, totalArrears, totalEnrolled, activeStudentsCount,
+            branchData, courseData, trendData, recoveryRate,
             defaulters: defaulters.slice(0, 50),
             highRiskCount, projectedPipeline, badDebtRisk
         };
-    }, [students, selectedMonth]);
+    }, [students, selectedMonth, selectedCenter]);
 
     if (!isOwner) {
         return (
@@ -263,9 +287,25 @@ export default function AdminAnalytics() {
                         <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-tight">
                             Predictive <span className="text-blue-600">Analytics</span>
                         </h1>
-                        <p className="text-slate-500 font-bold mt-2">AI-Powered Forecasting & Intelligence Engine.</p>
+                        <p className="text-slate-500 font-bold mt-2">AI-Powered Forecasting & P&L Analysis Engine.</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-4">
+                        
+                        {/* Center Filter */}
+                        <div className="bg-white border border-slate-200 p-2 rounded-2xl flex items-center shadow-sm w-full md:w-auto">
+                            <Building size={18} className="text-slate-400 ml-2" />
+                            <select 
+                                value={selectedCenter}
+                                onChange={(e) => setSelectedCenter(e.target.value)}
+                                className="bg-transparent border-none text-slate-700 font-black outline-none px-4 py-2 cursor-pointer uppercase text-xs w-full"
+                            >
+                                <option value="all">Global (All Centers)</option>
+                                <option value="nariyawal">HQ: Nariyawal</option>
+                                <option value="thiriya">Branch: Thiriya</option>
+                            </select>
+                        </div>
+
+                        {/* Month Filter */}
                         <div className="bg-white border border-slate-200 p-2 rounded-2xl flex items-center shadow-sm w-full md:w-auto">
                             <Calendar size={18} className="text-slate-400 ml-2" />
                             <select 
@@ -276,59 +316,77 @@ export default function AdminAnalytics() {
                                 {monthOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                             </select>
                         </div>
-                        <button onClick={() => window.print()} className="w-full md:w-auto justify-center px-6 py-4 bg-slate-900 text-white rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] shadow-lg flex items-center gap-2 hover:bg-slate-800 transition-all">
-                            <Download size={16} /> Export Report
+
+                        <button onClick={() => window.print()} className="w-full md:w-auto justify-center px-6 py-4 bg-slate-900 text-white rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] shadow-lg flex items-center gap-2 hover:bg-slate-800 transition-all active:scale-95">
+                            <Download size={16} /> Export
                         </button>
                     </div>
                 </div>
 
                 {/* Top High-Level Stats */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-                    <div className="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6 mb-8">
+                    {/* Revenue */}
+                    <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-lg transition-all duration-300">
                         <div className="flex justify-between items-start mb-6">
                             <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl"><Wallet size={20} /></div>
                             <span className="text-[10px] font-black uppercase text-emerald-500 bg-emerald-50 px-2 py-1 rounded">Secured</span>
                         </div>
                         <div>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{selectedMonth === 'all' ? 'Total Revenue' : 'Revenue This Month'}</p>
-                            <h3 className="text-2xl md:text-4xl font-black text-slate-900 truncate">₹{analytics.totalRevenue.toLocaleString()}</h3>
+                            <h3 className="text-2xl md:text-3xl font-black text-slate-900 truncate">₹{analytics.totalRevenue.toLocaleString()}</h3>
                         </div>
                     </div>
                     
-                    <div className="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+                    {/* Recovery Rate */}
+                    <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-lg transition-all duration-300">
                         <div className="flex justify-between items-start mb-6">
-                            <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><Zap size={20} /></div>
-                            <span className="text-[10px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-1 rounded">Pipeline</span>
+                            <div className="p-3 bg-blue-50 text-blue-600 rounded-xl"><Activity size={20} /></div>
+                            <span className="text-[10px] font-black uppercase text-blue-500 bg-blue-50 px-2 py-1 rounded">Health</span>
                         </div>
                         <div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Expected Run Rate</p>
-                            <h3 className="text-2xl md:text-4xl font-black text-slate-900 truncate">₹{analytics.projectedPipeline.toLocaleString()}</h3>
-                            <p className="text-[9px] text-slate-400 font-bold mt-2">Active students arrears</p>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Cash Recovery Rate</p>
+                            <h3 className="text-2xl md:text-3xl font-black text-slate-900 truncate">{analytics.recoveryRate}%</h3>
+                            <p className="text-[9px] text-slate-400 font-bold mt-2">Target &gt; 80%</p>
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 md:p-8 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+                    {/* Expected Pipeline */}
+                    <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-lg transition-all duration-300">
+                        <div className="flex justify-between items-start mb-6">
+                            <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl"><Zap size={20} /></div>
+                            <span className="text-[10px] font-black uppercase text-indigo-500 bg-indigo-50 px-2 py-1 rounded">Pipeline</span>
+                        </div>
+                        <div>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Expected Inflow</p>
+                            <h3 className="text-2xl md:text-3xl font-black text-slate-900 truncate">₹{analytics.projectedPipeline.toLocaleString()}</h3>
+                            <p className="text-[9px] text-slate-400 font-bold mt-2">Active arrears</p>
+                        </div>
+                    </div>
+
+                    {/* Bad Debt Risk */}
+                    <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-lg transition-all duration-300">
                         <div className="flex justify-between items-start mb-6">
                             <div className="p-3 bg-red-50 text-red-600 rounded-xl"><AlertTriangle size={20} /></div>
                             <span className="text-[10px] font-black uppercase text-red-500 bg-red-50 px-2 py-1 rounded">Risk</span>
                         </div>
                         <div>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Bad Debt Risk</p>
-                            <h3 className="text-2xl md:text-4xl font-black text-slate-900 truncate">₹{analytics.badDebtRisk.toLocaleString()}</h3>
-                            <p className="text-[9px] text-red-400 font-bold mt-2">{analytics.highRiskCount} High-Risk Defaulters</p>
+                            <h3 className="text-2xl md:text-3xl font-black text-slate-900 truncate">₹{analytics.badDebtRisk.toLocaleString()}</h3>
+                            <p className="text-[9px] text-red-400 font-bold mt-2">{analytics.highRiskCount} Extreme Defaulters</p>
                         </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-slate-900 to-blue-900 p-6 md:p-8 rounded-[2rem] shadow-xl text-white flex flex-col justify-between relative overflow-hidden group">
+                    {/* Enrollment */}
+                    <div className="bg-gradient-to-br from-slate-900 to-blue-900 p-6 rounded-[2rem] shadow-xl text-white flex flex-col justify-between relative overflow-hidden group">
                         <TrendingUp size={100} className="absolute -right-6 -bottom-6 opacity-10 group-hover:scale-110 group-hover:opacity-20 transition-all duration-500" />
                         <div className="flex justify-between items-start mb-6 relative z-10">
                             <div className="p-3 bg-white/10 text-white rounded-xl backdrop-blur-md"><Users size={20} /></div>
                         </div>
                         <div className="relative z-10">
-                            <p className="text-[10px] font-black text-blue-200 uppercase tracking-widest mb-1">{selectedMonth === 'all' ? 'Total Enrolled' : 'New Admissions'}</p>
-                            <h3 className="text-3xl md:text-4xl font-black text-white">{analytics.totalEnrolled}</h3>
+                            <p className="text-[10px] font-black text-blue-200 uppercase tracking-widest mb-1">{selectedMonth === 'all' ? 'Total Load' : 'New Admissions'}</p>
+                            <h3 className="text-3xl md:text-3xl font-black text-white">{analytics.totalEnrolled}</h3>
                             <p className="text-[9px] text-slate-300 font-bold mt-2">
-                                Avg LTV: ₹{analytics.totalEnrolled ? Math.round(analytics.totalRevenue / analytics.totalEnrolled).toLocaleString() : 0}
+                                {analytics.activeStudentsCount} Active Pipeline
                             </p>
                         </div>
                     </div>
@@ -336,29 +394,31 @@ export default function AdminAnalytics() {
 
                 {/* Main Charts Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8">
-                    {/* Branch Comparison */}
-                    <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-slate-100 h-[350px] md:h-[400px] flex flex-col hover:shadow-lg transition-all duration-300">
-                        <div className="flex items-center gap-3 mb-6">
-                            <MapPin size={20} className="text-blue-600" />
-                            <h3 className="text-lg md:text-xl font-black text-slate-900 uppercase tracking-tight">Center Performance</h3>
+                    {/* Branch Comparison (Only show if global selected) */}
+                    {selectedCenter === 'all' && (
+                        <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-slate-100 h-[350px] md:h-[400px] flex flex-col hover:shadow-lg transition-all duration-300">
+                            <div className="flex items-center gap-3 mb-6">
+                                <MapPin size={20} className="text-blue-600" />
+                                <h3 className="text-lg md:text-xl font-black text-slate-900 uppercase tracking-tight">Center Performance</h3>
+                            </div>
+                            <div className="flex-1 w-full min-h-0">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={analytics.branchData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 700 }} dy={10} />
+                                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(v) => `₹${v/1000}k`} />
+                                        <RechartsTooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                                        <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase' }} />
+                                        <Bar dataKey="Revenue" fill="#2563eb" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey="Arrears" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
-                        <div className="flex-1 w-full min-h-0">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={analytics.branchData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 700 }} dy={10} />
-                                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(v) => `₹${v/1000}k`} />
-                                    <RechartsTooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                                    <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase' }} />
-                                    <Bar dataKey="Revenue" fill="#2563eb" radius={[4, 4, 0, 0]} />
-                                    <Bar dataKey="Arrears" fill="#f59e0b" radius={[4, 4, 0, 0]} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
+                    )}
 
                     {/* Admission & Revenue Velocity */}
-                    <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-slate-100 h-[350px] md:h-[400px] flex flex-col hover:shadow-lg transition-all duration-300">
+                    <div className={`bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-slate-100 h-[350px] md:h-[400px] flex flex-col hover:shadow-lg transition-all duration-300 ${selectedCenter !== 'all' ? 'lg:col-span-2' : ''}`}>
                         <div className="flex items-center gap-3 mb-6">
                             <TrendingUp size={20} className="text-emerald-600" />
                             <h3 className="text-lg md:text-xl font-black text-slate-900 uppercase tracking-tight">Velocity (Last 12 Mo)</h3>
@@ -374,11 +434,12 @@ export default function AdminAnalytics() {
                                     </defs>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                                     <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 9, fill: '#64748b', fontWeight: 700 }} dy={10} />
-                                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(v) => `₹${v/1000}k`} />
+                                    <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(v) => `₹${v/1000}k`} />
+                                    <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#10b981' }} />
                                     <RechartsTooltip contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
                                     <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase' }} />
-                                    <Area type="monotone" dataKey="Admissions" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorAdmissions)" />
-                                    <Line type="monotone" dataKey="Revenue" stroke="#2563eb" strokeWidth={3} dot={false} />
+                                    <Area yAxisId="right" type="monotone" dataKey="Admissions" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorAdmissions)" />
+                                    <Line yAxisId="left" type="monotone" dataKey="Revenue" stroke="#2563eb" strokeWidth={3} dot={false} />
                                 </ComposedChart>
                             </ResponsiveContainer>
                         </div>
@@ -387,10 +448,11 @@ export default function AdminAnalytics() {
 
                 {/* Secondary Grid */}
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8 mb-8">
+                    {/* Top Grossing Courses */}
                     <div className="xl:col-span-1 bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-slate-100 h-[400px] flex flex-col hover:shadow-lg transition-all duration-300">
                         <div className="flex items-center gap-3 mb-4">
                             <PieChartIcon size={20} className="text-purple-600" />
-                            <h3 className="text-lg md:text-xl font-black text-slate-900 uppercase tracking-tight">Course Dist.</h3>
+                            <h3 className="text-lg md:text-xl font-black text-slate-900 uppercase tracking-tight">Top Grossing Courses</h3>
                         </div>
                         <div className="flex-1 w-full min-h-0">
                             <ResponsiveContainer width="100%" height="100%">
@@ -400,7 +462,10 @@ export default function AdminAnalytics() {
                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                         ))}
                                     </Pie>
-                                    <RechartsTooltip contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 800 }} />
+                                    <RechartsTooltip 
+                                        formatter={(value) => `₹${value.toLocaleString()}`}
+                                        contentStyle={{ borderRadius: '1rem', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', fontWeight: 800 }} 
+                                    />
                                 </PieChart>
                             </ResponsiveContainer>
                         </div>
