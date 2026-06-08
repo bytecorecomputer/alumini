@@ -28,6 +28,7 @@
     "react-firebase-hooks": "^5.1.1",
     "react-helmet-async": "^2.0.5",
     "react-hot-toast": "^2.6.0",
+    "react-is": "^19.2.7",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.11.0",
     "react-tsparticles": "^2.12.2",
