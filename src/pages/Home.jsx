@@ -39,8 +39,30 @@ export default function Home() {
     return (
         <div className="bg-white overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
             <SEO
-                title="#1 Rank Offline Tech Lab in Bareilly"
-                description="ByteCore Computer Centre is the BEST offline IT lab in Bareilly. We teach Web Development, Python, Full Stack, ADCA, Tally Prime."
+                title="#1 Offline Tech & Computer Centre in Bareilly"
+                description="ByteCore Computer Centre is the BEST offline IT lab in Nariyawal, Bareilly. We offer O Level, ADCA, Python, Web Development, Full Stack, and Tally Prime with 100% practical training."
+                keywords="bytecore computer centre, best computer center in bareilly, o level institute in bareilly, adca coaching in nariyawal, python programming classes bareilly, tally prime course, web design training bareilly, best it lab bareilly"
+                schema={{
+                    "@context": "https://schema.org",
+                    "@type": ["EducationalOrganization", "LocalBusiness"],
+                    "name": "ByteCore Computer Centre",
+                    "description": "Premium offline computer centre offering advanced IT, coding, and professional courses.",
+                    "url": "https://bytecores.in",
+                    "logo": "https://bytecores.in/logo.png",
+                    "image": "https://bytecores.in/banner-og.png",
+                    "telephone": "+91-8859942426",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "streetAddress": "Nariyawal",
+                        "addressLocality": "Bareilly",
+                        "addressRegion": "Uttar Pradesh",
+                        "postalCode": "243001",
+                        "addressCountry": "IN"
+                    },
+                    "sameAs": [
+                        "https://bytecores.in/"
+                    ]
+                }}
             />
 
             <HeroSection />

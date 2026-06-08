@@ -62,10 +62,49 @@ const Courses = () => {
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-800 pt-28 pb-20 px-4 sm:px-6 lg:px-8 font-sans">
             <SEO
-                title="Premium IT Courses"
-                description="Explore our premium IT courses including Full Stack Development, Python, ADCA, Tally Prime, and more. Master the future of technology with ByteCore Computer Centre Bareilly."
-                keywords="IT courses Bareilly, computer diploma Bareilly, web development training, Tally Prime classes, ADCA course, Python coding"
+                title="Premium IT Courses | O Level, Python, Full Stack"
+                description="Explore our premium IT courses including O Level, Full Stack Web Development, Python, ADCA, Tally Prime. Master the future of technology with ByteCore Computer Centre Bareilly."
+                keywords="o level course in bareilly, adca coaching in nariyawal, full stack web development training, python programming classes, tally prime certification, IT courses Bareilly"
                 url="https://bytecores.in/courses"
+                schema={{
+                    "@context": "https://schema.org",
+                    "@type": "ItemList",
+                    "itemListElement": [
+                        {
+                            "@type": "Course",
+                            "position": 1,
+                            "name": "O Level (NIELIT)",
+                            "description": "Comprehensive IT curriculum covering IT Tools, Web Design, Python Programming, and IoT.",
+                            "provider": {
+                                "@type": "EducationalOrganization",
+                                "name": "ByteCore Computer Centre",
+                                "sameAs": "https://bytecores.in"
+                            }
+                        },
+                        {
+                            "@type": "Course",
+                            "position": 2,
+                            "name": "ADCA",
+                            "description": "Advanced Diploma in Computer Applications. Complete professional course for office and IT skills.",
+                            "provider": {
+                                "@type": "EducationalOrganization",
+                                "name": "ByteCore Computer Centre",
+                                "sameAs": "https://bytecores.in"
+                            }
+                        },
+                        {
+                            "@type": "Course",
+                            "position": 3,
+                            "name": "Python Mastery",
+                            "description": "Learn Python programming from scratch to advanced problem-solving.",
+                            "provider": {
+                                "@type": "EducationalOrganization",
+                                "name": "ByteCore Computer Centre",
+                                "sameAs": "https://bytecores.in"
+                            }
+                        }
+                    ]
+                }}
             />
 
             {/* Hero Section */}
