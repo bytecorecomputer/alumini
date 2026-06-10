@@ -332,6 +332,7 @@ export default function StudentDetails() {
                                     <EditField label="Course" value={editForm.course} onChange={v => setEditForm({ ...editForm, course: v })} />
                                     <EditField label="Status" value={editForm.status} type="select" options={['unpaid', 'pass']} onChange={v => setEditForm({ ...editForm, status: v })} />
                                     <EditField label="Total Fee" value={editForm.totalFees} type="number" onChange={v => setEditForm({ ...editForm, totalFees: parseInt(v) })} />
+                                    <EditField label="Admission Fee" value={editForm.admissionFee} type="number" onChange={v => setEditForm({ ...editForm, admissionFee: parseInt(v) })} />
                                     <EditField label="Old Fees Received" value={editForm.oldPaidFees} type="number" onChange={v => setEditForm({ ...editForm, oldPaidFees: parseInt(v) })} />
                                     <EditField label="Father's Name" value={editForm.fatherName} onChange={v => setEditForm({ ...editForm, fatherName: v })} />
                                     <div className="md:col-span-2 space-y-2">
