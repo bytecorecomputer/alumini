@@ -9,6 +9,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'logo.png'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,mp4,woff,woff2,json,pdf,webmanifest}'],
+        maximumFileSizeToCacheInBytes: 50000000 // 50MB to cache heavy assets like mp4 and pdf
+      },
       manifest: {
         name: 'ByteCore Computer Centre',
         short_name: 'ByteCore',

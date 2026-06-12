@@ -2269,6 +2269,1333 @@ export const HINDI_QUIZ_DATA = {
         <p><b>File Menu:</b> New, Open, Save, Export As PDF, Print आदि विकल्प होते हैं।</p>
         <p><b>Tools Menu:</b> Spelling, Word Count, Macros, Extension Manager आदि महत्वपूर्ण टूल्स यहाँ मिलते हैं।</p>`,
         "modules": {
+            "Writer Mock Test 1": [
+                {
+                                "question": "Shortcut key for manage template in LibreOffice Writer____",
+                                "options": [
+                                                "Ctrl + B",
+                                                "Ctrl + Shift + N",
+                                                "Ctrl + Shift + O",
+                                                "None of the above"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Font size can’t be changed in LibreOffice writer.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Shortcut key used for line break in LibreOffice writer is ____",
+                                "options": [
+                                                "Ctrl + M",
+                                                "Ctrl + P",
+                                                "Shift + Enter",
+                                                "Ctrl + O"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which of the following key is used for align left of the text in LibreOffice?",
+                                "options": [
+                                                "Ctrl + M",
+                                                "Ctrl + P",
+                                                "Ctrl + L",
+                                                "Ctrl + )"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the minimum font size in LibreOffice writer?",
+                                "options": [
+                                                "1",
+                                                "2",
+                                                "3",
+                                                "4"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Minimum zoom percentage in LibreOffice Writer is 20%.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Bullets and numbering appears in the standard toolbar in LibreOffice writer.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Eleven menu are found in LibreOffice writer.",
+                                "options": [
+                                                "True",
+                                                "false"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice writer template does not include style formatting.",
+                                "options": [
+                                                "False",
+                                                "True"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the default file extension of LibreOffice Writer?",
+                                "options": [
+                                                ".doc",
+                                                ".docx",
+                                                ".odt",
+                                                "None of the above"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the maximum font size in LibreOffice Writer?",
+                                "options": [
+                                                "999.9",
+                                                "80",
+                                                "100",
+                                                "200"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Shortcut key for insert table in LibreOffice writer.",
+                                "options": [
+                                                "Ctrl + F7",
+                                                "Ctrl + F12",
+                                                "Ctrl + F8",
+                                                "Ctrl + F9"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Print Preview shortcut key is ______ in LibreOffice writer.",
+                                "options": [
+                                                "Ctrl + Shift + O",
+                                                "Ctrl + shift + P",
+                                                "Ctrl + Shift + S",
+                                                "Ctrl + Shift + U"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Shortcut key for increase the font size in libreOffice Writer is …….",
+                                "options": [
+                                                "Ctrl + ]",
+                                                "Ctrl + [",
+                                                "Ctrl + [",
+                                                "Ctrl + ]"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Shortcut key is _____ to open a document in LiberOffice Writer.",
+                                "options": [
+                                                "Ctrl + Q",
+                                                "Ctrl + O",
+                                                "Ctrl + H",
+                                                "Ctrl + P"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                }
+],
+            "Writer Mock Test 2": [
+                {
+                                "question": "FootNote is located at ______ in LibreOffice Writer.",
+                                "options": [
+                                                "Header of Page",
+                                                "Middle of Page",
+                                                "Bottom of Page",
+                                                "None of the above"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which key is used for subscript the text in LibreOffice writer?",
+                                "options": [
+                                                "Ctrl + Shift + B",
+                                                "Ctrl + Shift + A",
+                                                "Ctrl + Shift + S",
+                                                "None of the above"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": ". In LibreOffice writer which of the following shortcut is used to justify the document?",
+                                "options": [
+                                                "Ctrl + J",
+                                                "Ctrl + P",
+                                                "Ctrl + Z",
+                                                "Ctrl + O"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the shortcut key to bullet off in LibreOffice Writer?",
+                                "options": [
+                                                "F12",
+                                                "Shift + F12",
+                                                "Ctrl + F12",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "In which menu is the word count option in LibreOffice Writer?",
+                                "options": [
+                                                "Table",
+                                                "Tools",
+                                                "File",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Which is the type of page orientation in LibreOffice Writer?",
+                                "options": [
+                                                "Portrait",
+                                                "Landscape",
+                                                "Slide",
+                                                "Both Portrait & Landscape"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which of the following options appears when a hyperlink is selected in LibreOffice Writer?",
+                                "options": [
+                                                "Place in document, mail, document, new document",
+                                                "Place in document, new document",
+                                                "Internet, mail",
+                                                "Internet, mail, document, new document"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the default font size in LibreOffice Writer?",
+                                "options": [
+                                                "10",
+                                                "11",
+                                                "12",
+                                                "13"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the default margin in LibreOffice writer?",
+                                "options": [
+                                                "1",
+                                                "2",
+                                                ".50",
+                                                ".75"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the default highlight color of LibreOffice writer?",
+                                "options": [
+                                                "Blue",
+                                                "Yellow",
+                                                "Red",
+                                                "Green"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key of extension manager in LibreOffice writer?",
+                                "options": [
+                                                "Ctrl + Alt + E",
+                                                "Ctrl + Shift + E",
+                                                "Alt + Shift + F5",
+                                                "Ctrl + F5"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice writer has a default user interface ……",
+                                "options": [
+                                                "Standard tool bar",
+                                                "Formatting tool bar",
+                                                "Side bar",
+                                                "Print bar"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Shortcut key Ctrl + 1 is used for heading 1 style in selected text.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Which of the following options will be used to change the printer related settings in LibreOffice Writer?",
+                                "options": [
+                                                "Printer",
+                                                "Print Preview",
+                                                "Printer Setup",
+                                                "Print setup"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the shortcut key to apply heading in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + 1",
+                                                "Ctrl + 2",
+                                                "Ctrl + 3",
+                                                "All of the above"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                }
+],
+            "Writer Mock Test 3": [
+                {
+                                "question": "Where is the option to comment in LibreOffice write?",
+                                "options": [
+                                                "Tools",
+                                                "Style",
+                                                "Insert",
+                                                "Format"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "How many user interfaces are available in LibreOffice Writer?",
+                                "options": [
+                                                "2",
+                                                "3",
+                                                "4",
+                                                "5"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the shortcut key to bold a text in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + D",
+                                                "Ctrl + B",
+                                                "Ctrl + s",
+                                                "Ctrl + N"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key to centralize text in LibreOffice writer?",
+                                "options": [
+                                                "Ctrl + J",
+                                                "Ctrl +K",
+                                                "Ctrl + E",
+                                                "Ctrl + L"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "It does not appear in LibreOffice Writer status bar?",
+                                "options": [
+                                                "Total characters",
+                                                "Number of words",
+                                                "Computer Name",
+                                                "Current page number"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the default view of LibreOffice writer?",
+                                "options": [
+                                                "Normal view",
+                                                "Slide view",
+                                                "Web view",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In which menu of the LibreOffice writer is the Emphasis option available?",
+                                "options": [
+                                                "Style",
+                                                "Tool menu",
+                                                "Edit menu",
+                                                "Insert menu"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Bold, Italic, underline option is found in which menu in LibreOffice Writer?",
+                                "options": [
+                                                "Edit",
+                                                "Format",
+                                                "Tool",
+                                                "File"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the default alignment of text in LibreOffice Writer?",
+                                "options": [
+                                                "Right align",
+                                                "Left align",
+                                                "Both A and B",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "In LibreOffice writer, what is the line under the text called?",
+                                "options": [
+                                                "Underline",
+                                                "Below line",
+                                                "Bottom line",
+                                                "Top line"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In which menu is the option of endnote and footnote found in LibreOffice writer?",
+                                "options": [
+                                                "Edit menu",
+                                                "View menu",
+                                                "Format menu",
+                                                "Insert menu"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Shortcut key to break the page?",
+                                "options": [
+                                                "Ctrl + Return",
+                                                "Ctrl + Enter",
+                                                "Ctrl + A",
+                                                "Both A and B"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "In which menu of LibreOffice writer is there is an option for ‘automatic spell check’?",
+                                "options": [
+                                                "View",
+                                                "Tool",
+                                                "Edit",
+                                                "File"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "LibreOffice is an application software.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Which shortcut key is used for new style in LibreOffice writer?",
+                                "options": [
+                                                "Shift + F11",
+                                                "Shift + F5",
+                                                "Ctrl + F",
+                                                "Ctrl + F5"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                }
+],
+            "Writer Mock Test 4": [
+                {
+                                "question": "In LibreOffice writer, search is case sensitive.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "In LibreOffice, shortcut keys are used for duplicate shapes?",
+                                "options": [
+                                                "Ctrl + F3",
+                                                "Ctrl + F2",
+                                                "Shift + F2",
+                                                "Shift + F3"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "In LibreOffice writer, mail merge option is in which menu?",
+                                "options": [
+                                                "Insert",
+                                                "Format",
+                                                "Tools",
+                                                "Form"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the shortcut key of superscript in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + Shift + P",
+                                                "Ctrl + Shift + B",
+                                                "Ctrl + shift + S",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the shortcut key for Autotext used in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + F3",
+                                                "Ctrl + F2",
+                                                "Ctrl + F4",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key for save as in LibreOffice writer?",
+                                "options": [
+                                                "Ctrl + Shift + S",
+                                                "Ctrl + S",
+                                                "F12",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "By default Line spacing in LibreOffice Writer is?",
+                                "options": [
+                                                "1",
+                                                "1.5",
+                                                "2",
+                                                "2.5"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the shortcut key for double underline in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + Shift + D",
+                                                "Ctrl + D",
+                                                "Ctrl + D",
+                                                "Ctrl + Shift + U"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key for inserting a table in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + F12",
+                                                "Ctrl + F2",
+                                                "Ctrl + F1",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In LibreOffice writer, scroll bar option is in which menu?",
+                                "options": [
+                                                "File",
+                                                "Insert",
+                                                "Tools",
+                                                "View"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Thesaurus option is in which menu of LibreOffice?",
+                                "options": [
+                                                "Format",
+                                                "Tools",
+                                                "View",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Which shortcut key is used for full screen in LibreOffice?",
+                                "options": [
+                                                "Ctrl + Shift + J",
+                                                "Ctrl + shift + K",
+                                                "Shift + J",
+                                                "None of the above"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Which shortcut key is used in LibreOffice to hide or unhide the ruler?",
+                                "options": [
+                                                "Ctrl + Shift + R",
+                                                "Ctrl + Shift + P",
+                                                "Ctrl + shift + B",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the shortcut key for clear format in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + C",
+                                                "Ctrl + M",
+                                                "Ctrl + Shift + M",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key to close the current window in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + Q",
+                                                "Ctrl + W",
+                                                "Ctrl + T",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                }
+],
+            "Writer Mock Test 5": [
+                {
+                                "question": "Which was the most widely used word processing software in late 1970?",
+                                "options": [
+                                                "MS Word",
+                                                "LibreOffice Writer",
+                                                "Word Star",
+                                                "None of the above"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the word processing in LibreOffice?",
+                                "options": [
+                                                "Draw",
+                                                "Impress",
+                                                "Calc",
+                                                "Writer"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the file extension for template in LibreOffice Writer?",
+                                "options": [
+                                                ".odp",
+                                                ".odt",
+                                                ".ott",
+                                                ".doc"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which of the following keyboard shortcut is used to exit writer?",
+                                "options": [
+                                                "Ctrl + F4",
+                                                "Ctrl + F2",
+                                                "Ctrl + F1",
+                                                "Alt + F4"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the shortcut key to create a new document in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + N",
+                                                "Ctrl + Shift + N",
+                                                "Shift + N",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "The status bar can be enabled/disabled in LibreOffice Writer.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "The table of LibreOffice writer document cannot be converted into text.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "We cannot add video to LibreOffice Writer document.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "You can save a document created in LibreOffice writer directly on Google drive.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In LibreOffice writer, you can use header and footer on every page.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice writer has 11 total menus.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice writer can have different footer in even and odd pages.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In LibreOffice writer, a manual font can be written 100, because the final font size is 96 by the font size.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In the LibreOffice writer, if the italic option is used by the Ctrl + I shortcut key on the selected text, can  the italic option be removed from this shortcut key?",
+                                "options": [
+                                                "Yes",
+                                                "No"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "The default language of Libreoffice writer is English.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                }
+],
+            "Writer Mock Test 6": [
+                {
+                                "question": "What is the Power Point known in the LibreOffice?",
+                                "options": [
+                                                "Writer",
+                                                "Draw",
+                                                "Calc",
+                                                "Impress"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which of the following charts is not in the chart menu?",
+                                "options": [
+                                                "Pie chart",
+                                                "Bar chart",
+                                                "Line chart",
+                                                "Square chart"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which of the following charts is used to display a data series?",
+                                "options": [
+                                                "column",
+                                                "Bubble",
+                                                "Pie",
+                                                "None"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "In LibreOffice, give the value of ‘=average(1,2,4,9)’",
+                                "options": [
+                                                "1",
+                                                "3",
+                                                "4",
+                                                "5"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which command is used to uppercase text written in lower case?",
+                                "options": [
+                                                "Cycle case",
+                                                "=proper(text)",
+                                                "=upper(text)",
+                                                "None"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Shortcut key ‘Ctrl + -‘ used for",
+                                "options": [
+                                                "Delete row",
+                                                "Delete column",
+                                                "Delete sheet",
+                                                "Delete cell"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "In which menu is the LibreOffice Digital signature option available?",
+                                "options": [
+                                                "Windows",
+                                                "View",
+                                                "File",
+                                                "Tools"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the use of signature in LibreOffice?",
+                                "options": [
+                                                "integrity",
+                                                "Authentication",
+                                                "Non-Repudiation",
+                                                "All of these"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the use of Ctrl + G shortcut key in LibreOffice?",
+                                "options": [
+                                                "Go to page",
+                                                "Go to heading",
+                                                "Go to line",
+                                                "Go to text"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "By using which submenu libreOffice accept the donation?",
+                                "options": [
+                                                "donate to libreOffice",
+                                                "transfer to LibreOffice",
+                                                "Give to LibreOffice",
+                                                "Help to LibreOffice"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "How many languages does LibreOffice support?",
+                                "options": [
+                                                "100",
+                                                "115",
+                                                "120",
+                                                "125"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "How many languages are dedicated in LibreOffice?",
+                                "options": [
+                                                "70",
+                                                "75",
+                                                "80",
+                                                "40"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the shortcut key to exit LibreOffice?",
+                                "options": [
+                                                "Ctrl + Q",
+                                                "Ctrl + W",
+                                                "Ctrl + T",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the shortcut key for clear formatting in LibreOffice Writer?",
+                                "options": [
+                                                "Ctrl + B",
+                                                "Ctrl + Q",
+                                                "Ctrl + M",
+                                                "Ctrl + T"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the line given above a text?",
+                                "options": [
+                                                "Below line",
+                                                "Over line",
+                                                "Up line",
+                                                "Upper line"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                }
+],
+            "Writer Mock Test 7": [
+                {
+                                "question": "What is the extension of Base Data in LibreOffice?",
+                                "options": [
+                                                ".odb",
+                                                ".ods",
+                                                ".odf",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "______ is the correct option to insert header in LibreOffice?",
+                                "options": [
+                                                "Format > Header",
+                                                "Edit > Header",
+                                                "Insert > Header",
+                                                "View > Header"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which menu has the option to add pages in LibreOffice Writer?",
+                                "options": [
+                                                "File",
+                                                "Edit",
+                                                "Format",
+                                                "Insert"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which shortcut key is used to break the line in LibreOffice Writer?",
+                                "options": [
+                                                "Alt + Enter",
+                                                "Ctrl + Enter",
+                                                "Shift + Enter",
+                                                "None"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which shortcut key is used in LibreOffice Writer to go to the beginning of the line?",
+                                "options": [
+                                                "Home",
+                                                "Alt + Home",
+                                                "Ctrl + Home",
+                                                "Shift + Home"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Where is the file name displayed in LibreOffice?",
+                                "options": [
+                                                "in the title bar",
+                                                "in the task bar",
+                                                "in the status bar",
+                                                "in the scroll bar"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Ruler has shortcut key in LibreOffice?",
+                                "options": [
+                                                "Ctrl + R",
+                                                "Ctrl + Shift + R",
+                                                "Alt + shift + c",
+                                                "Window + L + R"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the new style shortcut key in LibreOffice sector?",
+                                "options": [
+                                                "Shift + F12",
+                                                "Ctrl + Shift + F11",
+                                                "Shift + F11",
+                                                "Ctrl + F12"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the shortcut key of a hyperlink in LibreOffice?",
+                                "options": [
+                                                "Ctrl + L",
+                                                "Ctrl + K",
+                                                "Ctrl + c",
+                                                "Ctrl + J"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key to print in LibreOffice?",
+                                "options": [
+                                                "Ctrl + P",
+                                                "Shift + P",
+                                                "Alt + P",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "There is no effect of transition in LibreOffice?",
+                                "options": [
+                                                "Dissolve",
+                                                "Fade",
+                                                "Diagonal",
+                                                "Fly in"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the graphics software in LibreOffice?",
+                                "options": [
+                                                "Calc",
+                                                "Impress",
+                                                "Writer",
+                                                "Draw"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which of these platforms can LibreOffice work on?",
+                                "options": [
+                                                "Windows",
+                                                "Linux",
+                                                "Mac",
+                                                "All of the above"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which of the following extensions are not related to the libra office?",
+                                "options": [
+                                                ".odt",
+                                                ".ods",
+                                                ".odp",
+                                                ".rtf"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is LibreOffice word processing called?",
+                                "options": [
+                                                "Writer",
+                                                "Calc",
+                                                "Text",
+                                                "Word"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                }
+],
+            "Writer Mock Test 8": [
+                {
+                                "question": "Which shortcut key is use to show formatting marks in LibreOffice?",
+                                "options": [
+                                                "Ctrl + F5",
+                                                "Ctrl + F10",
+                                                "Ctrl + F2",
+                                                "All of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key to paste in LibreOffice?",
+                                "options": [
+                                                "Ctrl + P",
+                                                "Ctrl + C",
+                                                "Ctrl + V",
+                                                "None"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which menu has word count option in LibreOffice?",
+                                "options": [
+                                                "Tools",
+                                                "Insert",
+                                                "Format",
+                                                "Edit"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Which shortcut key is used to get help in LibreOffice?",
+                                "options": [
+                                                "F2",
+                                                "F1",
+                                                "Shift + F1",
+                                                "None"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Where is the option of Edit in LibreOffice?",
+                                "options": [
+                                                "Status Bar",
+                                                "Title Bar",
+                                                "Standard Bar",
+                                                "None of the above"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "LibreOffice uses a very strong encryption mechanism that makes it almost impossible to retrieve the  contents of a document if a password is lost or forgotten.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "After writing a text once in LibreOffice, after writing the same text again, the rest of the text is written  automatically after writing the first word?",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In LibreOffice Can you write date only in DD/MM/YY?",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "LibreOffice is not an application software",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "LibreOffice contains many software",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice is an application software",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "There is not find and replace option in LibreOffice",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "LibreOffice is developed by Microsoft",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "LibreOffice falls under the category of computer software",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice is connected to a server. In case of any type of problem in the main server, the LibreOffice  automatically backup the file from the Main server.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                }
+],
+            "Writer Mock Test 9": [
+                {
+                                "question": "There is not publisher software in LibreOffice",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Undo and Redo commands are there is LibreOffice",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Bing is a LibreOffice product",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "LibreOffice ‘menu bar’ can be opened with shortcut key",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice is a free open source software",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                }
+],
             "Writer Basics & Shortcuts": [
                 {
                     "question": "LibreOffice Writer का डिफ़ॉल्ट फ़ाइल एक्सटेंशन क्या होता है?",
@@ -2325,6 +3652,641 @@ export const HINDI_QUIZ_DATA = {
             <li><b>=MAX(A1:A5)</b> - सबसे बड़ी संख्या बताता है।</li>
         </ul>`,
         "modules": {
+            "Calc Mock Test 1": [
+                {
+                                "question": "________ sign is mandatory before any formula in Calc.",
+                                "options": [
+                                                "+",
+                                                "–",
+                                                "=",
+                                                "*"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which of the following shortcut keys is used to increase the width of the selected column of a table in  LibreOffice writer?",
+                                "options": [
+                                                "Alt + Ctrl + Right Arrow",
+                                                "Alt + Ctrl + Left arrow",
+                                                "Alt + Right arrow",
+                                                "Ctrl + Right arrow"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "In LibreOffice, the shortcut key of going at the last of the cell is ____.",
+                                "options": [
+                                                "Alt + Tab",
+                                                "Tab",
+                                                "Alt",
+                                                "Shift + Tab"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "In LibreOffice writer, a table can be broken by means of split table option, can we break the row and  column in two parts in LibreOffice writer?",
+                                "options": [
+                                                "Yes",
+                                                "No"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "When in LibreOffice writer, the file of LibreOffice Calc is inserted, the data appears as an embedded  object.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "The cell selected in LibreOffice Calc defined.",
+                                "options": [
+                                                "A deep wide boarder",
+                                                "A dotted border",
+                                                "A blinking boarder",
+                                                "By Italic text"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the shortcut key to move from one cell to another in LibreOffice Calc?",
+                                "options": [
+                                                "Tabs",
+                                                "Ctrl + Q",
+                                                "Ctrl + M",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Which of the following is used to convert row into a column?",
+                                "options": [
+                                                "row to column",
+                                                "Transpose",
+                                                "Convert",
+                                                "Reverse"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "How to edit cell in LibreOffice Calc spreadsheet, or what shortcut key will be used to edit the cell?",
+                                "options": [
+                                                "F1",
+                                                "F2",
+                                                "F12",
+                                                "None"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key to close LibreOffice Spreadsheet?",
+                                "options": [
+                                                "Ctrl + Shift + E",
+                                                "Ctrl + H",
+                                                "Ctrl + T",
+                                                "Ctrl + Q"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "In LibreOffice Calc, is the extension name of the template file?",
+                                "options": [
+                                                ".ods",
+                                                ".xlsx",
+                                                ".xlt",
+                                                ".ots"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which of the following can represent a column in LibreOffice Calc?",
+                                "options": [
+                                                "1,2,3,4",
+                                                "A, B, C, D",
+                                                "A1, B1, C1",
+                                                "1A, 1B, 2C"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "The maximum width of a column can be",
+                                "options": [
+                                                "100",
+                                                "200",
+                                                "300",
+                                                "400"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Where is the goal seek option in LibreOffice Calc?",
+                                "options": [
+                                                "Windows",
+                                                "Tools",
+                                                "Data",
+                                                "Format"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "By what other name is the formula bar known in libreOffice Calc?",
+                                "options": [
+                                                "function bar",
+                                                "Name box",
+                                                "Input line",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                }
+],
+            "Calc Mock Test 2": [
+                {
+                                "question": "Which menu will be required to comment in LibreOffice Calc?",
+                                "options": [
+                                                "Insert",
+                                                "View",
+                                                "Format",
+                                                "Data"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "If the cell address changes after copying the formula, then the address is known as……..",
+                                "options": [
+                                                "Absolute address",
+                                                "Relative address",
+                                                "Mixed address",
+                                                "Dynamic address"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "In which menu is the option of Donnet found in LibreOffice Writer or Calc?",
+                                "options": [
+                                                "Edit",
+                                                "View",
+                                                "Help",
+                                                "None"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the number of by default rows and columns in LibreOffice Calc?",
+                                "options": [
+                                                "1048576, 16384",
+                                                "1048576, 1024",
+                                                "65536, 256",
+                                                "None"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the address of the last cell in LibreOffice Calc?",
+                                "options": [
+                                                "AMJ1024",
+                                                "AMJ1048576",
+                                                "XFD1048576",
+                                                "XFD1024"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the last row and column name in LibreOffice Calc?",
+                                "options": [
+                                                "1048576, AMJ",
+                                                "1048776, AMH",
+                                                "1048556, AME",
+                                                "1047576, AMJ"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the shortcut key to save as in LibreOffice Spreadsheet?",
+                                "options": [
+                                                "Shift + Alt + S",
+                                                "Ctrl + S",
+                                                "Ctrl + Shift + s",
+                                                "None"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Shortcut key to insert cell in LibreOffice Calc",
+                                "options": [
+                                                "Ctrl + Shift + +",
+                                                "Ctrl + +",
+                                                "Alt + +",
+                                                "Ctrl + -"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Currently you are on a G7 cell in LibreOffice Calc spreadsheet, which of the following will you be in  after pressing the Home key of the keyboard?",
+                                "options": [
+                                                "A1",
+                                                "A7",
+                                                "F7",
+                                                "G1"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the default size of a font in LibreOffice Calc?",
+                                "options": [
+                                                "10",
+                                                "12",
+                                                "14",
+                                                "18"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Which function in LibreOffice Calc only show Date?",
+                                "options": [
+                                                "Now()",
+                                                "Today()",
+                                                "Weekdays()",
+                                                "None of the above"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key for inserting date in LibreOffice Calc?",
+                                "options": [
+                                                "Ctrl + ;",
+                                                "Ctrl + :",
+                                                "Shift + ;",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "How many types of ‘cell references’ are there in LibreOffice Calc?",
+                                "options": [
+                                                "1",
+                                                "2",
+                                                "3",
+                                                "4"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Which bar is at the top of LibreOffice Calc?",
+                                "options": [
+                                                "Status bar",
+                                                "Menu bar",
+                                                "Title bar",
+                                                "Format bar"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the shortcut key to select cells in LibreOffice Calc?",
+                                "options": [
+                                                "Ctrl + 1",
+                                                "Ctrl + shift + 1",
+                                                "Ctrl + A",
+                                                "Shift + d"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                }
+],
+            "Calc Mock Test 3": [
+                {
+                                "question": "How many seats are there by default in the workbook of LibreOffice Calc?",
+                                "options": [
+                                                "1",
+                                                "2",
+                                                "3",
+                                                "4"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the default width of the column in the libreOffice column?",
+                                "options": [
+                                                ".18 inch",
+                                                ".89 inch",
+                                                "1.28 inch",
+                                                "1.05 inch"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the shortcut key to cut in LibreOffice Calc?",
+                                "options": [
+                                                "Shift + X",
+                                                "Ctrl + X",
+                                                "Ctrl + alt + X",
+                                                "Ctrl + O"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "How many worksheets are there in LibreOffice Calc?",
+                                "options": [
+                                                "32000",
+                                                "48000",
+                                                "60000",
+                                                "No limit"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Which of the following zoom in LibreOffice Calc?",
+                                "options": [
+                                                "20% to 400%",
+                                                "20% to 600%",
+                                                "10% to 500%",
+                                                "5% to 3000%"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the alignment of numbers in LibreOffice Calc?",
+                                "options": [
+                                                "Right",
+                                                "Left",
+                                                "Center",
+                                                "All"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "From which menu is the text color changed in LibreOffice Calc?",
+                                "options": [
+                                                "Edit",
+                                                "Formatting",
+                                                "Style",
+                                                "View"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the default font name of LibreOffice Calc?",
+                                "options": [
+                                                "Times new roman",
+                                                "Liberation Sans",
+                                                "Liberation Serif",
+                                                "Calibri"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the LibreOffice Calc file extension name?",
+                                "options": [
+                                                ".odt",
+                                                ".ods",
+                                                ".odb",
+                                                ".odm"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Shortcut key used to open the function wizard in LibreOffice Calc is ………..",
+                                "options": [
+                                                "Alt + F1",
+                                                "Ctrl + F6",
+                                                "F2",
+                                                "Ctrl + F2"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "The combination of the column letter and row number for cell in an Calc spreadsheet is called ………",
+                                "options": [
+                                                "Cell across",
+                                                "Cell reference",
+                                                "Cell identity",
+                                                "Cell Identification number"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the maximum number of characters in one cell in calc spreadsheet?",
+                                "options": [
+                                                "6000",
+                                                "32767",
+                                                "255",
+                                                "1021"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "What is the maximum number of cell per spreadsheets in calc?",
+                                "options": [
+                                                "6000",
+                                                "1000",
+                                                "1073741824",
+                                                "1048576"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which shortcut key is used to insert comment in LibreOffice Calc?",
+                                "options": [
+                                                "Ctrl + Alt + C",
+                                                "Ctrl + Shift + J",
+                                                "Ctrl + Alt + S",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "The LibreOffice Calc is similar to Microsoft Excel, with almost the same abilities.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                }
+],
+            "Calc Mock Test 4": [
+                {
+                                "question": "Page down key is used to moves the viewable rows down one screen.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In LibreOffice Package, spreadsheet is called ___________",
+                                "options": [
+                                                "Excel",
+                                                "Row",
+                                                "Column",
+                                                "Calc"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "______ is used to highlight cells containing numeric values.",
+                                "options": [
+                                                "Ctrl + F7",
+                                                "Ctrl + F6",
+                                                "Ctrl + F8",
+                                                "Ctrl + F5"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "How many axes does chart in Calc have?",
+                                "options": [
+                                                "2",
+                                                "3",
+                                                "4",
+                                                "5"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "How many columns are there in LibreOffice Calc",
+                                "options": [
+                                                "1048576",
+                                                "16384",
+                                                "1024",
+                                                "None"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "In which menu is the Merge Cells command found in LibreOffice Calc?",
+                                "options": [
+                                                "Edit",
+                                                "Style",
+                                                "Sheet",
+                                                "Format"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which menu is used for wizard in LibreOffice Calc?",
+                                "options": [
+                                                "File",
+                                                "Insert",
+                                                "Edit",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Clicking on the column name in LibreOffice can be selected the entire column.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Columns in LibreOffice Calc can have different widths.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In LibreOffice Calc, entire sheet can be selected at once?",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Ctrl + Shift + Arrow Up shortcut key is used to select the column from the current cell to the first cell?",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice Calc does not allow to open more than one document.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "By default grid line is printed in LibreOffice Calc",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "The cells of a single column of libreoffice calc spreadsheet can have different widths.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                }
+],
             "Calc Basics": [
                 {
                     "question": "LibreOffice Calc में अंतिम कॉलम का नाम क्या होता है?",
@@ -2362,6 +4324,572 @@ export const HINDI_QUIZ_DATA = {
             <li><b>Esc</b>: End Slide Show</li>
         </ul>`,
         "modules": {
+            "Impress Mock Test 1": [
+                {
+                                "question": "What is the maximum number of views you can add to a slide?",
+                                "options": [
+                                                "3",
+                                                "2",
+                                                "5",
+                                                "10"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the file extension of LibreOffice Impress?",
+                                "options": [
+                                                ".ott",
+                                                ".odt",
+                                                ".ods",
+                                                ".odp"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "It is used to determine the timing on a slide in a presentation?",
+                                "options": [
+                                                "rehearsal",
+                                                "slide timer",
+                                                "slide timing tool",
+                                                "Slide tool"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "How many types of LibreOffice Impress charts can be inserted?",
+                                "options": [
+                                                "12",
+                                                "14",
+                                                "11",
+                                                "10"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which of the following is slide transition?",
+                                "options": [
+                                                "Over head",
+                                                "Letter",
+                                                "A special effect used to show a slideshow",
+                                                "A type of slide"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What type of program is LibreOffice Impress?",
+                                "options": [
+                                                "WordProcessing",
+                                                "Presentation",
+                                                "Spreadsheet",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "By what name do you know the first slide in the presentation?",
+                                "options": [
+                                                "Home slide",
+                                                "Main slide",
+                                                "title slide",
+                                                "None"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the maximum zoom in LibreOffice Impress?",
+                                "options": [
+                                                "5%",
+                                                "100%",
+                                                "500%",
+                                                "3000%"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Where does the zoom option appear in LibreOffice Impress?",
+                                "options": [
+                                                "Title bar",
+                                                "Menu bar",
+                                                "Status bar",
+                                                "Task bar"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the shortcut key to print a presentation slide?",
+                                "options": [
+                                                "Ctrl + P",
+                                                "Ctrl + Shift + P",
+                                                "Ctrl + O",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the shortcut key for print preview in Presentation?",
+                                "options": [
+                                                "Ctrl + shift + F12",
+                                                "Ctrl + Shift + P",
+                                                "Ctrl +P",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the default title name in LibreOffice Impress?",
+                                "options": [
+                                                "Untitle",
+                                                "Untitled1",
+                                                "Document1",
+                                                "Doc1"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Where is the option of slide transition present?",
+                                "options": [
+                                                "Slide",
+                                                "View",
+                                                "A and B",
+                                                "insert"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "How many menus are there in LibreOffice Impress?",
+                                "options": [
+                                                "10",
+                                                "20",
+                                                "30",
+                                                "15"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the minimum zoom size of LibreOffice Impress?",
+                                "options": [
+                                                "10%",
+                                                "5%",
+                                                "20%",
+                                                "15%"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                }
+],
+            "Impress Mock Test 2": [
+                {
+                                "question": "The shortcut key to exit presentation is?",
+                                "options": [
+                                                "Esc",
+                                                "Del",
+                                                "Alt",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Shortcut key is to be taken out of Presentation?",
+                                "options": [
+                                                "Ctrl + A",
+                                                "Esc",
+                                                "Left arrow",
+                                                "None"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Using which option do all the slides appear simultaneously?",
+                                "options": [
+                                                "Handouts",
+                                                "Print preview",
+                                                "Slide sorter",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "This shortcut key is used to add new slides in LibreOffice impress.",
+                                "options": [
+                                                "Ctrl + M",
+                                                "Ctrl + N",
+                                                "Ctrl + T",
+                                                "Ctrl + S"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Which option will be used to repeat the slide show continuously?",
+                                "options": [
+                                                "Repeat",
+                                                "Loop",
+                                                "Again",
+                                                "None"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Which of the following will you use to organize or shorten a slide?",
+                                "options": [
+                                                "Slide sorter view",
+                                                "Slide pen",
+                                                "Both of the above",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which option will be used to remove slide transition?",
+                                "options": [
+                                                "Split transition",
+                                                "None transition",
+                                                "Wipe transition",
+                                                "Push"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "______ is a slide used as a starting point for other slides?",
+                                "options": [
+                                                "Template",
+                                                "File",
+                                                "First slide",
+                                                "Master slide"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which of the following software are made presentations in LibreOffice?",
+                                "options": [
+                                                "LibreOffice writer",
+                                                "LibreOffice Calc",
+                                                "LibreOffice Impress",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "Which of the following alignment is not in LibreOffice Impress?",
+                                "options": [
+                                                "Right",
+                                                "Left",
+                                                "Center",
+                                                "Justify"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What is the default page orientation in LibreOffice Impress?",
+                                "options": [
+                                                "Horizontal",
+                                                "Vertical",
+                                                "Landscaped",
+                                                "Portrait"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the shortcut key to start/perform a slide show?",
+                                "options": [
+                                                "F3",
+                                                "F4",
+                                                "Shift + F4",
+                                                "F5"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "How many types of charts are there in LibreOffice Impress?",
+                                "options": [
+                                                "9",
+                                                "10",
+                                                "11",
+                                                "12"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Which view of LibreOffice Impress contains only text?",
+                                "options": [
+                                                "outline view",
+                                                "slide sorter view",
+                                                "Notes view",
+                                                "Normal view"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "How does the screen appear when you open LibreOffice Impress?",
+                                "options": [
+                                                "Landscape",
+                                                "Portrait",
+                                                "Both",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                }
+],
+            "Impress Mock Test 3": [
+                {
+                                "question": "In which menu is the insert slide option available?",
+                                "options": [
+                                                "View",
+                                                "Edit",
+                                                "Insert",
+                                                "Slide"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "How can we go directly to the menu while the slide is running?",
+                                "options": [
+                                                "by mouse click",
+                                                "by right click on the slide",
+                                                "By clicking on the ribbon",
+                                                "None of these"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Which of the following is not an option of edit menu of LibreOffice Impress?",
+                                "options": [
+                                                "Cut",
+                                                "copy",
+                                                "duplicate",
+                                                "page setup"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "What will be the shortcut key to move to the next slide?",
+                                "options": [
+                                                "Ctrl + Page down",
+                                                "Ctrl + Page up",
+                                                "Ctrl + Home",
+                                                "None"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "To create a text box in a slide ______?",
+                                "options": [
+                                                "Insert > Table > Textbox",
+                                                "Insert > Textbox",
+                                                "Slide > Textbox",
+                                                "None"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Which of the following sound files can be added to LibreOffice Impress?",
+                                "options": [
+                                                ".wav",
+                                                ".dat",
+                                                ".drv",
+                                                ".log"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice Impress presentation has a default template?",
+                                "options": [
+                                                "Title and contact",
+                                                "Content only",
+                                                "Image only",
+                                                "Title only"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In which menu is the macros command used in LibreOffice impress?",
+                                "options": [
+                                                "Insert Menu",
+                                                "Slide menu",
+                                                "Tools menu",
+                                                "View menu"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                },
+                {
+                                "question": "What is the shortcut key for a duplicate slide?",
+                                "options": [
+                                                "Ctrl + Shift + D",
+                                                "Ctrl + D",
+                                                "Ctrl + S",
+                                                "None"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "In which menu is the option of Master slide found in LibreOffice Impress?",
+                                "options": [
+                                                "Slide show",
+                                                "Slide",
+                                                "Format",
+                                                "View"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "LibreOffice Impress has an optimum zoom _____ percentage?",
+                                "options": [
+                                                "75",
+                                                "95",
+                                                "100",
+                                                "200"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "Any presentation in LibreOffice Impress can be exported in the following Format?",
+                                "options": [
+                                                "PDF",
+                                                "BMP",
+                                                "GIF",
+                                                "All"
+                                ],
+                                "correctAnswer": 3,
+                                "explanation": "The correct answer is d."
+                },
+                {
+                                "question": "Which file format is not added to LibreOffice Impress?",
+                                "options": [
+                                                "JPEG",
+                                                "HTML",
+                                                "GIF",
+                                                "WAV"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "Which shortcut key is used for the text box in LibreOffice Impress?",
+                                "options": [
+                                                "F2",
+                                                "F3",
+                                                "F4",
+                                                "F5"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "What is the shortcut key to jumb to last edited slide in LibreOffice?",
+                                "options": [
+                                                "Ctrl + E",
+                                                "Ctrl + J",
+                                                "Ctrl + Shift + F5",
+                                                "Ctrl + Shift + T"
+                                ],
+                                "correctAnswer": 2,
+                                "explanation": "The correct answer is c."
+                }
+],
+            "Impress Mock Test 4": [
+                {
+                                "question": "LibreOffice Impress is a part of Linux operating system",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "There is no option of mail merge in LibreOffice Impress.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In LibreOffice Impress, delete key is used to delete a slide.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "When you add a new slide, it inserts according to its previous slide layout.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "In LibreOffice Impress, Two presentations are open and the first presentation is in the works, then the  second file is also saved after saving.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                },
+                {
+                                "question": "In LibreOffice Impress, the shortcut key to find is Ctrl + F.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 0,
+                                "explanation": "The correct answer is a."
+                },
+                {
+                                "question": "LibreOffice Impress acts like an Excel Program.",
+                                "options": [
+                                                "True",
+                                                "False"
+                                ],
+                                "correctAnswer": 1,
+                                "explanation": "The correct answer is b."
+                }
+],
             "Impress Basics": [
                 {
                     "question": "LibreOffice Impress का डिफ़ॉल्ट एक्सटेंशन क्या है?",
