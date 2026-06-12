@@ -16,17 +16,32 @@ const courseSlice = createSlice({
             const courseTitle = action.payload || '';
             state.activeStudentCourse = courseTitle;
 
-            // Simple exact match logic
-            let matchedModules = COURSE_MODULES_MAP[courseTitle];
+            // Parse compound courses (e.g., "O Level + Accounting" or "ADCA, O Level")
+            const normalizedCourseTitle = courseTitle.toLowerCase().replace(/-/g, ' ');
+            const courseSegments = normalizedCourseTitle.split(/\+|,|&|\band\b/).map(s => s.trim());
             
-            // Fuzzy match (e.g., ADCA+ -> ADCA, O-Level -> O Level)
-            if (!matchedModules) {
-                const normalizedCourseTitle = courseTitle.toLowerCase().replace(/-/g, ' ');
+            const matchedModuleSet = new Set();
+            
+            courseSegments.forEach(segment => {
+                if (!segment) return;
+                // Find matching course key in the map
                 const fuzzyMatchKey = Object.keys(COURSE_MODULES_MAP).find(key => 
-                    normalizedCourseTitle.includes(key.toLowerCase().replace(/-/g, ' '))
+                    segment.includes(key.toLowerCase().replace(/-/g, ' '))
                 );
-                matchedModules = COURSE_MODULES_MAP[fuzzyMatchKey] || COURSE_MODULES_MAP['default'];
+                
+                const modulesForSegment = fuzzyMatchKey ? COURSE_MODULES_MAP[fuzzyMatchKey] : null;
+                
+                if (modulesForSegment) {
+                    modulesForSegment.forEach(mod => matchedModuleSet.add(mod));
+                }
+            });
+
+            // Fallback if absolutely no matches found
+            if (matchedModuleSet.size === 0) {
+                COURSE_MODULES_MAP['default'].forEach(mod => matchedModuleSet.add(mod));
             }
+
+            const matchedModules = Array.from(matchedModuleSet);
 
             // Hydrate the IDs from the QUIZ_BANK to pass rich data to the UI
             state.activeModules = matchedModules.map(moduleId => ({
