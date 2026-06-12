@@ -17,17 +17,21 @@ const courseSlice = createSlice({
             state.activeStudentCourse = courseTitle;
 
             // Parse compound courses (e.g., "O Level + Accounting" or "ADCA, O Level")
-            const normalizedCourseTitle = courseTitle.toLowerCase().replace(/-/g, ' ');
+            // Handle hyphens and normalize multiple spaces to a single space
+            const normalizedCourseTitle = courseTitle.toLowerCase().replace(/-/g, ' ').replace(/\s+/g, ' ');
             const courseSegments = normalizedCourseTitle.split(/\+|,|&|\band\b/).map(s => s.trim());
             
             const matchedModuleSet = new Set();
             
             courseSegments.forEach(segment => {
                 if (!segment) return;
+                // Normalize segment spaces again just in case
+                const cleanSegment = segment.replace(/\s+/g, ' ');
                 // Find matching course key in the map
-                const fuzzyMatchKey = Object.keys(COURSE_MODULES_MAP).find(key => 
-                    segment.includes(key.toLowerCase().replace(/-/g, ' '))
-                );
+                const fuzzyMatchKey = Object.keys(COURSE_MODULES_MAP).find(key => {
+                    const cleanKey = key.toLowerCase().replace(/-/g, ' ').replace(/\s+/g, ' ');
+                    return cleanSegment.includes(cleanKey);
+                });
                 
                 const modulesForSegment = fuzzyMatchKey ? COURSE_MODULES_MAP[fuzzyMatchKey] : null;
                 
