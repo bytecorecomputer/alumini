@@ -58,15 +58,26 @@ const parseDateToYYYYMM = (dateStr) => {
     return null;
 }
 
-const calculateCourseExpiry = (admissionDateStr, courseName, totalFees) => {
+const calculateCourseExpiry = (student) => {
+    const admissionDateStr = student.admissionDate;
+    const courseName = student.course;
+    const totalFees = student.totalFees;
+    
     if (!admissionDateStr || !courseName) return null;
     let durationMonths = 6;
     const course = courseName.toUpperCase();
+    
     if (course.includes('DCST') || course.includes('CCC')) durationMonths = 3;
     else if (course.includes('O LEVEL')) durationMonths = 12;
     else if (course.includes('ADCA') || course.includes('MDCA')) {
-        durationMonths = ((totalFees || 0) >= 4500) ? 12 : 6;
+        durationMonths = 12; // Default 1 year
+        // Smart Expiry: If any installment is >= 1000, consider it a 6-month fast-track
+        const hasHighInstallments = student.installments && student.installments.some(inst => Number(inst.amount) >= 1000);
+        if (hasHighInstallments || (totalFees || 0) < 4500) {
+            durationMonths = 6;
+        }
     }
+    
     const admission = new Date(admissionDateStr);
     if (isNaN(admission.getTime())) return null;
     const expiryDate = new Date(admission);
@@ -107,6 +118,45 @@ export default function AdminAnalytics() {
         };
         fetchAllStudents();
     }, [isOwner]);
+
+    const exportToCSV = () => {
+        if (!students || students.length === 0) return;
+        
+        let csvContent = "data:text/csv;charset=utf-8,";
+        const headers = ["Registration", "Name", "Course", "Center", "Village/Address", "Admission Date", "Total Fees", "Registration Fee", "Paid Fees", "Arrears", "Status", "Is High Risk Defaulter"];
+        csvContent += headers.join(",") + "\n";
+        
+        students.forEach(s => {
+            const stuTotalPaidAllTime = (s.paidFees || 0) + (s.oldPaidFees || 0);
+            const stuArrears = Math.max(0, (s.totalFees || 0) - stuTotalPaidAllTime);
+            const expiryInfo = calculateCourseExpiry(s);
+            const isHighRisk = expiryInfo?.isCompleted && stuArrears > ((s.totalFees || 0) * 0.3);
+            
+            const row = [
+                s.registration || '',
+                `"${s.fullName || ''}"`,
+                `"${s.course || ''}"`,
+                s.center || 'Nariyawal',
+                `"${normalizeAddress(s.address)}"`,
+                s.admissionDate || '',
+                s.totalFees || 0,
+                s.registrationFee || 0,
+                stuTotalPaidAllTime,
+                stuArrears,
+                s.status || 'unpaid',
+                isHighRisk ? 'YES' : 'NO'
+            ];
+            csvContent += row.join(",") + "\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `student_analytics_export_${new Date().toISOString().split('T')[0]}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     const monthOptions = useMemo(() => {
         const opts = [{ value: 'all', label: 'Global (All Time)' }];
@@ -149,7 +199,7 @@ export default function AdminAnalytics() {
 
             const course = s.course || 'Unknown';
             const admMonth = parseDateToYYYYMM(s.admissionDate);
-            const expiryInfo = calculateCourseExpiry(s.admissionDate, s.course, s.totalFees);
+            const expiryInfo = calculateCourseExpiry(s);
             const regFee = Number(s.registrationFee) || 0;
             const normalizedAddr = normalizeAddress(s.address);
 
@@ -366,7 +416,7 @@ export default function AdminAnalytics() {
                             </select>
                         </div>
 
-                        <button onClick={() => window.print()} className="w-full md:w-auto justify-center px-6 py-3.5 bg-blue-600 text-white rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-blue-900/50 flex items-center gap-2 hover:bg-blue-500 transition-all active:scale-95">
+                        <button onClick={exportToCSV} className="w-full md:w-auto justify-center px-6 py-3.5 bg-blue-600 text-white rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-blue-900/50 flex items-center gap-2 hover:bg-blue-500 transition-all active:scale-95">
                             <Download size={14} /> Export Report
                         </button>
                     </div>
@@ -440,41 +490,43 @@ export default function AdminAnalytics() {
                 {/* Middle Charts Grid (BI Style) */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     {/* Geographic / Demographic Insights */}
-                    <div className="lg:col-span-1 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col h-[400px]">
+                    <div className="lg:col-span-1 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col min-h-[450px]">
                         <div className="flex items-center justify-between mb-6">
                             <div className="flex items-center gap-2">
                                 <Map size={16} className="text-emerald-400" />
                                 <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Demographics / Location</h3>
                             </div>
                         </div>
-                        <div className="flex-1 w-full min-h-0">
+                        <div className="flex-1 w-full min-h-0 mb-4">
                             <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie data={analytics.addressData} innerRadius={50} outerRadius={80} paddingAngle={5} dataKey="students">
-                                        {analytics.addressData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} stroke="rgba(0,0,0,0)" />
-                                        ))}
-                                    </Pie>
+                                <BarChart data={analytics.addressData} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
+                                    <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#334155" />
+                                    <XAxis type="number" hide />
+                                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#f8fafc', fontWeight: 700 }} width={90} />
                                     <RechartsTooltip 
-                                        formatter={(value, name) => [`${value} Students`, name]}
+                                        cursor={{ fill: '#334155', opacity: 0.4 }} 
+                                        formatter={(value) => [`${value} Students`, 'Enrolled']}
                                         contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px', fontWeight: 700, color: '#fff' }} 
-                                        itemStyle={{ color: '#e2e8f0' }}
                                     />
-                                    <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 800 }} />
-                                </PieChart>
+                                    <Bar dataKey="students" radius={[0, 4, 4, 0]} barSize={20}>
+                                        {analytics.addressData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
                             </ResponsiveContainer>
                         </div>
                         {/* Village / Address List */}
-                        <div className="mt-4 flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-2 max-h-[120px]">
+                        <div className="mt-auto flex-shrink-0 overflow-y-auto custom-scrollbar pr-2 space-y-2 max-h-[160px]">
                             {analytics.addressData.map((addr, idx) => (
-                                <div key={idx} className="flex justify-between items-center p-2 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:bg-slate-800 transition-colors">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }}></div>
-                                        <p className="text-[10px] font-bold text-white truncate max-w-[120px]">{addr.name}</p>
+                                <div key={idx} className="flex justify-between items-center p-3 bg-slate-800/50 rounded-xl border border-slate-700/50 hover:bg-slate-800 transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-2.5 h-2.5 rounded-full shadow-sm shadow-black/50" style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }}></div>
+                                        <p className="text-[11px] font-bold text-white truncate max-w-[130px]">{addr.name}</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-[10px] font-black text-emerald-400">{addr.students} Students</p>
-                                        <p className="text-[8px] font-bold text-slate-500">₹{addr.revenue.toLocaleString()}</p>
+                                        <p className="text-[11px] font-black text-emerald-400">{addr.students} Students</p>
+                                        <p className="text-[9px] font-bold text-slate-500 tracking-wider mt-0.5">₹{addr.revenue.toLocaleString()}</p>
                                     </div>
                                 </div>
                             ))}
@@ -482,7 +534,7 @@ export default function AdminAnalytics() {
                     </div>
 
                     {/* Growth Velocity & Revenue Timeline */}
-                    <div className="lg:col-span-2 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col h-[400px]">
+                    <div className="lg:col-span-2 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col min-h-[400px] h-auto">
                         <div className="flex items-center gap-2 mb-6">
                             <TrendingUp size={16} className="text-blue-400" />
                             <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Revenue Velocity (Last 12 Mo)</h3>
@@ -512,7 +564,7 @@ export default function AdminAnalytics() {
                 {/* Bottom Charts Grid */}
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
                     {/* Course Popularity */}
-                    <div className="xl:col-span-1 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col h-[400px]">
+                    <div className="xl:col-span-1 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col min-h-[400px] h-auto">
                         <div className="flex items-center gap-2 mb-4">
                             <PieChartIcon size={16} className="text-purple-400" />
                             <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Course Revenue Share</h3>
@@ -535,7 +587,7 @@ export default function AdminAnalytics() {
                     </div>
 
                     {/* Defaulters Data Table (Power BI Matrix style) */}
-                    <div className="xl:col-span-2 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col h-[400px]">
+                    <div className="xl:col-span-2 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col min-h-[400px] h-auto">
                         <div className="flex flex-wrap items-center justify-between gap-4 mb-4 border-b border-slate-800 pb-4">
                             <div className="flex items-center gap-2">
                                 <AlertCircle size={16} className="text-red-500" />

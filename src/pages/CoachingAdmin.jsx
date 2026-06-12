@@ -284,24 +284,19 @@ export default function CoachingAdmin() {
         const course = student.course.toUpperCase();
         const totalFees = student.totalFees || 0;
 
-        if (course.includes('DCST')) {
+        if (course.includes('DCST') || course.includes('CCC')) {
             durationMonths = 3;
-        } else if (course.includes('ACCOUNTING') || course.includes('DFA') || course === 'DCA') {
+        } else if (course.includes('ACCOUNTING') || course.includes('DFA') || course === 'DCA' || course.includes('GRAPHIC')) {
             durationMonths = 6;
-        } else if (course.includes('ADCA') || course.includes('MDCA')) {
-            // High-level logic based on fees (e.g. 500/mo = ~6000 for 1 yr, 1000/mo = ~6000 for 6mo)
-            // Heuristic: If total fee is less than 4000, assume 6 months. If >4000, 1 year.
-            if (totalFees >= 4500) {
-                durationMonths = 12;
-            } else {
-                durationMonths = 6;
-            }
         } else if (course.includes('O LEVEL')) {
             durationMonths = 12;
-        } else if (course.includes('CCC')) {
-            durationMonths = 3;
-        } else if (course.includes('GRAPHIC')) {
-            durationMonths = 6;
+        } else if (course.includes('ADCA') || course.includes('MDCA')) {
+            durationMonths = 12; // Default 1 year
+            // Smart Expiry: If any installment is >= 1000, consider it a 6-month fast-track
+            const hasHighInstallments = student.installments && student.installments.some(inst => Number(inst.amount) >= 1000);
+            if (hasHighInstallments || totalFees < 4500) {
+                durationMonths = 6;
+            }
         }
 
         const admission = new Date(student.admissionDate);

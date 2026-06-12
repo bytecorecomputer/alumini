@@ -142,6 +142,11 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Nariyawal') {
         let batch = writeBatch(db);
         let batchCount = 0;
 
+        // Fetch existing students to merge installments cleanly
+        const studentsSnap = await getDocs(collection(db, "students"));
+        const existingStudents = new Map();
+        studentsSnap.forEach(doc => existingStudents.set(doc.id, doc.data()));
+
         for (const row of data) {
             const regId = row['Registration'] || row['Registration NO.'];
             if (!regId || regId === '' || isNaN(regId)) continue; // Skip invalid or missing registration IDs
@@ -181,13 +186,28 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Nariyawal') {
                 }
             }
 
-            // Calculate paidFees from parsed installments
+            // Pro-Level Merge: Protect existing manual installments
+            const dbData = existingStudents.get(student.registration) || {};
+            const existingInst = dbData.installments || [];
+            
+            const mergedMap = new Map();
+            existingInst.forEach(inst => mergedMap.set(`${inst.date}_${inst.amount}`, inst));
+            
             installments.forEach(inst => {
-                totalPaid += inst.amount;
+                const key = `${inst.date}_${inst.amount}`;
+                if (!mergedMap.has(key)) mergedMap.set(key, inst);
             });
 
-            student.installments = installments;
-            student.paidFees = totalPaid;
+            const finalInstallments = Array.from(mergedMap.values());
+            
+            let finalPaid = 0;
+            finalInstallments.forEach((inst, idx) => {
+                inst.installmentNo = idx + 1; // Assign proper sequence
+                finalPaid += inst.amount;
+            });
+
+            student.installments = finalInstallments;
+            student.paidFees = finalPaid;
 
             // Note: We don't overwrite 'oldPaidFees' to avoid messing up manual balances
 
