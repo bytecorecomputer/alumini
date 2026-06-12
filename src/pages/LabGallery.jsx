@@ -165,6 +165,19 @@ const LabGallery = () => {
         }
     };
 
+    const handleDelete = async (img) => {
+        if (!window.confirm("Are you sure you want to delete this archive?")) return;
+        try {
+            if (img.storagePath) {
+                await deleteFromSupabase(img.storagePath);
+            }
+            await deleteDoc(doc(db, 'lab_gallery', img.id));
+        } catch (error) {
+            console.error('Delete failed:', error);
+            alert('Delete Failed: ' + error.message);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#050505] text-white selection:bg-blue-500/30 font-sans overflow-x-hidden">
             <SEO 

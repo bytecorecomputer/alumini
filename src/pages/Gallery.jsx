@@ -18,6 +18,52 @@ import topper1 from '../assets/images/computer lab/scholership exam topper.jpg';
 import topper2 from '../assets/images/computer lab/scholership exam topper (2).jpg';
 import rahulSirVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
 
+const Lightbox = ({ item, close }) => (
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10"
+    >
+        <div className="absolute inset-0 bg-slate-950/98 backdrop-blur-3xl" onClick={close}></div>
+        <motion.div
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            className="relative z-10 w-full max-w-6xl aspect-video rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(59,130,246,0.3)] border border-white/10"
+        >
+            {item.type === 'video' || item.imageUrl?.endsWith('.mp4') ? (
+                <video src={item.imageUrl || item.src} autoPlay controls className="w-full h-full object-contain" />
+            ) : (
+                <img 
+                    src={item.imageUrl || item.src} 
+                    alt={item.title} 
+                    className="w-full h-full object-contain"
+                />
+            )}
+            
+            <button
+                onClick={close}
+                className="absolute top-8 right-8 w-16 h-16 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all shadow-xl border border-white/20 z-30"
+            >
+                <X size={28} />
+            </button>
+
+            <div className="absolute bottom-0 left-0 right-0 p-12 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent z-30">
+                <div className="flex items-center gap-4 mb-4">
+                    <span className="px-4 py-1.5 bg-blue-500/20 border border-blue-500/20 rounded-full text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                        <Lock size={12} /> SECURED_RECORD
+                    </span>
+                </div>
+                <h3 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4 italic uppercase">{item.title}</h3>
+                <p className="text-slate-400 font-medium text-lg max-w-3xl leading-relaxed">
+                    {item.description}
+                </p>
+            </div>
+        </motion.div>
+    </motion.div>
+);
+
 const Gallery = () => {
     const [selectedId, setSelectedId] = useState(null);
     const [filter, setFilter] = useState('all');
@@ -78,52 +124,6 @@ const Gallery = () => {
             ? images 
             : images.filter(item => item.category === filter);
     }, [images, filter]);
-
-    const Lightbox = ({ item, close }) => (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-10"
-        >
-            <div className="absolute inset-0 bg-slate-950/98 backdrop-blur-3xl" onClick={close}></div>
-            <motion.div
-                initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                className="relative z-10 w-full max-w-6xl aspect-video rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(59,130,246,0.3)] border border-white/10"
-            >
-                {item.type === 'video' || item.imageUrl?.endsWith('.mp4') ? (
-                    <video src={item.imageUrl || item.src} autoPlay controls className="w-full h-full object-contain" />
-                ) : (
-                    <img 
-                        src={item.imageUrl || item.src} 
-                        alt={item.title} 
-                        className="w-full h-full object-contain"
-                    />
-                )}
-                
-                <button
-                    onClick={close}
-                    className="absolute top-8 right-8 w-16 h-16 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all shadow-xl border border-white/20 z-30"
-                >
-                    <X size={28} />
-                </button>
-
-                <div className="absolute bottom-0 left-0 right-0 p-12 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent z-30">
-                    <div className="flex items-center gap-4 mb-4">
-                        <span className="px-4 py-1.5 bg-blue-500/20 border border-blue-500/20 rounded-full text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
-                            <Lock size={12} /> SECURED_RECORD
-                        </span>
-                    </div>
-                    <h3 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4 italic uppercase">{item.title}</h3>
-                    <p className="text-slate-400 font-medium text-lg max-w-3xl leading-relaxed">
-                        {item.description}
-                    </p>
-                </div>
-            </motion.div>
-        </motion.div>
-    );
 
     return (
         <div className="min-h-screen bg-slate-950 text-white pt-24 pb-24 font-sans selection:bg-blue-500/30 selection:text-blue-200">

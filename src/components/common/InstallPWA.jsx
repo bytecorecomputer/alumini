@@ -8,7 +8,12 @@ const DISMISS_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
 export default function InstallPWA() {
     const [deferredPrompt, setDeferredPrompt] = useState(null);
     const [isVisible, setIsVisible] = useState(false);
-    const [isStandalone, setIsStandalone] = useState(false);
+    const [isStandalone, setIsStandalone] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        }
+        return false;
+    });
 
     const checkDismissalState = () => {
         const dismissedAt = localStorage.getItem(STORAGE_KEY);
@@ -28,10 +33,6 @@ export default function InstallPWA() {
     };
 
     useEffect(() => {
-        // Check if already installed
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-            setIsStandalone(true);
-        }
 
         const handler = (e) => {
             // Prevent Chrome 67 and earlier from automatically showing the prompt

@@ -125,7 +125,7 @@ export default function AdminAnalytics() {
         if (!students.length) return null;
 
         let totalRevenue = 0;
-        let totalAdmissionFees = 0;
+        let totalRegistrationFees = 0;
         let totalArrears = 0;
         let totalEnrolled = 0;
         let totalBilled = 0; 
@@ -150,7 +150,7 @@ export default function AdminAnalytics() {
             const course = s.course || 'Unknown';
             const admMonth = parseDateToYYYYMM(s.admissionDate);
             const expiryInfo = calculateCourseExpiry(s.admissionDate, s.course, s.totalFees);
-            const admFee = Number(s.admissionFee) || 0;
+            const regFee = Number(s.registrationFee) || 0;
             const normalizedAddr = normalizeAddress(s.address);
 
             if (!addressDistribution[normalizedAddr]) {
@@ -158,7 +158,7 @@ export default function AdminAnalytics() {
             }
 
             if (admMonth && !monthlyTrends[admMonth]) {
-                monthlyTrends[admMonth] = { month: admMonth, Admissions: 0, Revenue: 0, AdmissionFees: 0 };
+                monthlyTrends[admMonth] = { month: admMonth, Admissions: 0, Revenue: 0, RegistrationFees: 0 };
             }
 
             let stuTotalPaidAllTime = (s.paidFees || 0) + (s.oldPaidFees || 0);
@@ -169,13 +169,13 @@ export default function AdminAnalytics() {
 
             if (selectedMonth === 'all') {
                 totalEnrolled++;
-                totalAdmissionFees += admFee;
-                // Add admission fee to total revenue (assuming totalPaidAllTime doesn't include it if it's stored separately)
-                const stuTotalRevenue = stuTotalPaidAllTime + admFee;
+                totalRegistrationFees += regFee;
+                // Add registration fee to total revenue (assuming totalPaidAllTime doesn't include it if it's stored separately)
+                const stuTotalRevenue = stuTotalPaidAllTime + regFee;
                 
                 totalRevenue += stuTotalRevenue;
                 totalArrears += stuArrearsAllTime;
-                totalBilled += (stuTotalBilledAllTime + admFee);
+                totalBilled += (stuTotalBilledAllTime + regFee);
 
                 if (!expiryInfo?.isCompleted) activeStudentsCount++;
 
@@ -191,7 +191,7 @@ export default function AdminAnalytics() {
 
                 if (admMonth) {
                     monthlyTrends[admMonth].Admissions += 1;
-                    monthlyTrends[admMonth].AdmissionFees += admFee;
+                    monthlyTrends[admMonth].RegistrationFees += regFee;
                     // Installments are distributed across months below, but for 'all' we just aggregate trends accurately
                 }
 
@@ -211,13 +211,13 @@ export default function AdminAnalytics() {
                 const isAdmittedThisMonth = admMonth === selectedMonth;
                 
                 let paidThisMonth = 0;
-                let admFeeThisMonth = 0;
+                let regFeeThisMonth = 0;
 
                 if (isAdmittedThisMonth) {
                     totalEnrolled++;
-                    totalBilled += (stuTotalBilledAllTime + admFee);
-                    admFeeThisMonth = admFee;
-                    totalAdmissionFees += admFee;
+                    totalBilled += (stuTotalBilledAllTime + regFee);
+                    regFeeThisMonth = regFee;
+                    totalRegistrationFees += regFee;
                     if (branchStats[branch]) branchStats[branch].stu++;
                     addressDistribution[normalizedAddr].students += 1;
                 }
@@ -234,7 +234,7 @@ export default function AdminAnalytics() {
                     paidThisMonth += (Number(s.oldPaidFees) || 0);
                 }
 
-                const totalRevThisMonth = paidThisMonth + admFeeThisMonth;
+                const totalRevThisMonth = paidThisMonth + regFeeThisMonth;
                 totalRevenue += totalRevThisMonth;
                 
                 courseRevenue[course] = (courseRevenue[course] || 0) + totalRevThisMonth;
@@ -265,16 +265,16 @@ export default function AdminAnalytics() {
                         if (instMonth && monthlyTrends[instMonth]) {
                             monthlyTrends[instMonth].Revenue += (Number(inst.amount) || 0);
                         } else if (instMonth) {
-                            monthlyTrends[instMonth] = { month: instMonth, Admissions: 0, Revenue: (Number(inst.amount) || 0), AdmissionFees: 0 };
+                            monthlyTrends[instMonth] = { month: instMonth, Admissions: 0, Revenue: (Number(inst.amount) || 0), RegistrationFees: 0 };
                         }
                     });
                 } else if (admMonth && monthlyTrends[admMonth]) {
                     monthlyTrends[admMonth].Revenue += (Number(s.oldPaidFees) || 0);
                 }
             });
-            // Add admission fees to Revenue trends
+            // Add registration fees to Revenue trends
             Object.values(monthlyTrends).forEach(mt => {
-                mt.Revenue += mt.AdmissionFees;
+                mt.Revenue += mt.RegistrationFees;
             });
         }
 
@@ -295,7 +295,7 @@ export default function AdminAnalytics() {
         const recoveryRate = totalBilled > 0 ? ((totalRevenue / totalBilled) * 100).toFixed(1) : 0;
 
         return {
-            totalRevenue, totalAdmissionFees, totalArrears, totalEnrolled, activeStudentsCount,
+            totalRevenue, totalRegistrationFees, totalArrears, totalEnrolled, activeStudentsCount,
             branchData, courseData, addressData, trendData, recoveryRate,
             defaulters: defaulters.slice(0, 50),
             highRiskCount, projectedPipeline, badDebtRisk
@@ -387,14 +387,14 @@ export default function AdminAnalytics() {
                         </div>
                     </div>
 
-                    {/* Admission Fees Component */}
+                    {/* Registration Fees Component */}
                     <div className="bg-[#1e293b] p-5 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden">
                         <div className="flex justify-between items-start mb-4">
                             <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg"><TrendingUp size={16} /></div>
                         </div>
                         <div>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Admission Fees</p>
-                            <h3 className="text-2xl font-black text-white truncate">₹{analytics.totalAdmissionFees.toLocaleString()}</h3>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Registration Fees</p>
+                            <h3 className="text-2xl font-black text-white truncate">₹{analytics.totalRegistrationFees.toLocaleString()}</h3>
                             <p className="text-[9px] text-blue-400 font-bold mt-1 uppercase tracking-wider">One-time Injection</p>
                         </div>
                     </div>
@@ -464,16 +464,21 @@ export default function AdminAnalytics() {
                                 </PieChart>
                             </ResponsiveContainer>
                         </div>
-                        {/* Summary of top location */}
-                        {analytics.addressData.length > 0 && (
-                            <div className="mt-4 p-3 bg-slate-800/50 rounded-xl border border-slate-700/50">
-                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-1">Top Region</p>
-                                <div className="flex justify-between items-center">
-                                    <p className="text-sm font-black text-white">{analytics.addressData[0].name}</p>
-                                    <p className="text-xs font-black text-emerald-400">₹{analytics.addressData[0].revenue.toLocaleString()}</p>
+                        {/* Village / Address List */}
+                        <div className="mt-4 flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-2 max-h-[120px]">
+                            {analytics.addressData.map((addr, idx) => (
+                                <div key={idx} className="flex justify-between items-center p-2 bg-slate-800/50 rounded-lg border border-slate-700/50 hover:bg-slate-800 transition-colors">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }}></div>
+                                        <p className="text-[10px] font-bold text-white truncate max-w-[120px]">{addr.name}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-[10px] font-black text-emerald-400">{addr.students} Students</p>
+                                        <p className="text-[8px] font-bold text-slate-500">₹{addr.revenue.toLocaleString()}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            ))}
+                        </div>
                     </div>
 
                     {/* Growth Velocity & Revenue Timeline */}
@@ -497,7 +502,7 @@ export default function AdminAnalytics() {
                                     <RechartsTooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px', fontWeight: 700 }} />
                                     <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase' }} />
                                     <Area yAxisId="left" type="monotone" dataKey="Revenue" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorRev)" />
-                                    <Bar yAxisId="left" dataKey="AdmissionFees" fill="#8b5cf6" barSize={20} radius={[4, 4, 0, 0]} />
+                                    <Bar yAxisId="left" dataKey="RegistrationFees" fill="#8b5cf6" barSize={20} radius={[4, 4, 0, 0]} />
                                 </ComposedChart>
                             </ResponsiveContainer>
                         </div>

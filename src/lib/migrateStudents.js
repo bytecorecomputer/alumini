@@ -18,6 +18,12 @@ const FEE_MAPPING = {
     'CSC': 3500
 };
 
+const parseCurrency = (val) => {
+    if (!val) return 0;
+    const str = String(val).replace(/,/g, '').replace(/[^\d.-]/g, '');
+    return parseInt(str, 10) || 0;
+};
+
 const parseCSV = (csvText) => {
     const rawLines = csvText.split(/\r?\n/);
     const reconstructedLines = [];
@@ -61,7 +67,7 @@ const parseCSV = (csvText) => {
         if (!registration || registration === '-' || !fullName) continue;
 
         const csvRegistrationFee = row[10]?.trim();
-        const oldPaidFees = parseInt(csvRegistrationFee) || 0;
+        const oldPaidFees = parseCurrency(csvRegistrationFee);
 
         const installments = [];
         let csvPaidFeesSum = 0;
@@ -71,9 +77,10 @@ const parseCSV = (csvText) => {
             let cell = row[j]?.trim();
             if (!cell || cell === '-' || cell.toLowerCase() === 'unpaid' || cell.toLowerCase() === 'free') continue;
 
-            // Robust regex to capture: "500 (24-05)", "200 (07-07)", "700(28-10)", "350 10-11-2025"
-            // Captures amount and anything that looks like a date/note in parentheses or after
-            const match = cell.match(/(\d+)\s*[\(\-\s]*([0-9\-/ABC]+.*?)\)?$/i);
+            // Robust regex to capture: "5,500 (24-05)", "200 (07-07)", "700(28-10)", "350 10-11-2025"
+            // Remove commas first
+            const cleanCell = cell.replace(/,/g, '');
+            const match = cleanCell.match(/(\d+)\s*[( -]*([0-9\-/ABC]+.*?)\)?$/i);
             if (match) {
                 const amount = parseInt(match[1]);
                 let date = match[2].trim();

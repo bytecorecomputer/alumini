@@ -1,3 +1,5 @@
+/* eslint-env node */
+// eslint-disable-next-line no-undef
 const fs = require('fs');
 
 const generateShortcuts = (subject, shortcuts) => {

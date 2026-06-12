@@ -56,6 +56,15 @@ function parseCSV(str) {
 }
 
 /**
+ * Normalizes numbers by removing commas to parse correctly
+ */
+function parseCurrency(val) {
+    if (!val) return 0;
+    const str = String(val).replace(/,/g, '').replace(/[^\d.-]/g, '');
+    return parseInt(str, 10) || 0;
+}
+
+/**
  * Extracts fee and date from a string like "100 (20-05-2024)" or "450 150 (20-11-2025)" or "(02-12-2025)"
  * Returns an array of installment objects or null if invalid.
  */
@@ -82,8 +91,9 @@ function parseInstallment(str) {
         return [{ amount: 0, date: dateStr, status: 'paid', note: 'Free' }];
     }
 
-    // Try to extract numerical amount
-    const numbers = amountStr.match(/\d+/g);
+    // Try to extract numerical amount, stripping commas first
+    const amountClean = amountStr.replace(/,/g, '');
+    const numbers = amountClean.match(/\d+/g);
     if (numbers && numbers.length > 0) {
         // If there are multiple numbers e.g. "450 150", sum them
         const totalAmount = numbers.reduce((acc, curr) => acc + parseInt(curr, 10), 0);
@@ -145,8 +155,8 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Nariyawal') {
                 mobile: row['Mob. No.']?.trim() || '',
                 address: row['Address ']?.trim() || row['Address']?.trim() || '',
                 admissionDate: normalizeDate((row['Admission Date'] || '').trim()),
-                registrationFee: parseInt(row['Registration Fee'] || row['Regi. Fee']) || 0,
-                totalFees: parseInt(row['Total Fee']) || 0,
+                registrationFee: parseCurrency(row['Registration Fee'] || row['Regi. Fee']),
+                totalFees: parseCurrency(row['Total Fee']),
                 center: centerName, // Defaulting as per parameter
                 updatedAt: Date.now()
             };

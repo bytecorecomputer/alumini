@@ -20,7 +20,6 @@ const LabGalleryPreview = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setLoading(true);
         const q = query(collection(db, 'lab_gallery'), orderBy('createdAt', 'desc'), firestoreLimit(4));
         
         const staticItems = [

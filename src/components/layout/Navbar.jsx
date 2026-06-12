@@ -8,6 +8,35 @@ import { auth } from '../../firebase/auth';
 import { cn } from '../../lib/utils';
 import { getOptimizedUrl } from '../../lib/cloudinary';
 
+const mobileNavItem = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+};
+
+const MobileNavLink = ({ to, children, onClick }) => (
+    <motion.div variants={mobileNavItem}>
+        <Link
+            to={to}
+            onClick={onClick}
+            className="flex items-center gap-3 px-2 py-3 text-slate-600 hover:text-blue-600 font-bold text-[16px] transition-all group rounded-xl hover:bg-slate-50"
+        >
+            <div className="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-blue-50 flex items-center justify-center transition-colors">
+                <ArrowUpRight size={16} className="text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            </div>
+            <span className="group-hover:translate-x-1 transition-transform uppercase tracking-tight">{children}</span>
+        </Link>
+    </motion.div>
+);
+
+const NavLink = ({ to, children }) => (
+    <Link
+        to={to}
+        className="px-5 py-2.5 text-slate-500 hover:text-slate-900 font-black text-xs uppercase tracking-widest transition-all hover:bg-slate-50 rounded-2xl"
+    >
+        {children}
+    </Link>
+);
+
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -30,30 +59,6 @@ export default function Navbar() {
         navigate('/login');
     };
 
-    const NavLink = ({ to, children }) => (
-        <Link
-            to={to}
-            className="px-5 py-2.5 text-slate-500 hover:text-slate-900 font-black text-xs uppercase tracking-widest transition-all hover:bg-slate-50 rounded-2xl"
-        >
-            {children}
-        </Link>
-    );
-
-    const MobileNavLink = ({ to, children, onClick }) => (
-        <motion.div variants={mobileNavItem}>
-            <Link
-                to={to}
-                onClick={onClick}
-                className="flex items-center gap-3 px-2 py-3 text-slate-600 hover:text-blue-600 font-bold text-[16px] transition-all group rounded-xl hover:bg-slate-50"
-            >
-                <div className="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-blue-50 flex items-center justify-center transition-colors">
-                    <ArrowUpRight size={16} className="text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                </div>
-                <span className="group-hover:translate-x-1 transition-transform uppercase tracking-tight">{children}</span>
-            </Link>
-        </motion.div>
-    );
-
     const mobileNavContainer = {
         hidden: { opacity: 0 },
         show: {
@@ -63,11 +68,6 @@ export default function Navbar() {
                 delayChildren: 0.1
             }
         }
-    };
-
-    const mobileNavItem = {
-        hidden: { opacity: 0, y: 20 },
-        show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
     };
 
     return (

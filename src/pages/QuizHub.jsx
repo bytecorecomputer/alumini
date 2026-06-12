@@ -14,11 +14,7 @@ const ICONS = {
 
 export default function QuizHub() {
     const navigate = useNavigate();
-    const [globalXP, setGlobalXP] = useState(0);
-
-    useEffect(() => {
-        setGlobalXP(parseInt(localStorage.getItem('bytecore_xp') || '0', 10));
-    }, []);
+    const [globalXP, setGlobalXP] = useState(() => parseInt(localStorage.getItem('bytecore_xp') || '0', 10));
 
     // Extract all available topics across major courses
     const allTopics = [];
