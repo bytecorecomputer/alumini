@@ -8,7 +8,7 @@ export const COURSE_MODULES_MAP = {
     "DCST": ["ms_word", "ms_excel", "ms_powerpoint"],
     "DCA": ["ms_word", "ms_excel", "ms_powerpoint", "typing"],
     "GRAPHIC DESIGN": ["coreldraw", "photoshop", "adobe_illustrator", "canva"],
-    "O LEVEL": ["python", "html", "css", "js"],
+    "O LEVEL": ["libre_writer", "libre_calc", "libre_impress", "python", "html", "css", "js"],
     "CCC": ["libre_writer", "libre_calc", "libre_impress", "internet_basics", "ccc_mock_test"],
     // Fuzzy matching fallback
     "default": ["ms_word", "internet_basics"]

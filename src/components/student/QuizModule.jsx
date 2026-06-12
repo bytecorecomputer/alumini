@@ -231,6 +231,37 @@ export default function QuizModule({ student }) {
         );
     }
 
+    if (view === 'notes') {
+        const data = courseData[activeCourseKey];
+        return (
+            <div className="animate-in fade-in duration-500 max-w-4xl mx-auto pb-20">
+                <button
+                    onClick={() => setView('topics')}
+                    className="flex items-center gap-2 text-slate-400 font-bold hover:text-slate-900 transition-colors mb-8"
+                >
+                    <ChevronLeft size={20} /> Back to Modules
+                </button>
+
+                <div className="bg-white rounded-[3rem] p-8 md:p-12 border border-slate-100 shadow-xl shadow-slate-200/50">
+                    <div className="flex items-center gap-4 mb-8 pb-8 border-b border-slate-100">
+                        <div className={`p-4 rounded-2xl bg-${data.color || 'blue'}-100 text-${data.color || 'blue'}-600`}>
+                            <BookOpen size={32} />
+                        </div>
+                        <div>
+                            <h2 className="text-3xl font-black text-slate-900 tracking-tight">{data.title} - Master Guide</h2>
+                            <p className="text-slate-500 font-bold uppercase tracking-widest text-xs mt-1">Official Study Notes</p>
+                        </div>
+                    </div>
+
+                    <div 
+                        className="prose prose-slate prose-lg max-w-none prose-headings:font-black prose-headings:tracking-tight prose-a:text-blue-600 hover:prose-a:text-blue-500 prose-ul:list-disc prose-li:font-medium"
+                        dangerouslySetInnerHTML={{ __html: data.notes }}
+                    />
+                </div>
+            </div>
+        );
+    }
+
     if (view === 'courses') {
         const topics = Object.keys(courseData);
         if (topics.length === 0) {
@@ -382,10 +413,15 @@ export default function QuizModule({ student }) {
                         <div className="h-24 w-24 bg-white/20 backdrop-blur-xl rounded-3xl flex items-center justify-center border border-white/20 shrink-0">
                             <Icon size={48} className="text-white drop-shadow-md" />
                         </div>
-                        <div className="text-center md:text-left">
+                        <div className="text-center md:text-left flex-1">
                             <h2 className="text-4xl md:text-5xl font-black mb-3">{data.title || activeCourseKey}</h2>
                             <p className="text-white/80 font-medium text-lg max-w-2xl">{data.description}</p>
                         </div>
+                        {data.notes && (
+                            <button onClick={() => setView('notes')} className="shrink-0 mt-4 md:mt-0 px-8 py-4 bg-white text-slate-900 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform flex items-center gap-2 shadow-xl shadow-black/10">
+                                <FileText size={18} /> Master Guide
+                            </button>
+                        )}
                     </div>
                 </div>
 

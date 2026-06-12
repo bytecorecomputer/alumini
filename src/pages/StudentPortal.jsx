@@ -320,6 +320,25 @@ export default function StudentPortal() {
                                 </div>
 
                                 {/* Dynamic Resources Section */}
+                                {(student.course.toLowerCase().includes('o level') || student.course.toLowerCase().includes('ccc')) && (
+                                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[2.5rem] p-8 shadow-xl shadow-indigo-500/20 mb-12 text-white relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-8 opacity-10"><Book size={120} /></div>
+                                        <div className="relative z-10">
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <div className="p-2 bg-white/20 rounded-xl backdrop-blur-md"><Globe size={24} /></div>
+                                                <h3 className="text-2xl font-black uppercase tracking-tight">LibreOffice Master Guide</h3>
+                                            </div>
+                                            <p className="font-medium text-indigo-100 max-w-xl mb-8">Download the complete official PDF guide for Writer, Calc, and Impress. Essential for CCC and O Level examinations.</p>
+                                            <a 
+                                                href="/assets/libreoffice.pdf" 
+                                                download="LibreOffice_Notes_ByteCore.pdf"
+                                                className="inline-flex items-center gap-3 px-8 py-4 bg-white text-indigo-600 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform shadow-lg"
+                                            >
+                                                <Download size={18} /> Download PDF Now
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
                                 {resources.filter(r => r.category !== 'Syllabus').length > 0 && (
                                     <div className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm mb-12">
                                         <div className="flex items-center gap-3 mb-8">
@@ -405,8 +424,9 @@ export default function StudentPortal() {
                         )}
 
                         {activeTab === 'fees' && (() => {
+                            const registrationFee = student.registrationFee ? Number(student.registrationFee) : 0;
                             const totalPaid = (student.paidFees || 0) + (student.oldPaidFees || 0);
-                            const pendingFees = Math.max(0, (student.totalFees || 0) - totalPaid);
+                            const pendingFees = Math.max(0, ((student.totalFees || 0) + registrationFee) - totalPaid);
 
                             return (
                                 <div className="max-w-4xl mx-auto space-y-8">
@@ -418,13 +438,17 @@ export default function StudentPortal() {
                                         </h3>
                                         <p className="text-slate-500 font-bold text-sm mb-12">Total balance to clear for certification eligibility.</p>
 
-                                        <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-12">
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-2xl mx-auto mb-12">
                                             <div className="p-6 bg-slate-50 rounded-3xl">
-                                                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Paid Amount</p>
+                                                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Registration</p>
+                                                <p className="text-xl font-black text-slate-900">₹{registrationFee}</p>
+                                            </div>
+                                            <div className="p-6 bg-slate-50 rounded-3xl border-2 border-emerald-100 bg-emerald-50/30">
+                                                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Total Paid</p>
                                                 <p className="text-xl font-black text-emerald-600">₹{totalPaid}</p>
                                             </div>
                                             <div className="p-6 bg-slate-50 rounded-3xl">
-                                                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Total Fee</p>
+                                                <p className="text-slate-400 font-black text-[9px] uppercase tracking-widest mb-1">Tuition Fee</p>
                                                 <p className="text-xl font-black text-slate-900">₹{student.totalFees || 0}</p>
                                             </div>
                                         </div>
