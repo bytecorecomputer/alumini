@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Target, Eye, Calendar, ArrowRight, Quote, Star, CheckCircle } from 'lucide-react';
+import { Users, Target, Eye, Calendar, ArrowRight, Quote, Star, CheckCircle, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { collection, query, getDocs, orderBy } from 'firebase/firestore';
+import { db } from '../firebase/firestore';
 import SEO from '../components/common/SEO';
 import ProfileCard from '../components/ui/ProfileCard';
 
-const team = [
+// Default fallback team if DB fails or is empty
+const defaultTeam = [
     {
         name: "Maisar Hussain",
         role: "Senior Teacher (Thiriya)",
@@ -52,6 +55,29 @@ const testimonials = [
 
 const About = () => {
     const navigate = useNavigate();
+    const [team, setTeam] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTeam = async () => {
+            try {
+                const q = query(collection(db, "experts"), orderBy("createdAt", "asc"));
+                const snapshot = await getDocs(q);
+                if (!snapshot.empty) {
+                    const fetchedTeam = snapshot.docs.map(doc => doc.data());
+                    setTeam(fetchedTeam);
+                } else {
+                    setTeam(defaultTeam);
+                }
+            } catch (error) {
+                console.error("Failed to fetch experts:", error);
+                setTeam(defaultTeam);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTeam();
+    }, []);
 
     return (
         <div className="min-h-screen bg-[#f8fafc] text-slate-800 pt-28 pb-20 font-sans transition-colors duration-300 overflow-hidden">
@@ -265,21 +291,27 @@ const About = () => {
                         <p className="text-lg text-slate-500 font-medium max-w-2xl mx-auto">The passionate team driving Bytecore's vision.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                        {team.map((member, idx) => (
-                            <ProfileCard
-                                key={idx}
-                                name={member.name}
-                                role={member.role}
-                                image={member.image}
-                                theme="light"
-                                socials={[
-                                    { url: `https://wa.me/${member.whatsapp}`, icon: 'phone', label: 'WhatsApp', color: '#25D366' },
-                                    { url: '#', icon: 'mail', label: 'Email', color: '#ea4335' }
-                                ]}
-                            />
-                        ))}
-                    </div>
+                    {loading ? (
+                        <div className="flex justify-center items-center py-20">
+                            <Loader2 className="animate-spin text-blue-600 w-12 h-12" />
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                            {team.map((member, idx) => (
+                                <ProfileCard
+                                    key={idx}
+                                    name={member.name}
+                                    role={member.role}
+                                    image={member.image}
+                                    theme="light"
+                                    socials={[
+                                        { url: `https://wa.me/${member.whatsapp}`, icon: 'phone', label: 'WhatsApp', color: '#25D366' },
+                                        { url: '#', icon: 'mail', label: 'Email', color: '#ea4335' }
+                                    ]}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
             </section>
 

@@ -206,7 +206,7 @@ export default function PublicQuiz() {
             <div className="fixed top-0 left-0 right-0 h-1.5 bg-slate-200 z-[100]">
                 <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: \`\${progress}%\` }}
+                    animate={{ width: `${progress}%` }}
                     transition={{ duration: 0.3 }}
                     className="h-full bg-blue-600"
                 />
