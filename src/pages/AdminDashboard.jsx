@@ -141,6 +141,13 @@ export default function AdminDashboard() {
                             color="purple"
                         />
                         <ActionCard
+                            title="Host Live Quiz"
+                            subtitle="Real-Time Exam"
+                            icon={<Zap />}
+                            href="/admin/live-quiz"
+                            color="blue"
+                        />
+                        <ActionCard
                             title="Manage Students"
                             subtitle="Coaching System"
                             icon={<Database />}

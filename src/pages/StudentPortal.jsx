@@ -106,6 +106,7 @@ export default function StudentPortal() {
         { id: 'overview', label: 'Overview', icon: User },
         { id: 'courses', label: 'My Course', icon: Book },
         { id: 'learning', label: 'Learning Hub', icon: Zap },
+        { id: 'live', label: 'Live Quiz', icon: Target },
         { id: 'fees', label: 'Fee Record', icon: CreditCard },
     ];
 
@@ -420,6 +421,27 @@ export default function StudentPortal() {
                         {activeTab === 'learning' && (
                             <div className="bg-white rounded-[3rem] p-8 md:p-12 shadow-2xl shadow-blue-500/5 min-h-[600px] border border-slate-100">
                                 <QuizModule student={student} />
+                            </div>
+                        )}
+
+                        {activeTab === 'live' && (
+                            <div className="bg-indigo-600 rounded-[3rem] p-8 md:p-16 shadow-2xl shadow-indigo-500/20 text-center relative overflow-hidden">
+                                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                                <div className="relative z-10">
+                                    <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-8 backdrop-blur-md">
+                                        <Zap size={48} className="text-yellow-400" />
+                                    </div>
+                                    <h2 className="text-4xl md:text-5xl font-black text-white mb-6 tracking-tighter">Live Multiplayer Quiz</h2>
+                                    <p className="text-indigo-100 font-medium text-lg max-w-xl mx-auto mb-12">
+                                        Join real-time competitive quizzes hosted by your instructor. Compete with your batchmates, earn points, and climb the live leaderboard!
+                                    </p>
+                                    <a 
+                                        href="/student/live-quiz" 
+                                        className="inline-block px-12 py-5 bg-white text-indigo-600 rounded-[2rem] font-black uppercase tracking-widest text-lg hover:scale-105 transition-transform shadow-xl"
+                                    >
+                                        Enter Game PIN
+                                    </a>
+                                </div>
                             </div>
                         )}
 

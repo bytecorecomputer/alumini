@@ -38,6 +38,8 @@ const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
 const LabGallery = lazy(() => import("./pages/LabGallery"));
 const ResourceManager = lazy(() => import("./pages/ResourceManager"));
 const AdminAnalytics = lazy(() => import("./pages/AdminAnalytics"));
+const AdminLiveQuiz = lazy(() => import("./pages/AdminLiveQuiz"));
+const StudentLiveQuiz = lazy(() => import("./pages/StudentLiveQuiz"));
 
 const PublicQuiz = lazy(() => import("./pages/PublicQuiz"));
 
@@ -150,6 +152,12 @@ export default function App() {
                   <AdminAnalytics />
                 </AdminRoute>
               } />
+              <Route path="/admin/live-quiz" element={
+                <AdminRoute>
+                  <AdminLiveQuiz />
+                </AdminRoute>
+              } />
+              <Route path="/student/live-quiz" element={<StudentLiveQuiz />} />
               <Route path="/lab-gallery" element={<LabGallery />} />
 
             </Routes>
