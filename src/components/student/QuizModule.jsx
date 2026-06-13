@@ -489,7 +489,7 @@ export default function QuizModule({ student }) {
                 <div className="absolute top-0 left-0 right-0 h-1 bg-slate-200 rounded-full overflow-hidden mb-6">
                     <motion.div
                         initial={{ width: 0 }}
-                        animate={{ width: \`\${progressPercent}%\` }}
+                        animate={{ width: `${progressPercent}%` }}
                         transition={{ duration: 0.3 }}
                         className="h-full bg-indigo-600"
                     />
