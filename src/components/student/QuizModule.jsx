@@ -585,6 +585,8 @@ export default function QuizModule({ student }) {
                 </AnimatePresence>
             </div>
         );
+    }
+    
     if (view === 'result') {
         const qList = courseData[activeCourseKey].modules[activeSubModule];
         const percentage = Math.round((quizState.score / qList.length) * 100);
