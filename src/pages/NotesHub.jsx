@@ -80,14 +80,14 @@ export default function NotesHub() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                             {allNotes.map((note, idx) => (
                                 <motion.div
-                                    key={\`\${note.courseId}-\${note.topicId}\`}
+                                    key={`${note.courseId}-${note.topicId}`}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: idx * 0.05 }}
                                     onClick={() => setSelectedNote(note)}
                                     className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-200 shadow-xl shadow-slate-200/40 cursor-pointer group hover:border-blue-300 transition-all active:scale-[0.98]"
                                 >
-                                    <div className={\`w-14 h-14 rounded-2xl bg-\${note.color}-50 text-\${note.color}-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform\`}>
+                                    <div className={`w-14 h-14 rounded-2xl bg-${note.color}-50 text-${note.color}-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                                         <BookOpen size={28} />
                                     </div>
                                     <div className="flex items-center gap-2 mb-3">
@@ -155,7 +155,7 @@ export default function NotesHub() {
                                     <h3 className="text-xl font-black text-slate-900 mb-4">Ready to test your knowledge?</h3>
                                     <button
                                         onClick={() => {
-                                            navigate(\`/quiz/\${encodeURIComponent(selectedNote.courseId)}/\${encodeURIComponent(selectedNote.topicId)}\`);
+                                            navigate(`/quiz/${encodeURIComponent(selectedNote.courseId)}/${encodeURIComponent(selectedNote.topicId)}`);
                                         }}
                                         className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl shadow-blue-500/20 active:scale-95"
                                     >

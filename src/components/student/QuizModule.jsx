@@ -11,6 +11,8 @@ import { HINDI_QUIZ_DATA } from '../../data/hindiQuizData';
 import { studentQuizProfileInit, getStudentQuizProgress, markModuleCompleted, awardMasterBadge } from '../../lib/quizDb';
 import { selectActiveCourseModules, selectActiveStudentCourse } from '../../app/store/courseSlice';
 import toast from 'react-hot-toast';
+import ProgressCharts from './ProgressCharts';
+import LottiePlayer from '../common/LottiePlayer';
 
 // Icon Map for dynamic rendering
 const ICONS = {
@@ -316,6 +318,9 @@ export default function QuizModule({ student }) {
                     </div>
                 </div>
 
+                {/* Data Analytics Graphs */}
+                <ProgressCharts progress={progress} />
+
                 {/* Modules Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {topics.map((topicKey, idx) => {
@@ -580,8 +585,6 @@ export default function QuizModule({ student }) {
                 </AnimatePresence>
             </div>
         );
-    }
-
     if (view === 'result') {
         const qList = courseData[activeCourseKey].modules[activeSubModule];
         const percentage = Math.round((quizState.score / qList.length) * 100);
@@ -594,21 +597,28 @@ export default function QuizModule({ student }) {
                         "absolute inset-0 rounded-full blur-3xl opacity-30",
                         passed ? "bg-emerald-500" : "bg-rose-500"
                     )} />
-                    <div className="w-48 h-48 relative bg-white rounded-full shadow-2xl p-4">
-                        <svg className="w-full h-full transform -rotate-90">
-                            <circle cx="80" cy="80" r="70" fill="none" stroke="#f1f5f9" strokeWidth="12" />
-                            <motion.circle
-                                cx="80" cy="80" r="70" fill="none" stroke={passed ? "#10b981" : "#f43f5e"} strokeWidth="12"
-                                strokeDasharray="440" strokeDashoffset="440"
-                                animate={{ strokeDashoffset: 440 - (440 * percentage) / 100 }}
-                                transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
-                                strokeLinecap="round"
-                            />
-                        </svg>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <span className="text-4xl font-black text-slate-800">{percentage}%</span>
+                    
+                    {passed ? (
+                        <div className="relative z-10 w-48 h-48 mx-auto -mt-10">
+                            <LottiePlayer url="https://assets3.lottiefiles.com/packages/lf20_touohxv0.json" loop={false} className="w-full h-full" />
                         </div>
-                    </div>
+                    ) : (
+                        <div className="w-48 h-48 relative bg-white rounded-full shadow-2xl p-4 mx-auto">
+                            <svg className="w-full h-full transform -rotate-90">
+                                <circle cx="80" cy="80" r="70" fill="none" stroke="#f1f5f9" strokeWidth="12" />
+                                <motion.circle
+                                    cx="80" cy="80" r="70" fill="none" stroke="#f43f5e" strokeWidth="12"
+                                    strokeDasharray="440" strokeDashoffset="440"
+                                    animate={{ strokeDashoffset: 440 - (440 * percentage) / 100 }}
+                                    transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+                                    strokeLinecap="round"
+                                />
+                            </svg>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <span className="text-4xl font-black text-slate-800">{percentage}%</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <h2 className={cn("text-4xl md:text-5xl font-black mb-4 tracking-tight", passed ? "text-emerald-600" : "text-slate-800")}>

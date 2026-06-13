@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, Zap, ChevronLeft, Target, Trophy, Clock, Star, ArrowRight } from 'lucide-react';
+import { CheckCircle2, XCircle, Zap, ChevronLeft, Target, Trophy, Clock, Star, ArrowRight, Volume2, VolumeX } from 'lucide-react';
 import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
 import { cn } from '../lib/utils';
 import confetti from 'canvas-confetti';
 import SEO from '../components/common/SEO';
+import { useSpeech } from '../lib/useSpeech';
 
 export default function PublicQuiz() {
     const { courseId, topicId } = useParams();
@@ -22,6 +23,8 @@ export default function PublicQuiz() {
     });
     const [timeLeft, setTimeLeft] = useState(30);
     const [view, setView] = useState('quiz'); // quiz | result
+
+    const { speak, stop, isSpeaking, supported } = useSpeech();
 
     const courseData = HINDI_QUIZ_DATA[courseId];
     const topicData = courseData?.[topicId];
@@ -245,8 +248,16 @@ export default function PublicQuiz() {
                         className="flex-1 flex flex-col"
                     >
                         {/* Question Box */}
-                        <div className="mb-6 md:mb-10">
-                            <h3 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 leading-snug font-hindi">
+                        <div className="mb-6 md:mb-10 relative">
+                            {supported && (
+                                <button 
+                                    onClick={() => isSpeaking ? stop() : speak(currentQ.question)}
+                                    className="absolute -top-6 right-0 text-slate-400 hover:text-blue-500 transition-colors p-2 bg-white rounded-full shadow-sm border border-slate-100"
+                                >
+                                    {isSpeaking ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                                </button>
+                            )}
+                            <h3 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 leading-snug font-hindi pt-2">
                                 {currentQ.question}
                             </h3>
                         </div>

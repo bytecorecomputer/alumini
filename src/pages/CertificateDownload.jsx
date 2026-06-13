@@ -7,6 +7,7 @@ import jsPDF from 'jspdf';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import diplomaData from '../Diploma.json';
+import Trophy3D from '../components/common/Trophy3D';
 
 export default function CertificateDownload() {
     const [rollNo, setRollNo] = useState('');
@@ -297,12 +298,11 @@ export default function CertificateDownload() {
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
                                     transition={{ duration: 0.4 }}
-                                    className="h-full w-full border-2 border-dashed border-slate-800 rounded-[2.5rem] flex flex-col items-center justify-center text-center p-8 bg-slate-900/10"
+                                    className="h-full w-full border-2 border-dashed border-slate-800 rounded-[2.5rem] flex flex-col items-center justify-center text-center p-8 bg-slate-900/10 relative overflow-hidden group"
                                 >
-                                    <div className="w-20 h-20 rounded-3xl bg-slate-900 shadow-xl flex items-center justify-center mb-6">
-                                        <FileText size={32} className="text-slate-600" />
-                                    </div>
-                                    <h3 className="text-xl font-bold text-white mb-2">No Record Selected</h3>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-blue-500/5 to-transparent pointer-events-none" />
+                                    <Trophy3D size="h-64 w-full mb-2 pointer-events-auto" />
+                                    <h3 className="text-xl font-bold text-white mb-2 z-10 relative">No Record Selected</h3>
                                     <p className="text-slate-500 max-w-xs text-sm">Enter your roll number and associated date of birth to view and download your official certificate.</p>
                                 </motion.div>
                             ) : isSearching ? (
