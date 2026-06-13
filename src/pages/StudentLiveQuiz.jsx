@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, Trophy, Loader2, Zap, AlertCircle } from 'lucide-react';
 import { db } from '../firebase/firestore';
@@ -7,12 +7,28 @@ import { doc, setDoc, onSnapshot, updateDoc, increment } from 'firebase/firestor
 import { useAuth } from '../app/common/AuthContext';
 import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
 import confetti from 'canvas-confetti';
+import { initAudio, playSuccess, playError } from '../lib/soundEffects';
 
 export default function StudentLiveQuiz() {
     const { student } = useAuth();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    
     const [roomId, setRoomId] = useState('');
     const [joined, setJoined] = useState(false);
+    
+    // Auto-join logic
+    useEffect(() => {
+        const pin = searchParams.get('pin');
+        if (pin && !joined && student) {
+            setRoomId(pin);
+            // Slightly delay auto-join to allow UI to render
+            setTimeout(() => {
+                initAudio();
+                joinRoom(pin);
+            }, 500);
+        }
+    }, [searchParams, student]);
     
     // Live State
     const [liveData, setLiveData] = useState(null);
@@ -23,6 +39,7 @@ export default function StudentLiveQuiz() {
     const handleJoin = async (e) => {
         e?.preventDefault();
         if (!roomId || !student) return;
+        initAudio();
         joinRoom(roomId);
     };
 
@@ -82,6 +99,23 @@ export default function StudentLiveQuiz() {
         };
     }, [joined, roomId]);
 
+    // Audio effects for results
+    useEffect(() => {
+        if (liveData?.status === 'result') {
+            const courseData = HINDI_QUIZ_DATA[liveData.courseId];
+            const currentQ = courseData?.modules[liveData.topicId]?.[liveData.currentQuestionIndex];
+            const hasAnswer = myState?.lastAnswer !== null && myState?.lastAnswer !== undefined;
+            const isCorrect = hasAnswer && currentQ?.correctAnswer === myState.lastAnswer;
+            
+            if (isCorrect) {
+                playSuccess();
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            } else {
+                playError();
+            }
+        }
+    }, [liveData?.status, liveData?.currentQuestionIndex]);
+
     const handleAnswer = async (index) => {
         if (hasAnswered || !liveData) return;
         setHasAnswered(true);
@@ -92,10 +126,20 @@ export default function StudentLiveQuiz() {
         
         const isCorrect = currentQ.correctAnswer === index;
         
+        // Calculate Speed Score
+        let points = 0;
+        if (isCorrect) {
+            const timeElapsed = Date.now() - (liveData.questionStartedAt || Date.now());
+            const secondsElapsed = timeElapsed / 1000;
+            // Max 1000, Min 500. Decreases linearly over 30 seconds
+            points = Math.max(500, Math.round(1000 - (secondsElapsed / 30) * 500));
+        }
+        
         const myRef = doc(db, `live_quizzes/${roomId}/participants/${student.registration}`);
         await updateDoc(myRef, {
             lastAnswer: index,
-            score: isCorrect ? increment(100) : increment(0)
+            score: increment(points),
+            lastPoints: points
         });
     };
 
@@ -157,6 +201,16 @@ export default function StudentLiveQuiz() {
         );
     }
 
+    if (status === 'countdown') {
+        return (
+            <div className="min-h-screen bg-indigo-600 flex flex-col items-center justify-center p-6 text-center text-white">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                <h1 className="text-5xl md:text-6xl font-black mb-4 tracking-widest uppercase animate-pulse">Get Ready!</h1>
+                <p className="text-2xl font-bold opacity-80">Look at the main screen</p>
+            </div>
+        );
+    }
+
     if (status === 'active') {
         return (
             <div className="min-h-screen bg-slate-100 flex flex-col">
@@ -208,12 +262,13 @@ export default function StudentLiveQuiz() {
     }
 
     if (status === 'result') {
-        const isCorrect = currentQ?.correctAnswer === myState?.lastAnswer;
+        const hasAnswer = myState?.lastAnswer !== null && myState?.lastAnswer !== undefined;
+        const isCorrect = hasAnswer && currentQ?.correctAnswer === myState.lastAnswer;
         
-        if (isCorrect) {
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        }
-
+        let resultText = 'Incorrect';
+        if (!hasAnswer) resultText = 'Time Up!';
+        if (isCorrect) resultText = 'Correct!';
+        
         return (
             <div className={`min-h-screen flex flex-col items-center justify-center p-6 text-center text-white ${isCorrect ? 'bg-emerald-500' : 'bg-red-500'}`}>
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
@@ -222,10 +277,10 @@ export default function StudentLiveQuiz() {
                         {isCorrect ? <CheckCircle2 size={80} className="text-white drop-shadow-md" /> : <XCircle size={80} className="text-white drop-shadow-md" />}
                     </div>
                     <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-4">
-                        {isCorrect ? 'Correct!' : 'Incorrect'}
+                        {resultText}
                     </h1>
                     <div className="inline-flex items-center gap-2 bg-black/20 px-6 py-3 rounded-full font-bold text-xl">
-                        Streak Bonus: {isCorrect ? '+100' : '0'} Points
+                        {isCorrect ? `Speed Bonus: +${myState?.lastPoints || 0} Points` : '0 Points'}
                     </div>
                 </motion.div>
             </div>

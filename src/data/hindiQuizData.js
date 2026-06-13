@@ -30,6 +30,39 @@ export const HINDI_QUIZ_DATA = {
         "icon": "file-word",
         "color": "blue",
         "modules": {
+            
+            "MS Word Shortcuts": [
+                {
+                    "question": "MS Word में किसी टेक्स्ट को Copy करने की शॉर्टकट कुंजी क्या है?",
+                    "options": ["Ctrl + C", "Ctrl + V", "Ctrl + X", "Ctrl + Z"],
+                    "correctAnswer": 0,
+                    "explanation": "Ctrl + C का उपयोग टेक्स्ट या ऑब्जेक्ट को कॉपी करने के लिए किया जाता है।"
+                },
+                {
+                    "question": "MS Word में पूरे डॉक्यूमेंट को एक साथ Select करने की शॉर्टकट क्या है?",
+                    "options": ["Ctrl + S", "Ctrl + A", "Ctrl + D", "Shift + A"],
+                    "correctAnswer": 1,
+                    "explanation": "Ctrl + A का उपयोग पूरे डॉक्यूमेंट को सेलेक्ट करने के लिए किया जाता है।"
+                },
+                {
+                    "question": "Print Dialog Box खोलने की शॉर्टकट कुंजी क्या है?",
+                    "options": ["Ctrl + P", "Alt + P", "Shift + P", "Ctrl + PrtSc"],
+                    "correctAnswer": 0,
+                    "explanation": "Ctrl + P का उपयोग प्रिंट डायलॉग बॉक्स खोलने के लिए होता है।"
+                },
+                {
+                    "question": "MS Word में Text को Center Align करने की शॉर्टकट क्या है?",
+                    "options": ["Ctrl + C", "Ctrl + E", "Ctrl + J", "Ctrl + R"],
+                    "correctAnswer": 1,
+                    "explanation": "Ctrl + E का उपयोग टेक्स्ट को बीच (Center) में अलाइन करने के लिए किया जाता है।"
+                },
+                {
+                    "question": "Undo (पिछला एक्शन रद्द करना) के लिए कौन सी कुंजी प्रयोग होती है?",
+                    "options": ["Ctrl + Y", "Ctrl + Z", "Ctrl + X", "Ctrl + U"],
+                    "correctAnswer": 1,
+                    "explanation": "Ctrl + Z का उपयोग Undo करने के लिए होता है।"
+                }
+            ],
             "Master Assessment": [
                 {
                     "question": "MS Word में 'Mail Merge' का मुख्य उद्देश्य क्या है और इसके कितने चरण (steps) होते हैं?",
@@ -1083,6 +1116,39 @@ export const HINDI_QUIZ_DATA = {
         "icon": "monitor",
         "color": "cyan",
         "modules": {
+
+            "Computer Fundamentals": [
+                {
+                    "question": "कंप्यूटर का मस्तिष्क (Brain of Computer) किसे कहा जाता है?",
+                    "options": ["Monitor", "Keyboard", "CPU", "Mouse"],
+                    "correctAnswer": 2,
+                    "explanation": "CPU (Central Processing Unit) को कंप्यूटर का मस्तिष्क कहा जाता है।"
+                },
+                {
+                    "question": "RAM का पूरा नाम क्या है?",
+                    "options": ["Read Access Memory", "Random Access Memory", "Run Accept Memory", "Real Access Memory"],
+                    "correctAnswer": 1,
+                    "explanation": "RAM का फुल फॉर्म Random Access Memory होता है, जो कंप्यूटर की अस्थायी (Temporary) मेमोरी है।"
+                },
+                {
+                    "question": "इनमें से कौन सा इनपुट डिवाइस नहीं है?",
+                    "options": ["Mouse", "Keyboard", "Scanner", "Printer"],
+                    "correctAnswer": 3,
+                    "explanation": "Printer एक आउटपुट डिवाइस है, क्योंकि यह डाटा को हार्ड कॉपी के रूप में बाहर निकालता है।"
+                },
+                {
+                    "question": "1 Byte में कितने Bit होते हैं?",
+                    "options": ["4 Bits", "8 Bits", "16 Bits", "32 Bits"],
+                    "correctAnswer": 1,
+                    "explanation": "1 Byte हमेशा 8 Bits के बराबर होता है।"
+                },
+                {
+                    "question": "कंप्यूटर को रीस्टार्ट करने की प्रक्रिया को क्या कहा जाता है?",
+                    "options": ["Cold Booting", "Warm Booting", "Shut down", "Log off"],
+                    "correctAnswer": 1,
+                    "explanation": "पहले से चालू कंप्यूटर को रीस्टार्ट करने को Warm Booting कहा जाता है।"
+                }
+            ],
             "Master Assessment": [
                 {
                     "question": "कंप्यूटर का 'मस्तिष्क' (Brain) किसे कहा जाता है?",

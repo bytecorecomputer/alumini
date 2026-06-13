@@ -17,6 +17,7 @@ import { cn } from '../lib/utils';
 import toast from 'react-hot-toast';
 
 import { compressImage } from '../lib/imageCompression';
+import { useSearchParams } from 'react-router-dom';
 
 // Remove unused imports like COURSE_CURRICULUM from quizData inside StudentPortal.
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +25,8 @@ import { setStudentCourse, selectActiveCourseModules } from '../app/store/course
 
 export default function StudentPortal() {
     const { student, logoutStudent } = useAuth();
-    const [activeTab, setActiveTab] = useState('overview');
+    const [searchParams] = useSearchParams();
+    const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'overview');
     
     // REDUX SETUP
     const dispatch = useDispatch();
