@@ -77,16 +77,23 @@ export default function QuizHub() {
                     </div>
                 </motion.div>
 
-                <div className="text-center mb-20">
-                    <span className="text-blue-600 text-xs font-black uppercase tracking-[0.3em] mb-4 block flex items-center justify-center gap-2">
+                <div className="text-center mb-16">
+                    <span className="text-blue-600 text-xs font-black uppercase tracking-[0.3em] mb-4 flex items-center justify-center gap-2">
                         <BrainCircuit size={16} /> Open Assessments
                     </span>
                     <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter mb-6">
                         Prove Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Dominance</span>.
                     </h1>
-                    <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl mx-auto">
+                    <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-10">
                         No login required. Challenge yourself with industry-standard quizzes. Secure top ranks, earn XP, and prove your tech skills instantly.
                     </p>
+
+                    <button 
+                        onClick={() => navigate('/notes')}
+                        className="bg-indigo-50 hover:bg-indigo-100 text-indigo-600 px-8 py-4 rounded-full font-black uppercase tracking-widest text-sm inline-flex items-center gap-3 transition-colors border border-indigo-100 shadow-sm"
+                    >
+                        <FileText size={20} /> Access Free Study Materials
+                    </button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

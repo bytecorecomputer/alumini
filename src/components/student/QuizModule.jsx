@@ -476,61 +476,63 @@ export default function QuizModule({ student }) {
     if (view === 'quiz') {
         const qList = courseData[activeCourseKey].modules[activeSubModule];
         const currentQ = qList[quizState.qIndex];
+        const progressPercent = ((quizState.qIndex) / qList.length) * 100;
 
         return (
-            <div className="max-w-4xl mx-auto flex flex-col min-h-[70vh] animate-in fade-in slide-in-from-bottom-8 duration-500">
-                <div className="flex justify-between items-center mb-10">
-                    <button
-                        onClick={() => setView('topics')}
-                        className="flex items-center gap-2 text-slate-400 font-bold hover:text-slate-900 transition-colors px-4 py-2 bg-slate-100 rounded-full text-sm"
-                    >
-                        <ChevronLeft size={16} /> Exit Quiz
-                    </button>
-                    
-                    <div className="flex items-center gap-3 bg-white px-5 py-2 rounded-full shadow-sm border border-slate-100">
-                        <span className="text-sm font-black text-slate-400 uppercase tracking-widest">Question</span>
-                        <div className="text-lg font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-md">
-                            {quizState.qIndex + 1} <span className="text-indigo-300 text-sm">/ {qList.length}</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="w-full h-2.5 bg-slate-100 rounded-full mb-12 overflow-hidden shadow-inner relative">
+            <div className="max-w-3xl mx-auto flex flex-col min-h-[70vh] pb-32 animate-in fade-in slide-in-from-bottom-8 duration-500 relative">
+                {/* Thin App-like Progress Bar inside container */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-slate-200 rounded-full overflow-hidden mb-6">
                     <motion.div
                         initial={{ width: 0 }}
-                        animate={{ width: `${((quizState.qIndex + 1) / qList.length) * 100}%` }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                        className="absolute top-0 left-0 h-full bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full"
+                        animate={{ width: \`\${progressPercent}%\` }}
+                        transition={{ duration: 0.3 }}
+                        className="h-full bg-indigo-600"
                     />
+                </div>
+
+                <div className="flex justify-between items-center mb-8 mt-4">
+                    <button
+                        onClick={() => setView('topics')}
+                        className="flex items-center gap-2 text-slate-500 font-bold hover:text-slate-900 transition-colors bg-white hover:bg-slate-50 px-4 py-2 rounded-full text-sm border border-slate-200 shadow-sm"
+                    >
+                        <ChevronLeft size={16} /> Exit
+                    </button>
+                    
+                    <div className="flex items-center gap-2 bg-white px-4 py-1.5 rounded-full shadow-sm border border-slate-200">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Question</span>
+                        <div className="text-sm font-black text-indigo-600">
+                            {quizState.qIndex + 1} <span className="text-indigo-300">/ {qList.length}</span>
+                        </div>
+                    </div>
                 </div>
 
                 <AnimatePresence mode='wait'>
                     <motion.div
                         key={quizState.qIndex}
-                        initial={{ opacity: 0, scale: 0.98, y: 10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 1.02, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="flex-1"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        className="flex-1 flex flex-col"
                     >
-                        <div className="bg-white rounded-[2.5rem] p-8 md:p-12 border border-slate-100 shadow-2xl shadow-indigo-900/5 mb-8 relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-2 h-full bg-indigo-500" />
-                            <h3 className="text-2xl md:text-3xl font-black text-slate-800 leading-relaxed font-hindi">
+                        {/* Question Box */}
+                        <div className="mb-6 md:mb-10">
+                            <h3 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 leading-snug font-hindi">
                                 {currentQ.question}
                             </h3>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Options - Touch friendly */}
+                        <div className="grid grid-cols-1 gap-3 md:gap-4">
                             {currentQ.options.map((opt, i) => {
                                 const isSelected = quizState.selectedOption === i;
                                 const isCorrect = i === currentQ.correctAnswer;
 
-                                let stateStyle = "bg-white border-slate-200 hover:border-indigo-400 hover:shadow-lg text-slate-700";
+                                let stateStyle = "bg-white border-slate-200 hover:border-indigo-500 hover:shadow-md text-slate-700 hover:bg-indigo-50/30";
                                 if (quizState.isAnswered) {
-                                    if (isCorrect) stateStyle = "bg-emerald-50 border-emerald-500 text-emerald-800 shadow-emerald-500/20";
-                                    else if (isSelected) stateStyle = "bg-red-50 border-red-500 text-red-800 shadow-red-500/20";
-                                    else stateStyle = "bg-slate-50 border-slate-100 opacity-50 grayscale";
+                                    if (isCorrect) stateStyle = "bg-emerald-50 border-emerald-500 text-emerald-800 shadow-lg shadow-emerald-500/20 z-10 scale-[1.02]";
+                                    else if (isSelected) stateStyle = "bg-red-50 border-red-500 text-red-800 scale-95 opacity-80";
+                                    else stateStyle = "bg-slate-50 border-slate-200 opacity-40 scale-95";
                                 }
 
                                 return (
@@ -539,37 +541,42 @@ export default function QuizModule({ student }) {
                                         onClick={() => handleAnswer(i)}
                                         disabled={quizState.isAnswered}
                                         className={cn(
-                                            "text-left p-6 rounded-3xl border-2 transition-all duration-300 flex items-center justify-between group text-lg md:text-xl font-bold font-hindi",
-                                            stateStyle,
-                                            !quizState.isAnswered && "hover:-translate-y-1"
+                                            "w-full text-left p-5 min-h-[4rem] rounded-2xl md:rounded-[2rem] border-2 transition-all duration-300 flex items-center justify-between group font-bold text-lg md:text-xl font-hindi tap-highlight-transparent relative overflow-hidden",
+                                            stateStyle
                                         )}
+                                        style={{ WebkitTapHighlightColor: 'transparent' }}
                                     >
-                                        <span className="flex-1">{opt}</span>
-                                        {quizState.isAnswered && isCorrect && <CheckCircle2 className="text-emerald-500 shrink-0 ml-4" size={28} />}
-                                        {quizState.isAnswered && isSelected && !isCorrect && <XCircle className="text-red-500 shrink-0 ml-4" size={28} />}
+                                        <span className="relative z-10 pr-8">{opt}</span>
+                                        {quizState.isAnswered && isCorrect && <CheckCircle2 className="text-emerald-500 absolute right-4 top-1/2 -translate-y-1/2" size={24} />}
+                                        {quizState.isAnswered && isSelected && !isCorrect && <XCircle className="text-red-500 absolute right-4 top-1/2 -translate-y-1/2" size={24} />}
                                     </button>
                                 );
                             })}
                         </div>
-
-                        {quizState.isAnswered && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                className="mt-8 overflow-hidden rounded-3xl"
-                            >
-                                <div className="bg-indigo-50 p-6 md:p-8 border border-indigo-100 relative">
-                                    <div className="flex items-center gap-2 mb-3 text-indigo-600">
-                                        <Zap size={18} className="fill-indigo-600" />
-                                        <span className="font-black uppercase tracking-widest text-xs">Explanation</span>
-                                    </div>
-                                    <p className="text-lg font-medium text-indigo-900 leading-relaxed font-hindi">
-                                        {currentQ.explanation}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        )}
                     </motion.div>
+                </AnimatePresence>
+
+                {/* Mobile App-like Bottom Sheet for Explanation */}
+                <AnimatePresence>
+                    {quizState.isAnswered && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 50 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 50 }}
+                            className="fixed md:absolute bottom-16 md:bottom-0 left-0 right-0 bg-white border-t md:border border-slate-200 shadow-[0_-20px_40px_-10px_rgba(0,0,0,0.1)] md:shadow-2xl z-40 p-5 md:p-8 rounded-t-[2rem] md:rounded-[2rem]"
+                        >
+                            <div className="max-w-3xl mx-auto flex flex-col gap-2">
+                                <span className={cn(
+                                    "font-black uppercase tracking-[0.2em] text-[10px] md:text-xs flex items-center gap-1.5",
+                                    quizState.selectedOption === currentQ.correctAnswer ? "text-emerald-500" : "text-red-500"
+                                )}>
+                                    {quizState.selectedOption === currentQ.correctAnswer ? <CheckCircle2 size={16}/> : <XCircle size={16}/>}
+                                    {quizState.selectedOption === currentQ.correctAnswer ? "Awesome!" : "Explanation"}
+                                </span>
+                                <p className="text-slate-700 font-medium text-sm md:text-base leading-relaxed font-hindi">{currentQ.explanation}</p>
+                            </div>
+                        </motion.div>
+                    )}
                 </AnimatePresence>
             </div>
         );

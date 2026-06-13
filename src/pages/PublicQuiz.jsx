@@ -27,7 +27,8 @@ export default function PublicQuiz() {
     const topicData = courseData?.[topicId];
     
     // We assume all have 'Master Assessment' as the key for simplicity in public quizzes
-    const qList = topicData?.modules?.["Master Assessment"] || [];
+    // OR we use the topicId if it matches a module
+    const qList = courseData?.modules?.[topicId] || courseData?.modules?.["Master Assessment"] || [];
 
     useEffect(() => {
         if (qList.length === 0) {
@@ -54,6 +55,7 @@ export default function PublicQuiz() {
     if (qList.length === 0) return null;
 
     const currentQ = qList[quizState.qIndex];
+    const progress = ((quizState.qIndex) / qList.length) * 100;
 
     const handleAnswer = (optionIndex) => {
         if (quizState.isAnswered) return;
@@ -74,10 +76,9 @@ export default function PublicQuiz() {
         }));
 
         if (isCorrect) {
-            // Mini celebration for correct answer
             confetti({
-                particleCount: 30,
-                spread: 50,
+                particleCount: 40,
+                spread: 60,
                 origin: { y: 0.8 },
                 colors: ['#10b981', '#34d399']
             });
@@ -95,14 +96,13 @@ export default function PublicQuiz() {
             } else {
                 finishQuiz(isCorrect ? quizState.score + 1 : quizState.score, quizState.xp + xpGained);
             }
-        }, isCorrect ? 2500 : 4000); // Wait longer on wrong answer to read explanation
+        }, isCorrect ? 1500 : 3000);
     };
 
     const finishQuiz = (finalScore, finalXP) => {
         setView('result');
         const percentage = Math.round((finalScore / qList.length) * 100);
         
-        // Save to local storage for global ranking illusion
         let currentTotalXP = parseInt(localStorage.getItem('bytecore_xp') || '0', 10);
         localStorage.setItem('bytecore_xp', (currentTotalXP + finalXP).toString());
 
@@ -116,91 +116,75 @@ export default function PublicQuiz() {
         const end = Date.now() + duration;
 
         (function frame() {
-            confetti({
-                particleCount: 5,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: ['#3b82f6', '#10b981', '#f59e0b']
-            });
-            confetti({
-                particleCount: 5,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: ['#3b82f6', '#10b981', '#f59e0b']
-            });
-
-            if (Date.now() < end) {
-                requestAnimationFrame(frame);
-            }
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#3b82f6', '#10b981', '#f59e0b'] });
+            if (Date.now() < end) { requestAnimationFrame(frame); }
         }());
     };
 
     if (view === 'result') {
         const percentage = Math.round((quizState.score / qList.length) * 100);
         const passed = percentage >= 80;
-        // Social engineering pseudo-stats
         const percentile = Math.min(99, Math.max(50, percentage + Math.floor(Math.random() * 10)));
 
         return (
-            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 pt-24 text-center font-sans">
+            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 md:p-6 text-center font-sans pb-safe">
                 <SEO title={`Result: ${topicId} Quiz`} />
                 <motion.div 
-                    initial={{ scale: 0.9, opacity: 0 }}
+                    initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className="bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl max-w-2xl w-full border border-slate-100 relative overflow-hidden"
+                    className="bg-white p-8 md:p-16 rounded-[2.5rem] shadow-2xl max-w-lg w-full border border-slate-100 relative overflow-hidden"
                 >
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 opacity-5 blur-[100px] rounded-full"></div>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500 opacity-5 blur-[100px] rounded-full pointer-events-none"></div>
                     
-                    <div className="w-40 h-40 mx-auto relative mb-8">
+                    <div className="w-32 h-32 md:w-40 md:h-40 mx-auto relative mb-8">
                         <svg className="w-full h-full transform -rotate-90 drop-shadow-2xl">
-                            <circle cx="80" cy="80" r="70" fill="none" stroke="#f1f5f9" strokeWidth="12" />
+                            <circle cx="50%" cy="50%" r="45%" fill="none" stroke="#f1f5f9" strokeWidth="8" />
                             <motion.circle
-                                cx="80" cy="80" r="70" fill="none" stroke={passed ? "#10b981" : "#ef4444"} strokeWidth="12"
-                                strokeDasharray="440"
-                                strokeDashoffset="440"
-                                animate={{ strokeDashoffset: 440 - (440 * percentage) / 100 }}
+                                cx="50%" cy="50%" r="45%" fill="none" stroke={passed ? "#10b981" : "#ef4444"} strokeWidth="8"
+                                strokeDasharray="283"
+                                strokeDashoffset="283"
+                                animate={{ strokeDashoffset: 283 - (283 * percentage) / 100 }}
                                 transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
                                 strokeLinecap="round"
                             />
                         </svg>
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-4xl font-black text-slate-900 tracking-tighter">{percentage}%</span>
+                            <span className="text-3xl md:text-4xl font-black text-slate-900 tracking-tighter">{percentage}%</span>
                         </div>
                     </div>
 
-                    <h2 className={cn("text-4xl font-black mb-2 tracking-tight", passed ? "text-emerald-600" : "text-slate-900")}>
-                        {passed ? "Excellent Performance! 🌟" : "Keep Learning! 💪"}
+                    <h2 className={cn("text-3xl md:text-4xl font-black mb-2 tracking-tight", passed ? "text-emerald-600" : "text-slate-900")}>
+                        {passed ? "Excellent! 🌟" : "Keep Learning! 💪"}
                     </h2>
-                    <p className="text-slate-500 font-bold text-lg mb-8">
-                        You scored {quizState.score} out of {qList.length} correctly.
+                    <p className="text-slate-500 font-bold text-base md:text-lg mb-8">
+                        You scored {quizState.score} out of {qList.length}.
                     </p>
 
-                    <div className="grid grid-cols-2 gap-4 mb-10">
+                    <div className="grid grid-cols-2 gap-3 mb-8">
                         <div className="bg-amber-50 rounded-2xl p-4 border border-amber-100 flex flex-col items-center justify-center">
-                            <Star className="text-amber-500 mb-2" size={24} />
-                            <span className="text-sm font-bold text-amber-900/60 uppercase tracking-widest">XP Gained</span>
-                            <span className="text-2xl font-black text-amber-600">+{quizState.xp}</span>
+                            <Star className="text-amber-500 mb-1" size={20} />
+                            <span className="text-[10px] font-black text-amber-900/60 uppercase tracking-widest">XP Gained</span>
+                            <span className="text-xl font-black text-amber-600">+{quizState.xp}</span>
                         </div>
                         <div className="bg-blue-50 rounded-2xl p-4 border border-blue-100 flex flex-col items-center justify-center">
-                            <Trophy className="text-blue-500 mb-2" size={24} />
-                            <span className="text-sm font-bold text-blue-900/60 uppercase tracking-widest">Global Rank</span>
-                            <span className="text-2xl font-black text-blue-600">Top {100 - percentile}%</span>
+                            <Trophy className="text-blue-500 mb-1" size={20} />
+                            <span className="text-[10px] font-black text-blue-900/60 uppercase tracking-widest">Global Rank</span>
+                            <span className="text-xl font-black text-blue-600">Top {100 - percentile}%</span>
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-3">
                         <button
                             onClick={() => navigate('/quizzes')}
-                            className="w-full py-5 rounded-[2rem] bg-slate-900 text-white font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl active:scale-95"
+                            className="w-full py-4 rounded-2xl bg-slate-900 text-white font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl active:scale-95 text-xs md:text-sm"
                         >
                             Explore More Quizzes
                         </button>
                         {!passed && (
                             <button
                                 onClick={() => window.location.reload()}
-                                className="w-full py-5 rounded-[2rem] bg-slate-100 text-slate-600 font-black uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95"
+                                className="w-full py-4 rounded-2xl bg-slate-100 text-slate-600 font-black uppercase tracking-widest hover:bg-slate-200 transition-all active:scale-95 text-xs md:text-sm"
                             >
                                 Try Again
                             </button>
@@ -212,86 +196,72 @@ export default function PublicQuiz() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pt-24 pb-12 flex flex-col">
+        <div className="min-h-screen bg-slate-50 flex flex-col font-sans pb-safe">
             <SEO title={`Quiz: ${topicId}`} />
             
-            {/* Top Navigation Bar */}
-            <div className="fixed top-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 z-50 px-6 flex items-center justify-between">
-                <button
-                    onClick={() => navigate('/quizzes')}
-                    className="flex items-center gap-2 text-slate-500 font-bold hover:text-slate-900 transition-colors"
-                >
-                    <ChevronLeft size={20} /> Quit
-                </button>
-                
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-2 rounded-full font-black text-sm tracking-widest">
-                        <Zap size={16} className={quizState.streak > 2 ? "animate-pulse" : ""} />
-                        STREAK: {quizState.streak}
+            {/* Top Progress Bar App-like edge */}
+            <div className="fixed top-0 left-0 right-0 h-1.5 bg-slate-200 z-[100]">
+                <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: \`\${progress}%\` }}
+                    transition={{ duration: 0.3 }}
+                    className="h-full bg-blue-600"
+                />
+            </div>
+
+            {/* Mobile-friendly App Header */}
+            <div className="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50 pt-safe-top">
+                <div className="px-4 py-3 flex items-center justify-between">
+                    <button
+                        onClick={() => navigate('/quizzes')}
+                        className="w-10 h-10 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition-colors"
+                    >
+                        <ChevronLeft size={20} />
+                    </button>
+                    
+                    <div className="text-center flex-1 px-4">
+                        <h1 className="text-sm font-black text-slate-900 uppercase tracking-widest truncate">{topicId}</h1>
+                        <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Q {quizState.qIndex + 1} of {qList.length}</p>
                     </div>
-                    <div className="flex items-center gap-2 bg-slate-100 text-slate-700 px-4 py-2 rounded-full font-black text-sm tracking-widest">
-                        <Target size={16} />
-                        XP: {quizState.xp}
+
+                    <div className={cn(
+                        "flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-xs transition-colors",
+                        timeLeft <= 5 ? "bg-red-100 text-red-600 animate-pulse" : "bg-blue-50 text-blue-600"
+                    )}>
+                        <Clock size={14} />
+                        {timeLeft}s
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-4xl mx-auto w-full px-6 flex-1 flex flex-col mt-8">
-                
-                <div className="flex justify-between items-end mb-6">
-                    <div>
-                        <h1 className="text-xl md:text-2xl font-black text-slate-900 uppercase tracking-tight">{topicId}</h1>
-                        <p className="text-slate-500 font-medium text-sm">Question {quizState.qIndex + 1} of {qList.length}</p>
-                    </div>
-                    
-                    {/* Timer */}
-                    <div className={cn(
-                        "flex items-center gap-2 text-xl font-black px-4 py-2 rounded-xl transition-colors",
-                        timeLeft <= 5 ? "bg-red-100 text-red-600 animate-pulse" : "bg-blue-50 text-blue-600"
-                    )}>
-                        <Clock size={20} />
-                        00:{timeLeft.toString().padStart(2, '0')}
-                    </div>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="w-full h-2 bg-slate-200 rounded-full mb-10 overflow-hidden">
-                    <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${((quizState.qIndex + 1) / qList.length) * 100}%` }}
-                        transition={{ duration: 0.5 }}
-                        className="h-full bg-blue-600 rounded-full"
-                    />
-                </div>
-
+            <div className="flex-1 flex flex-col max-w-3xl mx-auto w-full px-4 py-6 md:py-10 relative overflow-hidden">
                 <AnimatePresence mode='wait'>
                     <motion.div
                         key={quizState.qIndex}
-                        initial={{ opacity: 0, x: 50 }}
+                        initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -50 }}
-                        transition={{ duration: 0.4, type: "spring" }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
                         className="flex-1 flex flex-col"
                     >
-                        {/* Question Card */}
-                        <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/50 mb-8">
-                            <h3 className="text-2xl md:text-4xl font-black text-slate-900 leading-tight font-hindi">
+                        {/* Question Box */}
+                        <div className="mb-6 md:mb-10">
+                            <h3 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 leading-snug font-hindi">
                                 {currentQ.question}
                             </h3>
                         </div>
 
-                        {/* Options */}
-                        <div className="grid grid-cols-1 gap-4">
+                        {/* Options - Large touch targets */}
+                        <div className="grid grid-cols-1 gap-3 md:gap-4 pb-24 md:pb-0">
                             {currentQ.options.map((opt, i) => {
                                 const isSelected = quizState.selectedOption === i;
                                 const isCorrect = i === currentQ.correctAnswer;
-                                const isTimeout = quizState.selectedOption === -1;
-
-                                let stateStyle = "bg-white border-slate-200 hover:border-blue-500 hover:shadow-lg text-slate-700 cursor-pointer";
+                                
+                                let stateStyle = "bg-white border-slate-200 hover:border-blue-500 text-slate-700 hover:bg-blue-50/30";
                                 if (quizState.isAnswered) {
-                                    if (isCorrect) stateStyle = "bg-emerald-50 border-emerald-500 text-emerald-800 shadow-emerald-500/20";
-                                    else if (isSelected) stateStyle = "bg-red-50 border-red-500 text-red-800 shadow-red-500/20";
-                                    else stateStyle = "bg-slate-50 border-slate-200 opacity-50";
+                                    if (isCorrect) stateStyle = "bg-emerald-50 border-emerald-500 text-emerald-800 shadow-lg shadow-emerald-500/20 z-10 scale-[1.02]";
+                                    else if (isSelected) stateStyle = "bg-red-50 border-red-500 text-red-800 scale-95 opacity-80";
+                                    else stateStyle = "bg-slate-50 border-slate-200 opacity-40 scale-95";
                                 }
 
                                 return (
@@ -300,40 +270,45 @@ export default function PublicQuiz() {
                                         onClick={() => handleAnswer(i)}
                                         disabled={quizState.isAnswered}
                                         className={cn(
-                                            "w-full text-left p-6 md:p-8 rounded-[2rem] border-2 transition-all duration-300 flex items-center justify-between group font-bold text-xl font-hindi",
+                                            "w-full text-left p-5 min-h-[4rem] rounded-2xl md:rounded-[2rem] border-2 transition-all duration-300 flex items-center justify-between group font-bold text-lg md:text-xl font-hindi tap-highlight-transparent relative overflow-hidden",
                                             stateStyle
                                         )}
+                                        style={{ WebkitTapHighlightColor: 'transparent' }}
                                     >
-                                        <span>{opt}</span>
-                                        {quizState.isAnswered && isCorrect && <CheckCircle2 className="text-emerald-500 shrink-0 ml-4" size={28} />}
-                                        {quizState.isAnswered && isSelected && !isCorrect && <XCircle className="text-red-500 shrink-0 ml-4" size={28} />}
+                                        <span className="relative z-10 pr-8">{opt}</span>
+                                        {quizState.isAnswered && isCorrect && <CheckCircle2 className="text-emerald-500 absolute right-4 top-1/2 -translate-y-1/2" size={24} />}
+                                        {quizState.isAnswered && isSelected && !isCorrect && <XCircle className="text-red-500 absolute right-4 top-1/2 -translate-y-1/2" size={24} />}
                                     </button>
                                 );
                             })}
                         </div>
                     </motion.div>
                 </AnimatePresence>
+            </div>
 
-                {/* Explanation Toast */}
-                <AnimatePresence>
-                    {quizState.isAnswered && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 20 }}
-                            className="fixed bottom-6 left-6 right-6 md:left-auto md:right-10 md:w-96 bg-slate-900 text-white p-6 rounded-3xl shadow-2xl z-50 font-hindi border border-slate-700"
-                        >
+            {/* Explanation Toast Bottom Sheet (App-like) */}
+            <AnimatePresence>
+                {quizState.isAnswered && (
+                    <motion.div
+                        initial={{ opacity: 0, y: '100%' }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: '100%' }}
+                        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                        className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.1)] z-50 p-6 md:p-8 rounded-t-[2rem]"
+                    >
+                        <div className="max-w-3xl mx-auto flex flex-col gap-2">
                             <span className={cn(
-                                "font-black uppercase tracking-[0.2em] text-[10px] block mb-2 flex items-center gap-2",
-                                quizState.selectedOption === currentQ.correctAnswer ? "text-emerald-400" : "text-red-400"
+                                "font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2",
+                                quizState.selectedOption === currentQ.correctAnswer ? "text-emerald-500" : "text-red-500"
                             )}>
+                                {quizState.selectedOption === currentQ.correctAnswer ? <CheckCircle2 size={16}/> : <XCircle size={16}/>}
                                 {quizState.selectedOption === currentQ.correctAnswer ? "Awesome!" : "Explanation"}
                             </span>
-                            <p className="text-sm font-medium leading-relaxed opacity-90">{currentQ.explanation}</p>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
+                            <p className="text-slate-700 font-medium text-sm md:text-base leading-relaxed font-hindi">{currentQ.explanation}</p>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

@@ -42,6 +42,7 @@ const AdminLiveQuiz = lazy(() => import("./pages/AdminLiveQuiz"));
 const StudentLiveQuiz = lazy(() => import("./pages/StudentLiveQuiz"));
 
 const PublicQuiz = lazy(() => import("./pages/PublicQuiz"));
+const NotesHub = lazy(() => import("./pages/NotesHub"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -71,6 +72,7 @@ export default function App() {
               <Route path="/student-portal" element={<StudentPortal />} />
               <Route path="/certificate" element={<CertificateDownload />} />
               <Route path="/quizzes" element={<QuizHub />} />
+              <Route path="/notes" element={<NotesHub />} />
               <Route path="/quiz/:courseId/:topicId" element={<PublicQuiz />} />
               <Route path="/fee-check" element={<Donate />} />
               <Route path="/terms" element={<Terms />} />
