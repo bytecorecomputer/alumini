@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 
 import { compressImage } from '../lib/imageCompression';
 import { useSearchParams } from 'react-router-dom';
+import { requestNotificationPermission } from '../lib/notifications';
 
 // Remove unused imports like COURSE_CURRICULUM from quizData inside StudentPortal.
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,6 +29,25 @@ export default function StudentPortal() {
     const [searchParams] = useSearchParams();
     const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'overview');
     
+    // Live Quiz Global State
+    const [activeQuizData, setActiveQuizData] = useState(null);
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(doc(db, 'settings', 'live_quiz_state'), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if (data.activeRoomId) {
+                    setActiveQuizData(data);
+                } else {
+                    setActiveQuizData(null);
+                }
+            } else {
+                setActiveQuizData(null);
+            }
+        });
+        return () => unsubscribe();
+    }, []);
+    
     // REDUX SETUP
     const dispatch = useDispatch();
     const courseModules = useSelector(selectActiveCourseModules) || [];
@@ -36,7 +56,23 @@ export default function StudentPortal() {
         if (student?.course) {
             dispatch(setStudentCourse(student.course));
         }
-    }, [student?.course, dispatch]);
+        
+        // Request Notification Permission gracefully on login
+        if (student?.registration) {
+            const hasRequested = localStorage.getItem('push_requested_' + student.registration);
+            if (!hasRequested) {
+                // Delay slightly to not bombard user immediately on page load
+                setTimeout(() => {
+                    requestNotificationPermission(student.registration).then(token => {
+                        if (token) {
+                            toast.success('Live Quiz Notifications Enabled! 🔔');
+                        }
+                    });
+                    localStorage.setItem('push_requested_' + student.registration, 'true');
+                }, 3000);
+            }
+        }
+    }, [student?.course, student?.registration, dispatch]);
 
     const [resources, setResources] = useState([]);
     const [resourcesLoading, setResourcesLoading] = useState(true);
@@ -115,6 +151,37 @@ export default function StudentPortal() {
     return (
         <div className="min-h-screen bg-[#F8FAFC] pb-20 font-inter pt-28">
             <div className="max-w-7xl mx-auto px-4 md:px-8">
+
+                {/* ACTIVE QUIZ BANNER */}
+                <AnimatePresence>
+                    {activeQuizData && activeQuizData.activeRoomId && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: -50, scale: 0.9 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -50, scale: 0.9 }}
+                            className="mb-12 p-6 bg-red-600 rounded-[2rem] shadow-2xl shadow-red-600/30 border-4 border-red-500 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 cursor-pointer group"
+                            onClick={() => window.location.href = `/student/live-quiz?pin=${activeQuizData.activeRoomId}`}
+                        >
+                            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                            <div className="relative z-10 flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+                                <div className="h-16 w-16 bg-white rounded-2xl flex items-center justify-center animate-pulse shadow-lg">
+                                    <Target size={32} className="text-red-600" />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">🔴 LIVE QUIZ RUNNING</h3>
+                                    <p className="text-red-100 font-bold uppercase tracking-widest text-xs mt-1">
+                                        Topic: {activeQuizData.topicId}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="relative z-10 w-full md:w-auto">
+                                <button className="w-full md:w-auto px-8 py-4 bg-white text-red-600 rounded-[1.5rem] font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform shadow-xl flex items-center justify-center gap-2 group-hover:bg-blue-50 group-hover:text-blue-600">
+                                    Click to Join <ChevronRight size={18} />
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {/* Header Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">

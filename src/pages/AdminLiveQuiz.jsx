@@ -9,6 +9,7 @@ import { db } from '../firebase/firestore';
 import { doc, setDoc, updateDoc, collection, onSnapshot, deleteDoc, increment } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import confetti from 'canvas-confetti';
 import { initAudio, playCountdownBeep, playCountdownGo, playTick, playSuccess } from '../lib/soundEffects';
 
 export default function AdminLiveQuiz() {
@@ -35,8 +36,16 @@ export default function AdminLiveQuiz() {
         
         const roomRef = doc(db, 'live_quizzes', roomId);
         const unsubscribe = onSnapshot(roomRef, (docSnap) => {
-            if (docSnap.exists()) {
+                if (docSnap.exists()) {
                 const data = docSnap.data();
+                if (data.status === 'finished' && quizState !== 'finished') {
+                    confetti({
+                        particleCount: 200,
+                        spread: 160,
+                        origin: { y: 0.3 },
+                        colors: ['#FBBF24', '#F87171', '#60A5FA', '#34D399']
+                    });
+                }
                 setLiveData(data);
                 setQuizState(data.status);
                 setCurrentQuestionIndex(data.currentQuestionIndex);
@@ -134,6 +143,8 @@ export default function AdminLiveQuiz() {
 
     const handleCreateRoom = async () => {
         if (!selectedCourse) return toast.error("Select a course module");
+        if (!selectedTopic) return toast.error("Select a quiz topic");
+        if (!questions || questions.length === 0) return toast.error("No questions available for this topic");
         
         const newRoomId = Math.floor(100000 + Math.random() * 900000).toString();
         try {
@@ -146,14 +157,22 @@ export default function AdminLiveQuiz() {
                 totalQuestions: questions.length,
                 host: 'Admin'
             });
-        setRoomId(newRoomId);
-        setQuizState('waiting');
-        toast.success("Room created! Students can join now.");
-    } catch (error) {
-        console.error(error);
-        toast.error("Failed to create live room");
-    }
-};
+            // Global state for real-time banner on Student Portal
+            await setDoc(doc(db, 'settings', 'live_quiz_state'), {
+                activeRoomId: newRoomId,
+                courseId: selectedCourse,
+                topicId: selectedTopic,
+                updatedAt: Date.now()
+            });
+            
+            setRoomId(newRoomId);
+            setQuizState('waiting');
+            toast.success("Room created! Students can join now.");
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to create live room");
+        }
+    };
 
 const handleAddBots = async () => {
     const bots = [
@@ -206,6 +225,7 @@ const handleStartQuiz = async () => {
     const handleEndSession = async () => {
         if (window.confirm("Are you sure you want to end and delete this live session?")) {
             await deleteDoc(doc(db, 'live_quizzes', roomId));
+            await setDoc(doc(db, 'settings', 'live_quiz_state'), { activeRoomId: null });
             setRoomId(null);
             setQuizState('setup');
             setParticipants([]);

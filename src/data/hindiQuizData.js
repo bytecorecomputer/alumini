@@ -1111,378 +1111,573 @@ export const HINDI_QUIZ_DATA = {
         }
     },
     "fundamentals": {
-        "title": "Fundamentals",
-        "description": "Computer Basics & IT",
-        "icon": "monitor",
-        "color": "cyan",
-        "modules": {
-
-            "Computer Fundamentals": [
-                {
-                    "question": "कंप्यूटर का मस्तिष्क (Brain of Computer) किसे कहा जाता है?",
-                    "options": ["Monitor", "Keyboard", "CPU", "Mouse"],
-                    "correctAnswer": 2,
-                    "explanation": "CPU (Central Processing Unit) को कंप्यूटर का मस्तिष्क कहा जाता है।"
-                },
-                {
-                    "question": "RAM का पूरा नाम क्या है?",
-                    "options": ["Read Access Memory", "Random Access Memory", "Run Accept Memory", "Real Access Memory"],
-                    "correctAnswer": 1,
-                    "explanation": "RAM का फुल फॉर्म Random Access Memory होता है, जो कंप्यूटर की अस्थायी (Temporary) मेमोरी है।"
-                },
-                {
-                    "question": "इनमें से कौन सा इनपुट डिवाइस नहीं है?",
-                    "options": ["Mouse", "Keyboard", "Scanner", "Printer"],
-                    "correctAnswer": 3,
-                    "explanation": "Printer एक आउटपुट डिवाइस है, क्योंकि यह डाटा को हार्ड कॉपी के रूप में बाहर निकालता है।"
-                },
-                {
-                    "question": "1 Byte में कितने Bit होते हैं?",
-                    "options": ["4 Bits", "8 Bits", "16 Bits", "32 Bits"],
-                    "correctAnswer": 1,
-                    "explanation": "1 Byte हमेशा 8 Bits के बराबर होता है।"
-                },
-                {
-                    "question": "कंप्यूटर को रीस्टार्ट करने की प्रक्रिया को क्या कहा जाता है?",
-                    "options": ["Cold Booting", "Warm Booting", "Shut down", "Log off"],
-                    "correctAnswer": 1,
-                    "explanation": "पहले से चालू कंप्यूटर को रीस्टार्ट करने को Warm Booting कहा जाता है।"
-                }
-            ],
-            "Master Assessment": [
-                {
-                    "question": "कंप्यूटर का 'मस्तिष्क' (Brain) किसे कहा जाता है?",
-                    "options": [
-                        "RAM",
-                        "Motherboard",
-                        "CPU (Central Processing Unit)",
-                        "Hard Disk"
-                    ],
-                    "correctAnswer": 2,
-                    "explanation": "CPU (सेंट्रल प्रोसेसिंग यूनिट) कंप्यूटर का मुख्य प्रोसेसर है जो सभी गणनाओं और निर्देशों को प्रोसेस करता है।"
-                },
-                {
-                    "question": "RAM (रैंडम एक्सेस मेमोरी) किस प्रकार की मेमोरी है?",
-                    "options": [
-                        "स्थायी (Permanent)",
-                        "अस्थायी (Volatile - बिजली जाने पर डेटा मिट जाता है)",
-                        "केवल पढ़ने योग्य (Read Only)",
-                        "ऑप्टिकल (Optical)"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "RAM एक प्राइमरी मेमोरी है। कंप्यूटर बंद होने पर या बिजली जाने पर इसमें मौजूद सारा डेटा मिट जाता है।"
-                },
-                {
-                    "question": "ROM का पूर्ण रूप क्या है और इसका मुख्य कार्य क्या है?",
-                    "options": [
-                        "Read Only Memory - इसमें कंप्यूटर को बूट (स्टार्ट) करने वाले स्थायी निर्देश (BIOS) होते हैं",
-                        "Random Only Memory - वीडियो सेव करना",
-                        "Read Open Memory - फाइल खोलना",
-                        "Run On Memory - गेम चलाना"
-                    ],
-                    "correctAnswer": 0,
-                    "explanation": "ROM (रीड ओनली मेमोरी) नॉन-वोलाटाइल होती है। इसमें निर्माता द्वारा फीड किये गए जरूरी निर्देश होते हैं जो कंप्यूटर स्टार्ट करते हैं।"
-                },
-                {
-                    "question": "सॉफ्टवेयर के दो मुख्य प्रकार कौन से हैं?",
-                    "options": [
-                        "हार्डवेयर और नेटवर्क",
-                        "सिस्टम सॉफ्टवेयर (जैसे Windows) और एप्लीकेशन सॉफ्टवेयर (जैसे MS Word)",
-                        "इनपुट और आउटपुट",
-                        "माउस और कीबोर्ड"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "सिस्टम सॉफ्टवेयर हार्डवेयर को कंट्रोल करता है, जबकि एप्लीकेशन सॉफ्टवेयर यूजर के किसी खास काम (जैसे टाइपिंग, एडिटिंग) के लिए होते हैं।"
-                },
-                {
-                    "question": "इनमें से कौन सा इनपुट डिवाइस (Input Device) नहीं है?",
-                    "options": [
-                        "कीबोर्ड (Keyboard)",
-                        "माउस (Mouse)",
-                        "स्कैनर (Scanner)",
-                        "प्रिंटर (Printer)"
-                    ],
-                    "correctAnswer": 3,
-                    "explanation": "प्रिंटर एक आउटपुट डिवाइस है क्योंकि यह कंप्यूटर से डेटा लेकर हमें कागज (हार्ड कॉपी) पर परिणाम देता है।"
-                },
-                {
-                    "question": "ऑपरेटिंग सिस्टम (OS) का क्या कार्य है?",
-                    "options": [
-                        "केवल वायरस हटाना",
-                        "कंप्यूटर के हार्डवेयर और सॉफ्टवेयर रिसोर्सेज का प्रबंधन करना और यूजर को इंटरफ़ेस प्रदान करना",
-                        "गेम बनाना",
-                        "इंटरनेट स्पीड बढ़ाना"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "OS (जैसे Windows, Linux, Android) कंप्यूटर की आत्मा है, जो यूजर, हार्डवेयर और एप्लीकेशन के बीच पुल का काम करता है।"
-                },
-                {
-                    "question": "1 गीगाबाइट (1 GB) में कितने मेगाबाइट (MB) होते हैं?",
-                    "options": [
-                        "1000 MB",
-                        "1024 MB",
-                        "1024 KB",
-                        "100 MB"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "बाइनरी सिस्टम में मेमोरी 2 की घात (power of 2) में चलती है, इसलिए 1 GB = 1024 MB, 1 MB = 1024 KB होता है।"
-                },
-                {
-                    "question": "GUI का पूर्ण रूप क्या है?",
-                    "options": [
-                        "Global User Internet",
-                        "Graphical User Interface",
-                        "General Utility Item",
-                        "Graphical Union Interface"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "GUI का मतलब है कि आप कंप्यूटर को आइकन, बटन और माउस के जरिए ग्राफ़िक्स के रूप में कंट्रोल कर सकते हैं, न कि सिर्फ टाइपिंग कमांड्स से।"
-                },
-                {
-                    "question": "मदरबोर्ड (Motherboard) क्या होता है?",
-                    "options": [
-                        "एक प्रकार का सॉफ्टवेयर",
-                        "कंप्यूटर का मुख्य सर्किट बोर्ड जिससे CPU, RAM, हार्ड डिस्क और सभी पोर्ट्स जुड़े होते हैं",
-                        "मॉनिटर का स्टैंड",
-                        "पावर सप्लाई (SMPS)"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "मदरबोर्ड कंप्यूटर की रीढ़ की हड्डी है। कंप्यूटर का हर हिस्सा इसी बोर्ड से सीधे या केबल के जरिए जुड़ा होता है।"
-                },
-                {
-                    "question": "SSD और HDD में मुख्य अंतर क्या है?",
-                    "options": [
-                        "HDD नया है, SSD पुराना",
-                        "SSD (Solid State Drive) में कोई घूमने वाला पार्ट नहीं होता, इसलिए यह HDD (Hard Disk Drive) से कई गुना तेज़ होती है",
-                        "HDD में चिप होती है, SSD में डिस्क",
-                        "दोनों बिलकुल एक ही हैं"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "SSD फ्लैश मेमोरी का उपयोग करती है (जैसे पेन ड्राइव), जबकि HDD में घूमने वाली मैग्नेटिक प्लेट्स होती हैं, इसलिए SSD बहुत फास्ट है।"
-                },
-                {
-                    "question": "LAN, MAN, और WAN क्या हैं?",
-                    "options": [
-                        "कंप्यूटर के ब्रांड",
-                        "नेटवर्क के प्रकार (Local Area, Metropolitan Area, Wide Area Network)",
-                        "प्रोग्रामिंग भाषाएं",
-                        "एंटीवायरस सॉफ्टवेयर"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "LAN एक बिल्डिंग में, MAN एक शहर में, और WAN पूरी दुनिया (जैसे इंटरनेट) में फैले नेटवर्क को कहते हैं।"
-                },
-                {
-                    "question": "IP Address क्या होता है?",
-                    "options": [
-                        "इंटरनेट प्रोवाइडर का पता",
-                        "नेटवर्क से जुड़े प्रत्येक डिवाइस की एक विशिष्ट पहचान संख्या (Unique ID)",
-                        "ईमेल का पासवर्ड",
-                        "वेबसाइट का नाम"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "इंटरनेट प्रोटोकॉल (IP) एड्रेस आपके डिवाइस का डिजिटल पता है, जिससे नेटवर्क पर डेटा सही जगह पहुंच पाता है (जैसे 192.168.1.1)।"
-                },
-                {
-                    "question": "URL का पूर्ण रूप क्या है और यह क्या करता है?",
-                    "options": [
-                        "Universal Router Link - राऊटर को जोड़ता है",
-                        "Uniform Resource Locator - यह इंटरनेट पर किसी वेबसाइट या फाइल का वेब एड्रेस (पता) होता है",
-                        "United Resources List - फाइलों की लिस्ट",
-                        "Uniform Radio Link - रेडियो सिग्नल"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "URL (जैसे www.google.com) ब्राउज़र को बताता है कि आप इंटरनेट पर कौन सा पेज या फाइल खोलना चाहते हैं।"
-                },
-                {
-                    "question": "कंप्यूटर वायरस (Virus) वास्तव में क्या होता है?",
-                    "options": [
-                        "एक प्रकार का बैक्टीरिया",
-                        "कंप्यूटर हार्डवेयर में खराबी",
-                        "एक दुर्भावनापूर्ण सॉफ्टवेयर (Malicious Program) जो कंप्यूटर को नुकसान पहुंचाने के लिए बनाया गया है",
-                        "इंटरनेट कनेक्शन टूटना"
-                    ],
-                    "correctAnswer": 2,
-                    "explanation": "वायरस एक कोड या प्रोग्राम है जो आपकी फाइलों को डिलीट कर सकता है, डेटा चुरा सकता है, या कंप्यूटर को धीमा कर सकता है।"
-                },
-                {
-                    "question": "Cache Memory (कैश मेमोरी) का क्या काम है?",
-                    "options": [
-                        "पैसे सेव करना",
-                        "यह CPU के सबसे पास मौजूद अत्यंत तेज़ मेमोरी है, जो बार-बार इस्तेमाल होने वाले डेटा को रखती है ताकि प्रोसेसिंग तेज़ हो सके",
-                        "हार्ड डिस्क का बैकअप लेना",
-                        "इंटरनेट चलाना"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "कैश मेमोरी RAM से भी बहुत अधिक फास्ट होती है। यह CPU को डेटा का इंतज़ार करने से बचाती है।"
-                },
-                {
-                    "question": "HTTP और HTTPS में 'S' का क्या अर्थ है?",
-                    "options": [
-                        "System",
-                        "Server",
-                        "Secure",
-                        "Speed"
-                    ],
-                    "correctAnswer": 2,
-                    "explanation": "HTTPS में 'S' का अर्थ 'Secure' (सुरक्षित) है, जिसका मतलब है कि उस वेबसाइट और आपके बीच भेजा गया डेटा एन्क्रिप्टेड (लॉक) है।"
-                },
-                {
-                    "question": "BIOS का पूर्ण रूप क्या है?",
-                    "options": [
-                        "Basic Input Output System",
-                        "Base Internal Output System",
-                        "Basic Internet Open System",
-                        "Binary Input Output Software"
-                    ],
-                    "correctAnswer": 0,
-                    "explanation": "BIOS (बेसिक इनपुट/आउटपुट सिस्टम) वह पहला प्रोग्राम है जो कंप्यूटर के चालू होते ही चलता है और हार्डवेयर चेक करता है।"
-                },
-                {
-                    "question": "ईमेल (Email) में 'BCC' का क्या अर्थ होता है?",
-                    "options": [
-                        "Basic Carbon Copy",
-                        "Blind Carbon Copy",
-                        "Blank Copy Creator",
-                        "Blind Core Copy"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "BCC (ब्लाइंड कार्बन कॉपी) में जिन लोगों का ईमेल डाला जाता है, उनका पता अन्य प्राप्तकर्ताओं को दिखाई नहीं देता (गोपनीयता के लिए)।"
-                },
-                {
-                    "question": "बाइनरी सिस्टम (Binary System) किन दो अंकों पर आधारित है?",
-                    "options": [
-                        "1 और 2",
-                        "0 और 1",
-                        "0 और 9",
-                        "A और B"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "कंप्यूटर केवल बाइनरी भाषा (मशीनी भाषा) समझता है, जो केवल '0' (Off) और '1' (On) से बनी होती है।"
-                },
-                {
-                    "question": "ISP (इंटरनेट सर्विस प्रोवाइडर) का क्या अर्थ है?",
-                    "options": [
-                        "इंटरनेट स्पीड प्रोग्राम",
-                        "वह कंपनी जो आपको इंटरनेट कनेक्शन प्रदान करती है (जैसे Jio, Airtel, BSNL)",
-                        "इंटरनेट सिक्योरिटी प्रोटोकॉल",
-                        "कंप्यूटर का प्रोसेसर"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "ISP वह टेलीकॉम या केबल कंपनी है जिसे आप इंटरनेट एक्सेस के लिए पैसे देते हैं।"
-                },
-                {
-                    "question": "SMPS का कंप्यूटर में क्या काम है?",
-                    "options": [
-                        "स्क्रीन की रौशनी बढ़ाना",
-                        "Switched Mode Power Supply - यह घर की AC बिजली को कंप्यूटर पार्ट्स के लिए DC में बदलता है और पावर देता है",
-                        "सिस्टम को ठंडा रखना",
-                        "साउंड उत्पन्न करना"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "SMPS कंप्यूटर का पावर हाउस है, जो मदरबोर्ड, हार्ड डिस्क और ड्राइव्स को आवश्यक वोल्टेज सप्लाई करता है।"
-                },
-                {
-                    "question": "MS-DOS किस प्रकार का ऑपरेटिंग सिस्टम था?",
-                    "options": [
-                        "GUI (ग्राफिकल)",
-                        "CUI / CLI (कमांड लाइन इंटरफ़ेस - जहाँ सब कुछ टाइप करके करना पड़ता है)",
-                        "मोबाइल OS",
-                        "ओपन सोर्स"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "MS-DOS (Microsoft Disk Operating System) में कोई माउस या ग्राफ़िक्स नहीं होते थे, सब कुछ काली स्क्रीन पर कमांड लिख कर होता था।"
-                },
-                {
-                    "question": "VGA और HDMI केबल्स का उपयोग मुख्य रूप से किस लिए होता है?",
-                    "options": [
-                        "इंटरनेट जोड़ने के लिए",
-                        "CPU को मॉनिटर (डिस्प्ले) से जोड़ने के लिए",
-                        "प्रिंटर को जोड़ने के लिए",
-                        "बिजली देने के लिए"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "VGA (पुराना, केवल वीडियो) और HDMI (नया, वीडियो + ऑडियो) पोर्ट्स कंप्यूटर के विजुअल्स को स्क्रीन तक पहुंचाते हैं।"
-                },
-                {
-                    "question": "कंप्यूटर की स्पीड मुख्य रूप से किसमें मापी जाती है?",
-                    "options": [
-                        "GHz (Gigahertz)",
-                        "GB (Gigabytes)",
-                        "Kbps",
-                        "DPI"
-                    ],
-                    "correctAnswer": 0,
-                    "explanation": "CPU की क्लॉक स्पीड मेगाहर्ट्ज़ (MHz) या गीगाहर्ट्ज़ (GHz) में मापी जाती है (जैसे 3.2 GHz प्रोसेसर)।"
-                },
-                {
-                    "question": "Phishing (फिशिंग) क्या है?",
-                    "options": [
-                        "मछली पकड़ना",
-                        "एक साइबर हमला जहाँ हैकर नकली वेबसाइट या ईमेल भेजकर आपके पासवर्ड या बैंक डिटेल्स चुराने की कोशिश करते हैं",
-                        "इंटरनेट पर सर्च करना",
-                        "फोटो खींचना"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "फिशिंग में अपराधी किसी विश्वसनीय संस्था (जैसे बैंक) का रूप धर कर यूजर को धोखा देते हैं।"
-                },
-                {
-                    "question": "'Ctrl + Alt + Delete' दबाने पर Windows में मुख्य रूप से क्या खुलता है?",
-                    "options": [
-                        "My Computer",
-                        "Task Manager / Security Screen",
-                        "Control Panel",
-                        "Command Prompt"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "यह शॉर्टकट कंप्यूटर के हैंग होने पर Task Manager खोलने या कंप्यूटर को लॉक/रीस्टार्ट करने के लिए इमरजेंसी स्क्रीन लाता है।"
-                },
-                {
-                    "question": "Cloud Storage (क्लाउड स्टोरेज) का मतलब क्या है?",
-                    "options": [
-                        "डेटा को हवा में रखना",
-                        "डेटा को इंटरनेट के माध्यम से रिमोट सर्वर्स (जैसे Google Drive) पर सुरक्षित सेव करना",
-                        "पेन ड्राइव में डेटा सेव करना",
-                        "कंप्यूटर की हार्ड डिस्क"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "क्लाउड स्टोरेज से आप अपने डेटा को दुनिया में कहीं से भी किसी भी डिवाइस पर एक्सेस कर सकते हैं।"
-                },
-                {
-                    "question": "बारकोड रीडर (Barcode Reader) किस प्रकार की डिवाइस है?",
-                    "options": [
-                        "Output",
-                        "Storage",
-                        "Input",
-                        "Processing"
-                    ],
-                    "correctAnswer": 2,
-                    "explanation": "यह एक इनपुट डिवाइस है जो लेज़र की मदद से लाइनों (बारकोड) को पढ़कर कंप्यूटर में डेटा (जैसे प्रोडक्ट की कीमत) भेजता है।"
-                },
-                {
-                    "question": "PDF का पूर्ण रूप क्या है?",
-                    "options": [
-                        "Public Document Format",
-                        "Portable Document Format",
-                        "Printed Document File",
-                        "Personal Data Form"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "PDF (पोर्टेबल डॉक्यूमेंट फॉर्मेट) Adobe द्वारा बनाया गया फॉर्मेट है, जो किसी भी डिवाइस पर डॉक्यूमेंट की डिज़ाइन को बिगड़ने नहीं देता।"
-                },
-                {
-                    "question": "Ctrl+C और Ctrl+X में मुख्य अंतर क्या है?",
-                    "options": [
-                        "Ctrl+C पेस्ट करता है, Ctrl+X डिलीट करता है",
-                        "Ctrl+C कॉपी (डुप्लीकेट) करता है, जबकि Ctrl+X कट (डेटा को वहां से हटाकर मूव करने के लिए) करता है",
-                        "दोनों एक ही काम करते हैं",
-                        "Ctrl+C बंद करता है"
-                    ],
-                    "correctAnswer": 1,
-                    "explanation": "कॉपी करने पर डेटा मूल स्थान पर भी रहता है, जबकि कट (Ctrl+X) करने पर डेटा अपनी जगह से हटकर क्लिपबोर्ड में आ जाता है।"
-                }
-            ]
-        }
-    },
+    "title": "Fundamentals",
+    "description": "Computer Basics & IT",
+    "icon": "monitor",
+    "color": "cyan",
+    "modules": {
+        "Module 1: Computer Architecture & Hardware": [
+            {
+                "question": "कंप्यूटर का मस्तिष्क (Brain of Computer) किसे कहा जाता है?",
+                "options": [
+                    "Monitor",
+                    "Keyboard",
+                    "CPU",
+                    "Mouse"
+                ],
+                "correctAnswer": 2,
+                "explanation": "CPU (Central Processing Unit) को कंप्यूटर का मस्तिष्क कहा जाता है क्योंकि यह सभी प्रोसेसिंग करता है।"
+            },
+            {
+                "question": "मदरबोर्ड (Motherboard) क्या होता है?",
+                "options": [
+                    "एक प्रकार का सॉफ्टवेयर",
+                    "कंप्यूटर का मुख्य सर्किट बोर्ड जिससे CPU, RAM और सभी पोर्ट्स जुड़े होते हैं",
+                    "मॉनिटर का स्टैंड",
+                    "पावर सप्लाई (SMPS)"
+                ],
+                "correctAnswer": 1,
+                "explanation": "मदरबोर्ड कंप्यूटर की रीढ़ की हड्डी है। कंप्यूटर का हर हिस्सा इसी बोर्ड से सीधे या केबल के जरिए जुड़ा होता है।"
+            },
+            {
+                "question": "इनमें से कौन सा इनपुट डिवाइस नहीं है?",
+                "options": [
+                    "Mouse",
+                    "Keyboard",
+                    "Scanner",
+                    "Printer"
+                ],
+                "correctAnswer": 3,
+                "explanation": "Printer एक आउटपुट डिवाइस है, क्योंकि यह डिजिटल डाटा को हार्ड कॉपी (पेपर) के रूप में बाहर निकालता है।"
+            },
+            {
+                "question": "VGA और HDMI केबल्स का उपयोग मुख्य रूप से किस लिए होता है?",
+                "options": [
+                    "इंटरनेट जोड़ने के लिए",
+                    "CPU को मॉनिटर (डिस्प्ले) से जोड़ने के लिए",
+                    "प्रिंटर को जोड़ने के लिए",
+                    "बिजली देने के लिए"
+                ],
+                "correctAnswer": 1,
+                "explanation": "VGA (केवल वीडियो) और HDMI (वीडियो + ऑडियो) पोर्ट्स कंप्यूटर के विजुअल्स को स्क्रीन तक पहुंचाते हैं।"
+            },
+            {
+                "question": "SMPS का फुल फॉर्म क्या है और इसका मुख्य कार्य क्या है?",
+                "options": [
+                    "Simple Mode Power Supply",
+                    "Switched Mode Power Supply - यह घर की AC को DC में बदलकर कंप्यूटर पार्ट्स को पावर देता है",
+                    "System Main Power Switch",
+                    "Secure Memory Processing System"
+                ],
+                "correctAnswer": 1,
+                "explanation": "SMPS कंप्यूटर का पावर हाउस है, जो मदरबोर्ड और ड्राइव्स को आवश्यक वोल्टेज सप्लाई करता है।"
+            },
+            {
+                "question": "कंप्यूटर की स्पीड मुख्य रूप से किसमें मापी जाती है?",
+                "options": [
+                    "GHz (Gigahertz)",
+                    "GB (Gigabytes)",
+                    "Kbps",
+                    "DPI"
+                ],
+                "correctAnswer": 0,
+                "explanation": "CPU की क्लॉक स्पीड मेगाहर्ट्ज़ (MHz) या गीगाहर्ट्ज़ (GHz) में मापी जाती है (जैसे 3.2 GHz प्रोसेसर)।"
+            },
+            {
+                "question": "बारकोड रीडर (Barcode Reader) किस प्रकार की डिवाइस है?",
+                "options": [
+                    "Output Device",
+                    "Storage Device",
+                    "Input Device",
+                    "Processing Device"
+                ],
+                "correctAnswer": 2,
+                "explanation": "यह एक इनपुट डिवाइस है जो लेज़र की मदद से लाइनों (बारकोड) को पढ़कर कंप्यूटर में डेटा भेजता है।"
+            },
+            {
+                "question": "MICR का पूर्ण रूप क्या है?",
+                "options": [
+                    "Magnetic Ink Character Recognition",
+                    "Micro Internet Computer Resource",
+                    "Machine Input Core Reader",
+                    "Magnetic Information Control Reader"
+                ],
+                "correctAnswer": 0,
+                "explanation": "MICR तकनीक का इस्तेमाल मुख्य रूप से बैंकों में चेक पर लिखे विशेष मैग्नेटिक नंबरों को पढ़ने के लिए किया जाता है।"
+            },
+            {
+                "question": "प्लॉटर (Plotter) क्या है?",
+                "options": [
+                    "एक प्रकार का वायरस",
+                    "उच्च गुणवत्ता वाले ग्राफिक्स और बड़े पोस्टर प्रिंट करने वाला एक आउटपुट डिवाइस",
+                    "इनपुट डिवाइस",
+                    "मेमोरी चिप"
+                ],
+                "correctAnswer": 1,
+                "explanation": "प्लॉटर एक प्रकार का प्रिंटर है जिसका उपयोग इंजीनियरिंग ड्राइंग्स, बैनर और बड़े पोस्टर प्रिंट करने के लिए किया जाता है।"
+            },
+            {
+                "question": "USB का फुल फॉर्म क्या है?",
+                "options": [
+                    "Universal Serial Bus",
+                    "Unique Serial Bus",
+                    "Universal System Board",
+                    "United States Business"
+                ],
+                "correctAnswer": 0,
+                "explanation": "USB (यूनिवर्सल सीरियल बस) सबसे कॉमन पोर्ट है जिससे माउस, कीबोर्ड, पेनड्राइव आदि जोड़े जाते हैं।"
+            }
+        ],
+        "Module 2: Memory & Storage Units": [
+            {
+                "question": "RAM का पूरा नाम क्या है?",
+                "options": [
+                    "Read Access Memory",
+                    "Random Access Memory",
+                    "Run Accept Memory",
+                    "Real Access Memory"
+                ],
+                "correctAnswer": 1,
+                "explanation": "RAM का फुल फॉर्म Random Access Memory होता है, जो कंप्यूटर की अस्थायी (Temporary / Volatile) मेमोरी है।"
+            },
+            {
+                "question": "ROM का मुख्य कार्य क्या है?",
+                "options": [
+                    "Read Only Memory - इसमें कंप्यूटर को बूट (स्टार्ट) करने वाले स्थायी निर्देश (BIOS) होते हैं",
+                    "Random Only Memory - वीडियो सेव करना",
+                    "Read Open Memory - फाइल खोलना",
+                    "Run On Memory - गेम चलाना"
+                ],
+                "correctAnswer": 0,
+                "explanation": "ROM (रीड ओनली मेमोरी) नॉन-वोलाटाइल होती है। इसमें निर्माता द्वारा फीड किये गए जरूरी निर्देश होते हैं।"
+            },
+            {
+                "question": "1 Byte में कितने Bit होते हैं?",
+                "options": [
+                    "4 Bits",
+                    "8 Bits",
+                    "16 Bits",
+                    "32 Bits"
+                ],
+                "correctAnswer": 1,
+                "explanation": "1 Byte हमेशा 8 Bits के बराबर होता है। 4 Bits के समूह को Nibble (निबल) कहा जाता है।"
+            },
+            {
+                "question": "1 गीगाबाइट (1 GB) में कितने मेगाबाइट (MB) होते हैं?",
+                "options": [
+                    "1000 MB",
+                    "1024 MB",
+                    "1024 KB",
+                    "100 MB"
+                ],
+                "correctAnswer": 1,
+                "explanation": "बाइनरी सिस्टम में मेमोरी 2 की घात में चलती है, इसलिए 1 GB = 1024 MB, और 1 MB = 1024 KB होता है।"
+            },
+            {
+                "question": "SSD और HDD में मुख्य अंतर क्या है?",
+                "options": [
+                    "HDD नया है, SSD पुराना",
+                    "SSD (Solid State Drive) में कोई घूमने वाला पार्ट नहीं होता, इसलिए यह HDD से कई गुना तेज़ होती है",
+                    "HDD में चिप होती है, SSD में डिस्क",
+                    "दोनों बिलकुल एक ही हैं"
+                ],
+                "correctAnswer": 1,
+                "explanation": "SSD फ्लैश मेमोरी का उपयोग करती है, जबकि HDD में घूमने वाली मैग्नेटिक प्लेट्स होती हैं, इसलिए SSD बहुत फास्ट है।"
+            },
+            {
+                "question": "Cache Memory (कैश मेमोरी) का क्या काम है?",
+                "options": [
+                    "पैसे सेव करना",
+                    "यह CPU के सबसे पास मौजूद अत्यंत तेज़ मेमोरी है, जो बार-बार इस्तेमाल होने वाले डेटा को रखती है",
+                    "हार्ड डिस्क का बैकअप लेना",
+                    "इंटरनेट चलाना"
+                ],
+                "correctAnswer": 1,
+                "explanation": "कैश मेमोरी RAM से भी बहुत अधिक फास्ट होती है। यह CPU को डेटा का इंतज़ार करने से बचाती है।"
+            },
+            {
+                "question": "CD और DVD किस प्रकार की स्टोरेज डिवाइस हैं?",
+                "options": [
+                    "Magnetic Storage",
+                    "Solid State Storage",
+                    "Optical Storage",
+                    "Cloud Storage"
+                ],
+                "correctAnswer": 2,
+                "explanation": "CD (Compact Disc) और DVD (Digital Video Disc) को लेज़र बीम की मदद से पढ़ा जाता है, इसलिए इन्हें ऑप्टिकल स्टोरेज कहते हैं।"
+            },
+            {
+                "question": "निम्नलिखित में से कौन सी मेमोरी 'Volatile' (अस्थायी) है?",
+                "options": [
+                    "ROM",
+                    "Hard Disk",
+                    "RAM",
+                    "Pen Drive"
+                ],
+                "correctAnswer": 2,
+                "explanation": "RAM 'Volatile' है, जिसका अर्थ है कि बिजली जाने या कंप्यूटर बंद होने पर इसका सारा डेटा मिट जाता है।"
+            },
+            {
+                "question": "Pen Drive को किस प्रकार की मेमोरी माना जाता है?",
+                "options": [
+                    "Flash Memory",
+                    "Optical Memory",
+                    "Magnetic Memory",
+                    "Sequential Access Memory"
+                ],
+                "correctAnswer": 0,
+                "explanation": "पेनड्राइव, मेमोरी कार्ड और SSD ये सभी फ्लैश मेमोरी (Flash Memory) के प्रकार हैं जो EEPROM तकनीक पर काम करते हैं।"
+            },
+            {
+                "question": "1 TeraByte (TB) में कितने GigaByte (GB) होते हैं?",
+                "options": [
+                    "1024 MB",
+                    "1000 GB",
+                    "1024 GB",
+                    "1024 PB"
+                ],
+                "correctAnswer": 2,
+                "explanation": "1 TB (टेराबाइट) = 1024 GB (गीगाबाइट) होता है।"
+            }
+        ],
+        "Module 3: Operating System Concepts": [
+            {
+                "question": "ऑपरेटिंग सिस्टम (OS) का क्या कार्य है?",
+                "options": [
+                    "केवल वायरस हटाना",
+                    "कंप्यूटर के हार्डवेयर और सॉफ्टवेयर का प्रबंधन करना और यूजर को इंटरफ़ेस प्रदान करना",
+                    "गेम बनाना",
+                    "इंटरनेट स्पीड बढ़ाना"
+                ],
+                "correctAnswer": 1,
+                "explanation": "OS (जैसे Windows, Linux, Android) कंप्यूटर की आत्मा है, जो यूजर, हार्डवेयर और एप्लीकेशन के बीच पुल का काम करता है।"
+            },
+            {
+                "question": "GUI का पूर्ण रूप क्या है?",
+                "options": [
+                    "Global User Internet",
+                    "Graphical User Interface",
+                    "General Utility Item",
+                    "Graphical Union Interface"
+                ],
+                "correctAnswer": 1,
+                "explanation": "GUI का मतलब है कि आप कंप्यूटर को आइकन, बटन और माउस के जरिए ग्राफ़िक्स के रूप में कंट्रोल कर सकते हैं।"
+            },
+            {
+                "question": "MS-DOS किस प्रकार का ऑपरेटिंग सिस्टम था?",
+                "options": [
+                    "GUI (ग्राफिकल)",
+                    "CUI / CLI (कमांड लाइन इंटरफ़ेस - जहाँ सब कुछ टाइप करके करना पड़ता है)",
+                    "मोबाइल OS",
+                    "ओपन सोर्स"
+                ],
+                "correctAnswer": 1,
+                "explanation": "MS-DOS (Microsoft Disk Operating System) में कोई माउस या ग्राफ़िक्स नहीं होते थे, सब कुछ काली स्क्रीन पर कमांड (Text) लिखकर होता था।"
+            },
+            {
+                "question": "सॉफ्टवेयर के दो मुख्य प्रकार कौन से हैं?",
+                "options": [
+                    "हार्डवेयर और नेटवर्क",
+                    "सिस्टम सॉफ्टवेयर (जैसे Windows) और एप्लीकेशन सॉफ्टवेयर (जैसे MS Word)",
+                    "इनपुट और आउटपुट",
+                    "माउस और कीबोर्ड"
+                ],
+                "correctAnswer": 1,
+                "explanation": "सिस्टम सॉफ्टवेयर कंप्यूटर को चलाता है, जबकि एप्लीकेशन सॉफ्टवेयर यूजर के काम (जैसे टाइपिंग, एडिटिंग) के लिए होते हैं।"
+            },
+            {
+                "question": "कंप्यूटर को रीस्टार्ट (Restart) करने की प्रक्रिया को क्या कहा जाता है?",
+                "options": [
+                    "Cold Booting",
+                    "Warm Booting",
+                    "Shut down",
+                    "Log off"
+                ],
+                "correctAnswer": 1,
+                "explanation": "पहले से चालू कंप्यूटर को रीस्टार्ट (Ctrl+Alt+Del या Restart बटन से) करने को Warm Booting कहा जाता है। बंद कंप्यूटर को चालू करना Cold Booting है।"
+            },
+            {
+                "question": "Windows में 'Ctrl + Alt + Delete' दबाने पर क्या खुलता है?",
+                "options": [
+                    "My Computer",
+                    "Task Manager / Security Screen",
+                    "Control Panel",
+                    "Command Prompt"
+                ],
+                "correctAnswer": 1,
+                "explanation": "यह इमरजेंसी शॉर्टकट कंप्यूटर के हैंग होने पर Task Manager खोलने या कंप्यूटर को लॉक/लॉगऑफ करने के काम आता है।"
+            },
+            {
+                "question": "निम्नलिखित में से कौन सा ऑपरेटिंग सिस्टम 'Open Source' है?",
+                "options": [
+                    "Windows 10",
+                    "Mac OS",
+                    "Linux",
+                    "MS-DOS"
+                ],
+                "correctAnswer": 2,
+                "explanation": "Linux एक ओपन सोर्स OS है, जिसका मतलब है कि इसका सोर्स कोड सभी के लिए मुफ्त में उपलब्ध है और इसे मॉडिफाई किया जा सकता है।"
+            },
+            {
+                "question": "Windows में किसी फाइल को हमेशा के लिए (Permanently) डिलीट करने की शॉर्टकट कुंजी क्या है?",
+                "options": [
+                    "Delete",
+                    "Shift + Delete",
+                    "Alt + Delete",
+                    "Ctrl + Delete"
+                ],
+                "correctAnswer": 1,
+                "explanation": "Shift + Delete दबाने से फाइल Recycle Bin में नहीं जाती, बल्कि सीधे हमेशा के लिए डिलीट हो जाती है।"
+            },
+            {
+                "question": "Multitasking (मल्टीटास्किंग) का क्या अर्थ है?",
+                "options": [
+                    "एक समय में केवल एक काम करना",
+                    "एक ही समय में एक से अधिक प्रोग्राम (जैसे गाने सुनना और टाइपिंग करना) चलाना",
+                    "कंप्यूटर में कई सारे प्रोसेसर होना",
+                    "मल्टीपल मॉनिटर लगाना"
+                ],
+                "correctAnswer": 1,
+                "explanation": "जब एक OS एक ही समय में कई एप्लीकेशन रन करता है, तो उसे मल्टीटास्किंग कहते हैं (जैसे Windows, Linux)।"
+            },
+            {
+                "question": "File System 'NTFS' का पूर्ण रूप क्या है?",
+                "options": [
+                    "New Technology File System",
+                    "Network Transfer File System",
+                    "Non-Technical File System",
+                    "Node Type File System"
+                ],
+                "correctAnswer": 0,
+                "explanation": "NTFS विंडोज का एडवांस फाइल सिस्टम है जो बड़ी फाइल्स और सिक्योरिटी फीचर्स सपोर्ट करता है। पुराना सिस्टम FAT32 था।"
+            }
+        ],
+        "Module 4: Internet & Networking Basics": [
+            {
+                "question": "LAN, MAN, और WAN क्या हैं?",
+                "options": [
+                    "कंप्यूटर के ब्रांड",
+                    "नेटवर्क के प्रकार (Local Area, Metropolitan Area, Wide Area Network)",
+                    "प्रोग्रामिंग भाषाएं",
+                    "एंटीवायरस सॉफ्टवेयर"
+                ],
+                "correctAnswer": 1,
+                "explanation": "LAN एक बिल्डिंग में, MAN एक शहर में, और WAN पूरी दुनिया (जैसे इंटरनेट) में फैले नेटवर्क को कहते हैं।"
+            },
+            {
+                "question": "IP Address क्या होता है?",
+                "options": [
+                    "इंटरनेट प्रोवाइडर का पता",
+                    "नेटवर्क से जुड़े प्रत्येक डिवाइस की एक विशिष्ट पहचान संख्या (Unique ID)",
+                    "ईमेल का पासवर्ड",
+                    "वेबसाइट का नाम"
+                ],
+                "correctAnswer": 1,
+                "explanation": "IP (Internet Protocol) एड्रेस आपके डिवाइस का डिजिटल पता है, जिससे नेटवर्क पर डेटा सही जगह पहुंच पाता है (जैसे 192.168.1.1)।"
+            },
+            {
+                "question": "URL का पूर्ण रूप क्या है?",
+                "options": [
+                    "Universal Router Link",
+                    "Uniform Resource Locator",
+                    "United Resources List",
+                    "Uniform Radio Link"
+                ],
+                "correctAnswer": 1,
+                "explanation": "URL (जैसे www.google.com) ब्राउज़र को बताता है कि आप इंटरनेट पर कौन सा पेज या फाइल खोलना चाहते हैं, यह एक वेब एड्रेस है।"
+            },
+            {
+                "question": "कंप्यूटर वायरस (Virus) क्या होता है?",
+                "options": [
+                    "एक प्रकार का बैक्टीरिया",
+                    "कंप्यूटर हार्डवेयर में खराबी",
+                    "एक दुर्भावनापूर्ण सॉफ्टवेयर (Malicious Program) जो कंप्यूटर को नुकसान पहुंचाने के लिए बनाया गया है",
+                    "इंटरनेट कनेक्शन टूटना"
+                ],
+                "correctAnswer": 2,
+                "explanation": "वायरस एक कोड या प्रोग्राम है जो आपकी फाइलों को करप्ट कर सकता है, डेटा चुरा सकता है, या कंप्यूटर को धीमा कर सकता है।"
+            },
+            {
+                "question": "Phishing (फिशिंग) क्या है?",
+                "options": [
+                    "मछली पकड़ना",
+                    "एक साइबर हमला जहाँ हैकर नकली वेबसाइट या ईमेल भेजकर आपके पासवर्ड या बैंक डिटेल्स चुराने की कोशिश करते हैं",
+                    "इंटरनेट पर सर्च करना",
+                    "फोटो खींचना"
+                ],
+                "correctAnswer": 1,
+                "explanation": "फिशिंग में अपराधी किसी विश्वसनीय संस्था (जैसे बैंक या फेसबुक) का रूप धर कर यूजर को धोखा देते हैं।"
+            },
+            {
+                "question": "HTTP और HTTPS में 'S' का क्या अर्थ है?",
+                "options": [
+                    "System",
+                    "Server",
+                    "Secure",
+                    "Speed"
+                ],
+                "correctAnswer": 2,
+                "explanation": "HTTPS में 'S' का अर्थ 'Secure' (सुरक्षित) है, जिसका मतलब है कि उस वेबसाइट और आपके बीच भेजा गया डेटा एन्क्रिप्टेड है।"
+            },
+            {
+                "question": "ISP (इंटरनेट सर्विस प्रोवाइडर) का क्या अर्थ है?",
+                "options": [
+                    "इंटरनेट स्पीड प्रोग्राम",
+                    "वह कंपनी जो आपको इंटरनेट कनेक्शन प्रदान करती है (जैसे Jio, Airtel, BSNL)",
+                    "इंटरनेट सिक्योरिटी प्रोटोकॉल",
+                    "कंप्यूटर का प्रोसेसर"
+                ],
+                "correctAnswer": 1,
+                "explanation": "ISP वह टेलीकॉम या केबल कंपनी है जिसे आप इंटरनेट एक्सेस के लिए पैसे देते हैं।"
+            },
+            {
+                "question": "ईमेल (Email) में 'BCC' का क्या अर्थ होता है?",
+                "options": [
+                    "Basic Carbon Copy",
+                    "Blind Carbon Copy",
+                    "Blank Copy Creator",
+                    "Blind Core Copy"
+                ],
+                "correctAnswer": 1,
+                "explanation": "BCC (ब्लाइंड कार्बन कॉपी) में जिन लोगों का ईमेल डाला जाता है, उनका पता अन्य प्राप्तकर्ताओं को दिखाई नहीं देता।"
+            },
+            {
+                "question": "Cloud Storage (क्लाउड स्टोरेज) का मतलब क्या है?",
+                "options": [
+                    "डेटा को हवा में रखना",
+                    "डेटा को इंटरनेट के माध्यम से रिमोट सर्वर्स (जैसे Google Drive) पर सुरक्षित सेव करना",
+                    "पेन ड्राइव में डेटा सेव करना",
+                    "कंप्यूटर की हार्ड डिस्क"
+                ],
+                "correctAnswer": 1,
+                "explanation": "क्लाउड स्टोरेज से आप अपने डेटा को दुनिया में कहीं से भी इंटरनेट के जरिए एक्सेस कर सकते हैं (जैसे Google Drive, OneDrive)।"
+            },
+            {
+                "question": "WWW (World Wide Web) का आविष्कार किसने किया था?",
+                "options": [
+                    "Bill Gates",
+                    "Steve Jobs",
+                    "Tim Berners-Lee",
+                    "Mark Zuckerberg"
+                ],
+                "correctAnswer": 2,
+                "explanation": "Tim Berners-Lee ने 1989 में WWW का आविष्कार किया था, जिसने इंटरनेट को आम जनता के इस्तेमाल के लायक बनाया।"
+            }
+        ],
+        "Module 5: Number Systems & Logic Gates": [
+            {
+                "question": "बाइनरी सिस्टम (Binary System) किन दो अंकों पर आधारित है?",
+                "options": [
+                    "1 और 2",
+                    "0 और 1",
+                    "0 और 9",
+                    "A और B"
+                ],
+                "correctAnswer": 1,
+                "explanation": "कंप्यूटर केवल बाइनरी भाषा (मशीनी भाषा) समझता है, जो केवल '0' (Off) और '1' (On) से बनी होती है।"
+            },
+            {
+                "question": "Decimal Number System (दशमलव प्रणाली) का आधार (Base/Radix) क्या है?",
+                "options": [
+                    "2",
+                    "8",
+                    "10",
+                    "16"
+                ],
+                "correctAnswer": 2,
+                "explanation": "Decimal system का बेस 10 होता है, क्योंकि इसमें 0 से 9 तक कुल 10 अंक होते हैं।"
+            },
+            {
+                "question": "Octal Number System (ऑक्टल प्रणाली) में कौन से अंक शामिल होते हैं?",
+                "options": [
+                    "0 से 7",
+                    "0 से 8",
+                    "1 से 8",
+                    "0 से 9"
+                ],
+                "correctAnswer": 0,
+                "explanation": "Octal का बेस 8 होता है, इसलिए इसमें 0, 1, 2, 3, 4, 5, 6, 7 (कुल 8) अंक होते हैं।"
+            },
+            {
+                "question": "Hexadecimal Number System में 'A' का मान (Value) क्या होता है?",
+                "options": [
+                    "10",
+                    "11",
+                    "12",
+                    "15"
+                ],
+                "correctAnswer": 0,
+                "explanation": "Hexadecimal (Base 16) में 0-9 तक अंक होते हैं, और उसके बाद 10 को 'A', 11 को 'B', 12 को 'C' ... 15 को 'F' लिखा जाता है।"
+            },
+            {
+                "question": "कौन सा लॉजिक गेट (Logic Gate) इनपुट को उल्टा (Invert) कर देता है?",
+                "options": [
+                    "AND Gate",
+                    "OR Gate",
+                    "NOT Gate",
+                    "NAND Gate"
+                ],
+                "correctAnswer": 2,
+                "explanation": "NOT Gate को Inverter भी कहा जाता है। यदि इनपुट 1 है तो आउटपुट 0 होगा, और यदि इनपुट 0 है तो आउटपुट 1 होगा।"
+            },
+            {
+                "question": "AND Gate में आउटपुट '1' (High) कब मिलता है?",
+                "options": [
+                    "जब कोई भी एक इनपुट 1 हो",
+                    "जब दोनों इनपुट 0 हों",
+                    "जब दोनों इनपुट 1 हों",
+                    "जब इनपुट अलग-अलग हों"
+                ],
+                "correctAnswer": 2,
+                "explanation": "AND Gate मल्टीप्लिकेशन (गुणा) की तरह काम करता है। आउटपुट 1 तभी आएगा जब दोनों इनपुट 1 होंगे (1 x 1 = 1)।"
+            },
+            {
+                "question": "ASCII (आस्की) का पूर्ण रूप क्या है?",
+                "options": [
+                    "American Standard Code for Information Interchange",
+                    "Asian Standard Code for Internet Interchange",
+                    "American System Code for Information Internet",
+                    "Advanced Standard Code for Information Interface"
+                ],
+                "correctAnswer": 0,
+                "explanation": "ASCII एक कोडिंग मानक है जो कीबोर्ड के हर अक्षर, नंबर और सिंबल को एक 7-bit या 8-bit बाइनरी कोड में बदलता है।"
+            },
+            {
+                "question": "बाइनरी संख्या '1010' का Decimal (दशमलव) मान क्या होगा?",
+                "options": [
+                    "8",
+                    "10",
+                    "12",
+                    "14"
+                ],
+                "correctAnswer": 1,
+                "explanation": "1010 = (1×2³) + (0×2²) + (1×2¹) + (0×2⁰) = 8 + 0 + 2 + 0 = 10."
+            },
+            {
+                "question": "Universal Gates किन्हें कहा जाता है?",
+                "options": [
+                    "AND और OR",
+                    "NAND और NOR",
+                    "NOT और AND",
+                    "XOR और XNOR"
+                ],
+                "correctAnswer": 1,
+                "explanation": "NAND और NOR गेट्स को यूनिवर्सल गेट्स कहा जाता है क्योंकि इनकी मदद से कोई भी अन्य लॉजिक गेट (AND, OR, NOT) बनाया जा सकता है।"
+            },
+            {
+                "question": "Computer Architecture का जनक (Father) किसे माना जाता है?",
+                "options": [
+                    "Charles Babbage",
+                    "Alan Turing",
+                    "John Von Neumann",
+                    "Bill Gates"
+                ],
+                "correctAnswer": 2,
+                "explanation": "John Von Neumann ने 1945 में 'Stored-Program Concept' दिया था, जिस पर आज के सभी आधुनिक कंप्यूटर काम करते हैं। (Charles Babbage कंप्यूटर के जनक हैं, पर आर्किटेक्चर के John Von Neumann हैं)।"
+            }
+        ]
+    }
+},
     "tally": {
         "title": "Tally",
         "description": "Tally Prime ERP",
