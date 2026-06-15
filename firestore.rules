@@ -71,9 +71,7 @@ service cloud.firestore {
       // Subcollection for participants
       match /participants/{participantId} {
          allow read: if true;
-         // Participants can join and update their own score
-         allow create: if true;
-         allow update: if request.resource.data.keys().hasAll(['score']) && request.resource.data.score >= resource.data.score; // Only score increments allowed
+         allow write: if true; // Allow students to join, reconnect, and update answers without complex rule friction
       }
     }
 

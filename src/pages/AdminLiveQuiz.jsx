@@ -25,10 +25,44 @@ export default function AdminLiveQuiz() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [timer, setTimer] = useState(0);
     const [countdownTimer, setCountdownTimer] = useState(3);
+    
+    // Custom Quizzes State
+    const [customQuizzes, setCustomQuizzes] = useState({});
+
+    useEffect(() => {
+        // Fetch Custom Quizzes from Firestore
+        const unsub = onSnapshot(collection(db, 'custom_quizzes'), (snap) => {
+            const formatted = {};
+            snap.forEach(docSnap => {
+                const data = docSnap.data();
+                const cId = data.courseId;
+                if (!formatted[cId]) {
+                    formatted[cId] = { title: cId + ' (Custom)', modules: {} };
+                }
+                formatted[cId].modules[data.topicId] = data.questions;
+            });
+            setCustomQuizzes(formatted);
+        });
+        return () => unsub();
+    }, []);
+
+    const combinedQuizData = { ...HINDI_QUIZ_DATA };
+    // Merge custom quizzes into combined
+    Object.keys(customQuizzes).forEach(cId => {
+        if (!combinedQuizData[cId]) {
+            combinedQuizData[cId] = customQuizzes[cId];
+        } else {
+            // Merge topics if course already exists
+            combinedQuizData[cId].modules = {
+                ...combinedQuizData[cId].modules,
+                ...customQuizzes[cId].modules
+            };
+        }
+    });
 
     // Derived questions
-    const questions = selectedCourse && HINDI_QUIZ_DATA[selectedCourse]?.modules[selectedTopic] 
-        ? HINDI_QUIZ_DATA[selectedCourse].modules[selectedTopic] 
+    const questions = selectedCourse && combinedQuizData[selectedCourse]?.modules[selectedTopic] 
+        ? combinedQuizData[selectedCourse].modules[selectedTopic] 
         : [];
 
     useEffect(() => {
@@ -258,13 +292,13 @@ const handleStartQuiz = async () => {
                                     }}
                                 >
                                     <option value="">-- Choose Course --</option>
-                                    {Object.entries(HINDI_QUIZ_DATA).map(([key, data]) => (
+                                    {Object.entries(combinedQuizData).map(([key, data]) => (
                                         <option key={key} value={key}>{data.title || key}</option>
                                     ))}
                                 </select>
                             </div>
                             
-                            {selectedCourse && HINDI_QUIZ_DATA[selectedCourse]?.modules && (
+                            {selectedCourse && combinedQuizData[selectedCourse]?.modules && (
                                 <div>
                                     <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Select Quiz Topic</label>
                                     <select 
@@ -273,7 +307,7 @@ const handleStartQuiz = async () => {
                                         onChange={(e) => setSelectedTopic(e.target.value)}
                                     >
                                         <option value="">-- Choose Topic --</option>
-                                        {Object.keys(HINDI_QUIZ_DATA[selectedCourse].modules).map(topic => (
+                                        {Object.keys(combinedQuizData[selectedCourse].modules).map(topic => (
                                             <option key={topic} value={topic}>{topic}</option>
                                         ))}
                                     </select>

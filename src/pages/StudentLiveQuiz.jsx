@@ -48,10 +48,9 @@ export default function StudentLiveQuiz() {
             const myRef = doc(db, `live_quizzes/${rId}/participants/${student.registration}`);
             await setDoc(myRef, {
                 name: student.fullName || student.studentName || 'Student',
-                score: 0,
                 lastAnswer: null,
                 joinedAt: Date.now()
-            });
+            }, { merge: true });
             setJoined(true);
         } catch (err) {
             console.error(err);
