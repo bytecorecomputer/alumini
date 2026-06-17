@@ -41,16 +41,31 @@ export const saveCertificate = async (certificateData) => {
 };
 
 /**
- * Upload certificate PDF to Firebase Storage (Legacy)
+ * Upload certificate PDF to Cloudinary (Jugaad instead of Firebase Storage)
  */
 export const uploadCertificatePDF = async (blob, filename) => {
     try {
-        const storageRef = ref(storage, `certificates/${filename}`);
-        await uploadBytes(storageRef, blob);
-        const downloadURL = await getDownloadURL(storageRef);
-        return downloadURL;
+        // We use cloudinary instead of Firebase Storage
+        const file = new File([blob], filename, { type: 'application/pdf' });
+        
+        const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'da8todyb7';
+        const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'ml_default';
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', UPLOAD_PRESET);
+        
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, {
+            method: 'POST',
+            body: formData,
+        });
+        
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error?.message || 'Upload failed');
+        
+        return data.secure_url;
     } catch (error) {
-        console.error('Error uploading PDF:', error);
+        console.error('Error uploading PDF to Cloudinary:', error);
         throw error;
     }
 };

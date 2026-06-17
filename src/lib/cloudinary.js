@@ -19,7 +19,7 @@ export const uploadToCloudinary = async (file) => {
 
     try {
         const response = await fetch(
-            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+            `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
             {
                 method: 'POST',
                 body: formData,
