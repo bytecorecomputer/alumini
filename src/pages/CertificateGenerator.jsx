@@ -175,16 +175,20 @@ export default function CertificateGenerator() {
     const handleGeneratePDF = async () => {
         setLoading(true);
         try {
+            // Wait briefly to ensure images/fonts are fully rendered in the DOM
+            await new Promise(resolve => setTimeout(resolve, 800));
             const element = printRef.current;
 
-            // Generate high-quality canvas
+            // Generate high-quality canvas (scale 2 is optimal, scale 3 often causes memory/black screen issues)
             const canvas = await html2canvas(element, {
-                scale: 3, // High resolution for best quality
+                scale: 2, 
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#ffffff',
                 imageTimeout: 0,
                 allowTaint: false,
+                windowWidth: element.scrollWidth,
+                windowHeight: element.scrollHeight
             });
 
             // Convert to PDF (portrait A4)
@@ -604,7 +608,7 @@ export default function CertificateGenerator() {
                 </div>
 
                 {/* Hidden Print Template - High Quality Capture Source */}
-                <div style={{ position: 'absolute', top: -10000, left: -10000 }}>
+                <div style={{ position: 'fixed', top: '100vh', left: 0, pointerEvents: 'none', zIndex: -1 }}>
                     <CertificateTemplate
                         ref={printRef}
                         data={{
