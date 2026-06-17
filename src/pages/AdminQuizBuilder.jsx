@@ -4,15 +4,10 @@ import { db } from '../firebase/firestore';
 import { collection, addDoc, updateDoc, doc, deleteDoc, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import { 
-    Plus, Trash2, Save, ArrowLeft, CheckCircle2, AlertCircle, 
-    BookOpen, Layers, Edit3, X, Copy, Sparkles, Loader2
+    Plus, Trash2, Save, ArrowLeft, CheckCircle2, 
+    BookOpen, Layers, Edit3, X, Copy
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
-// Initialize Gemini
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
 export default function AdminQuizBuilder() {
     const navigate = useNavigate();
@@ -28,13 +23,6 @@ export default function AdminQuizBuilder() {
     const [questions, setQuestions] = useState([
         { question: '', options: ['', '', '', ''], correctAnswer: 0, explanation: '' }
     ]);
-
-    // AI Modal State
-    const [showAIModal, setShowAIModal] = useState(false);
-    const [aiTopic, setAiTopic] = useState('');
-    const [aiDifficulty, setAiDifficulty] = useState('Medium');
-    const [aiCount, setAiCount] = useState(5);
-    const [isGenerating, setIsGenerating] = useState(false);
 
     // Fetch existing custom quizzes
     useEffect(() => {
@@ -160,63 +148,6 @@ export default function AdminQuizBuilder() {
         }
     };
 
-    const handleGenerateAIQuiz = async () => {
-        if (!genAI) {
-            return toast.error("Gemini API Key missing! Please add VITE_GEMINI_API_KEY in .env");
-        }
-        if (!aiTopic.trim()) return toast.error("Please enter a topic for AI generation");
-
-        setIsGenerating(true);
-        try {
-            const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-            const prompt = `
-You are an expert Indian teacher. Generate a multiple-choice quiz about "${aiTopic}".
-Difficulty: ${aiDifficulty}.
-Number of questions: ${aiCount}.
-Language: Use a mix of simple Hindi and English (Hinglish/English terms for tech).
-Format requirements:
-- Exactly 4 options per question.
-- "correctAnswer" must be the index (0, 1, 2, or 3) of the right option.
-- "explanation" must clearly explain why it is correct in simple Hindi/English.
-- OUTPUT MUST BE STRICTLY VALID JSON ARRAY OF OBJECTS ONLY, NO MARKDOWN, NO OTHER TEXT.
-
-Example JSON structure:
-[
-  {
-    "question": "What is Python?",
-    "options": ["A snake", "A programming language", "A game", "An OS"],
-    "correctAnswer": 1,
-    "explanation": "Python ek popular high-level programming language hai."
-  }
-]
-`;
-            const result = await model.generateContent(prompt);
-            let responseText = result.response.text();
-            
-            // Clean markdown if present
-            if (responseText.startsWith("```json")) {
-                responseText = responseText.replace(/```json\n?/, '').replace(/```$/, '');
-            }
-
-            const parsedQuestions = JSON.parse(responseText);
-            
-            if (Array.isArray(parsedQuestions) && parsedQuestions.length > 0) {
-                setQuestions(parsedQuestions);
-                setTopicName(aiTopic);
-                setShowAIModal(false);
-                toast.success(`Successfully generated ${parsedQuestions.length} questions!`);
-            } else {
-                throw new Error("Invalid JSON format from AI");
-            }
-
-        } catch (error) {
-            console.error("AI Generation Error:", error);
-            toast.error("Failed to generate AI quiz. Please try again.");
-        } finally {
-            setIsGenerating(false);
-        }
-    };
-
     return (
         <div className="min-h-screen bg-[#F8FAFC] pb-20 font-inter">
             {/* Header */}
@@ -300,12 +231,6 @@ Example JSON structure:
                                     </h2>
                                 </div>
                                 <div className="flex gap-2">
-                                    <button 
-                                        onClick={() => setShowAIModal(true)}
-                                        className="px-4 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-full font-bold flex items-center gap-2 transition-colors border border-indigo-200"
-                                    >
-                                        <Sparkles size={18} /> <span className="hidden sm:inline">AI Generator</span>
-                                    </button>
                                     <button onClick={resetForm} className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
                                         <X size={24} />
                                     </button>
@@ -430,74 +355,6 @@ Example JSON structure:
                     </div>
                 )}
             </div>
-
-            {/* AI Generator Modal */}
-            <AnimatePresence>
-                {showAIModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-                        <motion.div 
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 w-full max-w-lg border border-slate-100"
-                        >
-                            <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-2xl font-black text-slate-900 flex items-center gap-2">
-                                    <Sparkles className="text-indigo-600" /> AI Generator
-                                </h3>
-                                <button onClick={() => setShowAIModal(false)} className="text-slate-400 hover:text-slate-600 p-2"><X /></button>
-                            </div>
-
-                            <div className="space-y-4 mb-8">
-                                <div>
-                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Topic or Concept</label>
-                                    <input 
-                                        type="text" 
-                                        value={aiTopic}
-                                        onChange={(e) => setAiTopic(e.target.value)}
-                                        placeholder="e.g. Operating System basics, MS Excel formulas"
-                                        className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-indigo-500 outline-none"
-                                    />
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Questions</label>
-                                        <select 
-                                            value={aiCount}
-                                            onChange={(e) => setAiCount(Number(e.target.value))}
-                                            className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-indigo-500 outline-none"
-                                        >
-                                            <option value={5}>5 Questions</option>
-                                            <option value={10}>10 Questions</option>
-                                            <option value={15}>15 Questions</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Difficulty</label>
-                                        <select 
-                                            value={aiDifficulty}
-                                            onChange={(e) => setAiDifficulty(e.target.value)}
-                                            className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-indigo-500 outline-none"
-                                        >
-                                            <option value="Easy">Easy</option>
-                                            <option value="Medium">Medium</option>
-                                            <option value="Hard">Hard</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button 
-                                onClick={handleGenerateAIQuiz}
-                                disabled={isGenerating || !aiTopic}
-                                className="w-full py-4 bg-indigo-600 text-white rounded-xl font-black uppercase tracking-widest hover:bg-indigo-700 disabled:opacity-50 transition-colors shadow-lg shadow-indigo-600/30 flex justify-center items-center gap-2"
-                            >
-                                {isGenerating ? <><Loader2 className="animate-spin" /> Generating Magic...</> : <><Sparkles /> Generate Quiz</>}
-                            </button>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
         </div>
     );
 }
