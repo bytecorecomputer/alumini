@@ -6,7 +6,7 @@ export function useSpeech() {
 
     useEffect(() => {
         if (typeof window === 'undefined' || !window.speechSynthesis) {
-            setSupported(false);
+            setTimeout(() => setSupported(false), 0);
         }
         
         // Stop speaking when component unmounts

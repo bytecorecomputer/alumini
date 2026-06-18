@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'api/**', 'public/**', 'find_csv_duplicates.js']),
+  globalIgnores(['dist', 'api/**', 'public/**', 'find_csv_duplicates.js', 'injectData.js']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [

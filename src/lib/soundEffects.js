@@ -47,12 +47,12 @@ export const playSuccess = () => {
         [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
             setTimeout(() => playTone(freq, 'sine', 0.3, 0.1), i * 100);
         });
-    } catch (e) {}
+    } catch (e) { /* ignore error */ }
 };
 
 export const playError = () => {
     try {
         playTone(300, 'sawtooth', 0.3, 0.1);
         setTimeout(() => playTone(280, 'sawtooth', 0.4, 0.1), 150);
-    } catch (e) {}
+    } catch (e) { /* ignore error */ }
 };

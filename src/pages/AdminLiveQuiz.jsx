@@ -66,6 +66,11 @@ export default function AdminLiveQuiz() {
         ? combinedQuizData[selectedCourse].modules[selectedTopic] 
         : [];
 
+    async function handleShowResult() {
+        playSuccess();
+        await updateDoc(doc(db, 'live_quizzes', roomId), { status: 'result' });
+    }
+
     useEffect(() => {
         if (!roomId) return;
         
@@ -136,7 +141,7 @@ export default function AdminLiveQuiz() {
                 });
             }
         } else {
-             setCountdownTimer(3);
+             setTimeout(() => setCountdownTimer(3), 0);
         }
     }, [quizState, countdownTimer, roomId]);
 
@@ -261,10 +266,6 @@ export default function AdminLiveQuiz() {
         setTimer(30);
     };
 
-    const handleShowResult = async () => {
-        playSuccess();
-        await updateDoc(doc(db, 'live_quizzes', roomId), { status: 'result' });
-    };
 
     const handleShowLeaderboard = async () => {
         await updateDoc(doc(db, 'live_quizzes', roomId), { status: 'leaderboard' });

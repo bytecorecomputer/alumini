@@ -8,6 +8,7 @@ import { useAuth } from '../app/common/AuthContext';
 import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
 import confetti from 'canvas-confetti';
 import { initAudio, playSuccess, playError } from '../lib/soundEffects';
+import toast from 'react-hot-toast';
 
 export default function StudentLiveQuiz() {
     const { student } = useAuth();
@@ -22,13 +23,26 @@ export default function StudentLiveQuiz() {
     const [liveData, setLiveData] = useState(null);
     const [myState, setMyState] = useState(null);
     const [hasAnswered, setHasAnswered] = useState(false);
+    const [participants, setParticipants] = useState([]);
+    const [timer, setTimer] = useState(30);
+
+    // Timer Effect
+    useEffect(() => {
+        if (liveData?.status === 'active' && !liveData?.isPaused && liveData?.questionStartedAt) {
+            const t = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - liveData.questionStartedAt) / 1000);
+                setTimer(Math.max(0, 30 - elapsed));
+            }, 1000);
+            return () => clearInterval(t);
+        }
+    }, [liveData?.status, liveData?.isPaused, liveData?.questionStartedAt]);
+    
     
     // Custom Quizzes State
     const [customQuizzes, setCustomQuizzes] = useState({});
 
     useEffect(() => {
-        const fetchCustomQuizzes = async () => {
-            const snap = await getDocs(collection(db, 'custom_quizzes'));
+        const unsub = onSnapshot(collection(db, 'custom_quizzes'), (snap) => {
             const formatted = {};
             snap.forEach(docSnap => {
                 const data = docSnap.data();
@@ -39,8 +53,8 @@ export default function StudentLiveQuiz() {
                 formatted[cId].modules[data.topicId] = data.questions;
             });
             setCustomQuizzes(formatted);
-        };
-        fetchCustomQuizzes();
+        });
+        return () => unsub();
     }, []);
 
     const combinedQuizData = { ...HINDI_QUIZ_DATA };
@@ -55,29 +69,7 @@ export default function StudentLiveQuiz() {
         }
     });
 
-    // Auto-join logic
-    useEffect(() => {
-        const pin = searchParams.get('pin');
-        if (pin && !joined && student) {
-            setRoomId(pin);
-            setIsReconnecting(true);
-            setTimeout(() => {
-                initAudio();
-                joinRoom(pin);
-            }, 800);
-        }
-    }, [searchParams, student]);
-
-    // Join via manual input
-    const handleJoin = async (e) => {
-        e?.preventDefault();
-        if (!roomId || !student) return;
-        setIsReconnecting(true);
-        initAudio();
-        joinRoom(roomId);
-    };
-
-    const joinRoom = async (rId) => {
+    async function joinRoom(rId) {
         try {
             const myRef = doc(db, `live_quizzes/${rId}/participants/${student.registration}`);
             // We use merge: true so if they disconnect and reconnect, their score isn't wiped out
@@ -94,7 +86,30 @@ export default function StudentLiveQuiz() {
             alert("Room not found or error joining. Please check the PIN.");
             setIsReconnecting(false);
         }
+    }
+
+    // Auto-join logic
+    useEffect(() => {
+        const pin = searchParams.get('pin');
+        if (pin && !joined && student) {
+            setTimeout(() => {
+                setRoomId(pin);
+                setIsReconnecting(true);
+                initAudio();
+                joinRoom(pin);
+            }, 800);
+        }
+    }, [searchParams, student]);
+
+    // Join via manual input
+    const handleJoin = async (e) => {
+        e?.preventDefault();
+        if (!roomId || !student) return;
+        setIsReconnecting(true);
+        initAudio();
+        joinRoom(roomId);
     };
+
 
     // Listen to Room
     useEffect(() => {
@@ -142,9 +157,18 @@ export default function StudentLiveQuiz() {
             }
         });
 
+        // Listen to all participants for leaderboard
+        const participantsRef = collection(db, `live_quizzes/${roomId}/participants`);
+        const unsubParticipants = onSnapshot(participantsRef, (snapshot) => {
+            const parts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            parts.sort((a, b) => b.score - a.score);
+            setParticipants(parts);
+        });
+
         return () => {
             unsubscribe();
             unsubMe();
+            unsubParticipants();
         };
     }, [joined, roomId, liveData, student, navigate]);
 
@@ -181,7 +205,8 @@ export default function StudentLiveQuiz() {
         // Calculate Speed Score
         let points = 0;
         if (isCorrect) {
-            const timeElapsed = Date.now() - (liveData.questionStartedAt || Date.now());
+            const now = new Date().getTime();
+            const timeElapsed = now - (liveData.questionStartedAt || now);
             const secondsElapsed = timeElapsed / 1000;
             // Max 1000, Min 500. Decreases linearly over 30 seconds
             points = Math.max(500, Math.round(1000 - (secondsElapsed / 30) * 500));
@@ -302,6 +327,17 @@ export default function StudentLiveQuiz() {
                 
                 <div className="bg-white px-4 py-3 md:px-6 md:py-4 flex items-center justify-between shadow-sm border-b border-slate-200 shrink-0">
                     <div className="font-black text-slate-400 uppercase tracking-widest text-[10px] md:text-xs">Question {currentQuestionIndex + 1}/{questions.length}</div>
+                    
+                    <div className="flex-1 max-w-[150px] mx-2 md:mx-4 h-2 md:h-3 bg-slate-100 rounded-full overflow-hidden relative">
+                        <motion.div 
+                            className={`h-full ${isPaused ? 'bg-amber-400' : 'bg-blue-500'}`}
+                            initial={{ width: '100%' }}
+                            animate={{ width: `${(timer / 30) * 100}%` }}
+                            transition={isPaused ? { duration: 0 } : { duration: 1, ease: 'linear' }}
+                        />
+                    </div>
+                    <div className={`font-black mr-2 md:mr-4 ${isPaused ? 'text-amber-500' : 'text-blue-600'}`}>{timer}s</div>
+
                     <div className="px-3 py-1.5 md:px-4 md:py-1.5 bg-blue-100 text-blue-600 font-black rounded-full text-xs md:text-sm shadow-inner">
                         Score: {myState?.score || 0}
                     </div>
@@ -375,6 +411,12 @@ export default function StudentLiveQuiz() {
                     <h1 className="text-4xl md:text-7xl font-black tracking-tighter mb-4 drop-shadow-lg">
                         {resultText}
                     </h1>
+                    {!isCorrect && currentQ && (
+                        <div className="mb-6 p-4 bg-white/10 rounded-xl backdrop-blur-md border border-white/20">
+                            <p className="text-sm md:text-base font-bold opacity-90 uppercase tracking-widest mb-1">Correct Answer:</p>
+                            <p className="text-lg md:text-xl font-black text-emerald-200">{currentQ.options[currentQ.correctAnswer]}</p>
+                        </div>
+                    )}
                     <div className="inline-flex items-center gap-2 bg-black/20 px-4 py-2 md:px-6 md:py-3 rounded-full font-bold text-sm md:text-xl border border-white/10 backdrop-blur-sm">
                         {isCorrect ? `Speed Bonus: +${myState?.lastPoints || 0} Points` : '0 Points'}
                     </div>
@@ -387,12 +429,34 @@ export default function StudentLiveQuiz() {
         return (
             <div className="min-h-screen bg-indigo-900 flex flex-col items-center justify-center p-6 text-center text-white font-inter">
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                <div className="relative z-10 w-full max-w-sm">
-                    <Trophy size={80} className="text-yellow-400 mx-auto mb-6 md:mb-8 drop-shadow-2xl md:w-[100px] md:h-[100px]" />
-                    <h1 className="text-2xl md:text-4xl font-black mb-2 uppercase tracking-widest text-blue-200">Look at the Screen</h1>
-                    <div className="mt-6 md:mt-8 p-6 md:p-8 bg-white/10 backdrop-blur-xl rounded-[2rem] border border-white/20 shadow-2xl">
-                        <p className="text-sm md:text-xl font-bold opacity-80 uppercase tracking-widest mb-2">Your Score</p>
-                        <p className="text-5xl md:text-7xl font-black text-white">{myState?.score}</p>
+                <div className="relative z-10 w-full max-w-lg">
+                    <Trophy size={60} className="text-yellow-400 mx-auto mb-4 drop-shadow-2xl md:w-[80px] md:h-[80px]" />
+                    <h1 className="text-2xl md:text-4xl font-black mb-6 uppercase tracking-widest text-blue-200">Leaderboard</h1>
+                    
+                    <div className="space-y-3 md:space-y-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
+                        <AnimatePresence>
+                            {participants.slice(0, 5).map((p, index) => {
+                                const isMe = p.id === student?.registration;
+                                return (
+                                    <motion.div 
+                                        key={p.id}
+                                        initial={{ opacity: 0, x: -50 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className={`flex items-center rounded-xl md:rounded-2xl p-3 md:p-4 border ${isMe ? 'bg-blue-500/30 border-blue-400' : 'bg-white/10 border-white/10'} backdrop-blur-md`}
+                                    >
+                                        <div className="w-8 md:w-10 text-center text-lg md:text-xl font-black text-slate-400">#{index + 1}</div>
+                                        <div className="flex-1 text-left text-lg md:text-xl font-bold truncate px-3">{p.name} {isMe && '(You)'}</div>
+                                        <div className="text-xl md:text-2xl font-black text-blue-400 shrink-0">{p.score}</div>
+                                    </motion.div>
+                                );
+                            })}
+                        </AnimatePresence>
+                    </div>
+
+                    <div className="mt-6 md:mt-8 p-4 bg-white/5 backdrop-blur-xl rounded-[1rem] border border-white/10 shadow-2xl flex justify-between items-center">
+                        <p className="text-sm md:text-lg font-bold opacity-80 uppercase tracking-widest">Your Score</p>
+                        <p className="text-2xl md:text-4xl font-black text-yellow-400">{myState?.score}</p>
                     </div>
                 </div>
             </div>

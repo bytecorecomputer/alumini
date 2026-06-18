@@ -54,16 +54,20 @@ export default function Donate() {
 
         // Validate Key Presence
         if (!import.meta.env.VITE_RAZORPAY_KEY_ID) {
-            alert("Razorpay Key is missing in client configuration. If you are testing online, please add VITE_RAZORPAY_KEY_ID to Vercel Environment Variables.");
+            alert("Online payments are currently unavailable. Please use the Manual Transfer Protocol below.");
             setIsLoading(false);
+            const manualSection = document.getElementById('manual-transfer');
+            if (manualSection) manualSection.scrollIntoView({ behavior: 'smooth' });
             return;
         }
 
         const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
 
         if (!res) {
-            alert('DNS/Network Error: Razorpay SDK failed to load. Please check your internet connection or try again later. (The domain checkout.razorpay.com might be unreachable)');
+            alert('Payment gateway failed to load. Please use the Manual Transfer Protocol below.');
             setIsLoading(false);
+            const manualSection = document.getElementById('manual-transfer');
+            if (manualSection) manualSection.scrollIntoView({ behavior: 'smooth' });
             return;
         }
 
@@ -77,14 +81,11 @@ export default function Donate() {
             });
             
             if (!orderRes.ok) {
-                const text = await orderRes.text();
-                let errorData = {};
-                try {
-                    errorData = JSON.parse(text);
-                } catch (e) {
-                    console.error("Non-JSON Error Response:", text);
-                }
-                throw new Error(`API Error (${orderRes.status}): ${errorData.details || errorData.error || text || 'Failed to create order'}`);
+                alert("Online payment server is unreachable. Please use the Manual Transfer Protocol below.");
+                setIsLoading(false);
+                const manualSection = document.getElementById('manual-transfer');
+                if (manualSection) manualSection.scrollIntoView({ behavior: 'smooth' });
+                return;
             }
 
             const orderData = await orderRes.json();
@@ -150,8 +151,10 @@ export default function Donate() {
             const paymentObject = new window.Razorpay(options);
             paymentObject.open();
         } catch (error) {
-            alert(error.message);
+            alert("Payment failed: " + error.message + ". Please try Manual Transfer.");
             setIsLoading(false);
+            const manualSection = document.getElementById('manual-transfer');
+            if (manualSection) manualSection.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
@@ -446,6 +449,7 @@ export default function Donate() {
 
                 {/* Offline Details */}
                 <motion.div
+                    id="manual-transfer"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     className="mt-24 p-12 rounded-[3.5rem] bg-blue-50/50 border-2 border-blue-100 flex flex-col md:flex-row items-center gap-10"

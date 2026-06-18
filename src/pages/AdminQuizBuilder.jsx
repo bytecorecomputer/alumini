@@ -5,7 +5,7 @@ import { collection, addDoc, updateDoc, doc, deleteDoc, onSnapshot, serverTimest
 import toast from 'react-hot-toast';
 import { 
     Plus, Trash2, Save, ArrowLeft, CheckCircle2, 
-    BookOpen, Layers, Edit3, X, Copy
+    BookOpen, Layers, Edit3, X, Copy, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -93,6 +93,26 @@ export default function AdminQuizBuilder() {
         const newQ = [...questions];
         newQ.splice(index, 1);
         setQuestions(newQ);
+    };
+
+    const handleMoveQuestion = (index, direction) => {
+        if (direction === 'up' && index > 0) {
+            const newQ = [...questions];
+            [newQ[index - 1], newQ[index]] = [newQ[index], newQ[index - 1]];
+            setQuestions(newQ);
+        } else if (direction === 'down' && index < questions.length - 1) {
+            const newQ = [...questions];
+            [newQ[index + 1], newQ[index]] = [newQ[index], newQ[index + 1]];
+            setQuestions(newQ);
+        }
+    };
+
+    const handleDuplicateSingleQuestion = (index) => {
+        const newQ = [...questions];
+        const toCopy = { ...newQ[index], options: [...newQ[index].options] };
+        newQ.splice(index + 1, 0, toCopy);
+        setQuestions(newQ);
+        toast.success("Question duplicated!");
     };
 
     const handleQuestionChange = (index, field, value) => {
@@ -276,13 +296,28 @@ export default function AdminQuizBuilder() {
                                             {qIndex + 1}
                                         </div>
                                         
-                                        <button 
-                                            onClick={() => handleRemoveQuestion(qIndex)}
-                                            className="absolute top-6 right-6 text-slate-300 hover:text-red-500 hover:bg-red-50 p-2 rounded-xl transition-all"
-                                            title="Remove Question"
-                                        >
-                                            <Trash2 size={20} />
-                                        </button>
+                                        <div className="absolute top-4 right-4 flex items-center gap-2">
+                                            {qIndex > 0 && (
+                                                <button onClick={() => handleMoveQuestion(qIndex, 'up')} className="text-slate-400 hover:text-blue-500 bg-slate-50 hover:bg-blue-50 p-2 rounded-lg transition-all" title="Move Up">
+                                                    <ArrowUp size={18} />
+                                                </button>
+                                            )}
+                                            {qIndex < questions.length - 1 && (
+                                                <button onClick={() => handleMoveQuestion(qIndex, 'down')} className="text-slate-400 hover:text-blue-500 bg-slate-50 hover:bg-blue-50 p-2 rounded-lg transition-all" title="Move Down">
+                                                    <ArrowDown size={18} />
+                                                </button>
+                                            )}
+                                            <button onClick={() => handleDuplicateSingleQuestion(qIndex)} className="text-slate-400 hover:text-emerald-500 bg-slate-50 hover:bg-emerald-50 p-2 rounded-lg transition-all" title="Duplicate Question">
+                                                <Copy size={18} />
+                                            </button>
+                                            <button 
+                                                onClick={() => handleRemoveQuestion(qIndex)}
+                                                className="text-slate-400 hover:text-red-500 bg-slate-50 hover:bg-red-50 p-2 rounded-lg transition-all ml-2 border-l border-slate-200 pl-4"
+                                                title="Remove Question"
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
 
                                         <div className="space-y-6 mt-4">
                                             <div>
