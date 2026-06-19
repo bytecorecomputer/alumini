@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     PlayCircle, Users, Trophy, ChevronRight, XCircle, CheckCircle2,
-    Monitor, Target, Zap, Clock, ShieldCheck, Bot, Copy, PauseCircle
+    Monitor, Target, Zap, Clock, ShieldCheck, Bot, Copy, PauseCircle,
+    Triangle, Square, Circle, Hexagon
 } from 'lucide-react';
 import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
 import { db } from '../firebase/firestore';
@@ -11,6 +12,10 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { initAudio, playCountdownBeep, playCountdownGo, playTick, playSuccess } from '../lib/soundEffects';
+
+const OPTION_COLORS = ['bg-rose-500', 'bg-blue-500', 'bg-amber-500', 'bg-emerald-500'];
+const OPTION_BORDER = ['border-rose-600', 'border-blue-600', 'border-amber-600', 'border-emerald-600'];
+const OPTION_ICONS = [Triangle, Hexagon, Circle, Square];
 
 export default function AdminLiveQuiz() {
     const navigate = useNavigate();
@@ -31,7 +36,6 @@ export default function AdminLiveQuiz() {
     const [customQuizzes, setCustomQuizzes] = useState({});
 
     useEffect(() => {
-        // Fetch Custom Quizzes from Firestore
         const unsub = onSnapshot(collection(db, 'custom_quizzes'), (snap) => {
             const formatted = {};
             snap.forEach(docSnap => {
@@ -48,12 +52,10 @@ export default function AdminLiveQuiz() {
     }, []);
 
     const combinedQuizData = { ...HINDI_QUIZ_DATA };
-    // Merge custom quizzes into combined
     Object.keys(customQuizzes).forEach(cId => {
         if (!combinedQuizData[cId]) {
             combinedQuizData[cId] = customQuizzes[cId];
         } else {
-            // Merge topics if course already exists
             combinedQuizData[cId].modules = {
                 ...combinedQuizData[cId].modules,
                 ...customQuizzes[cId].modules
@@ -61,7 +63,6 @@ export default function AdminLiveQuiz() {
         }
     });
 
-    // Derived questions
     const questions = selectedCourse && combinedQuizData[selectedCourse]?.modules[selectedTopic] 
         ? combinedQuizData[selectedCourse].modules[selectedTopic] 
         : [];
@@ -91,7 +92,6 @@ export default function AdminLiveQuiz() {
                 setCurrentQuestionIndex(data.currentQuestionIndex || 0);
                 setIsPaused(data.isPaused || false);
             } else {
-                // Room deleted
                 setQuizState('setup');
                 setRoomId(null);
             }
@@ -100,7 +100,6 @@ export default function AdminLiveQuiz() {
         const participantsRef = collection(db, `live_quizzes/${roomId}/participants`);
         const unsubParticipants = onSnapshot(participantsRef, (snapshot) => {
             const parts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            // Sort by score descending
             parts.sort((a, b) => b.score - a.score);
             setParticipants(parts);
         });
@@ -111,7 +110,6 @@ export default function AdminLiveQuiz() {
         };
     }, [roomId, quizState]);
 
-    // Timer countdown
     useEffect(() => {
         if (quizState === 'active' && timer > 0 && !isPaused) {
             if (timer <= 10) playTick();
@@ -120,12 +118,10 @@ export default function AdminLiveQuiz() {
             }, 1000);
             return () => clearInterval(t);
         } else if (quizState === 'active' && timer === 0 && !isPaused) {
-            // Auto move to result
             handleShowResult();
         }
     }, [quizState, timer, isPaused]);
 
-    // Pre-question countdown
     useEffect(() => {
         if (quizState === 'countdown') {
             if (countdownTimer > 0) {
@@ -145,7 +141,6 @@ export default function AdminLiveQuiz() {
         }
     }, [quizState, countdownTimer, roomId]);
 
-    // Automate bot answers
     useEffect(() => {
         if (quizState === 'active' && roomId && !isPaused) {
             const bots = participants.filter(p => p.isBot && (p.lastAnswer === null || p.lastAnswer === undefined));
@@ -154,9 +149,8 @@ export default function AdminLiveQuiz() {
                 if (!currentQ) return;
                 
                 bots.forEach((bot) => {
-                    const delay = 2000 + Math.random() * 15000; // Bots answer between 2 and 17 seconds
+                    const delay = 2000 + Math.random() * 15000;
                     setTimeout(async () => {
-                        // Simple 70% accuracy for bots
                         const isCorrect = Math.random() < 0.7;
                         let randomAnswer;
                         if (isCorrect) {
@@ -169,7 +163,6 @@ export default function AdminLiveQuiz() {
                         const points = isCorrect ? Math.max(500, Math.round(1000 - (delay / 1000 / 30) * 500)) : 0;
                         
                         try {
-                            // Check if bot still hasn't answered (in case room status changed)
                             await updateDoc(doc(db, `live_quizzes/${roomId}/participants/${bot.id}`), {
                                 lastAnswer: randomAnswer,
                                 score: increment(points),
@@ -201,7 +194,6 @@ export default function AdminLiveQuiz() {
                 host: 'Admin',
                 isPaused: false
             });
-            // Global state for real-time banner on Student Portal
             await setDoc(doc(db, 'settings', 'live_quiz_state'), {
                 activeRoomId: newRoomId,
                 courseId: selectedCourse,
@@ -244,7 +236,7 @@ export default function AdminLiveQuiz() {
     };
 
     const handleStartQuiz = async () => {
-        initAudio(); // Initialize audio context on user interaction
+        initAudio();
         await updateDoc(doc(db, 'live_quizzes', roomId), {
             status: 'countdown',
             currentQuestionIndex: 0,
@@ -265,7 +257,6 @@ export default function AdminLiveQuiz() {
         });
         setTimer(30);
     };
-
 
     const handleShowLeaderboard = async () => {
         await updateDoc(doc(db, 'live_quizzes', roomId), { status: 'leaderboard' });
@@ -288,60 +279,69 @@ export default function AdminLiveQuiz() {
         }
     };
 
-    // Rendering
     if (quizState === 'setup') {
         return (
-            <div className="min-h-screen bg-[#F8FAFC] py-12 md:py-20 px-4 sm:px-6 flex items-center justify-center font-inter">
-                <div className="max-w-xl w-full bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] shadow-xl border border-slate-100 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-8 text-blue-50">
-                        <Monitor size={100} className="md:w-[120px] md:h-[120px]" />
+            <div className="min-h-screen bg-slate-900 py-12 md:py-20 px-4 sm:px-6 flex items-center justify-center font-inter relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] mix-blend-overlay"></div>
+                <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-600 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
+                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-600 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
+
+                <div className="max-w-xl w-full bg-white/10 backdrop-blur-3xl p-8 md:p-12 rounded-[3rem] shadow-[0_0_50px_rgba(0,0,0,0.3)] border border-white/20 relative z-10">
+                    <div className="absolute top-8 right-8 text-white/10">
+                        <Monitor size={80} />
                     </div>
+                    
                     <div className="relative z-10">
-                        <div className="flex items-center gap-3 mb-8">
-                            <div className="p-3 bg-blue-600 text-white rounded-2xl"><Zap size={24} /></div>
-                            <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tight">Host Live Quiz</h2>
+                        <div className="flex items-center gap-4 mb-10">
+                            <div className="p-4 bg-indigo-500 text-white rounded-[1.5rem] shadow-lg shadow-indigo-500/30">
+                                <Zap size={32} />
+                            </div>
+                            <div>
+                                <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight">Host Dashboard</h2>
+                                <p className="text-indigo-200 font-bold tracking-wide mt-1">Start a live multiplayer session</p>
+                            </div>
                         </div>
 
                         <div className="space-y-6">
                             <div>
-                                <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Select Course / App</label>
+                                <label className="block text-xs font-black text-indigo-200 uppercase tracking-widest mb-2 ml-2">Select Course Module</label>
                                 <select 
-                                    className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold text-slate-700 outline-none focus:border-blue-500 transition-colors"
+                                    className="w-full p-5 rounded-2xl bg-black/20 border-2 border-white/10 text-white font-bold outline-none focus:border-indigo-400 transition-colors appearance-none cursor-pointer"
                                     value={selectedCourse}
                                     onChange={(e) => {
                                         setSelectedCourse(e.target.value);
                                         setSelectedTopic('');
                                     }}
                                 >
-                                    <option value="">-- Choose Course --</option>
+                                    <option value="" className="text-slate-800">-- Choose Course --</option>
                                     {Object.entries(combinedQuizData).map(([key, data]) => (
-                                        <option key={key} value={key}>{data.title || key}</option>
+                                        <option key={key} value={key} className="text-slate-800">{data.title || key}</option>
                                     ))}
                                 </select>
                             </div>
                             
                             {selectedCourse && combinedQuizData[selectedCourse]?.modules && (
-                                <div>
-                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Select Quiz Topic</label>
+                                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+                                    <label className="block text-xs font-black text-indigo-200 uppercase tracking-widest mb-2 ml-2">Select Quiz Topic</label>
                                     <select 
-                                        className="w-full p-4 rounded-xl bg-slate-50 border-2 border-slate-100 font-bold text-slate-700 outline-none focus:border-blue-500 transition-colors"
+                                        className="w-full p-5 rounded-2xl bg-black/20 border-2 border-white/10 text-white font-bold outline-none focus:border-indigo-400 transition-colors appearance-none cursor-pointer"
                                         value={selectedTopic}
                                         onChange={(e) => setSelectedTopic(e.target.value)}
                                     >
-                                        <option value="">-- Choose Topic --</option>
+                                        <option value="" className="text-slate-800">-- Choose Topic --</option>
                                         {Object.keys(combinedQuizData[selectedCourse].modules).map(topic => (
-                                            <option key={topic} value={topic}>{topic}</option>
+                                            <option key={topic} value={topic} className="text-slate-800">{topic}</option>
                                         ))}
                                     </select>
-                                </div>
+                                </motion.div>
                             )}
                             
                             <button 
                                 onClick={handleCreateRoom}
                                 disabled={!selectedCourse || !selectedTopic}
-                                className="w-full py-4 md:py-5 bg-slate-900 text-white rounded-[1.5rem] font-black uppercase tracking-widest hover:bg-blue-600 transition-colors shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full mt-8 py-5 bg-indigo-500 text-white rounded-[1.5rem] font-black uppercase tracking-widest hover:bg-indigo-400 transition-all shadow-[0_10px_30px_rgba(99,102,241,0.4)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none text-lg"
                             >
-                                Generate Room Code
+                                Generate Live Room
                             </button>
                         </div>
                     </div>
@@ -358,268 +358,322 @@ export default function AdminLiveQuiz() {
         };
 
         return (
-            <div className="min-h-screen bg-indigo-950 flex flex-col items-center justify-center p-4 md:p-8 text-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                <div className="relative z-10 w-full max-w-4xl">
-                    <h1 className="text-white text-xl md:text-3xl font-medium mb-4 uppercase tracking-widest opacity-80">Join at Student Portal</h1>
-                    <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 md:p-12 rounded-[2rem] md:rounded-[4rem] mb-6 shadow-2xl relative">
-                        <p className="text-blue-200 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mb-2 md:mb-4 text-xs md:text-base">Live Room PIN</p>
-                        <h2 className="text-6xl md:text-9xl font-black text-white tracking-tighter drop-shadow-2xl">{roomId}</h2>
+            <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden font-inter">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
+                <div className="absolute top-0 w-full h-[50vh] bg-gradient-to-b from-indigo-600/30 to-transparent pointer-events-none"></div>
+
+                <div className="relative z-10 w-full max-w-6xl flex flex-col lg:flex-row gap-8 items-center lg:items-stretch">
+                    
+                    {/* Left: PIN DISPLAY */}
+                    <div className="flex-1 w-full bg-white/10 backdrop-blur-2xl border border-white/20 p-10 md:p-16 rounded-[3rem] shadow-2xl flex flex-col justify-center items-center relative overflow-hidden">
+                        <div className="absolute -top-20 -right-20 w-64 h-64 bg-indigo-500/20 rounded-full blur-[80px]"></div>
                         
-                        <div className="mt-6 md:mt-8 flex justify-center">
-                            <button onClick={handleCopyLink} className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-3 bg-blue-500/20 hover:bg-blue-500/40 text-blue-200 hover:text-white rounded-full font-bold text-xs md:text-sm transition-colors border border-blue-400/30">
-                                <Copy size={16} /> Copy Invite Link
+                        <p className="text-indigo-300 font-black uppercase tracking-[0.4em] mb-6 text-lg md:text-xl">Join at Student Portal</p>
+                        
+                        <div className="bg-black/30 w-full py-8 md:py-12 rounded-[3rem] border-y border-white/10 mb-8 shadow-inner relative">
+                            <p className="text-white/50 font-black uppercase tracking-[0.3em] mb-2 text-sm">Live Room PIN</p>
+                            <h2 className="text-[6rem] md:text-[9rem] font-black text-white tracking-widest drop-shadow-[0_0_40px_rgba(255,255,255,0.2)] leading-none">
+                                {roomId}
+                            </h2>
+                        </div>
+                        
+                        <div className="flex flex-col sm:flex-row gap-4 w-full">
+                            <button onClick={handleCopyLink} className="flex-1 flex justify-center items-center gap-3 py-4 bg-white/5 hover:bg-white/10 text-white rounded-[1.5rem] font-bold text-sm md:text-base transition-colors border border-white/10 backdrop-blur-md">
+                                <Copy size={20} /> Copy Direct Link
+                            </button>
+                            <button onClick={handleAddBots} className="flex-1 flex justify-center items-center gap-3 py-4 bg-indigo-500/20 hover:bg-indigo-500/40 text-indigo-200 rounded-[1.5rem] font-bold text-sm md:text-base transition-colors border border-indigo-500/30 backdrop-blur-md">
+                                <Bot size={20} /> Add Test Bots
                             </button>
                         </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-between bg-white/5 backdrop-blur-md px-6 py-4 md:px-8 md:py-6 rounded-[2rem] md:rounded-full border border-white/10 mb-8 gap-4">
-                        <div className="flex items-center gap-3 md:gap-4">
-                            <Users className="text-blue-400" size={24} />
-                            <span className="text-2xl md:text-3xl font-black text-white">{participants.length}</span>
-                            <span className="text-blue-200 font-bold uppercase tracking-widest text-xs md:text-sm">Players Joined</span>
+                    {/* Right: PARTICIPANTS */}
+                    <div className="w-full lg:w-[450px] flex flex-col bg-black/40 backdrop-blur-xl border border-white/10 p-8 rounded-[3rem] shadow-2xl h-[600px] lg:h-auto">
+                        <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/10">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-emerald-500/20 text-emerald-400 rounded-xl">
+                                    <Users size={28} />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-emerald-400 font-black uppercase tracking-widest text-xs">Waiting in Lobby</p>
+                                    <h3 className="text-4xl font-black text-white">{participants.length} <span className="text-xl text-white/50">Players</span></h3>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex gap-3 w-full sm:w-auto">
-                            <button onClick={handleAddBots} className="flex-1 sm:flex-none px-4 py-3 md:px-6 md:py-4 bg-indigo-600/50 text-indigo-100 rounded-xl md:rounded-full font-black uppercase tracking-widest hover:bg-indigo-600 transition-colors border border-indigo-400/30 flex justify-center items-center gap-2 text-xs md:text-sm">
-                                <Bot size={18} /> <span className="hidden sm:inline">Add Bots</span>
-                            </button>
+
+                        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar flex flex-wrap gap-3 content-start">
+                            <AnimatePresence>
+                                {participants.map(p => (
+                                    <motion.div 
+                                        initial={{ scale: 0.8, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        exit={{ scale: 0.8, opacity: 0 }}
+                                        key={p.id} 
+                                        className="px-4 py-3 bg-white/10 border border-white/10 hover:border-red-400/50 hover:bg-red-400/10 rounded-xl text-white font-bold text-sm flex items-center gap-2 group cursor-pointer transition-all"
+                                        onClick={() => handleKickPlayer(p.id)}
+                                        title="Click to kick player"
+                                    >
+                                        {p.name}
+                                        <XCircle size={16} className="opacity-0 group-hover:opacity-100 text-red-400 transition-opacity" />
+                                    </motion.div>
+                                ))}
+                                {participants.length === 0 && (
+                                    <div className="w-full h-full flex flex-col items-center justify-center text-white/30">
+                                        <Users size={48} className="mb-4 opacity-50" />
+                                        <p className="font-bold uppercase tracking-widest text-sm text-center">Waiting for players...</p>
+                                    </div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+
+                        <div className="mt-6 pt-6 border-t border-white/10">
                             <button 
                                 onClick={handleStartQuiz}
                                 disabled={participants.length === 0}
-                                className="flex-2 sm:flex-none px-6 py-3 md:px-8 md:py-4 bg-white text-indigo-900 rounded-xl md:rounded-full font-black uppercase tracking-widest hover:scale-105 transition-transform disabled:opacity-50 text-xs md:text-sm"
+                                className="w-full py-6 bg-emerald-500 text-slate-900 rounded-[1.5rem] font-black uppercase tracking-[0.2em] hover:bg-emerald-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-xl shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] active:scale-95"
                             >
                                 Start Game
                             </button>
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap justify-center gap-2 md:gap-3 max-h-[30vh] overflow-y-auto p-2 scrollbar-hide">
-                        {participants.map(p => (
-                            <motion.div 
-                                initial={{ scale: 0, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                key={p.id} 
-                                className="px-3 py-1.5 md:px-4 md:py-2 bg-indigo-800/50 rounded-lg text-white font-bold text-xs md:text-base flex items-center gap-2 group cursor-pointer"
-                                onClick={() => handleKickPlayer(p.id)}
-                                title="Click to kick player"
-                            >
-                                {p.name}
-                                <XCircle size={14} className="opacity-0 group-hover:opacity-100 text-red-400 transition-opacity" />
-                            </motion.div>
-                        ))}
-                    </div>
                 </div>
             </div>
         );
     }
 
-    // Active, Result, Leaderboard Views
     const currentQ = questions[currentQuestionIndex];
     const totalQ = questions.length;
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col font-inter">
-            {/* Admin Header Bar */}
-            <div className="h-16 md:h-20 bg-white border-b border-slate-200 flex items-center justify-between px-4 md:px-8 shadow-sm shrink-0">
-                <div className="flex items-center gap-2 md:gap-4">
-                    <ShieldCheck className="text-emerald-500 hidden sm:block" />
-                    <span className="font-black text-slate-900 uppercase tracking-widest text-xs md:text-sm">Host Panel</span>
-                    <span className="px-2 py-1 md:px-3 md:py-1 bg-slate-100 text-slate-600 text-[10px] md:text-xs font-black rounded-full">PIN: {roomId}</span>
+        <div className="min-h-screen bg-slate-900 flex flex-col font-inter">
+            {/* Top Presentation Bar */}
+            <div className="h-20 bg-black/40 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-8 shadow-sm shrink-0 z-50">
+                <div className="flex items-center gap-4">
+                    <ShieldCheck className="text-emerald-500 w-8 h-8" />
+                    <div>
+                        <div className="font-black text-white uppercase tracking-widest text-sm leading-none mb-1">Host Screen</div>
+                        <div className="text-emerald-400 font-bold text-[10px] uppercase tracking-widest">Live Quiz Active</div>
+                    </div>
                 </div>
-                <div className="flex items-center gap-3 md:gap-4">
-                    <span className="font-black text-slate-400 text-xs md:text-sm hidden sm:inline">Q {currentQuestionIndex + 1}/{totalQ}</span>
-                    <button onClick={handleEndSession} className="px-3 py-1.5 md:px-4 md:py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-bold text-[10px] md:text-xs uppercase tracking-widest transition-colors">
+                
+                {quizState !== 'countdown' && (
+                    <div className="px-6 py-2 bg-white/10 border border-white/20 rounded-full text-white font-black tracking-[0.2em] flex items-center gap-3">
+                        <span className="text-white/50 text-xs">JOIN PIN:</span>
+                        <span className="text-xl">{roomId}</span>
+                    </div>
+                )}
+
+                <div className="flex items-center gap-6">
+                    {quizState === 'active' && (
+                        <div className="text-white/50 font-black uppercase tracking-widest text-sm">
+                            Question <span className="text-white">{currentQuestionIndex + 1}</span> / {totalQ}
+                        </div>
+                    )}
+                    <button onClick={handleEndSession} className="px-4 py-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-lg font-black text-xs uppercase tracking-widest transition-all border border-red-500/30">
                         End Session
                     </button>
                 </div>
             </div>
 
-            <div className="flex-1 flex flex-col lg:flex-row p-4 md:p-8 gap-4 md:gap-8 overflow-hidden">
-                {/* Main Content Area */}
-                <div className="flex-1 bg-white rounded-[2rem] md:rounded-[3rem] border border-slate-200 shadow-xl overflow-hidden flex flex-col relative min-h-[50vh]">
+            <div className="flex-1 flex flex-col relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
 
-                    {quizState === 'countdown' && (
-                        <div className="p-8 md:p-12 flex-1 flex flex-col items-center justify-center bg-indigo-600 text-white relative overflow-hidden">
-                            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                            <h2 className="text-3xl md:text-5xl font-black mb-6 md:mb-8 tracking-widest uppercase text-indigo-200">Get Ready!</h2>
-                            <motion.div 
-                                key={countdownTimer}
-                                initial={{ scale: 2, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0, opacity: 0 }}
-                                className="text-8xl md:text-9xl font-black drop-shadow-2xl"
-                            >
-                                {countdownTimer > 0 ? countdownTimer : 'GO!'}
-                            </motion.div>
-                        </div>
-                    )}
-                    
-                    {quizState === 'active' && (
-                        <div className="p-6 md:p-12 flex-1 flex flex-col h-full">
-                            <div className="flex justify-between items-center mb-6 md:mb-8">
-                                <div className="h-3 md:h-4 flex-1 bg-slate-100 rounded-full overflow-hidden mr-4 md:mr-8 relative">
-                                    <motion.div 
-                                        className={`h-full ${isPaused ? 'bg-amber-400' : 'bg-blue-500'}`}
-                                        initial={{ width: 0 }}
-                                        animate={{ width: `${((timer)/30)*100}%` }}
-                                        transition={isPaused ? { duration: 0 } : { duration: 1, ease: "linear" }}
-                                    />
-                                    {isPaused && <div className="absolute inset-0 flex items-center justify-center text-[10px] font-black text-amber-900 uppercase">PAUSED</div>}
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <button onClick={handleTogglePause} className={`p-2 rounded-full ${isPaused ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'} hover:opacity-80 transition-opacity`} title={isPaused ? "Resume Timer" : "Pause Timer"}>
-                                        {isPaused ? <PlayCircle size={24}/> : <PauseCircle size={24}/>}
-                                    </button>
-                                    <div className={`text-3xl md:text-4xl font-black ${isPaused ? 'text-amber-500' : 'text-blue-600'}`}>{timer}s</div>
+                {quizState === 'countdown' && (
+                    <div className="absolute inset-0 z-40 flex flex-col items-center justify-center bg-indigo-600/90 backdrop-blur-sm text-white">
+                        <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-[0.3em] uppercase text-indigo-200 drop-shadow-lg">Get Ready!</h2>
+                        <motion.div 
+                            key={countdownTimer}
+                            initial={{ scale: 2, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0, opacity: 0 }}
+                            className="text-[15rem] font-black drop-shadow-[0_0_60px_rgba(255,255,255,0.4)] leading-none text-yellow-300"
+                        >
+                            {countdownTimer > 0 ? countdownTimer : 'GO!'}
+                        </motion.div>
+                    </div>
+                )}
+                
+                {quizState === 'active' && (
+                    <div className="flex-1 flex flex-col p-8 relative z-10">
+                        {/* Header Stats for projector */}
+                        <div className="flex justify-between items-center mb-8 px-4">
+                            <div className="flex items-center gap-6 bg-white/10 px-8 py-4 rounded-3xl border border-white/20 backdrop-blur-md">
+                                <div className="text-center">
+                                    <div className="text-white/50 font-black text-[10px] uppercase tracking-widest mb-1">Answers In</div>
+                                    <div className="text-4xl font-black text-white leading-none">
+                                        {participants.filter(p => p.lastAnswer !== undefined && p.lastAnswer !== null).length} <span className="text-xl text-white/30">/ {participants.length}</span>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <div className="flex-1 flex items-center justify-center overflow-y-auto mb-6">
-                                <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-slate-900 leading-tight font-hindi text-center">
-                                    {currentQ?.question}
-                                </h2>
-                            </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6 shrink-0">
-                                {currentQ?.options.map((opt, i) => {
-                                    // Count how many answered this option
-                                    const count = participants.filter(p => p.lastAnswer === i).length;
-                                    return (
-                                        <div key={i} className="p-4 md:p-8 bg-slate-50 border-2 border-slate-100 rounded-xl md:rounded-[2rem] font-bold text-lg md:text-xl text-slate-700 text-center relative overflow-hidden flex items-center justify-center min-h-[60px] md:min-h-[100px]">
-                                            <div className="relative z-10">{opt}</div>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-
-                            <div className="flex justify-center mt-6 shrink-0">
-                                <button onClick={handleShowResult} className="px-6 py-3 md:px-8 md:py-4 bg-slate-900 text-white rounded-full font-black uppercase tracking-widest text-xs md:text-sm hover:scale-105 transition-transform shadow-xl">
-                                    Skip Timer (Show Answer)
+                            {/* Massive Timer */}
+                            <div className="flex items-center gap-4">
+                                <button onClick={handleTogglePause} className={`w-16 h-16 rounded-full flex items-center justify-center ${isPaused ? 'bg-amber-500 text-white animate-pulse shadow-[0_0_30px_rgba(245,158,11,0.5)]' : 'bg-white/10 text-white/50 hover:bg-white/20 hover:text-white'} transition-all`} title={isPaused ? "Resume Timer" : "Pause Timer"}>
+                                    {isPaused ? <PlayCircle size={32}/> : <PauseCircle size={32}/>}
                                 </button>
+                                <div className={`w-32 h-32 rounded-full border-8 flex items-center justify-center text-5xl font-black bg-black/30 backdrop-blur-md shadow-[0_0_50px_rgba(0,0,0,0.5)]
+                                    ${isPaused ? 'border-amber-500 text-amber-500' : timer > 10 ? 'border-emerald-500 text-emerald-400' : 'border-rose-500 text-rose-400 animate-pulse'}
+                                `}>
+                                    {timer}
+                                </div>
                             </div>
                         </div>
-                    )}
+                        
+                        {/* Huge Question Display */}
+                        <div className="flex-1 flex items-center justify-center px-10 mb-8 bg-white/5 backdrop-blur-sm rounded-[3rem] border border-white/10 shadow-inner">
+                            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight font-hindi text-center drop-shadow-xl w-full max-w-7xl">
+                                {currentQ?.question}
+                            </h2>
+                        </div>
 
-                    {quizState === 'result' && (
-                        <div className="p-6 md:p-12 flex-1 flex flex-col text-center justify-center overflow-y-auto">
-                            <h2 className="text-xl md:text-3xl font-black text-slate-500 mb-6 md:mb-12 uppercase tracking-widest">Correct Answer</h2>
-                            <div className="p-6 md:p-10 bg-emerald-50 border-4 border-emerald-500 rounded-3xl md:rounded-[3rem] mb-8 md:mb-12 shadow-lg">
-                                <CheckCircle2 className="text-emerald-500 mx-auto mb-2 md:mb-4 w-12 h-12 md:w-16 md:h-16" />
-                                <h3 className="text-2xl md:text-4xl font-black text-emerald-900 font-hindi">{currentQ?.options[currentQ?.correctAnswer]}</h3>
-                            </div>
-                            
-                            <p className="text-base md:text-xl font-medium text-slate-600 mb-8 md:mb-12 font-hindi max-w-3xl mx-auto">{currentQ?.explanation}</p>
+                        {/* Kahoot Style Options Grid */}
+                        <div className="grid grid-cols-2 gap-6 h-[35vh] shrink-0">
+                            {currentQ?.options.map((opt, i) => {
+                                const Icon = OPTION_ICONS[i % OPTION_ICONS.length];
+                                return (
+                                    <div key={i} className={`rounded-[2rem] p-8 flex items-center justify-start gap-8 relative overflow-hidden shadow-2xl border-b-8 ${OPTION_BORDER[i % OPTION_BORDER.length]} ${OPTION_COLORS[i % OPTION_COLORS.length]}`}>
+                                        <div className="absolute inset-0 bg-black/10"></div>
+                                        <div className="w-24 h-24 bg-black/20 rounded-2xl flex items-center justify-center shrink-0 relative z-10 shadow-inner backdrop-blur-md">
+                                            <Icon size={50} className="text-white drop-shadow-md" strokeWidth={3} />
+                                        </div>
+                                        <div className="text-3xl md:text-5xl font-black text-white font-hindi relative z-10 drop-shadow-lg leading-tight">
+                                            {opt}
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
 
-                            <button onClick={handleShowLeaderboard} className="mt-auto mx-auto px-8 py-4 md:px-12 md:py-5 bg-blue-600 text-white rounded-full font-black uppercase tracking-widest text-sm md:text-lg hover:scale-105 transition-transform shadow-xl shadow-blue-500/20 shrink-0">
-                                View Leaderboard
+                        <div className="absolute bottom-8 right-8 z-20">
+                            <button onClick={handleShowResult} className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white rounded-full font-black uppercase tracking-widest text-sm backdrop-blur-md border border-white/20 transition-colors shadow-xl">
+                                Skip Timer
                             </button>
                         </div>
-                    )}
+                    </div>
+                )}
 
-                    {quizState === 'leaderboard' && (
-                        <div className="p-6 md:p-12 flex-1 flex flex-col bg-slate-900 text-white overflow-y-auto">
-                            <div className="flex items-center justify-center gap-3 md:gap-4 mb-8 md:mb-12 shrink-0">
-                                <Trophy className="text-yellow-400 w-10 h-10 md:w-12 md:h-12" />
-                                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-widest text-yellow-400 drop-shadow-lg">Leaderboard</h2>
-                            </div>
+                {quizState === 'result' && (
+                    <div className="flex-1 flex flex-col p-12 relative z-10 overflow-hidden">
+                        <div className="absolute top-10 left-10 text-white/50 font-black uppercase tracking-widest text-2xl">Result</div>
+                        
+                        <div className="flex-1 flex flex-col items-center justify-center max-w-5xl mx-auto w-full text-center">
+                            <h3 className="text-2xl font-black text-white/50 mb-8 uppercase tracking-[0.3em]">Correct Answer</h3>
                             
-                            <div className="max-w-3xl mx-auto w-full space-y-3 md:space-y-4 flex-1">
-                                <AnimatePresence>
-                                    {participants.slice(0, 5).map((p, index) => (
-                                        <motion.div 
-                                            key={p.id}
-                                            initial={{ opacity: 0, x: -50 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: index * 0.1 }}
-                                            className="flex items-center bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl p-3 md:p-4 border border-white/10"
-                                        >
-                                            <div className="w-8 md:w-12 text-center text-lg md:text-2xl font-black text-slate-400">#{index + 1}</div>
-                                            <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center font-black text-lg md:text-xl mr-4 md:mr-6 shrink-0">
-                                                {p.name[0]}
-                                            </div>
-                                            <div className="flex-1 text-lg md:text-2xl font-bold truncate pr-2">{p.name}</div>
-                                            <div className="text-xl md:text-3xl font-black text-blue-400 shrink-0">{p.score}</div>
-                                        </motion.div>
-                                    ))}
-                                </AnimatePresence>
-                                {participants.length === 0 && <p className="text-center text-slate-500 mt-10">No participants yet</p>}
-                            </div>
-
-                            <div className="mt-8 shrink-0 flex justify-center">
-                                <button onClick={handleNextQuestion} className="px-8 py-4 md:px-12 md:py-5 bg-white text-slate-900 rounded-full font-black uppercase tracking-widest text-sm md:text-lg hover:scale-105 transition-transform shadow-2xl">
-                                    {currentQuestionIndex >= totalQ - 1 ? 'Finish Quiz' : 'Next Question'} <ChevronRight className="inline" />
-                                </button>
-                            </div>
+                            <motion.div 
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="w-full p-12 bg-emerald-500 rounded-[3rem] border-b-8 border-emerald-700 shadow-[0_0_100px_rgba(16,185,129,0.3)] mb-12 relative overflow-hidden"
+                            >
+                                <div className="absolute inset-0 bg-black/10"></div>
+                                <CheckCircle2 className="text-white/20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96" />
+                                <h3 className="text-5xl md:text-7xl font-black text-white font-hindi relative z-10 drop-shadow-2xl">
+                                    {currentQ?.options[currentQ?.correctAnswer]}
+                                </h3>
+                            </motion.div>
+                            
+                            {currentQ?.explanation && (
+                                <div className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl w-full">
+                                    <p className="text-xl md:text-2xl font-medium text-blue-100 font-hindi leading-relaxed">
+                                        <span className="font-black uppercase tracking-widest text-sm text-blue-300 block mb-3">Explanation</span>
+                                        {currentQ.explanation}
+                                    </p>
+                                </div>
+                            )}
                         </div>
-                    )}
 
-                    {quizState === 'finished' && (
-                        <div className="p-6 md:p-12 flex-1 flex flex-col items-center justify-center bg-indigo-950 text-white text-center relative overflow-hidden">
-                            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-                            
-                            <h2 className="text-4xl md:text-6xl font-black mb-2 md:mb-4 tracking-tighter relative z-10">Quiz Complete!</h2>
-                            
-                            {/* Podium */}
-                            <div className="flex items-end justify-center gap-2 md:gap-4 mb-8 md:mb-12 h-48 md:h-64 mt-8 md:mt-12 relative z-10 w-full px-2">
-                                {/* 2nd Place */}
-                                {participants[1] && (
-                                    <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex flex-col items-center flex-1 max-w-[120px]">
-                                        <div className="text-sm md:text-xl font-bold mb-1 md:mb-2 truncate w-full text-center">{participants[1].name}</div>
-                                        <div className="text-xs md:text-sm text-blue-200 mb-1 md:mb-2">{participants[1].score} pts</div>
-                                        <div className="w-full h-24 md:h-32 bg-slate-400 rounded-t-lg md:rounded-t-xl flex items-center justify-center text-2xl md:text-4xl font-black text-slate-100 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.2)]">2</div>
-                                    </motion.div>
-                                )}
-                                {/* 1st Place */}
-                                {participants[0] && (
-                                    <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-col items-center z-10 flex-1 max-w-[140px] md:max-w-[160px]">
-                                        <Trophy className="text-yellow-400 mb-1 md:mb-2 drop-shadow-xl w-8 h-8 md:w-12 md:h-12" />
-                                        <div className="text-lg md:text-2xl font-black mb-1 md:mb-2 text-yellow-400 truncate w-full text-center">{participants[0].name}</div>
-                                        <div className="text-xs md:text-sm text-yellow-200 mb-1 md:mb-2 font-bold">{participants[0].score} pts</div>
-                                        <div className="w-full h-32 md:h-48 bg-yellow-500 rounded-t-lg md:rounded-t-xl flex items-center justify-center text-4xl md:text-6xl font-black text-yellow-100 shadow-[0_0_40px_rgba(234,179,8,0.4),inset_0_-10px_20px_rgba(0,0,0,0.2)]">1</div>
-                                    </motion.div>
-                                )}
-                                {/* 3rd Place */}
-                                {participants[2] && (
-                                    <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="flex flex-col items-center flex-1 max-w-[120px]">
-                                        <div className="text-sm md:text-xl font-bold mb-1 md:mb-2 truncate w-full text-center">{participants[2].name}</div>
-                                        <div className="text-xs md:text-sm text-orange-200 mb-1 md:mb-2">{participants[2].score} pts</div>
-                                        <div className="w-full h-16 md:h-24 bg-orange-700 rounded-t-lg md:rounded-t-xl flex items-center justify-center text-2xl md:text-4xl font-black text-orange-200 shadow-[inset_0_-10px_20px_rgba(0,0,0,0.2)]">3</div>
-                                    </motion.div>
-                                )}
-                            </div>
+                        <div className="absolute bottom-12 right-12">
+                            <button onClick={handleShowLeaderboard} className="px-12 py-6 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-black uppercase tracking-widest text-xl transition-all shadow-[0_0_40px_rgba(37,99,235,0.5)] active:scale-95 flex items-center gap-3">
+                                View Standings <ChevronRight size={28} />
+                            </button>
+                        </div>
+                    </div>
+                )}
 
-                            <button onClick={handleEndSession} className="relative z-10 px-6 py-3 md:px-8 md:py-4 bg-white text-indigo-900 rounded-full font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform text-xs md:text-sm">
+                {quizState === 'leaderboard' && (
+                    <div className="flex-1 flex flex-col p-12 relative z-10">
+                        <div className="flex flex-col items-center justify-center mb-12">
+                            <Trophy className="text-yellow-400 w-20 h-20 mb-4 drop-shadow-[0_0_30px_rgba(250,204,21,0.5)]" />
+                            <h2 className="text-5xl md:text-6xl font-black uppercase tracking-[0.2em] text-white drop-shadow-xl">Top Players</h2>
+                        </div>
+                        
+                        <div className="flex-1 max-w-4xl mx-auto w-full space-y-4">
+                            <AnimatePresence>
+                                {participants.slice(0, 5).map((p, index) => (
+                                    <motion.div 
+                                        key={p.id}
+                                        initial={{ opacity: 0, x: -50 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: index * 0.1 }}
+                                        className="flex items-center bg-white/10 backdrop-blur-xl rounded-2xl p-5 border border-white/20 shadow-lg"
+                                    >
+                                        <div className="w-16 text-center text-3xl font-black text-white/30">#{index + 1}</div>
+                                        <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center font-black text-2xl text-white mr-6 shadow-inner border border-white/20">
+                                            {p.name[0].toUpperCase()}
+                                        </div>
+                                        <div className="flex-1 text-3xl font-bold text-white truncate pr-4">{p.name}</div>
+                                        <div className="text-4xl font-black text-yellow-400 shrink-0 drop-shadow-md">{p.score}</div>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                            {participants.length === 0 && <p className="text-center text-white/50 text-2xl mt-20 font-bold uppercase tracking-widest">No participants</p>}
+                        </div>
+
+                        <div className="absolute bottom-12 right-12">
+                            <button onClick={handleNextQuestion} className="px-12 py-6 bg-emerald-500 hover:bg-emerald-400 text-slate-900 rounded-full font-black uppercase tracking-widest text-xl transition-all shadow-[0_0_40px_rgba(16,185,129,0.5)] active:scale-95 flex items-center gap-3">
+                                {currentQuestionIndex >= totalQ - 1 ? 'Finish Game' : 'Next Question'} <ChevronRight size={28} />
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {quizState === 'finished' && (
+                    <div className="flex-1 flex flex-col items-center justify-center relative z-10">
+                        <div className="absolute inset-0 bg-gradient-to-b from-indigo-900/50 to-slate-900/50 pointer-events-none"></div>
+                        
+                        <h2 className="text-6xl md:text-8xl font-black mb-16 tracking-tighter text-white drop-shadow-2xl relative z-20">Final Podium</h2>
+                        
+                        {/* Podium */}
+                        <div className="flex items-end justify-center gap-6 h-[400px] relative z-20 w-full max-w-5xl px-8">
+                            {/* 2nd Place */}
+                            {participants[1] && (
+                                <motion.div initial={{ y: 200, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex flex-col items-center flex-1 max-w-[250px]">
+                                    <div className="w-20 h-20 bg-slate-300 rounded-full flex items-center justify-center font-black text-3xl text-slate-800 mb-4 shadow-[0_0_30px_rgba(203,213,225,0.5)] border-4 border-slate-100">{participants[1].name[0].toUpperCase()}</div>
+                                    <div className="text-3xl font-black text-white mb-2 truncate w-full text-center drop-shadow-md">{participants[1].name}</div>
+                                    <div className="text-xl font-bold text-slate-300 mb-4 tracking-widest">{participants[1].score} pts</div>
+                                    <div className="w-full h-[200px] bg-gradient-to-b from-slate-400 to-slate-600 rounded-t-3xl flex items-start justify-center pt-8 text-6xl font-black text-white/50 border-t-4 border-slate-300 shadow-[0_-10px_40px_rgba(0,0,0,0.3)]">2</div>
+                                </motion.div>
+                            )}
+                            
+                            {/* 1st Place */}
+                            {participants[0] && (
+                                <motion.div initial={{ y: 200, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-col items-center z-10 flex-1 max-w-[300px]">
+                                    <Trophy className="text-yellow-400 mb-4 drop-shadow-[0_0_50px_rgba(250,204,21,0.8)] w-24 h-24" />
+                                    <div className="text-4xl font-black text-yellow-400 mb-2 truncate w-full text-center drop-shadow-lg">{participants[0].name}</div>
+                                    <div className="text-2xl font-bold text-yellow-200 mb-4 tracking-widest">{participants[0].score} pts</div>
+                                    <div className="w-full h-[300px] bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-t-3xl flex items-start justify-center pt-10 text-8xl font-black text-white/50 border-t-8 border-yellow-300 shadow-[0_-20px_60px_rgba(250,204,21,0.4)]">1</div>
+                                </motion.div>
+                            )}
+                            
+                            {/* 3rd Place */}
+                            {participants[2] && (
+                                <motion.div initial={{ y: 200, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="flex flex-col items-center flex-1 max-w-[250px]">
+                                    <div className="w-20 h-20 bg-orange-400 rounded-full flex items-center justify-center font-black text-3xl text-orange-900 mb-4 shadow-[0_0_30px_rgba(251,146,60,0.5)] border-4 border-orange-200">{participants[2].name[0].toUpperCase()}</div>
+                                    <div className="text-3xl font-black text-white mb-2 truncate w-full text-center drop-shadow-md">{participants[2].name}</div>
+                                    <div className="text-xl font-bold text-orange-300 mb-4 tracking-widest">{participants[2].score} pts</div>
+                                    <div className="w-full h-[150px] bg-gradient-to-b from-orange-600 to-orange-800 rounded-t-3xl flex items-start justify-center pt-6 text-6xl font-black text-white/50 border-t-4 border-orange-400 shadow-[0_-10px_40px_rgba(0,0,0,0.3)]">3</div>
+                                </motion.div>
+                            )}
+                        </div>
+
+                        <div className="absolute bottom-12 right-12 z-30">
+                            <button onClick={handleEndSession} className="px-10 py-5 bg-white/10 hover:bg-white/20 text-white rounded-full font-black uppercase tracking-widest text-lg backdrop-blur-md border border-white/20 transition-all shadow-xl">
                                 Close Room
                             </button>
                         </div>
-                    )}
-
-                </div>
-
-                {/* Sidebar Stats */}
-                <div className="lg:w-80 bg-white rounded-[2rem] md:rounded-[3rem] border border-slate-200 shadow-sm p-6 md:p-8 flex flex-col shrink-0">
-                    <h3 className="text-xs md:text-sm font-black text-slate-400 uppercase tracking-widest mb-4 md:mb-6">Live Status</h3>
-                    
-                    <div className="flex items-center justify-between mb-4 md:mb-6 pb-4 md:pb-6 border-b border-slate-100">
-                        <span className="font-bold text-slate-600 text-sm md:text-base">Total Players</span>
-                        <span className="text-xl md:text-2xl font-black text-slate-900">{participants.length}</span>
                     </div>
+                )}
 
-                    <div className="flex items-center justify-between mb-4 md:mb-6 pb-4 md:pb-6 border-b border-slate-100">
-                        <span className="font-bold text-slate-600 text-sm md:text-base">Answers In</span>
-                        <span className="text-xl md:text-2xl font-black text-blue-600">
-                            {quizState === 'active' ? participants.filter(p => p.lastAnswer !== undefined && p.lastAnswer !== null).length : 0}
-                        </span>
-                    </div>
-
-                    <div className="mt-auto pt-4">
-                        <div className={`p-4 md:p-6 rounded-2xl md:rounded-3xl text-center ${isPaused ? 'bg-amber-50' : 'bg-slate-50'}`}>
-                            {isPaused ? <PauseCircle className="text-amber-500 mx-auto mb-2 w-6 h-6 md:w-8 md:h-8" /> : <Zap className="text-amber-500 mx-auto mb-2 w-6 h-6 md:w-8 md:h-8" />}
-                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">System</p>
-                            <p className="font-bold text-slate-700 text-xs md:text-sm">{isPaused ? 'Quiz Paused' : 'Realtime Sync Active'}</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );

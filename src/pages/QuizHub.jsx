@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { BrainCircuit, PlayCircle, ArrowRight, Target, Zap, Trophy, MonitorPlay, Code, FileText } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
+import { db } from '../firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 const ICONS = {
     "file-word": <FileText size={32} />,
@@ -40,7 +42,33 @@ export default function QuizHub() {
         }
     });
 
-    const handleStartQuiz = (courseId, topicId) => {
+    const [customQuizzes, setCustomQuizzes] = useState([]);
+
+    useEffect(() => {
+        const unsub = onSnapshot(collection(db, 'custom_quizzes'), (snap) => {
+            const list = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            // Format them exactly like allTopics for seamless display
+            const formattedCustom = list.map(q => ({
+                courseId: q.courseId,
+                topicId: q.topicId,
+                description: `Dynamic Assessment: ${q.questions?.length || 0} Questions`,
+                icon: ICONS.default,
+                color: 'indigo',
+                isCustom: true // Flag to know it's from Firestore
+            }));
+            
+            setCustomQuizzes(formattedCustom);
+        });
+        return () => unsub();
+    }, []);
+
+    // Combine static topics and custom topics
+    const displayTopics = [...customQuizzes, ...allTopics];
+
+    const handleStartQuiz = (courseId, topicId, isCustom) => {
+        // We encode so the URL is safe. We use the same route for both, 
+        // but PublicQuiz will check Firestore first.
         navigate(`/quiz/${encodeURIComponent(courseId)}/${encodeURIComponent(topicId)}`);
     };
 
@@ -97,14 +125,14 @@ export default function QuizHub() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {allTopics.map((quiz, i) => (
+                    {displayTopics.map((quiz, i) => (
                         <motion.div 
                             key={`${quiz.courseId}-${quiz.topicId}`}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.05 }}
                             className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/50 group relative overflow-hidden flex flex-col justify-between hover:-translate-y-2 transition-transform duration-500 cursor-pointer"
-                            onClick={() => handleStartQuiz(quiz.courseId, quiz.topicId)}
+                            onClick={() => handleStartQuiz(quiz.courseId, quiz.topicId, quiz.isCustom)}
                         >
                             <div className={`absolute -top-20 -right-20 w-64 h-64 bg-${quiz.color}-500 opacity-5 blur-[80px] rounded-full group-hover:opacity-20 transition-opacity duration-700 pointer-events-none`}></div>
                             
@@ -120,7 +148,9 @@ export default function QuizHub() {
                             </div>
                             
                             <div className="relative z-10 flex items-center justify-between border-t border-slate-100 pt-6">
-                                <span className="text-xs font-black uppercase tracking-widest text-slate-400">30 Questions</span>
+                                <span className="text-xs font-black uppercase tracking-widest text-slate-400">
+                                    {quiz.isCustom ? 'Dynamic Quiz' : '30 Questions'}
+                                </span>
                                 <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                     <ArrowRight size={18} />
                                 </div>

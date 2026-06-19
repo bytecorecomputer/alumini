@@ -106,7 +106,7 @@ export default function AdminAnalytics() {
     const [selectedMonth, setSelectedMonth] = useState('all');
     const [selectedCenter, setSelectedCenter] = useState('all');
 
-    const isOwner = user?.email === 'coderafroj@gmail.com' || role === 'super_admin';
+    const isOwner = user?.role === 'admin' || role === 'super_admin';
 
     useEffect(() => {
         if (!isOwner) return;

@@ -49,12 +49,12 @@ service cloud.firestore {
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
     }
 
-    // 7. Quiz Progress: Students can only read/write their own progress. Admins can read/write all.
     match /quiz_progress/{studentId} {
-      allow read, write: if (request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin']) || 
-                         // For students using local PIN auth, we ideally want to check the PIN or use AppCheck. 
-                         // But for now, we lock it so they can only update existing fields or create their own.
-                         true; // Keeping true temporarily to avoid breaking existing PIN-less local login, but in a real app we'd map local PIN to Firebase Auth.
+      allow read: if true;
+      allow create: if true;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['courses', 'lastActive', 'modules']) || 
+                    (request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin']);
+      allow delete: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
     }
 
     // 8. Experts Management
@@ -71,14 +71,16 @@ service cloud.firestore {
       // Subcollection for participants
       match /participants/{participantId} {
          allow read: if true;
-         allow write: if true; // Allow students to join, reconnect, and update answers without complex rule friction
+         allow create: if true;
+         allow update: if request.resource.data.diff(resource.data).affectedKeys().hasAny(['lastAnswer', 'score', 'lastPoints', 'joinedAt', 'name']);
+         allow delete: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
       }
     }
 
-    // 9. Default restrictive fallback (Best Practice)
-    // Only allow access if explicitly defined above, or for admins
+    // 10. Default restrictive fallback (Best Practice)
+    // Only allow access if explicitly defined above
     match /{document=**} {
-      allow read, write: if request.auth != null; 
+      allow read, write: if false; 
     }
   }
 }

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, Zap, ChevronLeft, Target, Trophy, Clock, Star, ArrowRight, Volume2, VolumeX } from 'lucide-react';
 import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
+import { db } from '../firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { cn } from '../lib/utils';
 import confetti from 'canvas-confetti';
 import SEO from '../components/common/SEO';
@@ -26,18 +28,44 @@ export default function PublicQuiz() {
 
     const { speak, stop, isSpeaking, supported } = useSpeech();
 
-    const courseData = HINDI_QUIZ_DATA[courseId];
-    const topicData = courseData?.[topicId];
-    
-    // We assume all have 'Master Assessment' as the key for simplicity in public quizzes
-    // OR we use the topicId if it matches a module
-    const qList = courseData?.modules?.[topicId] || courseData?.modules?.["Master Assessment"] || [];
+    const [qList, setQList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        if (qList.length === 0) {
-            navigate('/quizzes');
-        }
-    }, [qList, navigate]);
+        const fetchQuiz = async () => {
+            setIsLoading(true);
+            try {
+                // First try to fetch from Firestore custom_quizzes
+                const q = query(
+                    collection(db, 'custom_quizzes'), 
+                    where('courseId', '==', courseId),
+                    where('topicId', '==', topicId)
+                );
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    // Found custom quiz
+                    const quizDoc = querySnapshot.docs[0].data();
+                    setQList(quizDoc.questions || []);
+                } else {
+                    // Fallback to static HINDI_QUIZ_DATA
+                    const courseData = HINDI_QUIZ_DATA[courseId];
+                    const staticQList = courseData?.modules?.[topicId] || courseData?.modules?.["Master Assessment"] || [];
+                    setQList(staticQList);
+                    if (staticQList.length === 0) {
+                        navigate('/quizzes');
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching quiz:", error);
+                navigate('/quizzes');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchQuiz();
+    }, [courseId, topicId, navigate]);
 
     // Timer logic
     useEffect(() => {
@@ -54,6 +82,14 @@ export default function PublicQuiz() {
         }, 1000);
         return () => clearInterval(timer);
     }, [quizState.qIndex, quizState.isAnswered, view]);
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        );
+    }
 
     if (qList.length === 0) return null;
 

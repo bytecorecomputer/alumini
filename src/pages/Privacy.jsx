@@ -42,7 +42,7 @@ export default function Privacy() {
                         </div>
                         <div>
                             <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-1">Questions?</p>
-                            <a href="mailto:coderafroj@gmail.com" className="text-blue-600 font-bold hover:underline">coderafroj@gmail.com</a>
+                            <a href="mailto:bytecore.info@gmail.com" className="text-blue-600 font-bold hover:underline">bytecore.info@gmail.com</a>
                         </div>
                     </div>
                 </div>

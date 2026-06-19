@@ -10,20 +10,47 @@ import toast from 'react-hot-toast';
 
 import HeroSection from '../components/home/HeroSection';
 import CourseCarousel from '../components/home/CourseCarousel';
+import { QUIZ_BANK } from '../lib/quizData';
+import { db } from '../firebase/firestore';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import LabGalleryPreview from '../components/home/LabGalleryPreview';
 
 export default function Home() {
-    const { user } = useAuth();
+    const { user, role } = useAuth();
     const [isMigrating, setIsMigrating] = useState(false);
     const [migrationDone, setMigrationDone] = useState(false);
     const navigate = useNavigate();
 
-    const isOwner = user?.email === 'coderafroj@gmail.com';
+    const isOwner = role === 'admin' || role === 'super_admin';
 
     const handleDataMigration = async () => {
         try {
             setIsMigrating(true);
-            const response = await fetch('/src/assets/student data.csv');
+            
+            // Seed Quizzes
+            for (const key of ['c_programming', 'python']) {
+                if (QUIZ_BANK[key]) {
+                    const quizData = QUIZ_BANK[key];
+                    const qRef = collection(db, 'custom_quizzes');
+                    const qSnap = await getDocs(query(qRef, where('courseId', '==', quizData.title)));
+                    if (qSnap.empty) {
+                        await addDoc(qRef, {
+                            courseId: quizData.title,
+                            topicId: quizData.description,
+                            questions: quizData.questions.map(q => ({
+                                question: q.q,
+                                options: q.options,
+                                correctAnswer: q.correct,
+                                explanation: q.explanation
+                            })),
+                            createdAt: new Date(),
+                            createdBy: 'System Seed'
+                        });
+                    }
+                }
+            }
+
+            const response = await fetch('/student data.csv');
             const csvText = await response.text();
             const count = await runMigration(csvText);
             setMigrationDone(true);

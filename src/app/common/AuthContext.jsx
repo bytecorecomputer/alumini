@@ -79,7 +79,7 @@ export function AuthProvider({ children }) {
             let data = snap.data();
 
             // SUPER ADMIN AUTO-PROMOTION SITE OWNER
-            if (u.email === "coderafroj@gmail.com" && data?.role !== "super_admin") {
+            if (u.email === "bytecore.info@gmail.com" && data?.role !== "super_admin") {
               await updateDoc(userRef, { role: "super_admin" });
               snap = await getDoc(userRef);
               data = snap.data();

@@ -20,7 +20,7 @@ import { syncFromGoogleSheet } from '../lib/syncGoogleSheet';
 import { limit, startAfter } from 'firebase/firestore';
 
 export default function CoachingAdmin() {
-    const { user } = useAuth();
+    const { user, role } = useAuth();
     const navigate = useNavigate();
     const [students, setStudents] = useState([]);
     const [courses, setCourses] = useState([]);
@@ -47,7 +47,7 @@ export default function CoachingAdmin() {
         fatherName: '', address: '', photoUrl: '', center: 'Nariyawal'
     });
 
-    const isOwner = user?.email === 'coderafroj@gmail.com';
+    const isOwner = role === 'admin' || role === 'super_admin';
 
     useEffect(() => {
         if (!isOwner) return;

@@ -40,7 +40,7 @@ export default function Register() {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(res.user, { displayName: name });
 
-      const finalRole = email === "coderafroj@gmail.com" ? "super_admin" : role;
+      const finalRole = email === "bytecore.info@gmail.com" ? "super_admin" : role;
 
       await setDoc(doc(db, "users", res.user.uid), {
         uid: res.user.uid,

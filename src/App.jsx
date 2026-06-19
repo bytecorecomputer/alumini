@@ -7,8 +7,10 @@ import AdminRoute from "./components/auth/AdminRoute";
 import InstallPWA from "./components/common/InstallPWA";
 import NotificationHandler from "./components/common/NotificationHandler";
 import { Toaster } from "react-hot-toast";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 
 // Lazy load pages for performance
+const NotFound = lazy(() => import("./pages/NotFound"));
 const Home = lazy(() => import("./pages/Home"));
 const Courses = lazy(() => import("./pages/Courses"));
 const CourseDetails = lazy(() => import("./pages/CourseDetails"));
@@ -64,9 +66,10 @@ export default function App() {
           <Toaster position="top-right" toastOptions={{ duration: 4000, style: { background: '#333', color: '#fff' } }} />
           <InstallPWA />
           <NotificationHandler />
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
+          <ErrorBoundary>
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/courses/:id" element={<CourseDetails />} />
               <Route path="/about" element={<About />} />
@@ -173,9 +176,12 @@ export default function App() {
               } />
               <Route path="/student/live-quiz" element={<StudentLiveQuiz />} />
               <Route path="/lab-gallery" element={<LabGallery />} />
-
+              
+              {/* 404 Not Found Route */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
+          </ErrorBoundary>
         </Layout>
       </BrowserRouter>
     </AuthProvider>

@@ -185,7 +185,7 @@ export default function Profile() {
 
                         <form onSubmit={handleSubmit} className="space-y-12">
                             {/* Super Admin Shield Fix */}
-                            {user?.email === "coderafroj@gmail.com" && role !== 'super_admin' && (
+                            {user?.role === "admin" && role !== 'super_admin' && (
                                 <motion.div
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
