@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment, Float, Sparkles, MeshDistortMaterial } from '@react-three/drei';
+import { OrbitControls, Environment, Float, Sparkles } from '@react-three/drei';
 
 function TrophyModel() {
     const groupRef = useRef();
@@ -39,7 +39,7 @@ function TrophyModel() {
             {/* The magic energy ball inside */}
             <mesh position={[0, 1.6, 0]}>
                 <sphereGeometry args={[0.4, 32, 32]} />
-                <MeshDistortMaterial color="#60a5fa" envMapIntensity={1} clearcoat={1} clearcoatRoughness={0} metalness={0.1} distort={0.4} speed={4} />
+                <meshStandardMaterial color="#60a5fa" metalness={0.1} roughness={0.1} transparent opacity={0.8} />
             </mesh>
         </group>
     );

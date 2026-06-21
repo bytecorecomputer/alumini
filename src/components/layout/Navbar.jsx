@@ -233,7 +233,7 @@ export default function Navbar() {
                                 <div className="space-y-1 pt-6 border-t border-slate-100">
                                     <p className="text-[10px] font-black text-purple-600 uppercase tracking-[0.2em] mb-4 ml-2">Academics & Support</p>
                                     <MobileNavLink to="/certificate" onClick={() => setIsOpen(false)}>Student Certificates</MobileNavLink>
-                                    <MobileNavLink to="/fee-check" onClick={() => setIsOpen(false)}>Course Fee Verification</MobileNavLink>
+                                    <MobileNavLink to="/donate" onClick={() => setIsOpen(false)}>Donate / Support</MobileNavLink>
                                     <MobileNavLink to="/contact" onClick={() => setIsOpen(false)}>Connect With Us</MobileNavLink>
                                 </div>
 

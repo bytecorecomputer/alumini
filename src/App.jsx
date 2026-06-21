@@ -79,7 +79,7 @@ export default function App() {
               <Route path="/quizzes" element={<QuizHub />} />
               <Route path="/notes" element={<NotesHub />} />
               <Route path="/quiz/:courseId/:topicId" element={<PublicQuiz />} />
-              <Route path="/fee-check" element={<Donate />} />
+              <Route path="/donate" element={<Donate />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
 

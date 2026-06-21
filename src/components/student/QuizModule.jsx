@@ -13,6 +13,8 @@ import { selectActiveCourseModules, selectActiveStudentCourse } from '../../app/
 import toast from 'react-hot-toast';
 import ProgressCharts from './ProgressCharts';
 import LottiePlayer from '../common/LottiePlayer';
+import { db } from '../../firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 // Icon Map for dynamic rendering
 const ICONS = {
@@ -47,16 +49,49 @@ export default function QuizModule({ student }) {
     const [saving, setSaving] = useState(false);
     const [isDownloading, setIsDownloading] = useState(false);
 
-    // 1. Build courseData dynamically from activeModules
+    // Fetch custom quizzes from Firestore
+    const [customQuizzes, setCustomQuizzes] = useState([]);
+
+    useEffect(() => {
+        const unsub = onSnapshot(collection(db, 'custom_quizzes'), (snap) => {
+            const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            setCustomQuizzes(list);
+        });
+        return () => unsub();
+    }, []);
+
+    // 1. Build courseData dynamically from activeModules and customQuizzes
     const courseData = React.useMemo(() => {
-        const data = {};
+        // Deep clone base data to safely inject custom quizzes
+        const mergedBaseData = JSON.parse(JSON.stringify(HINDI_QUIZ_DATA));
+        
+        customQuizzes.forEach(quiz => {
+            const cId = (quiz.courseId || "").toLowerCase().trim();
+            const tId = (quiz.topicId || "").trim();
+            
+            if (!mergedBaseData[cId]) {
+                mergedBaseData[cId] = {
+                    title: quiz.courseId,
+                    description: "Custom Practice Modules",
+                    icon: "brain",
+                    color: "indigo",
+                    modules: {}
+                };
+            }
+            if (!mergedBaseData[cId].modules) mergedBaseData[cId].modules = {};
+            // Merge custom quiz questions
+            mergedBaseData[cId].modules[tId] = quiz.questions;
+        });
+
+        const activeData = {};
         if (activeModules && activeModules.length > 0) {
             activeModules.forEach(mod => {
-                if (HINDI_QUIZ_DATA[mod.id]) {
-                    data[mod.id] = HINDI_QUIZ_DATA[mod.id];
+                const modId = mod.id.toLowerCase();
+                if (mergedBaseData[modId]) {
+                    activeData[mod.id] = mergedBaseData[modId];
                 } else {
                     // Inject a placeholder so the UI looks complete even if no questions exist yet
-                    data[mod.id] = {
+                    activeData[mod.id] = {
                         title: mod.title,
                         description: mod.description,
                         icon: mod.icon || "default",
@@ -66,8 +101,8 @@ export default function QuizModule({ student }) {
                 }
             });
         }
-        return data;
-    }, [activeModules]);
+        return activeData;
+    }, [activeModules, customQuizzes]);
 
     const downloadCertificate = async () => {
         setIsDownloading(true);
