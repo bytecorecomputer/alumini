@@ -20,7 +20,7 @@ export default function QuizHub() {
 
     // Extract all available topics across major courses
     const allTopics = [];
-    const targetCourses = ['ADCA', 'Python', 'React', 'Tally', 'O Level']; // Prioritize these if they exist, else take first 5
+    const targetCourses = ['C Programming Foundation', 'ADCA', 'Python', 'React', 'Tally', 'O Level']; // Prioritize these if they exist, else take first 5
     
     Object.keys(HINDI_QUIZ_DATA).forEach(courseId => {
         if(targetCourses.includes(courseId) || allTopics.length < 10) {

@@ -37,9 +37,9 @@ export default function Directory() {
     };
 
     const filteredUsers = users.filter(user => {
-        const matchesSearch = user.displayName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.course?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = (user.displayName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (user.company || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (user.course || "").toLowerCase().includes(searchTerm.toLowerCase());
         const matchesRole = filterRole === 'all' || user.role === filterRole;
         return matchesSearch && matchesRole;
     });

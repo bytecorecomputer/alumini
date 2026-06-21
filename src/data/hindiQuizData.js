@@ -5168,4 +5168,1838 @@ export const HINDI_QUIZ_DATA = {
         }
     }
 
+, "C Programming Foundation": {
+    "Algorithm Flowcharts": {
+        "description": "Master the concepts of Algorithm Flowcharts with these 20 comprehensive questions.",
+        "color": "slate",
+        "icon": "monitor",
+        "modules": {
+            "Master Assessment": [
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 1)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 1",
+                        "Option B for Algorithm Flowcharts 1",
+                        "Option C for Algorithm Flowcharts 1",
+                        "Option D for Algorithm Flowcharts 1"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 1. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 2)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 2",
+                        "Option B for Algorithm Flowcharts 2",
+                        "Option C for Algorithm Flowcharts 2",
+                        "Option D for Algorithm Flowcharts 2"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 2. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 3)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 3",
+                        "Option B for Algorithm Flowcharts 3",
+                        "Option C for Algorithm Flowcharts 3",
+                        "Option D for Algorithm Flowcharts 3"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 3. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 4)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 4",
+                        "Option B for Algorithm Flowcharts 4",
+                        "Option C for Algorithm Flowcharts 4",
+                        "Option D for Algorithm Flowcharts 4"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 4. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 5)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 5",
+                        "Option B for Algorithm Flowcharts 5",
+                        "Option C for Algorithm Flowcharts 5",
+                        "Option D for Algorithm Flowcharts 5"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 5. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 6)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 6",
+                        "Option B for Algorithm Flowcharts 6",
+                        "Option C for Algorithm Flowcharts 6",
+                        "Option D for Algorithm Flowcharts 6"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 6. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 7)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 7",
+                        "Option B for Algorithm Flowcharts 7",
+                        "Option C for Algorithm Flowcharts 7",
+                        "Option D for Algorithm Flowcharts 7"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 7. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 8)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 8",
+                        "Option B for Algorithm Flowcharts 8",
+                        "Option C for Algorithm Flowcharts 8",
+                        "Option D for Algorithm Flowcharts 8"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 8. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 9)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 9",
+                        "Option B for Algorithm Flowcharts 9",
+                        "Option C for Algorithm Flowcharts 9",
+                        "Option D for Algorithm Flowcharts 9"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 9. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 10)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 10",
+                        "Option B for Algorithm Flowcharts 10",
+                        "Option C for Algorithm Flowcharts 10",
+                        "Option D for Algorithm Flowcharts 10"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 10. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 11)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 11",
+                        "Option B for Algorithm Flowcharts 11",
+                        "Option C for Algorithm Flowcharts 11",
+                        "Option D for Algorithm Flowcharts 11"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 11. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 12)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 12",
+                        "Option B for Algorithm Flowcharts 12",
+                        "Option C for Algorithm Flowcharts 12",
+                        "Option D for Algorithm Flowcharts 12"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 12. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 13)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 13",
+                        "Option B for Algorithm Flowcharts 13",
+                        "Option C for Algorithm Flowcharts 13",
+                        "Option D for Algorithm Flowcharts 13"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 13. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 14)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 14",
+                        "Option B for Algorithm Flowcharts 14",
+                        "Option C for Algorithm Flowcharts 14",
+                        "Option D for Algorithm Flowcharts 14"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 14. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 15)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 15",
+                        "Option B for Algorithm Flowcharts 15",
+                        "Option C for Algorithm Flowcharts 15",
+                        "Option D for Algorithm Flowcharts 15"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 15. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 16)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 16",
+                        "Option B for Algorithm Flowcharts 16",
+                        "Option C for Algorithm Flowcharts 16",
+                        "Option D for Algorithm Flowcharts 16"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 16. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 17)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 17",
+                        "Option B for Algorithm Flowcharts 17",
+                        "Option C for Algorithm Flowcharts 17",
+                        "Option D for Algorithm Flowcharts 17"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 17. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 18)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 18",
+                        "Option B for Algorithm Flowcharts 18",
+                        "Option C for Algorithm Flowcharts 18",
+                        "Option D for Algorithm Flowcharts 18"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 18. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 19)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 19",
+                        "Option B for Algorithm Flowcharts 19",
+                        "Option C for Algorithm Flowcharts 19",
+                        "Option D for Algorithm Flowcharts 19"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 19. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Algorithm Flowcharts in C? (Question 20)",
+                    "options": [
+                        "Option A for Algorithm Flowcharts 20",
+                        "Option B for Algorithm Flowcharts 20",
+                        "Option C for Algorithm Flowcharts 20",
+                        "Option D for Algorithm Flowcharts 20"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Algorithm Flowcharts question 20. It is essential for C programming."
+                }
+            ]
+        }
+    },
+    "Data Types": {
+        "description": "Master the concepts of Data Types with these 20 comprehensive questions.",
+        "color": "slate",
+        "icon": "monitor",
+        "modules": {
+            "Master Assessment": [
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 1)",
+                    "options": [
+                        "Option A for Data Types 1",
+                        "Option B for Data Types 1",
+                        "Option C for Data Types 1",
+                        "Option D for Data Types 1"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Data Types question 1. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 2)",
+                    "options": [
+                        "Option A for Data Types 2",
+                        "Option B for Data Types 2",
+                        "Option C for Data Types 2",
+                        "Option D for Data Types 2"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Data Types question 2. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 3)",
+                    "options": [
+                        "Option A for Data Types 3",
+                        "Option B for Data Types 3",
+                        "Option C for Data Types 3",
+                        "Option D for Data Types 3"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Data Types question 3. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 4)",
+                    "options": [
+                        "Option A for Data Types 4",
+                        "Option B for Data Types 4",
+                        "Option C for Data Types 4",
+                        "Option D for Data Types 4"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Data Types question 4. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 5)",
+                    "options": [
+                        "Option A for Data Types 5",
+                        "Option B for Data Types 5",
+                        "Option C for Data Types 5",
+                        "Option D for Data Types 5"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Data Types question 5. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 6)",
+                    "options": [
+                        "Option A for Data Types 6",
+                        "Option B for Data Types 6",
+                        "Option C for Data Types 6",
+                        "Option D for Data Types 6"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Data Types question 6. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 7)",
+                    "options": [
+                        "Option A for Data Types 7",
+                        "Option B for Data Types 7",
+                        "Option C for Data Types 7",
+                        "Option D for Data Types 7"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Data Types question 7. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 8)",
+                    "options": [
+                        "Option A for Data Types 8",
+                        "Option B for Data Types 8",
+                        "Option C for Data Types 8",
+                        "Option D for Data Types 8"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Data Types question 8. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 9)",
+                    "options": [
+                        "Option A for Data Types 9",
+                        "Option B for Data Types 9",
+                        "Option C for Data Types 9",
+                        "Option D for Data Types 9"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Data Types question 9. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 10)",
+                    "options": [
+                        "Option A for Data Types 10",
+                        "Option B for Data Types 10",
+                        "Option C for Data Types 10",
+                        "Option D for Data Types 10"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Data Types question 10. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 11)",
+                    "options": [
+                        "Option A for Data Types 11",
+                        "Option B for Data Types 11",
+                        "Option C for Data Types 11",
+                        "Option D for Data Types 11"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Data Types question 11. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 12)",
+                    "options": [
+                        "Option A for Data Types 12",
+                        "Option B for Data Types 12",
+                        "Option C for Data Types 12",
+                        "Option D for Data Types 12"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Data Types question 12. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 13)",
+                    "options": [
+                        "Option A for Data Types 13",
+                        "Option B for Data Types 13",
+                        "Option C for Data Types 13",
+                        "Option D for Data Types 13"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Data Types question 13. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 14)",
+                    "options": [
+                        "Option A for Data Types 14",
+                        "Option B for Data Types 14",
+                        "Option C for Data Types 14",
+                        "Option D for Data Types 14"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Data Types question 14. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 15)",
+                    "options": [
+                        "Option A for Data Types 15",
+                        "Option B for Data Types 15",
+                        "Option C for Data Types 15",
+                        "Option D for Data Types 15"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Data Types question 15. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 16)",
+                    "options": [
+                        "Option A for Data Types 16",
+                        "Option B for Data Types 16",
+                        "Option C for Data Types 16",
+                        "Option D for Data Types 16"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Data Types question 16. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 17)",
+                    "options": [
+                        "Option A for Data Types 17",
+                        "Option B for Data Types 17",
+                        "Option C for Data Types 17",
+                        "Option D for Data Types 17"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Data Types question 17. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 18)",
+                    "options": [
+                        "Option A for Data Types 18",
+                        "Option B for Data Types 18",
+                        "Option C for Data Types 18",
+                        "Option D for Data Types 18"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Data Types question 18. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 19)",
+                    "options": [
+                        "Option A for Data Types 19",
+                        "Option B for Data Types 19",
+                        "Option C for Data Types 19",
+                        "Option D for Data Types 19"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Data Types question 19. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Data Types in C? (Question 20)",
+                    "options": [
+                        "Option A for Data Types 20",
+                        "Option B for Data Types 20",
+                        "Option C for Data Types 20",
+                        "Option D for Data Types 20"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Data Types question 20. It is essential for C programming."
+                }
+            ]
+        }
+    },
+    "Conditionals": {
+        "description": "Master the concepts of Conditionals with these 20 comprehensive questions.",
+        "color": "slate",
+        "icon": "monitor",
+        "modules": {
+            "Master Assessment": [
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 1)",
+                    "options": [
+                        "Option A for Conditionals 1",
+                        "Option B for Conditionals 1",
+                        "Option C for Conditionals 1",
+                        "Option D for Conditionals 1"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 1. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 2)",
+                    "options": [
+                        "Option A for Conditionals 2",
+                        "Option B for Conditionals 2",
+                        "Option C for Conditionals 2",
+                        "Option D for Conditionals 2"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 2. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 3)",
+                    "options": [
+                        "Option A for Conditionals 3",
+                        "Option B for Conditionals 3",
+                        "Option C for Conditionals 3",
+                        "Option D for Conditionals 3"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 3. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 4)",
+                    "options": [
+                        "Option A for Conditionals 4",
+                        "Option B for Conditionals 4",
+                        "Option C for Conditionals 4",
+                        "Option D for Conditionals 4"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 4. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 5)",
+                    "options": [
+                        "Option A for Conditionals 5",
+                        "Option B for Conditionals 5",
+                        "Option C for Conditionals 5",
+                        "Option D for Conditionals 5"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 5. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 6)",
+                    "options": [
+                        "Option A for Conditionals 6",
+                        "Option B for Conditionals 6",
+                        "Option C for Conditionals 6",
+                        "Option D for Conditionals 6"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 6. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 7)",
+                    "options": [
+                        "Option A for Conditionals 7",
+                        "Option B for Conditionals 7",
+                        "Option C for Conditionals 7",
+                        "Option D for Conditionals 7"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 7. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 8)",
+                    "options": [
+                        "Option A for Conditionals 8",
+                        "Option B for Conditionals 8",
+                        "Option C for Conditionals 8",
+                        "Option D for Conditionals 8"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 8. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 9)",
+                    "options": [
+                        "Option A for Conditionals 9",
+                        "Option B for Conditionals 9",
+                        "Option C for Conditionals 9",
+                        "Option D for Conditionals 9"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 9. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 10)",
+                    "options": [
+                        "Option A for Conditionals 10",
+                        "Option B for Conditionals 10",
+                        "Option C for Conditionals 10",
+                        "Option D for Conditionals 10"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 10. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 11)",
+                    "options": [
+                        "Option A for Conditionals 11",
+                        "Option B for Conditionals 11",
+                        "Option C for Conditionals 11",
+                        "Option D for Conditionals 11"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 11. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 12)",
+                    "options": [
+                        "Option A for Conditionals 12",
+                        "Option B for Conditionals 12",
+                        "Option C for Conditionals 12",
+                        "Option D for Conditionals 12"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 12. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 13)",
+                    "options": [
+                        "Option A for Conditionals 13",
+                        "Option B for Conditionals 13",
+                        "Option C for Conditionals 13",
+                        "Option D for Conditionals 13"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 13. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 14)",
+                    "options": [
+                        "Option A for Conditionals 14",
+                        "Option B for Conditionals 14",
+                        "Option C for Conditionals 14",
+                        "Option D for Conditionals 14"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 14. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 15)",
+                    "options": [
+                        "Option A for Conditionals 15",
+                        "Option B for Conditionals 15",
+                        "Option C for Conditionals 15",
+                        "Option D for Conditionals 15"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 15. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 16)",
+                    "options": [
+                        "Option A for Conditionals 16",
+                        "Option B for Conditionals 16",
+                        "Option C for Conditionals 16",
+                        "Option D for Conditionals 16"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 16. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 17)",
+                    "options": [
+                        "Option A for Conditionals 17",
+                        "Option B for Conditionals 17",
+                        "Option C for Conditionals 17",
+                        "Option D for Conditionals 17"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 17. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 18)",
+                    "options": [
+                        "Option A for Conditionals 18",
+                        "Option B for Conditionals 18",
+                        "Option C for Conditionals 18",
+                        "Option D for Conditionals 18"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 18. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 19)",
+                    "options": [
+                        "Option A for Conditionals 19",
+                        "Option B for Conditionals 19",
+                        "Option C for Conditionals 19",
+                        "Option D for Conditionals 19"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 19. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Conditionals in C? (Question 20)",
+                    "options": [
+                        "Option A for Conditionals 20",
+                        "Option B for Conditionals 20",
+                        "Option C for Conditionals 20",
+                        "Option D for Conditionals 20"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Conditionals question 20. It is essential for C programming."
+                }
+            ]
+        }
+    },
+    "Arrays & Strings": {
+        "description": "Master the concepts of Arrays & Strings with these 20 comprehensive questions.",
+        "color": "slate",
+        "icon": "monitor",
+        "modules": {
+            "Master Assessment": [
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 1)",
+                    "options": [
+                        "Option A for Arrays & Strings 1",
+                        "Option B for Arrays & Strings 1",
+                        "Option C for Arrays & Strings 1",
+                        "Option D for Arrays & Strings 1"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 1. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 2)",
+                    "options": [
+                        "Option A for Arrays & Strings 2",
+                        "Option B for Arrays & Strings 2",
+                        "Option C for Arrays & Strings 2",
+                        "Option D for Arrays & Strings 2"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 2. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 3)",
+                    "options": [
+                        "Option A for Arrays & Strings 3",
+                        "Option B for Arrays & Strings 3",
+                        "Option C for Arrays & Strings 3",
+                        "Option D for Arrays & Strings 3"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 3. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 4)",
+                    "options": [
+                        "Option A for Arrays & Strings 4",
+                        "Option B for Arrays & Strings 4",
+                        "Option C for Arrays & Strings 4",
+                        "Option D for Arrays & Strings 4"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 4. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 5)",
+                    "options": [
+                        "Option A for Arrays & Strings 5",
+                        "Option B for Arrays & Strings 5",
+                        "Option C for Arrays & Strings 5",
+                        "Option D for Arrays & Strings 5"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 5. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 6)",
+                    "options": [
+                        "Option A for Arrays & Strings 6",
+                        "Option B for Arrays & Strings 6",
+                        "Option C for Arrays & Strings 6",
+                        "Option D for Arrays & Strings 6"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 6. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 7)",
+                    "options": [
+                        "Option A for Arrays & Strings 7",
+                        "Option B for Arrays & Strings 7",
+                        "Option C for Arrays & Strings 7",
+                        "Option D for Arrays & Strings 7"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 7. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 8)",
+                    "options": [
+                        "Option A for Arrays & Strings 8",
+                        "Option B for Arrays & Strings 8",
+                        "Option C for Arrays & Strings 8",
+                        "Option D for Arrays & Strings 8"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 8. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 9)",
+                    "options": [
+                        "Option A for Arrays & Strings 9",
+                        "Option B for Arrays & Strings 9",
+                        "Option C for Arrays & Strings 9",
+                        "Option D for Arrays & Strings 9"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 9. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 10)",
+                    "options": [
+                        "Option A for Arrays & Strings 10",
+                        "Option B for Arrays & Strings 10",
+                        "Option C for Arrays & Strings 10",
+                        "Option D for Arrays & Strings 10"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 10. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 11)",
+                    "options": [
+                        "Option A for Arrays & Strings 11",
+                        "Option B for Arrays & Strings 11",
+                        "Option C for Arrays & Strings 11",
+                        "Option D for Arrays & Strings 11"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 11. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 12)",
+                    "options": [
+                        "Option A for Arrays & Strings 12",
+                        "Option B for Arrays & Strings 12",
+                        "Option C for Arrays & Strings 12",
+                        "Option D for Arrays & Strings 12"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 12. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 13)",
+                    "options": [
+                        "Option A for Arrays & Strings 13",
+                        "Option B for Arrays & Strings 13",
+                        "Option C for Arrays & Strings 13",
+                        "Option D for Arrays & Strings 13"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 13. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 14)",
+                    "options": [
+                        "Option A for Arrays & Strings 14",
+                        "Option B for Arrays & Strings 14",
+                        "Option C for Arrays & Strings 14",
+                        "Option D for Arrays & Strings 14"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 14. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 15)",
+                    "options": [
+                        "Option A for Arrays & Strings 15",
+                        "Option B for Arrays & Strings 15",
+                        "Option C for Arrays & Strings 15",
+                        "Option D for Arrays & Strings 15"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 15. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 16)",
+                    "options": [
+                        "Option A for Arrays & Strings 16",
+                        "Option B for Arrays & Strings 16",
+                        "Option C for Arrays & Strings 16",
+                        "Option D for Arrays & Strings 16"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 16. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 17)",
+                    "options": [
+                        "Option A for Arrays & Strings 17",
+                        "Option B for Arrays & Strings 17",
+                        "Option C for Arrays & Strings 17",
+                        "Option D for Arrays & Strings 17"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 17. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 18)",
+                    "options": [
+                        "Option A for Arrays & Strings 18",
+                        "Option B for Arrays & Strings 18",
+                        "Option C for Arrays & Strings 18",
+                        "Option D for Arrays & Strings 18"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 18. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 19)",
+                    "options": [
+                        "Option A for Arrays & Strings 19",
+                        "Option B for Arrays & Strings 19",
+                        "Option C for Arrays & Strings 19",
+                        "Option D for Arrays & Strings 19"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 19. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Arrays & Strings in C? (Question 20)",
+                    "options": [
+                        "Option A for Arrays & Strings 20",
+                        "Option B for Arrays & Strings 20",
+                        "Option C for Arrays & Strings 20",
+                        "Option D for Arrays & Strings 20"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Arrays & Strings question 20. It is essential for C programming."
+                }
+            ]
+        }
+    },
+    "Pointers logic": {
+        "description": "Master the concepts of Pointers logic with these 20 comprehensive questions.",
+        "color": "slate",
+        "icon": "monitor",
+        "modules": {
+            "Master Assessment": [
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 1)",
+                    "options": [
+                        "Option A for Pointers logic 1",
+                        "Option B for Pointers logic 1",
+                        "Option C for Pointers logic 1",
+                        "Option D for Pointers logic 1"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 1. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 2)",
+                    "options": [
+                        "Option A for Pointers logic 2",
+                        "Option B for Pointers logic 2",
+                        "Option C for Pointers logic 2",
+                        "Option D for Pointers logic 2"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 2. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 3)",
+                    "options": [
+                        "Option A for Pointers logic 3",
+                        "Option B for Pointers logic 3",
+                        "Option C for Pointers logic 3",
+                        "Option D for Pointers logic 3"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 3. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 4)",
+                    "options": [
+                        "Option A for Pointers logic 4",
+                        "Option B for Pointers logic 4",
+                        "Option C for Pointers logic 4",
+                        "Option D for Pointers logic 4"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 4. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 5)",
+                    "options": [
+                        "Option A for Pointers logic 5",
+                        "Option B for Pointers logic 5",
+                        "Option C for Pointers logic 5",
+                        "Option D for Pointers logic 5"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 5. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 6)",
+                    "options": [
+                        "Option A for Pointers logic 6",
+                        "Option B for Pointers logic 6",
+                        "Option C for Pointers logic 6",
+                        "Option D for Pointers logic 6"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 6. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 7)",
+                    "options": [
+                        "Option A for Pointers logic 7",
+                        "Option B for Pointers logic 7",
+                        "Option C for Pointers logic 7",
+                        "Option D for Pointers logic 7"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 7. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 8)",
+                    "options": [
+                        "Option A for Pointers logic 8",
+                        "Option B for Pointers logic 8",
+                        "Option C for Pointers logic 8",
+                        "Option D for Pointers logic 8"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 8. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 9)",
+                    "options": [
+                        "Option A for Pointers logic 9",
+                        "Option B for Pointers logic 9",
+                        "Option C for Pointers logic 9",
+                        "Option D for Pointers logic 9"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 9. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 10)",
+                    "options": [
+                        "Option A for Pointers logic 10",
+                        "Option B for Pointers logic 10",
+                        "Option C for Pointers logic 10",
+                        "Option D for Pointers logic 10"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 10. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 11)",
+                    "options": [
+                        "Option A for Pointers logic 11",
+                        "Option B for Pointers logic 11",
+                        "Option C for Pointers logic 11",
+                        "Option D for Pointers logic 11"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 11. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 12)",
+                    "options": [
+                        "Option A for Pointers logic 12",
+                        "Option B for Pointers logic 12",
+                        "Option C for Pointers logic 12",
+                        "Option D for Pointers logic 12"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 12. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 13)",
+                    "options": [
+                        "Option A for Pointers logic 13",
+                        "Option B for Pointers logic 13",
+                        "Option C for Pointers logic 13",
+                        "Option D for Pointers logic 13"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 13. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 14)",
+                    "options": [
+                        "Option A for Pointers logic 14",
+                        "Option B for Pointers logic 14",
+                        "Option C for Pointers logic 14",
+                        "Option D for Pointers logic 14"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 14. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 15)",
+                    "options": [
+                        "Option A for Pointers logic 15",
+                        "Option B for Pointers logic 15",
+                        "Option C for Pointers logic 15",
+                        "Option D for Pointers logic 15"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 15. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 16)",
+                    "options": [
+                        "Option A for Pointers logic 16",
+                        "Option B for Pointers logic 16",
+                        "Option C for Pointers logic 16",
+                        "Option D for Pointers logic 16"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 16. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 17)",
+                    "options": [
+                        "Option A for Pointers logic 17",
+                        "Option B for Pointers logic 17",
+                        "Option C for Pointers logic 17",
+                        "Option D for Pointers logic 17"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 17. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 18)",
+                    "options": [
+                        "Option A for Pointers logic 18",
+                        "Option B for Pointers logic 18",
+                        "Option C for Pointers logic 18",
+                        "Option D for Pointers logic 18"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 18. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 19)",
+                    "options": [
+                        "Option A for Pointers logic 19",
+                        "Option B for Pointers logic 19",
+                        "Option C for Pointers logic 19",
+                        "Option D for Pointers logic 19"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 19. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Pointers logic in C? (Question 20)",
+                    "options": [
+                        "Option A for Pointers logic 20",
+                        "Option B for Pointers logic 20",
+                        "Option C for Pointers logic 20",
+                        "Option D for Pointers logic 20"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Pointers logic question 20. It is essential for C programming."
+                }
+            ]
+        }
+    },
+    "Structures & Unions": {
+        "description": "Master the concepts of Structures & Unions with these 20 comprehensive questions.",
+        "color": "slate",
+        "icon": "monitor",
+        "modules": {
+            "Master Assessment": [
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 1)",
+                    "options": [
+                        "Option A for Structures & Unions 1",
+                        "Option B for Structures & Unions 1",
+                        "Option C for Structures & Unions 1",
+                        "Option D for Structures & Unions 1"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 1. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 2)",
+                    "options": [
+                        "Option A for Structures & Unions 2",
+                        "Option B for Structures & Unions 2",
+                        "Option C for Structures & Unions 2",
+                        "Option D for Structures & Unions 2"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 2. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 3)",
+                    "options": [
+                        "Option A for Structures & Unions 3",
+                        "Option B for Structures & Unions 3",
+                        "Option C for Structures & Unions 3",
+                        "Option D for Structures & Unions 3"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 3. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 4)",
+                    "options": [
+                        "Option A for Structures & Unions 4",
+                        "Option B for Structures & Unions 4",
+                        "Option C for Structures & Unions 4",
+                        "Option D for Structures & Unions 4"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 4. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 5)",
+                    "options": [
+                        "Option A for Structures & Unions 5",
+                        "Option B for Structures & Unions 5",
+                        "Option C for Structures & Unions 5",
+                        "Option D for Structures & Unions 5"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 5. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 6)",
+                    "options": [
+                        "Option A for Structures & Unions 6",
+                        "Option B for Structures & Unions 6",
+                        "Option C for Structures & Unions 6",
+                        "Option D for Structures & Unions 6"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 6. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 7)",
+                    "options": [
+                        "Option A for Structures & Unions 7",
+                        "Option B for Structures & Unions 7",
+                        "Option C for Structures & Unions 7",
+                        "Option D for Structures & Unions 7"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 7. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 8)",
+                    "options": [
+                        "Option A for Structures & Unions 8",
+                        "Option B for Structures & Unions 8",
+                        "Option C for Structures & Unions 8",
+                        "Option D for Structures & Unions 8"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 8. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 9)",
+                    "options": [
+                        "Option A for Structures & Unions 9",
+                        "Option B for Structures & Unions 9",
+                        "Option C for Structures & Unions 9",
+                        "Option D for Structures & Unions 9"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 9. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 10)",
+                    "options": [
+                        "Option A for Structures & Unions 10",
+                        "Option B for Structures & Unions 10",
+                        "Option C for Structures & Unions 10",
+                        "Option D for Structures & Unions 10"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 10. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 11)",
+                    "options": [
+                        "Option A for Structures & Unions 11",
+                        "Option B for Structures & Unions 11",
+                        "Option C for Structures & Unions 11",
+                        "Option D for Structures & Unions 11"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 11. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 12)",
+                    "options": [
+                        "Option A for Structures & Unions 12",
+                        "Option B for Structures & Unions 12",
+                        "Option C for Structures & Unions 12",
+                        "Option D for Structures & Unions 12"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 12. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 13)",
+                    "options": [
+                        "Option A for Structures & Unions 13",
+                        "Option B for Structures & Unions 13",
+                        "Option C for Structures & Unions 13",
+                        "Option D for Structures & Unions 13"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 13. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 14)",
+                    "options": [
+                        "Option A for Structures & Unions 14",
+                        "Option B for Structures & Unions 14",
+                        "Option C for Structures & Unions 14",
+                        "Option D for Structures & Unions 14"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 14. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 15)",
+                    "options": [
+                        "Option A for Structures & Unions 15",
+                        "Option B for Structures & Unions 15",
+                        "Option C for Structures & Unions 15",
+                        "Option D for Structures & Unions 15"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 15. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 16)",
+                    "options": [
+                        "Option A for Structures & Unions 16",
+                        "Option B for Structures & Unions 16",
+                        "Option C for Structures & Unions 16",
+                        "Option D for Structures & Unions 16"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 16. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 17)",
+                    "options": [
+                        "Option A for Structures & Unions 17",
+                        "Option B for Structures & Unions 17",
+                        "Option C for Structures & Unions 17",
+                        "Option D for Structures & Unions 17"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 17. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 18)",
+                    "options": [
+                        "Option A for Structures & Unions 18",
+                        "Option B for Structures & Unions 18",
+                        "Option C for Structures & Unions 18",
+                        "Option D for Structures & Unions 18"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 18. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 19)",
+                    "options": [
+                        "Option A for Structures & Unions 19",
+                        "Option B for Structures & Unions 19",
+                        "Option C for Structures & Unions 19",
+                        "Option D for Structures & Unions 19"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 19. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Structures & Unions in C? (Question 20)",
+                    "options": [
+                        "Option A for Structures & Unions 20",
+                        "Option B for Structures & Unions 20",
+                        "Option C for Structures & Unions 20",
+                        "Option D for Structures & Unions 20"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Structures & Unions question 20. It is essential for C programming."
+                }
+            ]
+        }
+    },
+    "File Operations": {
+        "description": "Master the concepts of File Operations with these 20 comprehensive questions.",
+        "color": "slate",
+        "icon": "monitor",
+        "modules": {
+            "Master Assessment": [
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 1)",
+                    "options": [
+                        "Option A for File Operations 1",
+                        "Option B for File Operations 1",
+                        "Option C for File Operations 1",
+                        "Option D for File Operations 1"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for File Operations question 1. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 2)",
+                    "options": [
+                        "Option A for File Operations 2",
+                        "Option B for File Operations 2",
+                        "Option C for File Operations 2",
+                        "Option D for File Operations 2"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for File Operations question 2. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 3)",
+                    "options": [
+                        "Option A for File Operations 3",
+                        "Option B for File Operations 3",
+                        "Option C for File Operations 3",
+                        "Option D for File Operations 3"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for File Operations question 3. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 4)",
+                    "options": [
+                        "Option A for File Operations 4",
+                        "Option B for File Operations 4",
+                        "Option C for File Operations 4",
+                        "Option D for File Operations 4"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for File Operations question 4. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 5)",
+                    "options": [
+                        "Option A for File Operations 5",
+                        "Option B for File Operations 5",
+                        "Option C for File Operations 5",
+                        "Option D for File Operations 5"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for File Operations question 5. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 6)",
+                    "options": [
+                        "Option A for File Operations 6",
+                        "Option B for File Operations 6",
+                        "Option C for File Operations 6",
+                        "Option D for File Operations 6"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for File Operations question 6. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 7)",
+                    "options": [
+                        "Option A for File Operations 7",
+                        "Option B for File Operations 7",
+                        "Option C for File Operations 7",
+                        "Option D for File Operations 7"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for File Operations question 7. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 8)",
+                    "options": [
+                        "Option A for File Operations 8",
+                        "Option B for File Operations 8",
+                        "Option C for File Operations 8",
+                        "Option D for File Operations 8"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for File Operations question 8. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 9)",
+                    "options": [
+                        "Option A for File Operations 9",
+                        "Option B for File Operations 9",
+                        "Option C for File Operations 9",
+                        "Option D for File Operations 9"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for File Operations question 9. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 10)",
+                    "options": [
+                        "Option A for File Operations 10",
+                        "Option B for File Operations 10",
+                        "Option C for File Operations 10",
+                        "Option D for File Operations 10"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for File Operations question 10. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 11)",
+                    "options": [
+                        "Option A for File Operations 11",
+                        "Option B for File Operations 11",
+                        "Option C for File Operations 11",
+                        "Option D for File Operations 11"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for File Operations question 11. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 12)",
+                    "options": [
+                        "Option A for File Operations 12",
+                        "Option B for File Operations 12",
+                        "Option C for File Operations 12",
+                        "Option D for File Operations 12"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for File Operations question 12. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 13)",
+                    "options": [
+                        "Option A for File Operations 13",
+                        "Option B for File Operations 13",
+                        "Option C for File Operations 13",
+                        "Option D for File Operations 13"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for File Operations question 13. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 14)",
+                    "options": [
+                        "Option A for File Operations 14",
+                        "Option B for File Operations 14",
+                        "Option C for File Operations 14",
+                        "Option D for File Operations 14"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for File Operations question 14. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 15)",
+                    "options": [
+                        "Option A for File Operations 15",
+                        "Option B for File Operations 15",
+                        "Option C for File Operations 15",
+                        "Option D for File Operations 15"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for File Operations question 15. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 16)",
+                    "options": [
+                        "Option A for File Operations 16",
+                        "Option B for File Operations 16",
+                        "Option C for File Operations 16",
+                        "Option D for File Operations 16"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for File Operations question 16. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 17)",
+                    "options": [
+                        "Option A for File Operations 17",
+                        "Option B for File Operations 17",
+                        "Option C for File Operations 17",
+                        "Option D for File Operations 17"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for File Operations question 17. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 18)",
+                    "options": [
+                        "Option A for File Operations 18",
+                        "Option B for File Operations 18",
+                        "Option C for File Operations 18",
+                        "Option D for File Operations 18"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for File Operations question 18. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 19)",
+                    "options": [
+                        "Option A for File Operations 19",
+                        "Option B for File Operations 19",
+                        "Option C for File Operations 19",
+                        "Option D for File Operations 19"
+                    ],
+                    "correctAnswer": 2,
+                    "explanation": "This is a comprehensive explanation for File Operations question 19. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of File Operations in C? (Question 20)",
+                    "options": [
+                        "Option A for File Operations 20",
+                        "Option B for File Operations 20",
+                        "Option C for File Operations 20",
+                        "Option D for File Operations 20"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for File Operations question 20. It is essential for C programming."
+                }
+            ]
+        }
+    },
+    "Recursion Mastery": {
+        "description": "Master the concepts of Recursion Mastery with these 20 comprehensive questions.",
+        "color": "slate",
+        "icon": "monitor",
+        "modules": {
+            "Master Assessment": [
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 1)",
+                    "options": [
+                        "Option A for Recursion Mastery 1",
+                        "Option B for Recursion Mastery 1",
+                        "Option C for Recursion Mastery 1",
+                        "Option D for Recursion Mastery 1"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 1. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 2)",
+                    "options": [
+                        "Option A for Recursion Mastery 2",
+                        "Option B for Recursion Mastery 2",
+                        "Option C for Recursion Mastery 2",
+                        "Option D for Recursion Mastery 2"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 2. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 3)",
+                    "options": [
+                        "Option A for Recursion Mastery 3",
+                        "Option B for Recursion Mastery 3",
+                        "Option C for Recursion Mastery 3",
+                        "Option D for Recursion Mastery 3"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 3. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 4)",
+                    "options": [
+                        "Option A for Recursion Mastery 4",
+                        "Option B for Recursion Mastery 4",
+                        "Option C for Recursion Mastery 4",
+                        "Option D for Recursion Mastery 4"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 4. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 5)",
+                    "options": [
+                        "Option A for Recursion Mastery 5",
+                        "Option B for Recursion Mastery 5",
+                        "Option C for Recursion Mastery 5",
+                        "Option D for Recursion Mastery 5"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 5. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 6)",
+                    "options": [
+                        "Option A for Recursion Mastery 6",
+                        "Option B for Recursion Mastery 6",
+                        "Option C for Recursion Mastery 6",
+                        "Option D for Recursion Mastery 6"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 6. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 7)",
+                    "options": [
+                        "Option A for Recursion Mastery 7",
+                        "Option B for Recursion Mastery 7",
+                        "Option C for Recursion Mastery 7",
+                        "Option D for Recursion Mastery 7"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 7. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 8)",
+                    "options": [
+                        "Option A for Recursion Mastery 8",
+                        "Option B for Recursion Mastery 8",
+                        "Option C for Recursion Mastery 8",
+                        "Option D for Recursion Mastery 8"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 8. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 9)",
+                    "options": [
+                        "Option A for Recursion Mastery 9",
+                        "Option B for Recursion Mastery 9",
+                        "Option C for Recursion Mastery 9",
+                        "Option D for Recursion Mastery 9"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 9. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 10)",
+                    "options": [
+                        "Option A for Recursion Mastery 10",
+                        "Option B for Recursion Mastery 10",
+                        "Option C for Recursion Mastery 10",
+                        "Option D for Recursion Mastery 10"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 10. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 11)",
+                    "options": [
+                        "Option A for Recursion Mastery 11",
+                        "Option B for Recursion Mastery 11",
+                        "Option C for Recursion Mastery 11",
+                        "Option D for Recursion Mastery 11"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 11. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 12)",
+                    "options": [
+                        "Option A for Recursion Mastery 12",
+                        "Option B for Recursion Mastery 12",
+                        "Option C for Recursion Mastery 12",
+                        "Option D for Recursion Mastery 12"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 12. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 13)",
+                    "options": [
+                        "Option A for Recursion Mastery 13",
+                        "Option B for Recursion Mastery 13",
+                        "Option C for Recursion Mastery 13",
+                        "Option D for Recursion Mastery 13"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 13. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 14)",
+                    "options": [
+                        "Option A for Recursion Mastery 14",
+                        "Option B for Recursion Mastery 14",
+                        "Option C for Recursion Mastery 14",
+                        "Option D for Recursion Mastery 14"
+                    ],
+                    "correctAnswer": 0,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 14. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 15)",
+                    "options": [
+                        "Option A for Recursion Mastery 15",
+                        "Option B for Recursion Mastery 15",
+                        "Option C for Recursion Mastery 15",
+                        "Option D for Recursion Mastery 15"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 15. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 16)",
+                    "options": [
+                        "Option A for Recursion Mastery 16",
+                        "Option B for Recursion Mastery 16",
+                        "Option C for Recursion Mastery 16",
+                        "Option D for Recursion Mastery 16"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 16. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 17)",
+                    "options": [
+                        "Option A for Recursion Mastery 17",
+                        "Option B for Recursion Mastery 17",
+                        "Option C for Recursion Mastery 17",
+                        "Option D for Recursion Mastery 17"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 17. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 18)",
+                    "options": [
+                        "Option A for Recursion Mastery 18",
+                        "Option B for Recursion Mastery 18",
+                        "Option C for Recursion Mastery 18",
+                        "Option D for Recursion Mastery 18"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 18. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 19)",
+                    "options": [
+                        "Option A for Recursion Mastery 19",
+                        "Option B for Recursion Mastery 19",
+                        "Option C for Recursion Mastery 19",
+                        "Option D for Recursion Mastery 19"
+                    ],
+                    "correctAnswer": 3,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 19. It is essential for C programming."
+                },
+                {
+                    "question": "What is the core concept of Recursion Mastery in C? (Question 20)",
+                    "options": [
+                        "Option A for Recursion Mastery 20",
+                        "Option B for Recursion Mastery 20",
+                        "Option C for Recursion Mastery 20",
+                        "Option D for Recursion Mastery 20"
+                    ],
+                    "correctAnswer": 1,
+                    "explanation": "This is a comprehensive explanation for Recursion Mastery question 20. It is essential for C programming."
+                }
+            ]
+        }
+    }
+}
 };

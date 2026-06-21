@@ -47,6 +47,8 @@ const ExpertManager = lazy(() => import('./pages/ExpertManager'));
 
 const PublicQuiz = lazy(() => import("./pages/PublicQuiz"));
 const NotesHub = lazy(() => import("./pages/NotesHub"));
+const CoderAfroj = lazy(() => import("./pages/CoderAfroj"));
+const Workspace = lazy(() => import("./pages/Workspace"));
 
 // Loading fallback
 const PageLoader = () => (
@@ -82,6 +84,8 @@ export default function App() {
               <Route path="/donate" element={<Donate />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
+              <Route path="/coderafroj" element={<CoderAfroj />} />
+              <Route path="/coderafroj/:problemId" element={<Workspace />} />
 
               {/* Protected Routes */}
               <Route path="/directory" element={
@@ -123,7 +127,6 @@ export default function App() {
 
               {/* Coaching Management Routes */}
               <Route path="/student-login" element={<StudentLogin />} />
-              <Route path="/student-portal" element={<StudentPortal />} />
               <Route path="/admin/coaching" element={
                 <AdminRoute>
                   <CoachingAdmin />

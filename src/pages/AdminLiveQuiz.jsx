@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     PlayCircle, Users, Trophy, ChevronRight, XCircle, CheckCircle2,
@@ -51,26 +51,33 @@ export default function AdminLiveQuiz() {
         return () => unsub();
     }, []);
 
-    const combinedQuizData = { ...HINDI_QUIZ_DATA };
-    Object.keys(customQuizzes).forEach(cId => {
-        if (!combinedQuizData[cId]) {
-            combinedQuizData[cId] = customQuizzes[cId];
-        } else {
-            combinedQuizData[cId].modules = {
-                ...combinedQuizData[cId].modules,
-                ...customQuizzes[cId].modules
-            };
-        }
-    });
+    const combinedQuizData = useMemo(() => {
+        const data = { ...HINDI_QUIZ_DATA };
+        Object.keys(customQuizzes).forEach(cId => {
+            if (!data[cId]) {
+                data[cId] = customQuizzes[cId];
+            } else {
+                data[cId].modules = {
+                    ...data[cId].modules,
+                    ...customQuizzes[cId].modules
+                };
+            }
+        });
+        return data;
+    }, [customQuizzes]);
 
-    const questions = selectedCourse && combinedQuizData[selectedCourse]?.modules[selectedTopic] 
-        ? combinedQuizData[selectedCourse].modules[selectedTopic] 
-        : [];
+    const questions = useMemo(() => {
+        return selectedCourse && combinedQuizData[selectedCourse]?.modules[selectedTopic] 
+            ? combinedQuizData[selectedCourse].modules[selectedTopic] 
+            : [];
+    }, [selectedCourse, selectedTopic, combinedQuizData]);
 
-    async function handleShowResult() {
+    const handleShowResult = useCallback(async () => {
         playSuccess();
-        await updateDoc(doc(db, 'live_quizzes', roomId), { status: 'result' });
-    }
+        if (roomId) {
+            await updateDoc(doc(db, 'live_quizzes', roomId), { status: 'result' });
+        }
+    }, [roomId]);
 
     useEffect(() => {
         if (!roomId) return;
@@ -120,7 +127,7 @@ export default function AdminLiveQuiz() {
         } else if (quizState === 'active' && timer === 0 && !isPaused) {
             handleShowResult();
         }
-    }, [quizState, timer, isPaused]);
+    }, [quizState, timer, isPaused, handleShowResult]);
 
     useEffect(() => {
         if (quizState === 'countdown') {

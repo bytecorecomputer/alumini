@@ -7,16 +7,15 @@ const TerminalEffect = () => {
     const [lines, setLines] = useState([]);
     const [isTyping, setIsTyping] = useState(true);
 
-    const commands = [
-        "ssh bytecore@lab.nariyawal -p 22",
-        "Connecting to ByteCore Enterprise Server...",
-        "Authenticating...",
-        "Access Granted. Welcome Future Engineer.",
-        "Loading curriculum modules...",
-        "Running init_career.sh ... [OK]"
-    ];
-
     useEffect(() => {
+        const commands = [
+            "ssh bytecore@lab.nariyawal -p 22",
+            "Connecting to ByteCore Enterprise Server...",
+            "Authenticating...",
+            "Access Granted. Welcome Future Engineer.",
+            "Loading curriculum modules...",
+            "Running init_career.sh ... [OK]"
+        ];
         let currentLine = 0;
         const interval = setInterval(() => {
             if (currentLine < commands.length) {

@@ -103,6 +103,7 @@ export default function Navbar() {
                             <NavLink to="/">Home</NavLink>
                             <NavLink to="/courses">Courses</NavLink>
                             <NavLink to="/quizzes">Quizzes</NavLink>
+                            <NavLink to="/coderafroj">CodeLabs</NavLink>
                             <NavLink to="/contact">Contact</NavLink>
                             {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
                             {(role === 'admin' || role === 'super_admin') && (
@@ -214,6 +215,7 @@ export default function Navbar() {
                                     <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink>
                                     <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Professional Courses</MobileNavLink>
                                     <MobileNavLink to="/quizzes" onClick={() => setIsOpen(false)}>Skill Quizzes</MobileNavLink>
+                                    <MobileNavLink to="/coderafroj" onClick={() => setIsOpen(false)}>CoderAfroj Arena</MobileNavLink>
                                     <MobileNavLink to="/gallery" onClick={() => setIsOpen(false)}>Dome Gallery</MobileNavLink>
                                     {(role === 'admin' || role === 'super_admin') && (
                                         <>

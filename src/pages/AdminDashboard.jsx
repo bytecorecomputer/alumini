@@ -100,9 +100,9 @@ export default function AdminDashboard() {
     };
 
     const filteredUsers = users.filter(u =>
-        u.displayName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        u.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        u.role?.toLowerCase().includes(searchTerm.toLowerCase())
+        (u.displayName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (u.email || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (u.role || "").toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -160,6 +160,13 @@ export default function AdminDashboard() {
                             icon={<Award />}
                             href="/admin/certificates/upload"
                             color="purple"
+                        />
+                        <ActionCard
+                            title="Quiz Builder"
+                            subtitle="Custom Tests"
+                            icon={<Zap />}
+                            href="/admin/quiz-builder"
+                            color="emerald"
                         />
                         <ActionCard
                             title="Gallery Manager"

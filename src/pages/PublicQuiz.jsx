@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, Zap, ChevronLeft, Target, Trophy, Clock, Star, ArrowRight, Volume2, VolumeX } from 'lucide-react';
@@ -74,7 +74,7 @@ export default function PublicQuiz() {
         const timer = setInterval(() => {
             setTimeLeft(prev => {
                 if (prev <= 1) {
-                    handleAnswer(-1); // timeout
+                    if (handleAnswerRef.current) handleAnswerRef.current(-1); // timeout
                     return 30;
                 }
                 return prev - 1;
@@ -82,6 +82,8 @@ export default function PublicQuiz() {
         }, 1000);
         return () => clearInterval(timer);
     }, [quizState.qIndex, quizState.isAnswered, view]);
+
+    const handleAnswerRef = useRef(null);
 
     if (isLoading) {
         return (
@@ -137,6 +139,8 @@ export default function PublicQuiz() {
             }
         }, isCorrect ? 1500 : 3000);
     };
+
+    handleAnswerRef.current = handleAnswer;
 
     const finishQuiz = (finalScore, finalXP) => {
         setView('result');

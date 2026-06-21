@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, Trophy, Loader2, Zap, AlertCircle, RefreshCw, Triangle, Square, Circle, Hexagon } from 'lucide-react';
@@ -61,19 +61,22 @@ export default function StudentLiveQuiz() {
         return () => unsub();
     }, []);
 
-    const combinedQuizData = { ...HINDI_QUIZ_DATA };
-    Object.keys(customQuizzes).forEach(cId => {
-        if (!combinedQuizData[cId]) {
-            combinedQuizData[cId] = customQuizzes[cId];
-        } else {
-            combinedQuizData[cId].modules = {
-                ...combinedQuizData[cId].modules,
-                ...customQuizzes[cId].modules
-            };
-        }
-    });
+    const combinedQuizData = useMemo(() => {
+        const data = { ...HINDI_QUIZ_DATA };
+        Object.keys(customQuizzes).forEach(cId => {
+            if (!data[cId]) {
+                data[cId] = customQuizzes[cId];
+            } else {
+                data[cId].modules = {
+                    ...data[cId].modules,
+                    ...customQuizzes[cId].modules
+                };
+            }
+        });
+        return data;
+    }, [customQuizzes]);
 
-    async function joinRoom(rId) {
+    const joinRoom = useCallback(async (rId) => {
         try {
             const myRef = doc(db, `live_quizzes/${rId}/participants/${student.registration}`);
             await setDoc(myRef, {
@@ -88,7 +91,7 @@ export default function StudentLiveQuiz() {
             toast.error("Room not found or error joining. Please check the PIN.");
             setIsReconnecting(false);
         }
-    }
+    }, [student]);
 
     // Auto-join logic
     useEffect(() => {
@@ -101,7 +104,7 @@ export default function StudentLiveQuiz() {
                 joinRoom(pin);
             }, 800);
         }
-    }, [searchParams, student]);
+    }, [searchParams, student, joined, joinRoom]);
 
     // Join via manual input
     const handleJoin = async (e) => {
@@ -188,7 +191,7 @@ export default function StudentLiveQuiz() {
                 playError();
             }
         }
-    }, [liveData?.status, liveData?.currentQuestionIndex, myState]);
+    }, [liveData?.status, liveData?.currentQuestionIndex, liveData?.courseId, liveData?.topicId, myState, combinedQuizData]);
 
     const handleAnswer = async (index) => {
         if (hasAnswered || !liveData || liveData.isPaused) return;

@@ -100,8 +100,8 @@ export default function ResourceManager() {
     };
 
     const filteredResources = resources.filter(res => {
-        const matchesSearch = res.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                             res.description.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = (res.title || "").toLowerCase().includes(searchTerm.toLowerCase()) || 
+                             (res.description || "").toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = filterCategory === 'all' || res.category === filterCategory;
         return matchesSearch && matchesCategory;
     });

@@ -275,7 +275,7 @@ export default function CoachingAdmin() {
     };
 
     const filteredStudents = students.filter(s => {
-        const matchesSearch = s.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) || s.registration?.includes(searchTerm);
+        const matchesSearch = (s.fullName || "").toLowerCase().includes(searchTerm.toLowerCase()) || (s.registration || "").includes(searchTerm);
         const matchesStatus = filterStatus === 'all' || s.status === filterStatus;
         const matchesCenter = centerFilter === 'all' || s.center === centerFilter;
         return matchesSearch && matchesStatus && matchesCenter;

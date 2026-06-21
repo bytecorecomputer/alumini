@@ -49,9 +49,9 @@ const Courses = () => {
     const categories = ["All", ...new Set(displayCourses.map(c => c.category || "General"))];
 
     const filteredCourses = displayCourses.filter(course => {
-        const titleMatch = course.title?.toLowerCase().includes(searchTerm.toLowerCase());
-        const descMatch = course.description?.toLowerCase().includes(searchTerm.toLowerCase());
-        const tagMatch = course.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+        const titleMatch = (course.title || "").toLowerCase().includes(searchTerm.toLowerCase());
+        const descMatch = (course.description || "").toLowerCase().includes(searchTerm.toLowerCase());
+        const tagMatch = course.tags?.some(tag => (tag || "").toLowerCase().includes(searchTerm.toLowerCase()));
 
         const matchesSearch = titleMatch || descMatch || tagMatch;
         const matchesCategory = activeCategory === "All" || course.category === activeCategory;

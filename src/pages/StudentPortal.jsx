@@ -390,7 +390,7 @@ export default function StudentPortal() {
                                 </div>
 
                                 {/* Dynamic Resources Section */}
-                                {(student.course.toLowerCase().includes('o level') || student.course.toLowerCase().includes('ccc')) && (
+                                {((student.course || "").toLowerCase().includes('o level') || (student.course || "").toLowerCase().includes('ccc')) && (
                                     <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[2.5rem] p-8 shadow-xl shadow-indigo-500/20 mb-12 text-white relative overflow-hidden">
                                         <div className="absolute top-0 right-0 p-8 opacity-10"><Book size={120} /></div>
                                         <div className="relative z-10">
