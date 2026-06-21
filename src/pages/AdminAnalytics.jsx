@@ -122,9 +122,8 @@ export default function AdminAnalytics() {
     const exportToCSV = () => {
         if (!students || students.length === 0) return;
         
-        let csvContent = "data:text/csv;charset=utf-8,";
         const headers = ["Registration", "Name", "Course", "Center", "Village/Address", "Admission Date", "Total Fees", "Registration Fee", "Paid Fees", "Arrears", "Status", "Is High Risk Defaulter"];
-        csvContent += headers.join(",") + "\n";
+        let csvRows = [headers.join(",")];
         
         students.forEach(s => {
             const stuTotalPaidAllTime = (s.paidFees || 0) + (s.oldPaidFees || 0);
@@ -146,16 +145,19 @@ export default function AdminAnalytics() {
                 s.status || 'unpaid',
                 isHighRisk ? 'YES' : 'NO'
             ];
-            csvContent += row.join(",") + "\n";
+            csvRows.push(row.join(","));
         });
 
-        const encodedUri = encodeURI(csvContent);
+        const csvString = csvRows.join("\n");
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
+        link.setAttribute("href", url);
         link.setAttribute("download", `student_analytics_export_${new Date().toISOString().split('T')[0]}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     };
 
     const monthOptions = useMemo(() => {

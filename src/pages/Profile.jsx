@@ -184,40 +184,7 @@ export default function Profile() {
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-12">
-                            {/* Super Admin Shield Fix */}
-                            {user?.role === "admin" && role !== 'super_admin' && (
-                                <motion.div
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    className="bg-red-50 p-6 rounded-[2rem] border border-red-100 flex flex-col md:flex-row items-center justify-between gap-6"
-                                >
-                                    <div className="flex items-center gap-4 text-center md:text-left">
-                                        <div className="p-3 bg-red-100 rounded-2xl text-red-600">
-                                            <ShieldAlert size={32} />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-red-900 font-black text-lg">Admin Access Needed</h3>
-                                            <p className="text-red-600 font-bold">Your account needs to be set as Admin to manage the portal.</p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        onClick={async (e) => {
-                                            e.preventDefault();
-                                            if (!window.confirm("Make this account an Admin?")) return;
-                                            try {
-                                                await updateDoc(doc(db, "users", user.uid), { role: "super_admin" });
-                                                alert("Role updated. Reloading...");
-                                                window.location.reload();
-                                            } catch (err) {
-                                                alert("Failed: " + err.message);
-                                            }
-                                        }}
-                                        className="w-full md:w-auto px-8 py-4 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-200 active:scale-95"
-                                    >
-                                        Fix My Role
-                                    </button>
-                                </motion.div>
-                            )}
+
 
                             {/* Section: Identity */}
                             <div className="space-y-6">

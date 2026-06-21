@@ -198,48 +198,60 @@ export default function CoachingAdmin() {
         }
     };
 
-    const handleExportCSV = () => {
-        if (!students.length) {
-            alert("No data to export.");
-            return;
+    const handleExportCSV = async () => {
+        setIsUpdating(true);
+        try {
+            const q = query(collection(db, "students"));
+            const snap = await getDocs(q);
+            const allStudents = snap.docs.map(doc => doc.data());
+
+            if (!allStudents.length) {
+                alert("No data to export.");
+                return;
+            }
+
+            const headers = ["Registration", "Full Name", "Course", "Mobile", "Status", "Admission Date", "Father Name", "Address", "Total Fees", "Old Paid Fees", "New Paid Fees", "Total Paid", "Balance"];
+
+            const csvRows = [
+                headers.join(','),
+                ...allStudents.map(s => {
+                    const totalPaid = (s.paidFees || 0) + (s.oldPaidFees || 0);
+                    const balance = (s.totalFees || 0) - totalPaid;
+
+                    return [
+                        s.registration || '',
+                        `"${s.fullName || ''}"`, // Wrap in quotes to handle commas in names
+                        s.course || '',
+                        s.mobile || '',
+                        s.status || 'unpaid',
+                        s.admissionDate || '',
+                        `"${s.fatherName || ''}"`,
+                        `"${s.address || ''}"`,
+                        s.totalFees || 0,
+                        s.oldPaidFees || 0,
+                        s.paidFees || 0,
+                        totalPaid,
+                        balance
+                    ].join(',');
+                })
+            ];
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bytecore_students_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error("Export Error:", err);
+            alert("Failed to export data.");
+        } finally {
+            setIsUpdating(false);
         }
-
-        const headers = ["Registration", "Full Name", "Course", "Mobile", "Status", "Admission Date", "Father Name", "Address", "Total Fees", "Old Paid Fees", "New Paid Fees", "Total Paid", "Balance"];
-
-        const csvRows = [
-            headers.join(','),
-            ...students.map(s => {
-                const totalPaid = (s.paidFees || 0) + (s.oldPaidFees || 0);
-                const balance = (s.totalFees || 0) - totalPaid;
-
-                return [
-                    s.registration || '',
-                    `"${s.fullName || ''}"`, // Wrap in quotes to handle commas in names
-                    s.course || '',
-                    s.mobile || '',
-                    s.status || 'unpaid',
-                    s.admissionDate || '',
-                    `"${s.fatherName || ''}"`,
-                    `"${s.address || ''}"`,
-                    s.totalFees || 0,
-                    s.oldPaidFees || 0,
-                    s.paidFees || 0,
-                    totalPaid,
-                    balance
-                ].join(',');
-            })
-        ];
-
-        const csvString = csvRows.join('\n');
-        const blob = new Blob([csvString], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `bytecore_students_${new Date().toISOString().split('T')[0]}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
     };
 
     const openAddModal = () => {
@@ -412,7 +424,7 @@ export default function CoachingAdmin() {
                                     // Small delay for UI feel
                                     await new Promise(r => setTimeout(r, 500));
 
-                                    const response = await fetch('/src/assets/ByteCore%20%20(1).csv');
+                                    const response = await fetch('/ByteCore%20%20(1).csv');
                                     if (!response.ok) throw new Error("CSV file not found");
                                     const text = await response.text();
 
@@ -448,7 +460,7 @@ export default function CoachingAdmin() {
                                 if (!window.confirm("Sync Student Data from 'bytecore thiriya.csv'?")) return;
                                 setIsUpdating(true);
                                 try {
-                                    const response = await fetch('/src/assets/bytecore%20thiriya.csv');
+                                    const response = await fetch('/bytecore%20thiriya.csv');
                                     if (!response.ok) throw new Error("CSV file not found");
                                     const text = await response.text();
 
