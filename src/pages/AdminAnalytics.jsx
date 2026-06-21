@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { collection, query, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { useAuth } from '../app/common/AuthContext';
 import { 
@@ -105,6 +105,7 @@ export default function AdminAnalytics() {
     const [loading, setLoading] = useState(true);
     const [selectedMonth, setSelectedMonth] = useState('all');
     const [selectedCenter, setSelectedCenter] = useState('all');
+    const [appInstalls, setAppInstalls] = useState(0);
 
     const isOwner = user?.role === 'admin' || role === 'super_admin';
 
@@ -114,6 +115,16 @@ export default function AdminAnalytics() {
             const q = query(collection(db, "students"));
             const snap = await getDocs(q);
             setStudents(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+            
+            try {
+                const installDoc = await getDoc(doc(db, "analytics", "app_installs"));
+                if (installDoc.exists()) {
+                    setAppInstalls(installDoc.data().count || 0);
+                }
+            } catch(e) {
+                console.error("Error fetching app installs:", e);
+            }
+
             setLoading(false);
         };
         fetchAllStudents();
@@ -425,7 +436,7 @@ export default function AdminAnalytics() {
                 </div>
 
                 {/* BI Dashboard Grid Top Level Stats */}
-                <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
+                <div className="grid grid-cols-2 lg:grid-cols-7 gap-4 mb-6">
                     {/* Gross Revenue */}
                     <div className="lg:col-span-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all"></div>
@@ -485,6 +496,18 @@ export default function AdminAnalytics() {
                         <div className="relative z-10">
                             <p className="text-[10px] font-black text-blue-200 uppercase tracking-widest mb-1">{selectedMonth === 'all' ? 'Total Admitted' : 'New Admissions'}</p>
                             <h3 className="text-3xl font-black text-white truncate">{analytics.totalEnrolled}</h3>
+                        </div>
+                    </div>
+
+                    {/* App Installations */}
+                    <div className="bg-gradient-to-br from-cyan-600 to-blue-900 p-5 rounded-2xl border border-cyan-500/30 shadow-xl shadow-cyan-900/20 relative overflow-hidden">
+                        <Smartphone size={80} className="absolute -right-4 -bottom-4 opacity-20 text-white" />
+                        <div className="flex justify-between items-start mb-4 relative z-10">
+                            <div className="p-2 bg-white/20 text-white rounded-lg backdrop-blur-sm"><Smartphone size={16} /></div>
+                        </div>
+                        <div className="relative z-10">
+                            <p className="text-[10px] font-black text-cyan-200 uppercase tracking-widest mb-1">App Installations</p>
+                            <h3 className="text-3xl font-black text-white truncate">{appInstalls}</h3>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Download, X, Smartphone } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { doc, setDoc, increment } from 'firebase/firestore';
+import { db } from '../../firebase/firestore';
 
 const STORAGE_KEY = 'bytecore_pwa_install_dismissed';
 const DISMISS_DURATION = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
@@ -46,7 +48,18 @@ export default function InstallPWA() {
             }
         };
 
+        const installHandler = async () => {
+            console.log('App was successfully installed.');
+            try {
+                const statRef = doc(db, 'analytics', 'app_installs');
+                await setDoc(statRef, { count: increment(1) }, { merge: true });
+            } catch (err) {
+                console.error("Error logging install:", err);
+            }
+        };
+
         window.addEventListener('beforeinstallprompt', handler);
+        window.addEventListener('appinstalled', installHandler);
 
         // Check for iOS instructions
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -58,6 +71,7 @@ export default function InstallPWA() {
 
         return () => {
             window.removeEventListener('beforeinstallprompt', handler);
+            window.removeEventListener('appinstalled', installHandler);
             if (timer) clearTimeout(timer);
         };
     }, [isStandalone]);
