@@ -22,6 +22,26 @@ export default function CertificateVerification() {
                 
                 if (!snapshot.empty) {
                     setCertificateData(snapshot.docs[0].data());
+                    return;
+                }
+                
+                // Fallback to students collection if no certificate found
+                const studentSnap = await getDocs(query(collection(db, 'students'), where('registration', '==', certId)));
+                if (!studentSnap.empty) {
+                    const student = studentSnap.docs[0].data();
+                    setCertificateData({
+                        isStudentOnly: true,
+                        studentName: student.fullName,
+                        fatherName: student.fatherName || 'N/A',
+                        courseName: student.course || 'Unknown Course',
+                        studentPhotoUrl: student.photoUrl || null,
+                        roll: student.registration,
+                        certificateNumber: 'Off-System / Physical',
+                        marksheetNumber: 'Off-System / Physical',
+                        issueDate: 'N/A',
+                        grade: 'N/A',
+                        division: 'N/A'
+                    });
                 }
             } catch (error) {
                 console.error("Verification Error:", error);

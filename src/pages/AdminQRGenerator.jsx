@@ -29,10 +29,25 @@ export default function AdminQRGenerator() {
                 const q2 = query(collection(db, 'certificates'), where('roll', '==', rollNo.trim()));
                 const snap2 = await getDocs(q2);
                 if (snap2.empty) {
-                    toast.error("No certificate found for this Roll Number");
-                    return;
+                    // Fallback to students collection
+                    const qStudent = query(collection(db, 'students'), where('registration', '==', rollNo.trim().toUpperCase()));
+                    const snapStudent = await getDocs(qStudent);
+                    if (snapStudent.empty) {
+                        const qStudent2 = query(collection(db, 'students'), where('registration', '==', rollNo.trim()));
+                        const snapStudent2 = await getDocs(qStudent2);
+                        if (snapStudent2.empty) {
+                            toast.error("No record found in Certificates or Students database");
+                            return;
+                        }
+                        const sData = snapStudent2.docs[0].data();
+                        setCertData({ ...sData, roll: sData.registration, studentName: sData.fullName });
+                    } else {
+                        const sData = snapStudent.docs[0].data();
+                        setCertData({ ...sData, roll: sData.registration, studentName: sData.fullName });
+                    }
+                } else {
+                    setCertData(snap2.docs[0].data());
                 }
-                setCertData(snap2.docs[0].data());
             } else {
                 setCertData(snap.docs[0].data());
             }
