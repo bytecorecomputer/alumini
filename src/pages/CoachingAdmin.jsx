@@ -152,7 +152,7 @@ export default function CoachingAdmin() {
             await setDoc(studentRef, data, { merge: true });
 
             // Background sync stats
-            syncAggregateStats();
+            await syncAggregateStats();
 
             setIsAddEditModalOpen(false);
             setStudentForm({
@@ -519,7 +519,7 @@ export default function CoachingAdmin() {
                                 if (!window.confirm("Sync Student Data from Thiriya Live Google Sheet?")) return;
                                 setIsUpdating(true);
                                 try {
-                                    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRE02PgxnsZb22qYQRIqe3CQZIoCNlPmJ8975fmmrT2KIn40KPYO2PhBrEuNKgEu6ebCr-r0-yFMqzd/pub?output=csv";
+                                    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRE02PgxnsZb22qYQRIqe3CQZIoCNlPmJ8975fmmrT2KIn40KPYO2PhBrEuNKgEu6ebCr-r0-yFMqzd/pub?gid=967039806&single=true&output=csv";
                                     const result = await syncFromGoogleSheet(csvUrl, "Thiriya");
                                     if (result.success) {
                                         alert("Thiriya Google Sheets Sync Complete!\n" + result.message);

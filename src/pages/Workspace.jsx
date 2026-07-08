@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
-import { Play, CheckCircle2, XCircle, Terminal as TerminalIcon, ChevronLeft, Settings, Loader2, RefreshCw } from 'lucide-react';
+import { Play, CheckCircle2, XCircle, Terminal as TerminalIcon, ChevronLeft, Settings, Loader2, RefreshCw, Code2 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { CODER_AFROJ_PROBLEMS } from '../data/coderAfrojProblems';
 import SEO from '../components/common/SEO';

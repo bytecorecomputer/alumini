@@ -37,7 +37,7 @@
     "react-hot-toast": "^2.6.0",
     "react-is": "^19.2.7",
     "react-redux": "^9.2.0",
-    "react-resizable-panels": "^4.11.2",
+    "react-resizable-panels": "2.1.7",
     "react-router-dom": "^7.11.0",
     "react-tsparticles": "^2.12.2",
     "recharts": "^3.8.1",
