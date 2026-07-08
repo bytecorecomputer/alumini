@@ -367,7 +367,7 @@ export default function StudentLiveQuiz() {
                 <div className="flex-1 flex flex-col p-4 md:p-6 w-full mx-auto max-w-3xl overflow-hidden relative z-10">
                     {/* Big Bold Options */}
                     {!hasAnswered ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 flex-1 mt-2">
+                        <div className="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4 flex-1 mt-2 mb-4 pb-4">
                             <AnimatePresence>
                                 {currentQ?.options.map((opt, i) => {
                                     const Icon = OPTION_ICONS[i % OPTION_ICONS.length];
@@ -382,15 +382,15 @@ export default function StudentLiveQuiz() {
                                             onClick={() => handleAnswer(i)}
                                             disabled={isPaused}
                                             className={`
-                                                w-full h-full min-h-[100px] md:min-h-[140px] rounded-2xl md:rounded-[2rem] text-white font-black text-xl md:text-3xl font-hindi flex flex-col items-center justify-center p-6 relative overflow-hidden shadow-[0_8px_0_0_rgba(0,0,0,0.2)]
+                                                w-full h-full min-h-[110px] md:min-h-[140px] rounded-[1.5rem] md:rounded-[2rem] text-white font-black text-base sm:text-xl md:text-3xl font-hindi flex flex-col items-center justify-center p-3 sm:p-6 relative overflow-hidden shadow-[0_6px_0_0_rgba(0,0,0,0.2)] md:shadow-[0_8px_0_0_rgba(0,0,0,0.2)]
                                                 ${OPTION_COLORS[i % OPTION_COLORS.length]}
                                                 ${OPTION_HOVER[i % OPTION_HOVER.length]}
                                                 active:translate-y-2 active:shadow-none transition-all duration-150
                                             `}
                                         >
                                             <div className="absolute inset-0 bg-black/5 opacity-0 hover:opacity-100 transition-opacity" />
-                                            <Icon size={40} className="mb-4 opacity-80" strokeWidth={3} />
-                                            <span className="relative z-10 drop-shadow-md text-center">{opt}</span>
+                                            <Icon size={32} className="mb-2 md:mb-4 opacity-80 sm:w-10 sm:h-10" strokeWidth={3} />
+                                            <span className="relative z-10 drop-shadow-md text-center leading-tight">{opt}</span>
                                         </motion.button>
                                     );
                                 })}
@@ -434,7 +434,7 @@ export default function StudentLiveQuiz() {
             <div className={`min-h-screen flex flex-col items-center justify-center p-4 md:p-6 text-center text-white bg-gradient-to-br ${resultColor} font-inter relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
                 
-                <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative z-10 w-full max-w-md">
+                <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative z-10 w-full max-w-md bg-white/10 p-8 rounded-[3rem] backdrop-blur-md border border-white/20 shadow-2xl">
                     <motion.div 
                         animate={{ y: [0, -10, 0] }} 
                         transition={{ duration: 2, repeat: Infinity }}
@@ -442,7 +442,7 @@ export default function StudentLiveQuiz() {
                     >
                         {isCorrect ? <CheckCircle2 size={80} className="text-white drop-shadow-md" /> : <XCircle size={80} className="text-white drop-shadow-md" />}
                     </motion.div>
-                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 drop-shadow-2xl">
+                    <h1 className="text-4xl md:text-7xl font-black tracking-tighter mb-8 drop-shadow-2xl">
                         {resultText}
                     </h1>
                     

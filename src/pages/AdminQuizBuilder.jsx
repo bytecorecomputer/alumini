@@ -184,7 +184,7 @@ export default function AdminQuizBuilder() {
                     </button>
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter">Quiz Builder Studio</h1>
+                            <h1 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter">Quiz Builder Studio</h1>
                             <p className="text-blue-400 font-bold max-w-2xl text-lg">Manage and create pro-level custom quizzes for your live sessions.</p>
                         </div>
                     </div>
@@ -259,7 +259,7 @@ export default function AdminQuizBuilder() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Course / Category Name</label>
+                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Course Name</label>
                                     <input 
                                         type="text"
                                         placeholder="e.g., Python Masterclass"
@@ -269,7 +269,7 @@ export default function AdminQuizBuilder() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Topic / Chapter Name</label>
+                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Topic Name</label>
                                     <input 
                                         type="text"
                                         placeholder="e.g., Variables & Data Types"
@@ -326,7 +326,7 @@ export default function AdminQuizBuilder() {
                                                     placeholder="Enter your question here..."
                                                     value={q.question}
                                                     onChange={(e) => handleQuestionChange(qIndex, 'question', e.target.value)}
-                                                    className="w-full p-4 md:p-6 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold text-lg md:text-xl text-slate-900 font-hindi focus:border-blue-500 focus:bg-white outline-none transition-all min-h-[100px] resize-none"
+                                                    className="w-full p-4 md:p-6 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold text-base md:text-xl text-slate-900 font-hindi focus:border-blue-500 focus:bg-white outline-none transition-all min-h-[80px] md:min-h-[100px] resize-none"
                                                 />
                                             </div>
 
@@ -338,7 +338,7 @@ export default function AdminQuizBuilder() {
                                                             placeholder={`Option ${optIndex + 1}`}
                                                             value={opt}
                                                             onChange={(e) => handleOptionChange(qIndex, optIndex, e.target.value)}
-                                                            className={`w-full p-3 md:p-4 pl-12 md:pl-14 border-2 rounded-xl font-bold font-hindi outline-none transition-all ${
+                                                            className={`w-full p-3 md:p-4 pl-12 md:pl-14 border-2 rounded-xl font-bold text-sm md:text-base font-hindi outline-none transition-all ${
                                                                 q.correctAnswer === optIndex 
                                                                     ? 'bg-emerald-50 border-emerald-500 text-emerald-900' 
                                                                     : 'bg-slate-50 border-slate-100 focus:border-slate-300 text-slate-700'
