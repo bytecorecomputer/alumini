@@ -530,8 +530,8 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
                                 border: '1px solid #cbd5e1',
                             }}>
                                 <QRCodeCanvas
-                                    value={`${window.location.origin}/verify/${certificateNumber}`}
-                                    size={60}
+                                    value={`${window.location.origin}/verify/${roll}`}
+                                    size={80}
                                     level="M"
                                 />
                             </div>

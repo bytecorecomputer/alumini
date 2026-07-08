@@ -15,8 +15,11 @@ export default function CertificateVerification() {
         const fetchCertificate = async () => {
             if (!certId) return;
             try {
-                const q = query(collection(db, 'certificates'), where('certificateNumber', '==', certId));
-                const snapshot = await getDocs(q);
+                let snapshot = await getDocs(query(collection(db, 'certificates'), where('roll', '==', certId)));
+                if (snapshot.empty) {
+                    snapshot = await getDocs(query(collection(db, 'certificates'), where('certificateNumber', '==', certId)));
+                }
+                
                 if (!snapshot.empty) {
                     setCertificateData(snapshot.docs[0].data());
                 }

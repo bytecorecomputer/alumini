@@ -143,7 +143,7 @@ export default function AdminQRGenerator() {
                                     
                                     <div className="mt-6">
                                         <QRCodeCanvas
-                                            value={`${window.location.origin}/verify/${certData.certificateNumber}`}
+                                            value={`${window.location.origin}/verify/${certData.roll}`}
                                             size={200}
                                             level="H"
                                             includeMargin={false}
