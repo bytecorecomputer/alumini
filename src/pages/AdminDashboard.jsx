@@ -171,6 +171,13 @@ export default function AdminDashboard() {
                             color="emerald"
                         />
                         <ActionCard
+                            title="QR Generator"
+                            subtitle="Download Diploma QRs"
+                            icon={<QrCode />}
+                            href="/admin/qr-generator"
+                            color="blue"
+                        />
+                        <ActionCard
                             title="Gallery Manager"
                             subtitle="Content Suite"
                             icon={<ImageIcon />}

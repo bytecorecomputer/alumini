@@ -180,6 +180,11 @@ export default function App() {
                   <AdminQuizBuilder />
                 </AdminRoute>
               } />
+              <Route path="/admin/qr-generator" element={
+                <AdminRoute>
+                  <AdminQRGenerator />
+                </AdminRoute>
+              } />
               <Route path="/student/live-quiz" element={<StudentLiveQuiz />} />
               <Route path="/lab-gallery" element={<LabGallery />} />
               
