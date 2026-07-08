@@ -36,9 +36,10 @@ export default function CertificateVerification() {
                         courseName: student.course || 'Unknown Course',
                         studentPhotoUrl: student.photoUrl || null,
                         roll: student.registration,
-                        certificateNumber: 'Off-System / Physical',
+                        roll: student.registration,
+                        certificateNumber: student.registration,
                         marksheetNumber: 'Off-System / Physical',
-                        issueDate: 'N/A',
+                        issueDate: student.admissionDate || 'N/A',
                         grade: 'N/A',
                         division: 'N/A'
                     });
@@ -113,7 +114,9 @@ export default function CertificateVerification() {
                         <span className="text-emerald-400 font-black uppercase tracking-[0.2em] text-[10px]">100% Authentic & Verified</span>
                     </div>
 
-                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter relative z-10">Credential Verification</h1>
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tighter relative z-10">
+                        {certificateData.isStudentOnly ? 'Identity Verification' : 'Credential Verification'}
+                    </h1>
                 </div>
 
                 {/* Content Body */}
@@ -140,28 +143,46 @@ export default function CertificateVerification() {
                                     </div>
                                     <div className="font-black text-slate-800 text-lg">{certificateData.courseName}</div>
                                 </div>
-                                <div className="bg-emerald-50 p-4 rounded-2xl">
-                                    <div className="flex items-center justify-center md:justify-start gap-2 text-emerald-600 mb-1">
-                                        <Award size={16} />
-                                        <span className="text-[10px] font-black uppercase tracking-widest">Grade</span>
+                                {certificateData.isStudentOnly ? (
+                                    <div className="bg-emerald-50 p-4 rounded-2xl">
+                                        <div className="flex items-center justify-center md:justify-start gap-2 text-emerald-600 mb-1">
+                                            <ShieldCheck size={16} />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Status</span>
+                                        </div>
+                                        <div className="font-black text-slate-800 text-lg">Verified Student</div>
                                     </div>
-                                    <div className="font-black text-slate-800 text-lg">{certificateData.grade} ({certificateData.division})</div>
-                                </div>
+                                ) : (
+                                    <div className="bg-emerald-50 p-4 rounded-2xl">
+                                        <div className="flex items-center justify-center md:justify-start gap-2 text-emerald-600 mb-1">
+                                            <Award size={16} />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Grade</span>
+                                        </div>
+                                        <div className="font-black text-slate-800 text-lg">{certificateData.grade} ({certificateData.division})</div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
 
                     <div className="space-y-4">
                         <div className="flex items-center justify-between p-5 border border-slate-100 rounded-2xl bg-slate-50">
-                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Certificate No.</div>
+                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                {certificateData.isStudentOnly ? 'Registration No.' : 'Certificate No.'}
+                            </div>
                             <div className="font-black text-slate-800 text-sm md:text-base">{certificateData.certificateNumber}</div>
                         </div>
                         <div className="flex items-center justify-between p-5 border border-slate-100 rounded-2xl bg-slate-50">
-                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Marksheet No.</div>
-                            <div className="font-black text-slate-800 text-sm md:text-base">{certificateData.marksheetNumber}</div>
+                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                {certificateData.isStudentOnly ? 'Enrollment Status' : 'Marksheet No.'}
+                            </div>
+                            <div className="font-black text-slate-800 text-sm md:text-base">
+                                {certificateData.isStudentOnly ? <span className="text-emerald-600 flex items-center gap-1"><ShieldCheck size={16}/> Active & Verified</span> : certificateData.marksheetNumber}
+                            </div>
                         </div>
                         <div className="flex items-center justify-between p-5 border border-slate-100 rounded-2xl bg-slate-50">
-                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Issue Date</div>
+                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                {certificateData.isStudentOnly ? 'Admission Date' : 'Issue Date'}
+                            </div>
                             <div className="font-black text-slate-800 text-sm md:text-base">{certificateData.issueDate}</div>
                         </div>
                     </div>
