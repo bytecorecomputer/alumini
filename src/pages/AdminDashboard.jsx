@@ -2,11 +2,13 @@ import { useEffect, useState, cloneElement } from "react";
 import { collection, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/firestore";
 import { useAuth } from "../app/common/AuthContext";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Users, GraduationCap, Briefcase, Shield, Trash2, Search,
     Award, ShieldAlert, ShieldOff, X, MapPin, Linkedin, Github,
-    ChevronRight, ExternalLink, Mail, Edit3, Database, UploadCloud, Calendar, Zap, ArrowUpRight, Bell, Image as ImageIcon, FileText, BarChart3, Layers
+    ChevronRight, ExternalLink, Mail, Edit3, Database, UploadCloud, Calendar, Zap, ArrowUpRight, Bell, Image as ImageIcon, FileText, BarChart3, Layers,
+    QrCode, PenTool
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { getOptimizedUrl } from "../lib/cloudinary";
