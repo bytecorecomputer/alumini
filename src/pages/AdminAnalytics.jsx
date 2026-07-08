@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import { 
     BarChart3, TrendingUp, Users, Wallet, AlertCircle, 
-    MapPin, ChevronLeft, Download, ShieldCheck, PieChart as PieChartIcon, Calendar, Zap, AlertTriangle, Building, Activity, Map
+    MapPin, ChevronLeft, Download, ShieldCheck, PieChart as PieChartIcon, Calendar, Zap, AlertTriangle, Building, Activity, Map, Smartphone
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -105,6 +105,7 @@ export default function AdminAnalytics() {
     const [loading, setLoading] = useState(true);
     const [selectedMonth, setSelectedMonth] = useState('all');
     const [selectedCenter, setSelectedCenter] = useState('all');
+    const [addressFilter, setAddressFilter] = useState('all');
     const [appInstalls, setAppInstalls] = useState(0);
 
     const isOwner = user?.role === 'admin' || role === 'super_admin';
@@ -206,9 +207,11 @@ export default function AdminAnalytics() {
 
         students.forEach(s => {
             const branch = s.center || 'Nariyawal';
+            const normalizedAddr = normalizeAddress(s.address);
             
-            // Branch Filtering
+            // Branch & Address Filtering
             if (selectedCenter !== 'all' && branch.toLowerCase() !== selectedCenter.toLowerCase()) return;
+            if (addressFilter !== 'all' && normalizedAddr !== addressFilter) return;
 
             const course = s.course || 'Unknown';
             const admMonth = parseDateToYYYYMM(s.admissionDate);
@@ -363,7 +366,7 @@ export default function AdminAnalytics() {
             defaulters: defaulters.slice(0, 50),
             highRiskCount, projectedPipeline, badDebtRisk
         };
-    }, [students, selectedMonth, selectedCenter]);
+    }, [students, selectedMonth, selectedCenter, addressFilter]);
 
     if (!isOwner) {
         return (
@@ -415,6 +418,25 @@ export default function AdminAnalytics() {
                                 <option value="all">Global (All Centers)</option>
                                 <option value="nariyawal">HQ: Nariyawal</option>
                                 <option value="thiriya">Branch: Thiriya</option>
+                            </select>
+                        </div>
+
+                        <div className="bg-[#1e293b] border border-slate-700/50 p-2 rounded-xl flex items-center shadow-lg w-full md:w-auto">
+                            <MapPin size={16} className="text-emerald-400 ml-2" />
+                            <select 
+                                value={addressFilter}
+                                onChange={(e) => setAddressFilter(e.target.value)}
+                                className="bg-transparent border-none text-white font-black outline-none px-3 py-1.5 cursor-pointer uppercase text-[10px] tracking-wider w-full"
+                            >
+                                <option value="all">Global (All Locations)</option>
+                                <option value="Nariyawal">Nariyawal</option>
+                                <option value="Thiriya Nizamat Khan">Thiriya</option>
+                                <option value="Bareilly City">Bareilly City</option>
+                                <option value="Bithri Chainpur">Bithri Chainpur</option>
+                                <option value="Fargawan">Fargawan</option>
+                                <option value="Navadia">Navadia</option>
+                                <option value="Tuline">Tuline</option>
+                                <option value="Other Localities">Other Localities</option>
                             </select>
                         </div>
 

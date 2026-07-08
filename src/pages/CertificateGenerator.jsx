@@ -7,10 +7,10 @@ import {
     generateCertificateNumber,
     generateMarksheetNumber,
     saveCertificate,
-    uploadToGitHub,
     calculateGrade,
     calculateDivision,
 } from '../lib/certificateService';
+import { uploadToSupabase } from '../lib/supabase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { Search, Loader2, User, Users, BookOpen, Calendar, GraduationCap } from 'lucide-react';
@@ -209,15 +209,15 @@ export default function CertificateGenerator() {
             // Download PDF IMMEDIATELY
             pdf.save(filename);
 
-            // Upload to GitHub
+            // Upload to Supabase
             let pdfUrl = '';
             try {
-                pdfUrl = await uploadToGitHub(pdfBlob, filename);
-            } catch (githubError) {
-                console.error("GitHub upload failed but PDF was downloaded:", githubError);
-                // We might still want to save the record without URL or alert user?
-                // For now, let's proceed but maybe alert?
-                alert("Certificate downloaded, but cloud backup failed: " + githubError.message);
+                const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
+                const result = await uploadToSupabase(pdfFile, formData.marksheetNumber || 'cert', 'certificates');
+                pdfUrl = result.publicUrl;
+            } catch (supabaseError) {
+                console.error("Supabase upload failed but PDF was downloaded:", supabaseError);
+                alert("Certificate downloaded, but cloud backup failed: " + supabaseError.message);
             }
 
             // Save certificate data to Firestore

@@ -45,7 +45,8 @@ export const uploadToSupabase = async (file, registration, bucketName = 'student
     try {
         const fileExt = file.name.split('.').pop();
         const fileName = `${registration}_${Date.now()}.${fileExt}`;
-        const filePath = `profiles/${fileName}`;
+        const folder = bucketName === 'certificates' ? 'certs' : 'profiles';
+        const filePath = `${folder}/${fileName}`;
 
         console.log(`Uploading to Supabase bucket: ${bucketName}, path: ${filePath}`);
 
