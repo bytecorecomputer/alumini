@@ -217,7 +217,6 @@ export default function AdminAnalytics() {
             const admMonth = parseDateToYYYYMM(s.admissionDate);
             const expiryInfo = calculateCourseExpiry(s);
             const regFee = Number(s.registrationFee) || 0;
-            const normalizedAddr = normalizeAddress(s.address);
 
             if (!addressDistribution[normalizedAddr]) {
                 addressDistribution[normalizedAddr] = { name: normalizedAddr, revenue: 0, students: 0 };
