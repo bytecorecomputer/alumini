@@ -157,7 +157,7 @@ export const courses = [
         title: "Tally Prime (Professional Accounting)",
         description: "Digital accounting with GST, Taxation, and Inventory Management.",
         detailed_description: "Tally Prime is the industry standard for accounting in India. This course provides comprehensive training in GST, TDS, Payroll, and sophisticated inventory management, making you ready for accounting roles in any business.",
-        duration: "4 Months",
+        duration: "6 Months",
         enrolled: "180+",
         price: 2000,
         rating: "4.9",

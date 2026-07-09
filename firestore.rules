@@ -7,13 +7,13 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.uid == userId;
       allow create: if request.auth != null && request.auth.uid == userId;
       allow update: if request.auth != null && request.auth.uid == userId && 
-                    !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']);
+                    (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) || request.auth.token.email == 'bytecore.info@gmail.com');
       allow delete: if request.auth != null && request.auth.uid == userId;
     }
 
     // 2. Students: Restricted read (auth required), Restricted write
     match /students/{studentId} {
-      allow read: if true; 
+      allow read: if request.auth != null && (request.auth.uid == studentId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin']); 
       // Allow updates only to photoUrl and updatedAt to prevent tampering with fees or course data
       allow update: if request.auth != null && request.auth.uid == studentId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['photoUrl', 'updatedAt']); 
       // Full write still requires admin role

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase/firestore';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { QrCode, Search, Download, ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
 import html2canvas from 'html2canvas';
@@ -24,6 +24,9 @@ export default function AdminQRGenerator() {
             const q = query(collection(db, 'certificates'), where('roll', '==', rollNo.trim().toUpperCase()));
             const snap = await getDocs(q);
             
+            let docSnap = null;
+            let isStudentFallback = false;
+
             if (snap.empty) {
                 // Try case sensitive just in case
                 const q2 = query(collection(db, 'certificates'), where('roll', '==', rollNo.trim()));
@@ -39,17 +42,32 @@ export default function AdminQRGenerator() {
                             toast.error("No record found in Certificates or Students database");
                             return;
                         }
-                        const sData = snapStudent2.docs[0].data();
-                        setCertData({ ...sData, roll: sData.registration, studentName: sData.fullName });
+                        docSnap = snapStudent2.docs[0];
+                        isStudentFallback = true;
                     } else {
-                        const sData = snapStudent.docs[0].data();
-                        setCertData({ ...sData, roll: sData.registration, studentName: sData.fullName });
+                        docSnap = snapStudent.docs[0];
+                        isStudentFallback = true;
                     }
                 } else {
-                    setCertData(snap2.docs[0].data());
+                    docSnap = snap2.docs[0];
                 }
             } else {
-                setCertData(snap.docs[0].data());
+                docSnap = snap.docs[0];
+            }
+
+            let data = docSnap.data();
+
+            // Retroactively generate and save verificationToken if it doesn't exist
+            if (!data.verificationToken) {
+                const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                await updateDoc(docSnap.ref, { verificationToken: token });
+                data.verificationToken = token;
+            }
+
+            if (isStudentFallback) {
+                setCertData({ ...data, roll: data.registration, studentName: data.fullName });
+            } else {
+                setCertData(data);
             }
         } catch (error) {
             console.error(error);
@@ -158,7 +176,7 @@ export default function AdminQRGenerator() {
                                     
                                     <div className="mt-6">
                                         <QRCodeCanvas
-                                            value={`${window.location.origin}/verify/${certData.roll}`}
+                                            value={`${window.location.origin}/verify/${certData.roll}?t=${certData.verificationToken}`}
                                             size={200}
                                             level="H"
                                             includeMargin={false}

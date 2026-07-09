@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebase/auth";
-import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/firestore";
 import { checkMonthlyFeeReminders } from "../../lib/feeAutomation";
 
@@ -11,20 +11,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [userData, setUserData] = useState(null);
-
-  // Synchronous session load limits "Unauthorized" flashing
-  const [student, setStudent] = useState(() => {
-    const session = localStorage.getItem('student_session');
-    if (session) {
-      try {
-        return JSON.parse(session);
-      } catch (err) {
-        localStorage.removeItem('student_session');
-      }
-    }
-    return null;
-  });
-
+  const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // Sync Student Firestore for Real-time updates if student is logged in
@@ -35,20 +22,21 @@ export function AuthProvider({ children }) {
       if (snap.exists()) {
         const data = snap.data();
         setStudent(prev => ({ ...prev, ...data }));
-        localStorage.setItem('student_session', JSON.stringify(data));
       }
     });
     return () => unsub();
   }, [student?.registration]);
 
-  const loginStudent = (data) => {
-    setStudent(data);
-    localStorage.setItem('student_session', JSON.stringify(data));
+  const logoutStudent = async () => {
+    await signOut(auth);
+    setStudent(null);
   };
 
-  const logoutStudent = () => {
-    setStudent(null);
-    localStorage.removeItem('student_session');
+  const logoutUser = async () => {
+    await signOut(auth);
+    setUser(null);
+    setUserData(null);
+    setRole(null);
   };
 
   // Function to refresh user data (Admin/Staff) from Firestore
@@ -76,34 +64,41 @@ export function AuthProvider({ children }) {
           try {
             const userRef = doc(db, "users", u.uid);
             let snap = await getDoc(userRef);
-            let data = snap.data();
-
-            // SUPER ADMIN AUTO-PROMOTION SITE OWNER
-            if (u.email === "bytecore.info@gmail.com" && data?.role !== "super_admin") {
-              await updateDoc(userRef, { role: "super_admin" });
-              snap = await getDoc(userRef);
-              data = snap.data();
-            }
-
+            
             if (snap.exists()) {
+              let data = snap.data();
               setRole(data?.role);
               setUserData(data);
+              setUser(u);
+              setStudent(null);
 
               if (data?.role === 'admin' || data?.role === 'super_admin') {
                 checkMonthlyFeeReminders();
               }
             } else {
-              setUserData({});
+              // Might be a student logged in via Custom Token
+              const studentRef = doc(db, "students", u.uid);
+              const studentSnap = await getDoc(studentRef);
+              
+              if (studentSnap.exists()) {
+                setStudent(studentSnap.data());
+                setUser(null);
+                setUserData(null);
+                setRole('student');
+              } else {
+                setUser(u);
+                setUserData({});
+              }
             }
           } catch (error) {
             console.error("Error fetching user data:", error);
             setUserData({});
           }
-          setUser(u);
         } else {
           setUser(null);
           setRole(null);
           setUserData(null);
+          setStudent(null);
         }
       } finally {
         setLoading(false);
@@ -119,8 +114,8 @@ export function AuthProvider({ children }) {
       student, isStudent: !!student,
       loading,
       refreshUserData,
-      loginStudent,
-      logoutStudent
+      logoutStudent,
+      logoutUser
     }}>
       {children}
     </AuthContext.Provider>

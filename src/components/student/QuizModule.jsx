@@ -15,6 +15,7 @@ import ProgressCharts from './ProgressCharts';
 import LottiePlayer from '../common/LottiePlayer';
 import { db } from '../../firebase/firestore';
 import { collection, onSnapshot } from 'firebase/firestore';
+import DOMPurify from 'dompurify';
 
 // Icon Map for dynamic rendering
 const ICONS = {
@@ -292,7 +293,7 @@ export default function QuizModule({ student }) {
 
                     <div 
                         className="prose prose-slate prose-lg max-w-none prose-headings:font-black prose-headings:tracking-tight prose-a:text-blue-600 hover:prose-a:text-blue-500 prose-ul:list-disc prose-li:font-medium"
-                        dangerouslySetInnerHTML={{ __html: data.notes }}
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.notes) }}
                     />
                 </div>
             </div>

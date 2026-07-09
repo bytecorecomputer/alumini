@@ -47,6 +47,24 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Unauthorized: Missing or invalid Authorization header' });
+    }
+
+    const token = authHeader.split('Bearer ')[1];
+    
+    try {
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        // Ensure user is an admin by checking firestore users collection
+        const userDoc = await admin.firestore().collection('users').doc(decodedToken.uid).get();
+        if (!userDoc.exists || !['admin', 'super_admin'].includes(userDoc.data().role)) {
+            return res.status(403).json({ error: 'Forbidden: Requires admin privileges' });
+        }
+    } catch (e) {
+        return res.status(401).json({ error: 'Unauthorized: Invalid token' });
+    }
+
     try {
         const { title, body, tokens, url } = req.body;
 

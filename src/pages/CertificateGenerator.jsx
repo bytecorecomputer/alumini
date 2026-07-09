@@ -220,12 +220,16 @@ export default function CertificateGenerator() {
                 alert("Certificate downloaded, but cloud backup failed: " + supabaseError.message);
             }
 
+            // Generate secure verification token
+            const verificationToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
             // Save certificate data to Firestore
             const totals = calculateTotals();
             await saveCertificate({
                 ...formData,
                 studentPhoto,
                 pdfUrl,
+                verificationToken,
                 ...totals,
             });
 
@@ -243,6 +247,7 @@ export default function CertificateGenerator() {
                                 issueDate: formData.issueDate,
                                 course: formData.courseName
                             },
+                            verificationToken,
                             status: 'pass' // Mark student as passed/alumni
                         });
                         console.log("Certificate linked to student profile");

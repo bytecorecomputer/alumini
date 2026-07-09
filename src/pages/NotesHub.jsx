@@ -5,6 +5,7 @@ import { BookOpen, ChevronLeft, ArrowRight, FileText, Sparkles, X } from 'lucide
 import SEO from '../components/common/SEO';
 import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
 import { cn } from '../lib/utils';
+import DOMPurify from 'dompurify';
 
 export default function NotesHub() {
     const navigate = useNavigate();
@@ -148,7 +149,7 @@ export default function NotesHub() {
                                 
                                 <div 
                                     className="prose-notes font-hindi"
-                                    dangerouslySetInnerHTML={{ __html: selectedNote.content }}
+                                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedNote.content) }}
                                 />
                                 
                                 <div className="mt-20 pt-10 border-t border-slate-100 text-center">

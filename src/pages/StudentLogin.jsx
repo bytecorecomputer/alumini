@@ -28,30 +28,33 @@ export default function StudentLogin() {
         setError('');
 
         try {
-            const q = query(
-                collection(db, "students"),
-                where("registration", "==", registration.trim()),
-                where("mobile", "==", mobile.trim())
-            );
+            const response = await fetch('/api/student-login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ registration, mobile })
+            });
 
-            const querySnapshot = await getDocs(q);
+            const data = await response.json();
 
-            if (!querySnapshot.empty) {
-                const studentData = querySnapshot.docs[0].data();
-                // Use unified login function
-                loginStudent(studentData);
-
-                // Send Telegram Notification
-                await sendTelegramNotification('login', {
-                    displayName: studentData.fullName,
-                    email: studentData.email || 'N/A',
-                    role: `Student (${studentData.course})`
-                });
-
-                navigate('/student-portal');
-            } else {
-                setError('Invalid Registration or Mobile Number. Please contact Bytecore Admin.');
+            if (!response.ok) {
+                setError(data.error || 'Invalid Registration or Mobile Number.');
+                setIsLoading(false);
+                return;
             }
+
+            // Secure Firebase login with custom token
+            const { signInWithCustomToken } = await import('firebase/auth');
+            const { auth } = await import('../firebase/auth');
+            await signInWithCustomToken(auth, data.token);
+
+            // Send Telegram Notification
+            await sendTelegramNotification('login', {
+                displayName: data.studentData.fullName || registration,
+                email: data.studentData.email || 'N/A',
+                role: `Student (${data.studentData.course || 'N/A'})`
+            });
+
+            navigate('/student-portal');
         } catch (err) {
             console.error("Student login error:", err);
             setError('System connectivity error. Try again.');
