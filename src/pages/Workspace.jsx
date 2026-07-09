@@ -192,7 +192,7 @@ export default function Workspace() {
         }
     };
 
-    const DescriptionView = () => (
+    const renderDescriptionView = () => (
         <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#0a0a0a] scrollbar-thin scrollbar-thumb-white/10">
             <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight mb-4">{problem.title}</h1>
             <div className="flex flex-wrap gap-2 mb-8 border-b border-white/5 pb-6">
@@ -212,7 +212,7 @@ export default function Workspace() {
         </div>
     );
 
-    const EditorView = () => (
+    const renderEditorView = () => (
         <div className="flex-1 relative flex flex-col bg-[#111111]">
             <div className="h-10 bg-[#0a0a0a] border-b border-white/5 flex items-center px-4 justify-between shrink-0">
                 <div className="flex items-center gap-4 overflow-x-auto no-scrollbar">
@@ -303,7 +303,7 @@ export default function Workspace() {
         </div>
     );
 
-    const TerminalView = () => (
+    const renderTerminalView = () => (
         <div className="flex-1 bg-[#050505] flex flex-col relative">
             <div className="h-10 bg-[#0a0a0a] border-b border-white/5 flex items-center px-4 justify-between shrink-0">
                 <div className="flex items-center gap-4">
@@ -440,9 +440,9 @@ export default function Workspace() {
                     </div>
                     {/* Tab Content */}
                     <div className="flex-1 overflow-hidden flex flex-col">
-                        {mobileTab === 'description' && <DescriptionView />}
-                        {mobileTab === 'code' && <EditorView />}
-                        {mobileTab === 'output' && <TerminalView />}
+                        {mobileTab === 'description' && renderDescriptionView()}
+                        {mobileTab === 'code' && renderEditorView()}
+                        {mobileTab === 'output' && renderTerminalView()}
                     </div>
                 </div>
             ) : (
@@ -451,7 +451,7 @@ export default function Workspace() {
                     <PanelGroup direction="horizontal" className="rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
                         
                         <Panel defaultSize={40} minSize={20} className="relative z-0">
-                            <DescriptionView />
+                            {renderDescriptionView()}
                         </Panel>
 
                         <PanelResizeHandle className="w-1.5 bg-[#0a0a0a] hover:bg-indigo-500/50 transition-colors cursor-col-resize flex items-center justify-center group z-10">
@@ -461,7 +461,7 @@ export default function Workspace() {
                         <Panel defaultSize={60} minSize={30} className="relative z-0">
                             <PanelGroup direction="vertical">
                                 <Panel defaultSize={70} minSize={20}>
-                                    <EditorView />
+                                    {renderEditorView()}
                                 </Panel>
                                 
                                 <PanelResizeHandle className="h-1.5 bg-[#0a0a0a] hover:bg-indigo-500/50 transition-colors cursor-row-resize flex items-center justify-center group z-10 border-t border-white/5">
@@ -469,7 +469,7 @@ export default function Workspace() {
                                 </PanelResizeHandle>
 
                                 <Panel defaultSize={30} minSize={10}>
-                                    <TerminalView />
+                                    {renderTerminalView()}
                                 </Panel>
                             </PanelGroup>
                         </Panel>

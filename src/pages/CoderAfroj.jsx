@@ -92,32 +92,6 @@ export default function CoderAfroj() {
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02] mix-blend-overlay"></div>
             </div>
 
-            {/* Premium Header */}
-            <header className="sticky top-0 z-50 bg-[#050505]/80 backdrop-blur-2xl border-b border-white/5 px-4 md:px-8 py-4 shadow-2xl shadow-black/50">
-                <div className="max-w-7xl mx-auto flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-cyan-500 p-[1px] shadow-lg shadow-indigo-500/20 group cursor-pointer" onClick={() => navigate('/')}>
-                            <div className="w-full h-full bg-[#050505] rounded-2xl flex items-center justify-center group-hover:bg-transparent transition-colors duration-300">
-                                <Terminal size={24} className="text-white group-hover:text-white transition-colors" />
-                            </div>
-                        </div>
-                        <div>
-                            <h1 className="text-xl md:text-2xl font-black text-white tracking-tighter">
-                                CoderAfroj <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Arena</span>
-                            </h1>
-                            <div className="flex items-center gap-2 text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-                                <Activity size={12} className="text-emerald-400 animate-pulse" />
-                                <span>System Online • {CODER_AFROJ_PROBLEMS.length} Active Nodes</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="hidden md:flex items-center gap-6">
-                        <button onClick={() => navigate('/')} className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors flex items-center gap-2">
-                            <ChevronLeft size={16} /> Disconnect
-                        </button>
-                    </div>
-                </div>
-            </header>
 
             <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 relative z-10">
                 
