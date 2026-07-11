@@ -251,7 +251,7 @@ export default function ExpertManager() {
                             <form onSubmit={handleSubmit} className="p-8 space-y-5">
                                 <div>
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-2 mb-1 block">Full Name</label>
-                                    <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-purple-100 font-bold" placeholder="e.g. Maisar Hussain" />
+                                    <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-purple-100 font-bold" placeholder="e.g. Rahul Sir" />
                                 </div>
                                 <div>
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-2 mb-1 block">Role / Title</label>

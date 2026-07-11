@@ -27,6 +27,7 @@ const DomeGallery = () => {
     const containerRef = useRef(null);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [isMobile, setIsMobile] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(12); // Chunk size
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 1024);
@@ -34,6 +35,16 @@ const DomeGallery = () => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    // Progressive rendering chunking
+    useEffect(() => {
+        if (visibleCount < students.length) {
+            const timer = setTimeout(() => {
+                setVisibleCount(prev => Math.min(prev + 12, students.length));
+            }, 300); // load 12 more every 300ms
+            return () => clearTimeout(timer);
+        }
+    }, [visibleCount]);
 
     const handleMouseMove = (e) => {
         if (isMobile) return;
@@ -68,7 +79,7 @@ const DomeGallery = () => {
                 }}
                 className="relative grid grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-3 md:gap-5 w-full max-w-7xl mx-auto items-center justify-center"
             >
-                {students.map((file, i) => {
+                {students.slice(0, visibleCount).map((file, i) => {
                     const match = file.match(/^(.+)\s\((.+)\)\.jpg$/);
                     const name = match ? match[1] : file.replace('.jpg', '').replace('.png', '');
                     const course = match ? match[2] : "Student";
@@ -89,6 +100,8 @@ const DomeGallery = () => {
                     return (
                         <motion.div
                             key={file}
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            animate={{ opacity: 1, scale: scale }}
                             whileHover={{
                                 scale: 1.15,
                                 z: 50,
@@ -96,15 +109,15 @@ const DomeGallery = () => {
                             }}
                             style={{
                                 transformStyle: "preserve-3d",
-                                z: z,
-                                scale: scale
+                                z: z
                             }}
-                            className="relative group aspect-[4/5] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-white/5 bg-slate-900 cursor-pointer"
+                            className="fast-render relative group aspect-[4/5] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-white/5 bg-slate-900 cursor-pointer"
                         >
                             <img
                                 src={`/images/students/${file}`}
                                 alt={name}
                                 loading="lazy"
+                                decoding="async"
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-2 md:p-4">

@@ -10,13 +10,6 @@ import ProfileCard from '../components/ui/ProfileCard';
 // Default fallback team if DB fails or is empty
 const defaultTeam = [
     {
-        name: "Maisar Hussain",
-        role: "Senior Teacher (Thiriya)",
-        image: <Monitor size={48} className="text-slate-400" />,
-        desc: "Specialized in professional computer training and student mentorship at our Thiriya center.",
-        whatsapp: "917455098949"
-    },
-    {
         name: "RAHUL",
         role: "Founder & CEO",
         image: "/images/cd/rahul.jfif",
@@ -70,10 +63,11 @@ const About = () => {
                         if (nameLower.includes("afroj")) {
                             data.image = <Code size={48} className="text-indigo-400" />;
                         }
-                        if (nameLower.includes("maisar") || nameLower.includes("husain") || nameLower.includes("hussain")) {
-                            data.image = <Monitor size={48} className="text-slate-400" />;
-                        }
                         return data;
+                    }).filter(data => {
+                        const nameLower = data.name ? data.name.toLowerCase() : "";
+                        // Completely erase any trace of Maisar
+                        return !(nameLower.includes("maisar") || nameLower.includes("husain") || nameLower.includes("hussain"));
                     });
                     setTeam(fetchedTeam);
                 } else {
