@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, Target, Eye, Calendar, ArrowRight, Quote, Star, CheckCircle, Loader2 } from 'lucide-react';
+import { Users, Target, Eye, Calendar, ArrowRight, Quote, Star, CheckCircle, Loader2, Code, Monitor } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { collection, query, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
@@ -12,7 +12,7 @@ const defaultTeam = [
     {
         name: "Maisar Hussain",
         role: "Senior Teacher (Thiriya)",
-        image: "/images/cd/maisar.jpg",
+        image: <Monitor size={48} className="text-slate-400" />,
         desc: "Specialized in professional computer training and student mentorship at our Thiriya center.",
         whatsapp: "917455098949"
     },
@@ -26,7 +26,7 @@ const defaultTeam = [
     {
         name: "AFROJ",
         role: "Web Dev",
-        image: "/images/cd/coderafroj.jpg",
+        image: <Code size={48} className="text-indigo-400" />,
         desc: "BCA (present) & Web Developer passionate about student growth.",
         whatsapp: "917017733805"
     }
@@ -64,7 +64,17 @@ const About = () => {
                 const q = query(collection(db, "experts"), orderBy("createdAt", "asc"));
                 const snapshot = await getDocs(q);
                 if (!snapshot.empty) {
-                    const fetchedTeam = snapshot.docs.map(doc => doc.data());
+                    const fetchedTeam = snapshot.docs.map(doc => {
+                        const data = doc.data();
+                        const nameLower = data.name ? data.name.toLowerCase() : "";
+                        if (nameLower.includes("afroj")) {
+                            data.image = <Code size={48} className="text-indigo-400" />;
+                        }
+                        if (nameLower.includes("maisar") || nameLower.includes("husain") || nameLower.includes("hussain")) {
+                            data.image = <Monitor size={48} className="text-slate-400" />;
+                        }
+                        return data;
+                    });
                     setTeam(fetchedTeam);
                 } else {
                     setTeam(defaultTeam);

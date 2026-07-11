@@ -8,10 +8,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'logo.png'],
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,json,webmanifest}'],
-        maximumFileSizeToCacheInBytes: 3000000 // 3MB limit
+        maximumFileSizeToCacheInBytes: 6000000,
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,jpg,jpeg}'],
       },
       manifest: {
         name: 'ByteCore Computer Centre',

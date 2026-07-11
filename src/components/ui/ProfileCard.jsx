@@ -62,12 +62,16 @@ export default function ProfileCard({
                 {/* Avatar Container */}
                 <div className="relative mb-6">
                     <motion.div
-                        className="w-32 h-32 rounded-full overflow-hidden border-4"
+                        className="w-32 h-32 rounded-full overflow-hidden border-4 bg-slate-50 flex items-center justify-center"
                         style={{ borderColor: currentTheme.bg }}
                         animate={{ scale: isHovered ? 1.05 : 1 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <img src={image} alt={name} className="w-full h-full object-cover" />
+                        {typeof image === 'string' ? (
+                            <img src={image} alt={name} className="w-full h-full object-cover" />
+                        ) : (
+                            image
+                        )}
                     </motion.div>
                     {/* Decorative Ring */}
                     <motion.div

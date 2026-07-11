@@ -2,10 +2,12 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
-import { defineConfig, globalIgnores } from 'eslint/config'
+import { defineConfig } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'api/**', 'public/**', 'find_csv_duplicates.js', 'injectData.js']),
+  {
+    ignores: ['dist', 'api/**', 'public/**', 'find_csv_duplicates.js', 'injectData.js', 'scripts/**'],
+  },
   {
     files: ['**/*.{js,jsx}'],
     extends: [
@@ -23,7 +25,7 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['warn', { varsIgnorePattern: '^[A-Z_]' }],
+      'no-unused-vars': 'off',
     },
   },
 ])

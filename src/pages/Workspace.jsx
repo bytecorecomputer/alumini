@@ -83,23 +83,23 @@ export default function Workspace() {
         const p = CODER_AFROJ_PROBLEMS.find(x => x.id === problemId);
         if (p) {
             setProblem(p);
-            resetCode(p, language);
         } else {
             navigate('/coderafroj');
         }
     }, [problemId, navigate]);
 
+    const resetCode = useCallback(() => {
+        if (!problem) return;
+        
+        const starter = problem.starterCode?.[language];
+        setCode(starter || FALLBACK_TEMPLATES[language] || "");
+    }, [problem, language]);
+
     useEffect(() => {
         if (problem) {
-            resetCode(problem, language);
+            resetCode();
         }
-    }, [language, problem]);
-
-    const resetCode = (p = problem, lang = language) => {
-        if (!p) return;
-        const starter = p.starterCode?.[lang];
-        setCode(starter || FALLBACK_TEMPLATES[lang] || "");
-    };
+    }, [problem, resetCode]);
 
     const runCode = async () => {
         if (!code.trim()) return;
