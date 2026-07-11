@@ -27,9 +27,19 @@ export function AuthProvider({ children }) {
     return () => unsub();
   }, [student?.registration]);
 
+  const loginStudent = (studentData) => {
+    setStudent(studentData);
+    setUser(null);
+    setUserData(null);
+    setRole('student');
+    // Store in local storage to persist student session
+    localStorage.setItem('studentSession', JSON.stringify({ registration: studentData.registration }));
+  };
+
   const logoutStudent = async () => {
     await signOut(auth);
     setStudent(null);
+    localStorage.removeItem('studentSession');
   };
 
   const logoutUser = async () => {
@@ -49,7 +59,6 @@ export function AuthProvider({ children }) {
         const data = snap.data();
         setRole(data?.role);
         setUserData(data);
-        console.log("User data refreshed successfully");
       }
     } catch (error) {
       console.error("Error refreshing user data:", error);
@@ -98,7 +107,29 @@ export function AuthProvider({ children }) {
           setUser(null);
           setRole(null);
           setUserData(null);
-          setStudent(null);
+          
+          // Check for persisted student session
+          const storedSession = localStorage.getItem('studentSession');
+          if (storedSession) {
+            try {
+              const { registration } = JSON.parse(storedSession);
+              if (registration) {
+                const studentRef = doc(db, "students", registration);
+                const studentSnap = await getDoc(studentRef);
+                if (studentSnap.exists()) {
+                  setStudent(studentSnap.data());
+                  setRole('student');
+                } else {
+                  setStudent(null);
+                  localStorage.removeItem('studentSession');
+                }
+              }
+            } catch(err) {
+               console.error("Error recovering student session", err);
+            }
+          } else {
+             setStudent(null);
+          }
         }
       } finally {
         setLoading(false);
@@ -114,6 +145,7 @@ export function AuthProvider({ children }) {
       student, isStudent: !!student,
       loading,
       refreshUserData,
+      loginStudent,
       logoutStudent,
       logoutUser
     }}>
@@ -122,5 +154,4 @@ export function AuthProvider({ children }) {
   );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

@@ -2,89 +2,88 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Helper Functions
+    function isAdmin() {
+      return request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+    }
+
     // 1. User Profiles: Users can read/write their OWN data
     match /users/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
       allow create: if request.auth != null && request.auth.uid == userId;
       allow update: if request.auth != null && request.auth.uid == userId && 
-                    (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']) || request.auth.token.email == 'bytecore.info@gmail.com');
+                    !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']);
       allow delete: if request.auth != null && request.auth.uid == userId;
     }
 
     // 2. Students: Restricted read (auth required), Restricted write
     match /students/{studentId} {
-      allow read: if request.auth != null && (request.auth.uid == studentId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin']); 
+      allow read: if request.auth != null && (request.auth.uid == studentId || isAdmin()); 
       // Allow updates only to photoUrl and updatedAt to prevent tampering with fees or course data
       allow update: if request.auth != null && request.auth.uid == studentId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['photoUrl', 'updatedAt']); 
       // Full write still requires admin role
-      allow write: if request.auth != null && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+      allow write: if isAdmin();
     }
 
     // 3. Certificates: Public read (verification), Staff write
     match /certificates/{certId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isAdmin();
     }
 
     // 4. Metadata and Courses: Public read, Admin write
     match /metadata/{docId} {
       allow read: if true;
-      allow write: if request.auth != null && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+      allow write: if isAdmin();
     }
     match /courses/{courseId} {
       allow read: if true;
-      allow write: if request.auth != null && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+      allow write: if isAdmin();
     }
     
     // 5. Lab Gallery: Public Read, Admin Write
     match /lab_gallery/{docId} {
       allow read: if true;
-      allow write: if request.auth != null && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+      allow write: if isAdmin();
     }
 
     // 6. Coaching: Public Read, Admin Write
     match /coaching/{docId} {
       allow read: if true;
-      allow write: if request.auth != null && 
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+      allow write: if isAdmin();
     }
 
     match /quiz_progress/{studentId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null && request.auth.uid == studentId;
-      allow update: if (request.auth != null && request.auth.uid == studentId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['courses', 'lastActive', 'modules', 'completedModules', 'unlockedBadges', 'totalScore'])) || 
-                       (request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin']);
-      allow delete: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+      allow update: if (request.auth != null && request.auth.uid == studentId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['courses', 'lastActive', 'modules', 'completedModules', 'unlockedBadges', 'totalScore'])) || isAdmin();
+      allow delete: if isAdmin();
     }
 
     // 8. Experts Management
     match /experts/{expertId} {
       allow read: if true;
-      allow write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+      allow write: if isAdmin();
     }
 
     // 9. Live Quizzes (Real-time Multiplayer)
     match /live_quizzes/{roomId} {
       allow read: if true; // Anyone can join and read
-      allow write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+      allow write: if isAdmin();
       
       // Subcollection for participants
       match /participants/{participantId} {
          allow read: if true;
          allow create: if request.auth != null;
          allow update: if request.auth != null && request.resource.data.diff(resource.data).affectedKeys().hasAny(['lastAnswer', 'score', 'lastPoints', 'joinedAt', 'name']);
-         allow delete: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+         allow delete: if isAdmin();
       }
     }
 
     // Custom Quizzes
     match /custom_quizzes/{quizId} {
       allow read: if true;
-      allow write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'super_admin'];
+      allow write: if isAdmin();
     }
 
     // 10. Default restrictive fallback (Best Practice)

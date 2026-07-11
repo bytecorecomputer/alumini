@@ -52,15 +52,24 @@ const CoderAfroj = lazy(() => import("./pages/CoderAfroj"));
 const Workspace = lazy(() => import("./pages/Workspace"));
 const CertificateVerification = lazy(() => import("./pages/CertificateVerification"));
 
-// Loading fallback
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-slate-950">
-    <div className="relative w-20 h-20">
-      <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full animate-pulse"></div>
-      <div className="absolute inset-0 border-t-4 border-blue-500 rounded-full animate-spin"></div>
+// Loading fallback with delayed render to prevent flash
+const PageLoader = () => {
+  const [show, setShow] = React.useState(false);
+  React.useEffect(() => {
+    const timer = setTimeout(() => setShow(true), 200); // Only show loader if taking more than 200ms
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!show) return null;
+
+  return (
+    <div className="fixed top-0 left-0 w-full z-[9999]">
+      <div className="h-1 bg-blue-500/20 w-full overflow-hidden">
+        <div className="h-full bg-blue-600 w-1/2 animate-[ping-pong_1s_ease-in-out_infinite] shadow-[0_0_10px_#2563eb]"></div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default function App() {
   return (

@@ -11,7 +11,7 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'logo.png'],
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,json,webmanifest}'],
-        maximumFileSizeToCacheInBytes: 10000000 // 10MB limit (fixes build error for 5.5MB agra trip.jpg)
+        maximumFileSizeToCacheInBytes: 3000000 // 3MB limit
       },
       manifest: {
         name: 'ByteCore Computer Centre',
