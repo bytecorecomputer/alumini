@@ -103,7 +103,7 @@ export default function Navbar() {
                             <NavLink to="/">Home</NavLink>
                             <NavLink to="/courses">Courses</NavLink>
                             <NavLink to="/quizzes">Quizzes</NavLink>
-                            <NavLink to="/coderafroj">CodeLabs</NavLink>
+                            <a href="https://coderafroj.bytecores.in" target="_blank" rel="noopener noreferrer" className="relative px-3 md:px-5 py-2 text-[13px] md:text-sm font-semibold transition-all duration-300 text-slate-600 hover:text-blue-600 group flex items-center gap-1">CodeLabs <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span></a>
                             <NavLink to="/contact">Contact</NavLink>
                             {isStudent && <NavLink to="/student-portal">Dashboard</NavLink>}
                             {(role === 'admin' || role === 'super_admin') && (
@@ -215,7 +215,7 @@ export default function Navbar() {
                                     <MobileNavLink to="/about" onClick={() => setIsOpen(false)}>About Us</MobileNavLink>
                                     <MobileNavLink to="/courses" onClick={() => setIsOpen(false)}>Professional Courses</MobileNavLink>
                                     <MobileNavLink to="/quizzes" onClick={() => setIsOpen(false)}>Skill Quizzes</MobileNavLink>
-                                    <MobileNavLink to="/coderafroj" onClick={() => setIsOpen(false)}>CoderAfroj Arena</MobileNavLink>
+                                    <a href="https://coderafroj.bytecores.in" target="_blank" rel="noopener noreferrer" className="block text-2xl font-black text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-2" onClick={() => setIsOpen(false)}>CoderAfroj Arena <span className="relative flex h-3 w-3"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span></span></a>
                                     <MobileNavLink to="/gallery" onClick={() => setIsOpen(false)}>Dome Gallery</MobileNavLink>
                                     {(role === 'admin' || role === 'super_admin') && (
                                         <>

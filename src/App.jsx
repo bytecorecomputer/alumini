@@ -48,8 +48,7 @@ const ExpertManager = lazy(() => import('./pages/ExpertManager'));
 
 const PublicQuiz = lazy(() => import("./pages/PublicQuiz"));
 const NotesHub = lazy(() => import("./pages/NotesHub"));
-const CoderAfroj = lazy(() => import("./pages/CoderAfroj"));
-const Workspace = lazy(() => import("./pages/Workspace"));
+
 const CertificateVerification = lazy(() => import("./pages/CertificateVerification"));
 
 // Loading fallback with delayed render to prevent flash
@@ -95,8 +94,6 @@ export default function App() {
               <Route path="/donate" element={<Donate />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
-              <Route path="/coderafroj" element={<CoderAfroj />} />
-              <Route path="/coderafroj/:problemId" element={<Workspace />} />
               <Route path="/verify/:certId" element={<CertificateVerification />} />
 
               {/* Protected Routes */}

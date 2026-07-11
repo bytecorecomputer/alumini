@@ -157,6 +157,54 @@ export default function Home() {
                 </motion.div>
             </div>
 
+            {/* --- CODERAFROJ ARENA BANNER --- */}
+            <div className="py-20 px-6 bg-slate-950 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] -z-10"></div>
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] -z-10"></div>
+                
+                <div className="max-w-5xl mx-auto">
+                    <div className="relative rounded-[3rem] bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 overflow-hidden p-10 md:p-16 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-10">
+                        <div className="relative z-10 md:w-1/2 text-center md:text-left">
+                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-900/30 border border-blue-800/50 text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                                <Star className="w-3 h-3 text-yellow-400" />
+                                Exclusive Platform
+                            </span>
+                            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
+                                CoderAfroj <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Arena</span>
+                            </h2>
+                            <p className="text-slate-400 font-medium text-lg leading-relaxed mb-8">
+                                Master your coding skills with our advanced IDE platform. Practice 1000+ problems, compile code in real-time, and prepare for top tech interviews.
+                            </p>
+                            <a 
+                                href="https://coderafroj.bytecores.in" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex px-8 py-4 rounded-xl bg-blue-600 text-white font-black uppercase tracking-widest text-xs shadow-[0_0_40px_-10px_rgba(37,99,235,0.5)] hover:bg-blue-500 hover:-translate-y-1 transition-all items-center justify-center gap-2"
+                            >
+                                Enter The Arena <ArrowRight size={16} />
+                            </a>
+                        </div>
+                        <div className="relative z-10 md:w-1/2 flex justify-center">
+                            <div className="w-full max-w-sm aspect-square bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                                {/* Decorative code editor mockup */}
+                                <div className="flex gap-2 mb-4">
+                                    <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
+                                </div>
+                                <div className="space-y-3 font-mono text-sm opacity-70">
+                                    <div className="text-blue-400">function <span className="text-yellow-200">solveProblem</span>() {'{'}</div>
+                                    <div className="pl-4 text-emerald-400">// Master data structures</div>
+                                    <div className="pl-4 text-emerald-400">// Ace technical interviews</div>
+                                    <div className="pl-4 text-purple-400">return <span className="text-orange-300">"Success"</span>;</div>
+                                    <div className="text-blue-400">{'}'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* --- CTA BANNER --- */}
             < div className="py-20 px-6 bg-slate-50" >
                 <div className="max-w-5xl mx-auto">
