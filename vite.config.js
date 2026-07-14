@@ -21,6 +21,8 @@ export default defineConfig({
         theme_color: '#0f172a',
         background_color: '#ffffff',
         display: 'standalone',
+        orientation: 'portrait-primary',
+        categories: ["education", "technology", "productivity"],
         icons: [
           {
             src: 'logo.png',
@@ -37,6 +39,22 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
+          }
+        ],
+        shortcuts: [
+          {
+            name: "Student Portal",
+            short_name: "Portal",
+            description: "Access your student dashboard",
+            url: "/student-portal",
+            icons: [{ src: "logo.png", sizes: "192x192" }]
+          },
+          {
+            name: "Take a Quiz",
+            short_name: "Quizzes",
+            description: "Practice your knowledge",
+            url: "/quizzes",
+            icons: [{ src: "logo.png", sizes: "192x192" }]
           }
         ]
       }
