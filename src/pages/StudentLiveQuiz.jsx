@@ -9,6 +9,7 @@ import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
 import confetti from 'canvas-confetti';
 import { initAudio, playSuccess, playError } from '../lib/soundEffects';
 import toast from 'react-hot-toast';
+import ParticlesBackground from '../components/ParticlesBackground';
 
 const OPTION_COLORS = ['bg-rose-500', 'bg-blue-500', 'bg-amber-500', 'bg-emerald-500'];
 const OPTION_HOVER = ['hover:bg-rose-600', 'hover:bg-blue-600', 'hover:bg-amber-600', 'hover:bg-emerald-600'];
@@ -242,6 +243,7 @@ export default function StudentLiveQuiz() {
     if (!joined) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 flex flex-col items-center justify-center p-4 md:p-6 font-inter relative overflow-hidden">
+                <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
                 
                 {/* Floating animated shapes */}
@@ -298,6 +300,7 @@ export default function StudentLiveQuiz() {
     if (status === 'waiting') {
         return (
             <div className="min-h-screen bg-gradient-to-br from-emerald-400 to-emerald-600 flex flex-col items-center justify-center p-6 text-center text-white font-inter relative overflow-hidden">
+                <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
                 <motion.div animate={{ scale: [1, 1.05, 1], opacity: [0.5, 0.8, 0.5] }} transition={{ duration: 2, repeat: Infinity }} className="absolute w-[600px] h-[600px] bg-white/20 rounded-full blur-[100px]"></motion.div>
                 
@@ -315,6 +318,7 @@ export default function StudentLiveQuiz() {
     if (status === 'countdown') {
         return (
             <div className="min-h-screen bg-gradient-to-br from-indigo-500 to-blue-600 flex flex-col items-center justify-center p-6 text-center text-white font-inter relative overflow-hidden">
+                <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
                 
                 <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative z-10">
@@ -333,6 +337,7 @@ export default function StudentLiveQuiz() {
     if (status === 'active') {
         return (
             <div className="min-h-screen bg-slate-50 flex flex-col font-inter relative">
+                <ParticlesBackground />
                 {isPaused && (
                     <div className="absolute inset-0 z-50 bg-slate-900/90 backdrop-blur-md flex flex-col items-center justify-center text-white p-6 text-center">
                         <AlertCircle size={80} className="text-amber-400 mb-6 animate-bounce" />
@@ -432,6 +437,7 @@ export default function StudentLiveQuiz() {
         
         return (
             <div className={`min-h-screen flex flex-col items-center justify-center p-4 md:p-6 text-center text-white bg-gradient-to-br ${resultColor} font-inter relative overflow-hidden`}>
+                <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
                 
                 <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative z-10 w-full max-w-md bg-white/10 p-8 rounded-[3rem] backdrop-blur-md border border-white/20 shadow-2xl">
@@ -461,6 +467,7 @@ export default function StudentLiveQuiz() {
     if (status === 'leaderboard') {
         return (
             <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex flex-col items-center justify-center p-6 text-center text-white font-inter relative overflow-hidden">
+                <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
                 
                 <div className="relative z-10 w-full max-w-lg bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-[2.5rem] shadow-2xl">
@@ -500,6 +507,7 @@ export default function StudentLiveQuiz() {
     if (status === 'finished') {
         return (
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-4 md:p-6 text-center text-white font-inter relative overflow-hidden">
+                <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
                 <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="relative z-10 bg-white/5 p-8 md:p-12 rounded-[3rem] backdrop-blur-2xl border border-white/10 w-full max-w-md shadow-2xl">
                     <Trophy size={60} className="text-yellow-500 mx-auto mb-6" />

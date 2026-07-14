@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { initAudio, playCountdownBeep, playCountdownGo, playTick, playSuccess } from '../lib/soundEffects';
+import ParticlesBackground from '../components/ParticlesBackground';
 
 const OPTION_COLORS = ['bg-rose-500', 'bg-blue-500', 'bg-amber-500', 'bg-emerald-500'];
 const OPTION_BORDER = ['border-rose-600', 'border-blue-600', 'border-amber-600', 'border-emerald-600'];
@@ -289,6 +290,7 @@ export default function AdminLiveQuiz() {
     if (quizState === 'setup') {
         return (
             <div className="min-h-screen bg-slate-900 py-12 md:py-20 px-4 sm:px-6 flex items-center justify-center font-inter relative overflow-hidden">
+                <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] mix-blend-overlay"></div>
                 <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-600 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
                 <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-600 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
@@ -366,6 +368,7 @@ export default function AdminLiveQuiz() {
 
         return (
             <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden font-inter">
+                <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay"></div>
                 <div className="absolute top-0 w-full h-[50vh] bg-gradient-to-b from-indigo-600/30 to-transparent pointer-events-none"></div>
 
@@ -453,7 +456,8 @@ export default function AdminLiveQuiz() {
     const totalQ = questions.length;
 
     return (
-        <div className="min-h-screen bg-slate-900 flex flex-col font-inter">
+        <div className="min-h-screen bg-slate-900 flex flex-col font-inter relative overflow-hidden">
+            <ParticlesBackground />
             {/* Top Presentation Bar */}
             <div className="h-20 bg-black/40 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-8 shadow-sm shrink-0 z-50">
                 <div className="flex items-center gap-4">

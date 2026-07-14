@@ -6,7 +6,7 @@ import { defineConfig } from 'eslint/config'
 
 export default defineConfig([
   {
-    ignores: ['dist', 'api/**', 'public/**', 'find_csv_duplicates.js', 'injectData.js', 'scripts/**'],
+    ignores: ['dist', 'api/**', 'public/**', 'find_csv_duplicates.js', 'injectData.js', 'scripts/**', 'src/data/**'],
   },
   {
     files: ['**/*.{js,jsx}'],
