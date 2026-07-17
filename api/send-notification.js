@@ -1,7 +1,10 @@
-import admin from 'firebase-admin';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
+import { getMessaging } from 'firebase-admin/messaging';
 
 // Initialize Firebase Admin SDK
-if (!admin.apps.length) {
+if (!getApps().length) {
     try {
         let serviceAccount;
 
@@ -14,8 +17,8 @@ if (!admin.apps.length) {
                 serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
             }
 
-            admin.initializeApp({
-                credential: admin.credential.cert(serviceAccount)
+            initializeApp({
+                credential: cert(serviceAccount)
             });
             console.log("Firebase Admin Initialized via JSON");
         } else {
@@ -28,8 +31,8 @@ if (!admin.apps.length) {
             };
 
             if (serviceAccount && serviceAccount.privateKey) {
-                admin.initializeApp({
-                    credential: admin.credential.cert(serviceAccount)
+                initializeApp({
+                    credential: cert(serviceAccount)
                 });
                 console.log("Firebase Admin Initialized via ENV Parts");
             } else {
@@ -55,9 +58,9 @@ export default async function handler(req, res) {
     const token = authHeader.split('Bearer ')[1];
     
     try {
-        const decodedToken = await admin.auth().verifyIdToken(token);
+        const decodedToken = await getAuth().verifyIdToken(token);
         // Ensure user is an admin by checking firestore users collection
-        const userDoc = await admin.firestore().collection('users').doc(decodedToken.uid).get();
+        const userDoc = await getFirestore().collection('users').doc(decodedToken.uid).get();
         if (!userDoc.exists || !['admin', 'super_admin'].includes(userDoc.data().role)) {
             return res.status(403).json({ error: 'Forbidden: Requires admin privileges' });
         }
@@ -72,7 +75,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Missing required payload (title, body, tokens array)' });
         }
 
-        if (!admin.apps.length) {
+        if (!getApps().length) {
             return res.status(500).json({ error: 'Firebase Admin not initialized. Check server Vercel env.' });
         }
 
@@ -93,7 +96,7 @@ export default async function handler(req, res) {
             tokens: validTokens, // Cleaned array
         };
 
-        const response = await admin.messaging().sendEachForMulticast(message);
+        const response = await getMessaging().sendEachForMulticast(message);
         return res.status(200).json({
             success: true,
             successCount: response.successCount,

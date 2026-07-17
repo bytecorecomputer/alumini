@@ -1,4 +1,13 @@
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 import crypto from 'crypto';
+
+if (!getApps().length) {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
+    initializeApp({
+        credential: cert(serviceAccount)
+    });
+}
 
 export default async function handler(req, res) {
     console.log('--- Payment Verification Protocol Initiated ---');
@@ -38,5 +47,4 @@ export default async function handler(req, res) {
         console.error('CRITICAL FAILURE in verify-payment:', error);
         return res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
-}
 

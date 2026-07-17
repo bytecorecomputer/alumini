@@ -1,7 +1,9 @@
-import admin from 'firebase-admin';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
 
 // Initialize Firebase Admin SDK
-if (!admin.apps.length) {
+if (!getApps().length) {
     try {
         let serviceAccount;
 
@@ -13,8 +15,8 @@ if (!admin.apps.length) {
                 serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
             }
 
-            admin.initializeApp({
-                credential: admin.credential.cert(serviceAccount)
+            initializeApp({
+                credential: cert(serviceAccount)
             });
         } else {
             serviceAccount = {
@@ -24,8 +26,8 @@ if (!admin.apps.length) {
             };
 
             if (serviceAccount && serviceAccount.privateKey) {
-                admin.initializeApp({
-                    credential: admin.credential.cert(serviceAccount)
+                initializeApp({
+                    credential: cert(serviceAccount)
                 });
             }
         }
@@ -56,11 +58,11 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'Missing registration or mobile' });
         }
 
-        if (!admin.apps.length) {
-            return res.status(500).json({ error: 'Firebase Admin not initialized.' });
+        if (!getApps().length) {
+            return res.status(500).json({ error: 'Firebase Admin not initialized. Missing VITE_FIREBASE_PRIVATE_KEY in .env file.' });
         }
 
-        const db = admin.firestore();
+        const db = getFirestore();
         const studentsRef = db.collection('students');
         
         // Query the students collection
@@ -78,7 +80,7 @@ export default async function handler(req, res) {
         const studentData = studentDoc.data();
 
         // Create Custom Token using registration ID as the UID
-        const customToken = await admin.auth().createCustomToken(studentData.registration, {
+        const customToken = await getAuth().createCustomToken(studentData.registration, {
             role: 'student',
             course: studentData.course
         });
@@ -91,6 +93,6 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.error('Error during student login:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: `Internal Server Error: ${error.message}` });
     }
 }

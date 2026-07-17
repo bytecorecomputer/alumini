@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/common/SEO';
 import { Search, Download, FileImage, FileText, ArrowLeft, Loader2, CheckCircle2, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import jsPDF from 'jspdf';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import diplomaData from '../Diploma.json';
@@ -134,8 +133,9 @@ export default function CertificateDownload() {
         img.crossOrigin = "Anonymous";
         img.src = result.link;
 
-        img.onload = () => {
+        img.onload = async () => {
             try {
+                const { default: jsPDF } = await import('jspdf');
                 // A4 size in mm is 297 x 210 for Landscape
                 const pdf = new jsPDF({
                     orientation: 'landscape',

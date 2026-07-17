@@ -1,7 +1,5 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import CertificateTemplate from '../components/certificate/CertificateTemplate';
 import {
     generateCertificateNumber,
@@ -179,6 +177,11 @@ export default function CertificateGenerator() {
             // Wait briefly to ensure images/fonts are fully rendered in the DOM
             await new Promise(resolve => setTimeout(resolve, 800));
             const element = printRef.current;
+
+            const [html2canvas, { default: jsPDF }] = await Promise.all([
+                import('html2canvas').then(m => m.default),
+                import('jspdf')
+            ]);
 
             // Generate high-quality canvas (scale 2 is optimal, scale 3 often causes memory/black screen issues)
             const canvas = await html2canvas(element, {

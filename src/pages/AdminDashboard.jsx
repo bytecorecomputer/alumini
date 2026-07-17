@@ -1,5 +1,5 @@
 import { useEffect, useState, cloneElement } from "react";
-import { collection, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, deleteDoc, query, limit } from "firebase/firestore";
 import { db } from "../firebase/firestore";
 import { useAuth } from "../app/common/AuthContext";
 import { Link } from "react-router-dom";
@@ -30,7 +30,8 @@ export default function AdminDashboard() {
 
     const fetchUsers = async () => {
         try {
-            const querySnapshot = await getDocs(collection(db, "users"));
+            const q = query(collection(db, "users"), limit(500));
+            const querySnapshot = await getDocs(q);
             const usersList = [];
             let s = 0, a = 0, ad = 0;
 

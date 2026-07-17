@@ -16,11 +16,11 @@ import SEO from '../components/common/SEO';
 import { cn } from '../lib/utils';
 
 // Import Static Assets
-import students1 from '../assets/images/computer lab/students (1).jpg';
-import students2 from '../assets/images/computer lab/students (2).jpg';
-import topper2 from '../assets/images/computer lab/scholership exam topper (2).jpg';
-import topper1 from '../assets/images/computer lab/scholership exam topper.jpg';
-import agraTrip from '../assets/images/computer lab/agra trip.jpg';
+import students1 from '../assets/images/computer lab/students (1).webp';
+import students2 from '../assets/images/computer lab/students (2).webp';
+import topper2 from '../assets/images/computer lab/scholership exam topper (2).webp';
+import topper1 from '../assets/images/computer lab/scholership exam topper.webp';
+import agraTrip from '../assets/images/computer lab/agra trip.webp';
 import rahulSirVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
 
 const LabGallery = () => {

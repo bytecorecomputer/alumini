@@ -11,11 +11,11 @@ import {
 import { cn } from '../lib/utils';
 
 // Import Static Assets for Collage Hero
-import labImg1 from '../assets/images/computer lab/students (1).jpg';
-import labImg2 from '../assets/images/computer lab/students (2).jpg';
-import agraTrip from '../assets/images/computer lab/agra trip.jpg';
-import topper1 from '../assets/images/computer lab/scholership exam topper.jpg';
-import topper2 from '../assets/images/computer lab/scholership exam topper (2).jpg';
+import labImg1 from '../assets/images/computer lab/students (1).webp';
+import labImg2 from '../assets/images/computer lab/students (2).webp';
+import agraTrip from '../assets/images/computer lab/agra trip.webp';
+import topper1 from '../assets/images/computer lab/scholership exam topper.webp';
+import topper2 from '../assets/images/computer lab/scholership exam topper (2).webp';
 import rahulSirVideo from '../assets/images/computer lab/rahul sir teach student.mp4';
 
 const Lightbox = ({ item, close }) => (

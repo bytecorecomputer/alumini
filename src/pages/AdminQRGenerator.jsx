@@ -4,7 +4,6 @@ import { db } from '../firebase/firestore';
 import { collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { QrCode, Search, Download, ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react';
 import { QRCodeCanvas } from 'qrcode.react';
-import html2canvas from 'html2canvas';
 import toast from 'react-hot-toast';
 
 export default function AdminQRGenerator() {
@@ -81,6 +80,7 @@ export default function AdminQRGenerator() {
         if (!qrRef.current || !certData) return;
         
         try {
+            const { default: html2canvas } = await import('html2canvas');
             const canvas = await html2canvas(qrRef.current, { scale: 4 });
             const url = canvas.toDataURL('image/png', 1.0);
             const link = document.createElement('a');

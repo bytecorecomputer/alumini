@@ -34,6 +34,11 @@ export default function StudentLogin() {
                 body: JSON.stringify({ registration, mobile })
             });
 
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                throw new Error("Backend not running. Please use 'npx vercel dev' instead of 'npm run dev'.");
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
@@ -57,7 +62,9 @@ export default function StudentLogin() {
             navigate('/student-portal');
         } catch (err) {
             console.error("Student login error:", err);
-            setError('System connectivity error. Try again.');
+            setError(err.message === "Backend not running. Please use 'npx vercel dev' instead of 'npm run dev'." 
+                ? err.message 
+                : 'System connectivity error. Try again.');
         } finally {
             setIsLoading(false);
         }
