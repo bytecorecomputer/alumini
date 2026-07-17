@@ -21,6 +21,7 @@
     "dexie": "^4.4.3",
     "dompurify": "^3.4.11",
     "firebase": "^12.7.0",
+    "firebase-admin": "^14.2.0",
     "framer-motion": "^12.34.3",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.0.0",
