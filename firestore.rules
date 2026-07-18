@@ -16,9 +16,9 @@ service cloud.firestore {
       allow delete: if request.auth != null && request.auth.uid == userId;
     }
 
-    // 2. Students: Restricted read (auth required), Restricted write
+    // 2. Students: Public read (for client-side login), Restricted write
     match /students/{studentId} {
-      allow read: if request.auth != null && (request.auth.uid == studentId || isAdmin()); 
+      allow read: if true; 
       // Allow updates only to photoUrl and updatedAt to prevent tampering with fees or course data
       allow update: if request.auth != null && request.auth.uid == studentId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['photoUrl', 'updatedAt']); 
       // Full write still requires admin role

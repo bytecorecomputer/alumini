@@ -4,6 +4,7 @@ import { db } from '../firebase/firestore';
 import { useAuth } from '../app/common/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import {
     Search, Plus, User, CreditCard, Calendar, MapPin, Phone,
     Filter, Download, ChevronRight, X, Check, AlertCircle,
@@ -281,13 +282,79 @@ export default function CoachingAdmin() {
         return matchesSearch && matchesStatus && matchesCenter;
     });
 
-    const stats = {
-        thiriya: globalStats?.thiriyaCount || 0,
-        nariyawal: globalStats?.nariyawalCount || 0,
-        collected: globalStats?.totalRevenue || 0,
-        pending: globalStats?.totalArrears || 0,
-        total: globalStats?.totalEnrollments || 0
-    };
+    const stats = React.useMemo(() => {
+        const isFiltered = searchTerm || centerFilter !== 'all' || filterStatus !== 'all';
+        
+        if (!isFiltered && globalStats) {
+            return {
+                thiriya: globalStats.thiriyaCount || 0,
+                nariyawal: globalStats.nariyawalCount || 0,
+                collected: globalStats.totalRevenue || 0,
+                pending: globalStats.totalArrears || 0,
+                total: globalStats.totalEnrollments || 0,
+                registrationFees: 0,
+                courseData: []
+            };
+        }
+
+        let thiriya = 0;
+        let nariyawal = 0;
+        let collected = 0;
+        let pending = 0;
+        let registrationFees = 0;
+        let total = filteredStudents.length;
+        const courseCount = {};
+
+        filteredStudents.forEach(s => {
+            if (s.center === 'Thiriya') thiriya++;
+            else nariyawal++; 
+            
+            const totalPaid = (s.paidFees || 0) + (s.oldPaidFees || 0);
+            collected += totalPaid;
+            pending += Math.max(0, (s.totalFees || 0) - totalPaid);
+            registrationFees += (s.oldPaidFees || 0);
+
+            if (s.course) {
+                const c = s.course.toUpperCase().trim();
+                if (!courseCount[c]) courseCount[c] = 0;
+                courseCount[c]++;
+            }
+        });
+
+        const courseData = Object.keys(courseCount).map(c => ({
+            name: c,
+            value: courseCount[c]
+        })).sort((a,b) => b.value - a.value);
+
+        return { thiriya, nariyawal, collected, pending, total, registrationFees, courseData };
+    }, [filteredStudents, globalStats, searchTerm, centerFilter, filterStatus]);
+
+    const monthWiseData = React.useMemo(() => {
+        const trends = {};
+        filteredStudents.forEach(s => {
+            if (s.installments && s.installments.length > 0) {
+                s.installments.forEach(inst => {
+                    if (inst.date) {
+                        const month = inst.date.substring(0, 7); // YYYY-MM
+                        if (!trends[month]) trends[month] = 0;
+                        trends[month] += (Number(inst.amount) || 0);
+                    }
+                });
+            } else if (s.admissionDate && s.oldPaidFees > 0) {
+                // Approximate for old students without installments
+                const month = s.admissionDate.substring(0, 7);
+                if (month) {
+                    if (!trends[month]) trends[month] = 0;
+                    trends[month] += (Number(s.oldPaidFees) || 0);
+                }
+            }
+        });
+        
+        return Object.keys(trends)
+            .sort((a,b) => a.localeCompare(b))
+            .slice(-12) // Last 12 months with data
+            .map(k => ({ month: k, revenue: trends[k] }));
+    }, [filteredStudents]);
 
     const calculateCourseExpiry = (student) => {
         if (!student.admissionDate || !student.course) return null;
@@ -377,12 +444,62 @@ export default function CoachingAdmin() {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
                         <StatCard label="Total Enroll" value={stats.total} icon={<Users size={16} />} color="blue" />
                         <StatCard label="Thiriya Students" value={stats.thiriya} icon={<MapPin size={16} />} color="amber" />
                         <StatCard label="Naryawal Students" value={stats.nariyawal} icon={<MapPin size={16} />} color="emerald" />
-                        <StatCard label="Revenue" value={`₹${stats.collected}`} icon={<Wallet size={16} />} color="emerald" />
-                        <StatCard label="Arrears" value={`₹${stats.pending}`} icon={<AlertCircle size={16} />} color="amber" />
+                        <StatCard label="Total Income" value={`₹${stats.collected.toLocaleString()}`} icon={<Wallet size={16} />} color="emerald" />
+                        <StatCard label="Arrears" value={`₹${stats.pending.toLocaleString()}`} icon={<AlertCircle size={16} />} color="red" />
+                        <StatCard label="Reg. Fees" value={`₹${(stats.registrationFees || 0).toLocaleString()}`} icon={<CreditCard size={16} />} color="blue" />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-2">
+                        {/* Month-wise Chart */}
+                        {monthWiseData.length > 0 && (
+                            <div className="lg:col-span-2 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40">
+                                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Month-wise Fee Collection</h3>
+                                <div className="h-56 w-full">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={monthWiseData}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                            <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 700 }} />
+                                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(v) => `₹${v/1000}k`} />
+                                            <RechartsTooltip formatter={(value) => [`₹${value}`, 'Revenue']} contentStyle={{ borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                                            <Bar dataKey="revenue" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Course Distribution Chart */}
+                        {stats.courseData && stats.courseData.length > 0 && (
+                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40">
+                                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Course Popularity</h3>
+                                <div className="h-56 w-full relative">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <PieChart>
+                                            <Pie
+                                                data={stats.courseData.slice(0, 5)}
+                                                cx="50%"
+                                                cy="45%"
+                                                innerRadius={60}
+                                                outerRadius={80}
+                                                paddingAngle={5}
+                                                dataKey="value"
+                                                stroke="none"
+                                            >
+                                                {stats.courseData.slice(0, 5).map((entry, index) => (
+                                                    <Cell key={`cell-${index}`} fill={['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'][index % 5]} />
+                                                ))}
+                                            </Pie>
+                                            <RechartsTooltip contentStyle={{ borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
+                                            <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 700 }} />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 

@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail, signInWithCustomToken, signOut } from "firebase/auth";
 import { auth } from "../../firebase/auth";
 import { doc, getDoc, query, collection, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firestore";
@@ -59,7 +59,9 @@ export default function Login() {
         const snap = await getDoc(doc(db, "users", res.user.uid));
 
         if (!snap.exists()) {
-          navigate("/");
+          await signOut(auth);
+          setError("Access denied: Your profile was not found in the system. Contact Admin.");
+          setLoading(false);
           return;
         }
 
@@ -92,29 +94,31 @@ export default function Login() {
         const studentRef = doc(db, "students", studentReg.trim());
         const studentSnap = await getDoc(studentRef);
 
-        if (studentSnap.exists()) {
-          const studentData = studentSnap.data();
+        if (!studentSnap.exists()) {
+          setError('Invalid Registration Number.');
+          setLoading(false);
+          return;
+        }
 
-          // Verify mobile number matches for security
-          if (studentData.mobile?.trim() === studentMobile.trim()) {
-            // Use context provider properly to keep everything in sync
-            loginStudent(studentData);
+        const studentData = studentSnap.data();
 
-            sendTelegramNotification('login', {
-              displayName: studentData.fullName,
-              email: `Reg: ${studentData.registration} `,
-              role: 'student_portal'
-            });
+        // Verify mobile number matches for security
+        if (studentData.mobile?.trim() === studentMobile.trim()) {
+          // Use context provider properly to keep everything in sync
+          loginStudent(studentData);
 
-            // Trigger Targeted Fee Audit
-            checkMonthlyFeeReminders(studentData.registration);
+          sendTelegramNotification('login', {
+            displayName: studentData.fullName,
+            email: `Reg: ${studentData.registration}`,
+            role: 'student_portal'
+          });
 
-            // Navigation handled by the useEffect above
-          } else {
-            setError('Invalid Mobile Number for this Registration.');
-          }
+          // Trigger Targeted Fee Audit
+          checkMonthlyFeeReminders(studentData.registration);
+
+          // Navigation handled by the useEffect above
         } else {
-          setError('Registration ID not found.');
+          setError('Invalid Mobile Number for this Registration.');
         }
       } catch (err) {
         console.error(err);
