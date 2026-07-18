@@ -91,19 +91,37 @@ export default function Login() {
       }
 
       try {
-        const studentRef = doc(db, "students", studentReg.trim());
+        const studentRegClean = String(studentReg).trim();
+        const studentMobileClean = String(studentMobile).trim();
+        
+        let studentData = null;
+
+        // 1. Try fetching by Document ID exactly
+        const studentRef = doc(db, "students", studentRegClean);
         const studentSnap = await getDoc(studentRef);
 
-        if (!studentSnap.exists()) {
-          setError('Invalid Registration Number.');
+        if (studentSnap.exists()) {
+          studentData = studentSnap.data();
+        } else {
+          // 2. Fallback: Search the collection where registration field matches (in case Doc ID is slightly different)
+          const q = query(collection(db, "students"), where("registration", "==", studentRegClean));
+          const querySnapshot = await getDocs(q);
+          
+          if (!querySnapshot.empty) {
+            studentData = querySnapshot.docs[0].data();
+          }
+        }
+
+        if (!studentData) {
+          setError('Invalid Registration Number. Profile not found.');
           setLoading(false);
           return;
         }
 
-        const studentData = studentSnap.data();
-
-        // Verify mobile number matches for security
-        if (studentData.mobile?.trim() === studentMobile.trim()) {
+        // Verify mobile number matches for security (safe casting to String)
+        const dbMobile = String(studentData.mobile || '').trim();
+        
+        if (dbMobile === studentMobileClean) {
           // Use context provider properly to keep everything in sync
           loginStudent(studentData);
 
@@ -118,11 +136,13 @@ export default function Login() {
 
           // Navigation handled by the useEffect above
         } else {
-          setError('Invalid Mobile Number for this Registration.');
+          // Providing a masked hint of the actual registered mobile number
+          const hint = dbMobile.length >= 4 ? `...${dbMobile.slice(-4)}` : "unknown";
+          setError(`Invalid Mobile Number. Database expects number ending in ${hint}.`);
         }
       } catch (err) {
-        console.error(err);
-        setError('System connectivity error.');
+        console.error("Student Login Error:", err);
+        setError(`System error: ${err.message || 'Unknown error occurred.'}`);
       } finally {
         setLoading(false);
       }

@@ -309,13 +309,18 @@ export default function CoachingAdmin() {
             if (s.center === 'Thiriya') thiriya++;
             else nariyawal++; 
             
-            const totalPaid = (s.paidFees || 0) + (s.oldPaidFees || 0);
+            // Safe Number Casting for absolute accuracy
+            const nPaidFees = Number(s.paidFees) || 0;
+            const nOldPaidFees = Number(s.oldPaidFees) || 0;
+            const nTotalFees = Number(s.totalFees) || 0;
+
+            const totalPaid = nPaidFees + nOldPaidFees;
             collected += totalPaid;
-            pending += Math.max(0, (s.totalFees || 0) - totalPaid);
-            registrationFees += (s.oldPaidFees || 0);
+            pending += Math.max(0, nTotalFees - totalPaid);
+            registrationFees += nOldPaidFees;
 
             if (s.course) {
-                const c = s.course.toUpperCase().trim();
+                const c = String(s.course).toUpperCase().trim();
                 if (!courseCount[c]) courseCount[c] = 0;
                 courseCount[c]++;
             }
@@ -445,18 +450,23 @@ export default function CoachingAdmin() {
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-                        <StatCard label="Total Enroll" value={stats.total} icon={<Users size={16} />} color="blue" />
-                        <StatCard label="Thiriya Students" value={stats.thiriya} icon={<MapPin size={16} />} color="amber" />
-                        <StatCard label="Naryawal Students" value={stats.nariyawal} icon={<MapPin size={16} />} color="emerald" />
-                        <StatCard label="Total Income" value={`₹${stats.collected.toLocaleString()}`} icon={<Wallet size={16} />} color="emerald" />
-                        <StatCard label="Arrears" value={`₹${stats.pending.toLocaleString()}`} icon={<AlertCircle size={16} />} color="red" />
-                        <StatCard label="Reg. Fees" value={`₹${(stats.registrationFees || 0).toLocaleString()}`} icon={<CreditCard size={16} />} color="blue" />
+                        <StatCard label="Total Enroll" value={stats.total} icon={<Users size={16} />} color="blue" delay={0.1} />
+                        <StatCard label="Thiriya Students" value={stats.thiriya} icon={<MapPin size={16} />} color="amber" delay={0.15} />
+                        <StatCard label="Naryawal Students" value={stats.nariyawal} icon={<MapPin size={16} />} color="emerald" delay={0.2} />
+                        <StatCard label="Total Income" value={`₹${stats.collected.toLocaleString('en-IN')}`} icon={<Wallet size={16} />} color="emerald" delay={0.25} />
+                        <StatCard label="Arrears" value={`₹${stats.pending.toLocaleString('en-IN')}`} icon={<AlertCircle size={16} />} color="red" delay={0.3} />
+                        <StatCard label="Reg. Fees" value={`₹${(stats.registrationFees || 0).toLocaleString('en-IN')}`} icon={<CreditCard size={16} />} color="blue" delay={0.35} />
                     </div>
                     
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-2">
                         {/* Month-wise Chart */}
                         {monthWiseData.length > 0 && (
-                            <div className="lg:col-span-2 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40">
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, delay: 0.4 }}
+                                className="lg:col-span-2 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40"
+                            >
                                 <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Month-wise Fee Collection</h3>
                                 <div className="h-56 w-full">
                                     <ResponsiveContainer width="100%" height="100%">
@@ -469,12 +479,17 @@ export default function CoachingAdmin() {
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </div>
-                            </div>
+                            </motion.div>
                         )}
 
                         {/* Course Distribution Chart */}
                         {stats.courseData && stats.courseData.length > 0 && (
-                            <div className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40">
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.5, delay: 0.5 }}
+                                className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40"
+                            >
                                 <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Course Popularity</h3>
                                 <div className="h-56 w-full relative">
                                     <ResponsiveContainer width="100%" height="100%">
@@ -498,7 +513,7 @@ export default function CoachingAdmin() {
                                         </PieChart>
                                     </ResponsiveContainer>
                                 </div>
-                            </div>
+                            </motion.div>
                         )}
                     </div>
                 </div>
@@ -991,17 +1006,24 @@ export default function CoachingAdmin() {
     );
 }
 
-function StatCard({ label, value, icon, color }) {
+function StatCard({ label, value, icon, color, delay = 0 }) {
     const colors = {
         blue: "bg-blue-50 text-blue-700 border-blue-200 shadow-blue-100/50",
         emerald: "bg-emerald-50 text-emerald-700 border-emerald-200 shadow-emerald-100/50",
         amber: "bg-amber-50 text-amber-700 border-amber-200 shadow-amber-100/50",
-        indigo: "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-indigo-100/50"
+        indigo: "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-indigo-100/50",
+        red: "bg-red-50 text-red-700 border-red-200 shadow-red-100/50"
     };
     return (
-        <div className={cn("p-5 md:p-6 rounded-[2rem] border shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full", colors[color])}>
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: delay }}
+            whileHover={{ y: -5, scale: 1.02 }}
+            className={cn("p-5 md:p-6 rounded-[2rem] border shadow-sm hover:shadow-xl transition-all flex flex-col justify-between h-full", colors[color])}
+        >
             <div className="flex justify-between items-center mb-4">
-                <div className="opacity-40">{icon}</div>
+                <div className="opacity-40 scale-125 origin-left">{icon}</div>
             </div>
             <div>
                 <div className="text-xl md:text-2xl xl:text-3xl font-black tracking-tighter leading-none mb-1 break-all" title={value}>
@@ -1009,7 +1031,7 @@ function StatCard({ label, value, icon, color }) {
                 </div>
                 <div className="text-[9px] font-black uppercase tracking-widest opacity-60 leading-tight truncate">{label}</div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
