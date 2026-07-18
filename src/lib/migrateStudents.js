@@ -146,9 +146,27 @@ export const runMigration = async (csvText) => {
 
                 const existingInst = dbData.installments || [];
                 const mergedMap = new Map();
-                existingInst.forEach(inst => mergedMap.set(`${inst.date}_${inst.amount}`, inst));
+                
+                const normalizeDate = (d) => {
+                    const match = String(d || "").match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})$/);
+                    if (match) {
+                        let y = match[3];
+                        if (y.length === 2) y = "20" + y;
+                        return `${match[1].padStart(2, '0')}-${match[2].padStart(2, '0')}-${y}`;
+                    }
+                    return d;
+                };
+
+                existingInst.forEach(inst => {
+                    const nd = normalizeDate(inst.date);
+                    inst.date = nd; // Normalize in place to fix bad data
+                    mergedMap.set(`${nd}_${inst.amount}`, inst);
+                });
+                
                 student.installments.forEach(inst => {
-                    const key = `${inst.date}_${inst.amount}`;
+                    const nd = normalizeDate(inst.date);
+                    inst.date = nd;
+                    const key = `${nd}_${inst.amount}`;
                     if (!mergedMap.has(key)) mergedMap.set(key, inst);
                 });
 
