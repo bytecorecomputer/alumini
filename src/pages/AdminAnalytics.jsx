@@ -11,6 +11,7 @@ import {
     MapPin, ChevronLeft, Download, ShieldCheck, PieChart as PieChartIcon, Calendar, Zap, AlertTriangle, Building, Activity, Map, Smartphone
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const COLORS = ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#f43f5e', '#84cc16'];
 const PIE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16'];
@@ -104,7 +105,7 @@ export default function AdminAnalytics() {
     const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedMonth, setSelectedMonth] = useState('all');
-    const [selectedCenter, setSelectedCenter] = useState('all');
+    const [selectedCenter, setSelectedCenter] = useState('nariyawal');
     const [addressFilter, setAddressFilter] = useState('all');
     const [appInstalls, setAppInstalls] = useState(0);
 
@@ -320,6 +321,39 @@ export default function AdminAnalytics() {
             }
         });
 
+        // Calculate Monthly Payers explicitly
+        let monthlyPayers = [];
+        if (selectedMonth !== 'all') {
+            students.forEach(s => {
+                const branch = s.center || 'Nariyawal';
+                if (selectedCenter !== 'all' && branch.toLowerCase() !== selectedCenter.toLowerCase()) return;
+                
+                let paidThisMonth = 0;
+                
+                // Registration Fee
+                const admMonth = parseDateToYYYYMM(s.admissionDate);
+                if (admMonth === selectedMonth) paidThisMonth += (Number(s.registrationFee) || 0);
+
+                // Installments
+                if (s.installments && s.installments.length > 0) {
+                    s.installments.forEach(inst => {
+                        if (parseDateToYYYYMM(inst.date) === selectedMonth) paidThisMonth += (Number(inst.amount) || 0);
+                    });
+                } else if (admMonth === selectedMonth) {
+                    paidThisMonth += (Number(s.oldPaidFees) || 0);
+                }
+
+                if (paidThisMonth > 0) {
+                    monthlyPayers.push({
+                        ...s,
+                        paidThisMonth
+                    });
+                }
+            });
+            // Sort by amount descending
+            monthlyPayers.sort((a,b) => b.paidThisMonth - a.paidThisMonth);
+        }
+
         // Now populate trend data installments accurately for 'All Time' view
         if (selectedMonth === 'all') {
             students.forEach(s => {
@@ -363,6 +397,7 @@ export default function AdminAnalytics() {
             totalRevenue, totalRegistrationFees, totalArrears, totalEnrolled, activeStudentsCount,
             branchData, courseData, addressData, trendData, recoveryRate,
             defaulters: defaulters.slice(0, 50),
+            monthlyPayers,
             highRiskCount, projectedPipeline, badDebtRisk
         };
     }, [students, selectedMonth, selectedCenter, addressFilter]);
@@ -414,7 +449,6 @@ export default function AdminAnalytics() {
                                 onChange={(e) => setSelectedCenter(e.target.value)}
                                 className="bg-transparent border-none text-white font-black outline-none px-3 py-1.5 cursor-pointer uppercase text-[10px] tracking-wider w-full"
                             >
-                                <option value="all">Global (All Centers)</option>
                                 <option value="nariyawal">HQ: Nariyawal</option>
                                 <option value="thiriya">Branch: Thiriya</option>
                             </select>
@@ -459,7 +493,7 @@ export default function AdminAnalytics() {
                 {/* BI Dashboard Grid Top Level Stats */}
                 <div className="grid grid-cols-2 lg:grid-cols-7 gap-4 mb-6">
                     {/* Gross Revenue */}
-                    <div className="lg:col-span-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden group">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 bg-gradient-to-br from-[#1e293b] to-[#0f172a] p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-500/20 transition-all"></div>
                         <div className="flex justify-between items-start mb-4 relative z-10">
                             <div className="p-2 bg-emerald-500/20 text-emerald-400 rounded-lg"><Wallet size={16} /></div>
@@ -467,21 +501,21 @@ export default function AdminAnalytics() {
                         </div>
                         <div className="relative z-10">
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{selectedMonth === 'all' ? 'Total Revenue (Inc. Adm)' : 'Revenue This Month'}</p>
-                            <h3 className="text-3xl font-black text-white truncate">₹{analytics.totalRevenue.toLocaleString()}</h3>
+                            <h3 className="text-3xl font-black text-white truncate">₹{analytics.totalRevenue.toLocaleString('en-IN')}</h3>
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Registration Fees Component */}
-                    <div className="bg-[#1e293b] p-5 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-[#1e293b] p-5 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden">
                         <div className="flex justify-between items-start mb-4">
                             <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg"><TrendingUp size={16} /></div>
                         </div>
                         <div>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Registration Fees</p>
-                            <h3 className="text-2xl font-black text-white truncate">₹{analytics.totalRegistrationFees.toLocaleString()}</h3>
+                            <h3 className="text-2xl font-black text-white truncate">₹{analytics.totalRegistrationFees.toLocaleString('en-IN')}</h3>
                             <p className="text-[9px] text-blue-400 font-bold mt-1 uppercase tracking-wider">One-time Injection</p>
                         </div>
-                    </div>
+                    </motion.div>
                     
                     {/* Recovery Rate */}
                     <div className="bg-[#1e293b] p-5 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden">
@@ -498,15 +532,15 @@ export default function AdminAnalytics() {
                     </div>
 
                     {/* Expected Pipeline */}
-                    <div className="bg-[#1e293b] p-5 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="bg-[#1e293b] p-5 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden">
                         <div className="flex justify-between items-start mb-4">
                             <div className="p-2 bg-amber-500/20 text-amber-400 rounded-lg"><Zap size={16} /></div>
                         </div>
                         <div>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Pipeline (Arrears)</p>
-                            <h3 className="text-2xl font-black text-white truncate">₹{analytics.projectedPipeline.toLocaleString()}</h3>
+                            <h3 className="text-2xl font-black text-white truncate">₹{analytics.projectedPipeline.toLocaleString('en-IN')}</h3>
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Enrollment Data */}
                     <div className="bg-gradient-to-br from-blue-600 to-indigo-900 p-5 rounded-2xl border border-blue-500/30 shadow-xl shadow-blue-900/20 relative overflow-hidden">
@@ -532,6 +566,53 @@ export default function AdminAnalytics() {
                         </div>
                     </div>
                 </div>
+
+                {/* Monthly Payers Section (Only visible if month is selected) */}
+                <AnimatePresence>
+                    {selectedMonth !== 'all' && analytics.monthlyPayers && analytics.monthlyPayers.length > 0 && (
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="bg-[#1e293b] p-6 md:p-8 rounded-[2rem] border border-slate-800 shadow-2xl mb-8"
+                        >
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-3 bg-emerald-500/20 text-emerald-400 rounded-xl"><Wallet size={24} /></div>
+                                <div>
+                                    <h3 className="text-xl font-black text-white uppercase tracking-wider">Fee Collections for {monthOptions.find(m => m.value === selectedMonth)?.label}</h3>
+                                    <p className="text-slate-400 font-bold text-xs">Total: <span className="text-emerald-400">₹{analytics.monthlyPayers.reduce((acc, curr) => acc + curr.paidThisMonth, 0).toLocaleString('en-IN')}</span> collected from {analytics.monthlyPayers.length} students.</p>
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                                {analytics.monthlyPayers.map((payer, idx) => (
+                                    <motion.div 
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: idx * 0.05 }}
+                                        key={idx} 
+                                        onClick={() => navigate(`/admin/coaching/student/${payer.id}`)}
+                                        className="p-4 bg-slate-800/50 hover:bg-slate-700/50 rounded-2xl border border-slate-700/50 transition-all cursor-pointer flex items-center justify-between group"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-10 w-10 bg-slate-900 text-slate-300 rounded-xl flex items-center justify-center font-black text-sm shadow-inner">
+                                                {payer.fullName?.charAt(0) || '#'}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-white text-sm group-hover:text-blue-400 transition-colors">{payer.fullName}</h4>
+                                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{payer.registration}</p>
+                                            </div>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-lg font-black text-emerald-400">₹{payer.paidThisMonth.toLocaleString('en-IN')}</p>
+                                            <span className="text-[8px] font-bold text-emerald-400/50 uppercase tracking-widest bg-emerald-400/10 px-2 py-0.5 rounded-full">Paid</span>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 {/* Middle Charts Grid (BI Style) */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
@@ -572,7 +653,7 @@ export default function AdminAnalytics() {
                                     </div>
                                     <div className="text-right">
                                         <p className="text-[11px] font-black text-emerald-400">{addr.students} Students</p>
-                                        <p className="text-[9px] font-bold text-slate-500 tracking-wider mt-0.5">₹{addr.revenue.toLocaleString()}</p>
+                                        <p className="text-[9px] font-bold text-slate-500 tracking-wider mt-0.5">₹{addr.revenue.toLocaleString('en-IN')}</p>
                                     </div>
                                 </div>
                             ))}
@@ -642,7 +723,7 @@ export default function AdminAnalytics() {
                             <div className="flex gap-4">
                                 <div className="text-right">
                                     <p className="text-[9px] font-black text-slate-500 uppercase">Bad Debt Risk</p>
-                                    <p className="text-sm font-black text-red-400">₹{analytics.badDebtRisk.toLocaleString()}</p>
+                                    <p className="text-sm font-black text-red-400">₹{analytics.badDebtRisk.toLocaleString('en-IN')}</p>
                                 </div>
                             </div>
                         </div>

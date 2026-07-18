@@ -449,73 +449,9 @@ export default function CoachingAdmin() {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
-                        <StatCard label="Total Enroll" value={stats.total} icon={<Users size={16} />} color="blue" delay={0.1} />
-                        <StatCard label="Thiriya Students" value={stats.thiriya} icon={<MapPin size={16} />} color="amber" delay={0.15} />
-                        <StatCard label="Naryawal Students" value={stats.nariyawal} icon={<MapPin size={16} />} color="emerald" delay={0.2} />
-                        <StatCard label="Total Income" value={`₹${stats.collected.toLocaleString('en-IN')}`} icon={<Wallet size={16} />} color="emerald" delay={0.25} />
-                        <StatCard label="Arrears" value={`₹${stats.pending.toLocaleString('en-IN')}`} icon={<AlertCircle size={16} />} color="red" delay={0.3} />
-                        <StatCard label="Reg. Fees" value={`₹${(stats.registrationFees || 0).toLocaleString('en-IN')}`} icon={<CreditCard size={16} />} color="blue" delay={0.35} />
-                    </div>
+                    {/* Dashboard Metrics Removed - Moved to Analytics Dashboard */}
                     
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-2">
-                        {/* Month-wise Chart */}
-                        {monthWiseData.length > 0 && (
-                            <motion.div 
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.5, delay: 0.4 }}
-                                className="lg:col-span-2 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40"
-                            >
-                                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Month-wise Fee Collection</h3>
-                                <div className="h-56 w-full">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart data={monthWiseData}>
-                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                            <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 700 }} />
-                                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} tickFormatter={(v) => `₹${v/1000}k`} />
-                                            <RechartsTooltip formatter={(value) => [`₹${value}`, 'Revenue']} contentStyle={{ borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                                            <Bar dataKey="revenue" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {/* Course Distribution Chart */}
-                        {stats.courseData && stats.courseData.length > 0 && (
-                            <motion.div 
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.5, delay: 0.5 }}
-                                className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/40"
-                            >
-                                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">Course Popularity</h3>
-                                <div className="h-56 w-full relative">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <PieChart>
-                                            <Pie
-                                                data={stats.courseData.slice(0, 5)}
-                                                cx="50%"
-                                                cy="45%"
-                                                innerRadius={60}
-                                                outerRadius={80}
-                                                paddingAngle={5}
-                                                dataKey="value"
-                                                stroke="none"
-                                            >
-                                                {stats.courseData.slice(0, 5).map((entry, index) => (
-                                                    <Cell key={`cell-${index}`} fill={['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'][index % 5]} />
-                                                ))}
-                                            </Pie>
-                                            <RechartsTooltip contentStyle={{ borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }} />
-                                            <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 700 }} />
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                </div>
-                            </motion.div>
-                        )}
-                    </div>
+                    {/* Charts Removed - Moved to Analytics Dashboard */}
                 </div>
 
                 {/* Actions Toolbar */}
