@@ -330,10 +330,9 @@ export default function AdminAnalytics() {
                 
                 let paidThisMonth = 0;
                 
-                // Registration Fee
+                // Removed Registration Fee from this section as per request
                 const admMonth = parseDateToYYYYMM(s.admissionDate);
-                if (admMonth === selectedMonth) paidThisMonth += (Number(s.registrationFee) || 0);
-
+                
                 // Installments
                 if (s.installments && s.installments.length > 0) {
                     s.installments.forEach(inst => {
@@ -579,8 +578,8 @@ export default function AdminAnalytics() {
                             <div className="flex items-center gap-3 mb-6">
                                 <div className="p-3 bg-emerald-500/20 text-emerald-400 rounded-xl"><Wallet size={24} /></div>
                                 <div>
-                                    <h3 className="text-xl font-black text-white uppercase tracking-wider">Fee Collections for {monthOptions.find(m => m.value === selectedMonth)?.label}</h3>
-                                    <p className="text-slate-400 font-bold text-xs">Total: <span className="text-emerald-400">₹{analytics.monthlyPayers.reduce((acc, curr) => acc + curr.paidThisMonth, 0).toLocaleString('en-IN')}</span> collected from {analytics.monthlyPayers.length} students.</p>
+                                    <h3 className="text-xl font-black text-white uppercase tracking-wider">Course Fee Collections for {monthOptions.find(m => m.value === selectedMonth)?.label}</h3>
+                                    <p className="text-slate-400 font-bold text-xs">Total: <span className="text-emerald-400">₹{analytics.monthlyPayers.reduce((acc, curr) => acc + curr.paidThisMonth, 0).toLocaleString('en-IN')}</span> collected (excluding registration fees) from {analytics.monthlyPayers.length} students.</p>
                                 </div>
                             </div>
                             
