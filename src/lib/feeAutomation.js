@@ -2,10 +2,12 @@ import { db } from "../firebase/firestore";
 import { auth } from "../firebase/auth";
 import { collection, getDocs, doc, setDoc, getDoc, query, where } from "firebase/firestore";
 import { sendTelegramNotification } from "./telegram";
+import { calculateCourseExpiry, parseDateToYYYYMM } from "./utils";
 
 /**
  * Intelligent Fee Reminder Algorithm
- * High Level logic to detect which students' monthly fee is due today.
+ * High Level logic to detect which students' monthly fee is due today,
+ * and generates a Monthly Fee Performance Report.
  */
 export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
     try {
@@ -26,7 +28,8 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
             const metaSnap = await getDoc(metaRef);
             if (metaSnap.exists() && metaSnap.data().date === todayStr) {
                 console.log("Fee audit already completed for today.");
-                return;
+                // We still might want to run it manually if triggered from admin
+                // return;
             }
         }
 
@@ -39,21 +42,51 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
             // Full collection for bulk audit
             snapshot = await getDocs(collection(db, "students"));
         }
+        
         const studentsDue = [];
         const today = new Date();
         const currentDay = today.getDate();
         const currentMonth = today.getMonth() + 1;
         const currentYear = today.getFullYear();
+        const currentMonthYYYYMM = `${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        let report_paidThisMonth = 0;
+        let report_pendingThisMonth = 0;
 
         snapshot.forEach((studentDoc) => {
             const data = studentDoc.data();
 
-            // Skip passed out or fully paid students
+            // Ignore passed out students
+            if (data.status === 'pass') return;
+
+            // Check Expiry Logic
+            const expiryInfo = calculateCourseExpiry(data);
+            if (expiryInfo && expiryInfo.isCompleted) {
+                return; // Ignore students whose course duration is over
+            }
+
             const totalPaid = (data.paidFees || 0) + (data.oldPaidFees || 0);
-            const balance = (data.totalFees || 0) - totalPaid;
-            if (data.status === 'pass' || balance <= 0) return;
+            const balance = (Number(data.totalFees) || 0) - totalPaid;
+            
+            // If they are fully paid, they don't owe anything this month or ever
+            // Special Rule: If totalFees == 500, they are scholarship/free students. 
+            // Once they pay 500, balance is <= 0, so they are safely ignored here.
+            if (balance <= 0) return;
 
             // --- DEEP ALGORITHM START ---
+
+            // Check if they paid in the current calendar month
+            const hasPaidThisMonth = data.installments?.some(inst => {
+                const instMonth = parseDateToYYYYMM(inst.date);
+                return instMonth === currentMonthYYYYMM;
+            });
+
+            if (hasPaidThisMonth) {
+                report_paidThisMonth++;
+            } else {
+                report_pendingThisMonth++;
+            }
 
             // 1. Helper to parse mixed date formats (YYYY-MM-DD or DD/MM/YYYY)
             const parseToDate = (str) => {
@@ -71,7 +104,6 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
             let lastInteractionType = "Admission";
 
             if (data.installments && data.installments.length > 0) {
-                // Find the absolute latest installment date
                 data.installments.forEach(inst => {
                     const instDate = parseToDate(inst.date);
                     if (instDate && (!lastInteraction || instDate > lastInteraction)) {
@@ -84,29 +116,18 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
             if (!lastInteraction || isNaN(lastInteraction.getTime())) return;
 
             // 3. Logic: Is Today exactly 1 month (or more) after the last interaction?
-            // We trigger if: today.day === last.day (with month-end normalization) 
-            // AND (today.month > last.month OR today.year > last.year)
             const lastDay = lastInteraction.getDate();
-            const lastMonth = lastInteraction.getMonth() + 1;
+            const lastMonthNum = lastInteraction.getMonth() + 1;
             const lastYear = lastInteraction.getFullYear();
-
-            // Check if at least 1 calendar month has passed
-            const monthDiff = (currentYear - lastYear) * 12 + (currentMonth - lastMonth);
+            const monthDiff = (currentYear - lastYear) * 12 + (currentMonth - lastMonthNum);
 
             if (monthDiff >= 1) {
-                // Day of month matching logic
                 const daysInCurrentMonth = new Date(currentYear, currentMonth, 0).getDate();
                 const targetDay = Math.min(lastDay, daysInCurrentMonth);
 
                 if (currentDay === targetDay) {
                     // Final Check: Ensure they haven't ALREADY paid in the current target month
-                    // (To avoid double alerts if they paid exactly on their due date today)
-                    const alreadyPaidToday = data.installments?.some(inst => {
-                        const d = parseToDate(inst.date);
-                        return d && d.getDate() === currentDay && d.getMonth() + 1 === currentMonth && d.getFullYear() === currentYear;
-                    });
-
-                    if (!alreadyPaidToday) {
+                    if (!hasPaidThisMonth) {
                         studentsDue.push({
                             ...data,
                             balance,
@@ -120,12 +141,15 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
             // --- DEEP ALGORITHM END ---
         });
 
+        // Broadcast Daily Reminders
         if (studentsDue.length > 0) {
             console.log(`Audited: ${studentsDue.length} students are due for fees today.`);
-
-            // Format for professional bulk report
             let studentListText = '';
-            studentsDue.forEach((s, i) => {
+            
+            // For huge lists, limit text to avoid Telegram 4096 char limit
+            const maxList = studentsDue.slice(0, 20);
+            
+            maxList.forEach((s, i) => {
                 studentListText += `${i + 1}. <b>${s.fullName}</b> (Reg: ${s.registration})\n   💰 Bal: ₹${s.balance} | 📅 ${s.lastInteractionType}: ${s.lastInteractionDate}\n\n`;
 
                 // Also send individual alert for high-priority tracking
@@ -141,16 +165,27 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
                 });
             });
 
-            // Send Daily Summary
+            if (studentsDue.length > 20) studentListText += `\n...and ${studentsDue.length - 20} more.`;
+
             await sendTelegramNotification('bulk_fee_reminder', {
                 count: studentsDue.length,
                 studentList: studentListText
             });
         }
+        
+        // Broadcast Monthly Performance Report
+        // Only run this globally (not for a specific student)
+        if (!targetStudentId) {
+            console.log(`Monthly Report: ${report_paidThisMonth} Paid, ${report_pendingThisMonth} Pending`);
+            await sendTelegramNotification('monthly_fee_report', {
+                monthStr: `${monthNames[currentMonth - 1]} ${currentYear}`,
+                paidCount: report_paidThisMonth,
+                pendingCount: report_pendingThisMonth
+            });
+        }
 
         // 4. Finalize
         if (!targetStudentId) {
-            // Update last check date (Admin only)
             await setDoc(metaRef, { date: todayStr, count: studentsDue.length });
         }
 

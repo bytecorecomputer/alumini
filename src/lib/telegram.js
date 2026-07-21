@@ -117,6 +117,18 @@ ${details.studentList}
 
 💳 <i>Check the Admin Dashboard for details.</i>
 `.trim();
+        } else if (type === 'monthly_fee_report') {
+            message = `
+📈 <b>Monthly Fee Performance Report</b>
+📅 <b>Month:</b> ${details.monthStr}
+
+✅ <b>Paid This Month:</b> ${details.paidCount} students
+❌ <b>Pending This Month:</b> ${details.pendingCount} students
+
+<i>Note: Old/Expired students and Free Scholarship students (₹500 total fee) are intelligently excluded from the pending list.</i>
+
+💳 <i>Log in to the Admin Dashboard for full details.</i>
+`.trim();
         } else if (type === 'donation') {
             message = `
 💖 <b>New Donation Received</b>

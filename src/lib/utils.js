@@ -60,3 +60,49 @@ export function normalizeDateToYYYYMMDD(dateStr) {
     }
     return str; // Fallback
 }
+
+export function calculateCourseExpiry(student) {
+    const admissionDateStr = student.admissionDate;
+    const courseName = student.course;
+    const totalFees = Number(student.totalFees) || 0;
+    
+    if (!admissionDateStr || !courseName) return null;
+    let durationMonths = 6;
+    const course = courseName.toUpperCase();
+    
+    // Special Rule for Scholarship / Registration-only Free students
+    if (totalFees === 500) {
+        durationMonths = 12; // Strictly 1 year for these cases
+    } else {
+        // Standard Course Durations
+        if (course.includes('DCST') || course.includes('CCC')) durationMonths = 3;
+        else if (course.includes('O LEVEL')) durationMonths = 12;
+        else if (course.includes('ADCA') || course.includes('MDCA')) {
+            durationMonths = 12; // Default 1 year
+            // Smart Expiry: If any installment is >= 1000, consider it a 6-month fast-track
+            const hasHighInstallments = student.installments && student.installments.some(inst => Number(inst.amount) >= 1000);
+            if (hasHighInstallments || totalFees < 4500) {
+                durationMonths = 6;
+            }
+        }
+    }
+    
+    // Parse admission date carefully
+    let admission = new Date(admissionDateStr);
+    if (isNaN(admission.getTime())) {
+        // Fallback for DD/MM/YYYY or DD-MM-YYYY formats if raw parsing fails
+        const parts = admissionDateStr.split(/[-/]/);
+        if (parts.length === 3) {
+             let d = parts[0], m = parts[1], y = parts[2];
+             if (y.length === 2) y = "20" + y;
+             if (d.length === 4) { y = d; d = parts[2]; }
+             admission = new Date(`${y}-${m}-${d}`);
+        }
+    }
+    
+    if (isNaN(admission.getTime())) return null;
+    
+    const expiryDate = new Date(admission);
+    expiryDate.setMonth(expiryDate.getMonth() + durationMonths);
+    return { duration: durationMonths, isCompleted: new Date() > expiryDate };
+}

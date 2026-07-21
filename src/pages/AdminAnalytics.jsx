@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { collection, query, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { useAuth } from '../app/common/AuthContext';
+import { parseDateToYYYYMM, calculateCourseExpiry } from '../lib/utils';
 import { 
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer,
     PieChart, Pie, Cell, AreaChart, Area, ComposedChart, Line
@@ -16,75 +17,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 const COLORS = ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#f43f5e', '#84cc16'];
 const PIE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16'];
 
-// Utility to parse dates into YYYY-MM
-const parseDateToYYYYMM = (dateStr) => {
-    if (!dateStr) return null;
-    const cleanStr = dateStr.toString().trim().toLowerCase();
-    
-    const isoMatch = cleanStr.match(/^(\d{4})-(\d{2})/);
-    if (isoMatch) return `${isoMatch[1]}-${isoMatch[2]}`;
 
-    const months = {
-        jan: '01', feb: '02', mar: '03', apr: '04', may: '05', jun: '06',
-        jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12'
-    };
 
-    let foundMonth = null;
-    for (const [name, num] of Object.entries(months)) {
-        if (cleanStr.includes(name)) {
-            foundMonth = num;
-            break;
-        }
-    }
-
-    const yearMatch = cleanStr.match(/\b(20\d{2})\b/);
-    const year = yearMatch ? yearMatch[1] : new Date().getFullYear().toString();
-
-    if (foundMonth) return `${year}-${foundMonth}`;
-
-    const slashMatch = cleanStr.match(/(\d{1,2})[/.-](\d{1,2})[/.-](\d{2,4})/);
-    if (slashMatch) {
-        let y = slashMatch[3];
-        if (y.length === 2) y = "20" + y;
-        
-        let m = slashMatch[2].padStart(2, '0');
-        
-        if (parseInt(m, 10) > 12) {
-            m = slashMatch[1].padStart(2, '0');
-        }
-        
-        if (parseInt(m, 10) > 12 || parseInt(m, 10) === 0) return null;
-        return `${y}-${m}`;
-    }
-    return null;
-}
-
-const calculateCourseExpiry = (student) => {
-    const admissionDateStr = student.admissionDate;
-    const courseName = student.course;
-    const totalFees = student.totalFees;
-    
-    if (!admissionDateStr || !courseName) return null;
-    let durationMonths = 6;
-    const course = courseName.toUpperCase();
-    
-    if (course.includes('DCST') || course.includes('CCC')) durationMonths = 3;
-    else if (course.includes('O LEVEL')) durationMonths = 12;
-    else if (course.includes('ADCA') || course.includes('MDCA')) {
-        durationMonths = 12; // Default 1 year
-        // Smart Expiry: If any installment is >= 1000, consider it a 6-month fast-track
-        const hasHighInstallments = student.installments && student.installments.some(inst => Number(inst.amount) >= 1000);
-        if (hasHighInstallments || (totalFees || 0) < 4500) {
-            durationMonths = 6;
-        }
-    }
-    
-    const admission = new Date(admissionDateStr);
-    if (isNaN(admission.getTime())) return null;
-    const expiryDate = new Date(admission);
-    expiryDate.setMonth(expiryDate.getMonth() + durationMonths);
-    return { duration: durationMonths, isCompleted: new Date() > expiryDate };
-};
+// calculateCourseExpiry is now imported from utils.js
 
 const normalizeAddress = (addr) => {
     if (!addr) return 'Unknown Location';
