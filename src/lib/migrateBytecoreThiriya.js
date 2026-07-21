@@ -1,6 +1,7 @@
 import { db } from "../firebase/firestore";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { syncAggregateStats } from "./migrateStudents";
+import { normalizeDateToYYYYMMDD } from "./utils";
 
 /**
  * Specialized Migration Utility for "bytecore thiriya.csv" format.
@@ -31,7 +32,7 @@ export const runThiriyaMigration = async (csvText) => {
 
         const course = row[4]?.trim() || "N/A";
         const totalFees = parseInt(row[5]) || 0;
-        const admissionDate = row[6]?.trim() || "N/A";
+        const admissionDate = normalizeDateToYYYYMMDD(row[6]?.trim()) || "N/A";
         const address = row[7]?.trim() || "N/A";
 
         const installments = [];
@@ -54,7 +55,7 @@ export const runThiriyaMigration = async (csvText) => {
                 if (!isNaN(parsedAmt)) {
                     installments.push({
                         amount: parsedAmt,
-                        date: dates[idx] || dates[0] || "N/A",
+                        date: normalizeDateToYYYYMMDD(dates[idx] || dates[0]) || "N/A",
                         installmentNo: 0, // Will be sorted and numbered later
                         note: "Migrated from Thiriya CSV"
                     });
@@ -95,9 +96,15 @@ export const runThiriyaMigration = async (csvText) => {
                 const mergedMap = new Map();
 
                 // Key by date and amount to avoid exact duplicates
-                existingInst.forEach(inst => mergedMap.set(`${inst.date}_${inst.amount}`, inst));
+                existingInst.forEach(inst => {
+                    const nd = normalizeDateToYYYYMMDD(inst.date);
+                    inst.date = nd; // normalize in place
+                    mergedMap.set(`${nd}_${inst.amount}`, inst);
+                });
                 student.installments.forEach(inst => {
-                    const key = `${inst.date}_${inst.amount}`;
+                    const nd = normalizeDateToYYYYMMDD(inst.date);
+                    inst.date = nd;
+                    const key = `${nd}_${inst.amount}`;
                     if (!mergedMap.has(key)) mergedMap.set(key, inst);
                 });
 

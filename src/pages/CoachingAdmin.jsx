@@ -19,6 +19,7 @@ import { syncAggregateStats } from '../lib/migrateStudents';
 import { checkMonthlyFeeReminders } from '../lib/feeAutomation';
 import { syncFromGoogleSheet } from '../lib/syncGoogleSheet';
 import { limit, startAfter } from 'firebase/firestore';
+import { parseDateToYYYYMM } from '../lib/utils';
 
 export default function CoachingAdmin() {
     const { user, role } = useAuth();
@@ -339,15 +340,15 @@ export default function CoachingAdmin() {
         filteredStudents.forEach(s => {
             if (s.installments && s.installments.length > 0) {
                 s.installments.forEach(inst => {
-                    if (inst.date) {
-                        const month = inst.date.substring(0, 7); // YYYY-MM
+                    const month = parseDateToYYYYMM(inst.date); // Use robust parsing
+                    if (month) {
                         if (!trends[month]) trends[month] = 0;
                         trends[month] += (Number(inst.amount) || 0);
                     }
                 });
             } else if (s.admissionDate && s.oldPaidFees > 0) {
                 // Approximate for old students without installments
-                const month = s.admissionDate.substring(0, 7);
+                const month = parseDateToYYYYMM(s.admissionDate);
                 if (month) {
                     if (!trends[month]) trends[month] = 0;
                     trends[month] += (Number(s.oldPaidFees) || 0);

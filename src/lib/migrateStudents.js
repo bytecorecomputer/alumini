@@ -1,5 +1,6 @@
 import { db } from "../firebase/firestore";
 import { collection, doc, setDoc, writeBatch, getDoc, getDocs } from "firebase/firestore";
+import { normalizeDateToYYYYMMDD } from "./utils";
 
 /**
  * Migration Utility for Student Data
@@ -89,7 +90,7 @@ const parseCSV = (csvText) => {
                 if (!isNaN(amount)) {
                     installments.push({
                         amount,
-                        date,
+                        date: normalizeDateToYYYYMMDD(date),
                         installmentNo: 0,
                         note: "Migrated from CSV"
                     });
@@ -109,7 +110,7 @@ const parseCSV = (csvText) => {
             fatherName: row[5]?.trim() || 'N/A',
             mobile: row[6]?.trim() || 'N/A',
             address: row[8]?.trim() || 'N/A',
-            admissionDate: row[9]?.trim() || 'N/A',
+            admissionDate: normalizeDateToYYYYMMDD(row[9]?.trim()) || 'N/A',
             totalFees: defaultFee,
             oldPaidFees,
             paidFees: csvPaidFeesSum,
@@ -147,15 +148,7 @@ export const runMigration = async (csvText) => {
                 const existingInst = dbData.installments || [];
                 const mergedMap = new Map();
                 
-                const normalizeDate = (d) => {
-                    const match = String(d || "").match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})$/);
-                    if (match) {
-                        let y = match[3];
-                        if (y.length === 2) y = "20" + y;
-                        return `${match[1].padStart(2, '0')}-${match[2].padStart(2, '0')}-${y}`;
-                    }
-                    return d;
-                };
+                const normalizeDate = (d) => normalizeDateToYYYYMMDD(d);
 
                 existingInst.forEach(inst => {
                     const nd = normalizeDate(inst.date);

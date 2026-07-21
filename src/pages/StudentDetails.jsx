@@ -106,8 +106,8 @@ export default function StudentDetails() {
         try {
             const amount = parseInt(paymentAmount);
             // Format YYYY-MM-DD to DD/MM/YYYY for consistency
-            const [y, m, d] = paymentDate.split('-');
-            const formattedDate = `${d}/${m}/${y}`;
+            // Changed: Keep YYYY-MM-DD for consistency with dashboard and analytics
+            const formattedDate = paymentDate;
 
             await updateDoc(doc(db, "students", id), {
                 paidFees: increment(amount), // Atomic increment

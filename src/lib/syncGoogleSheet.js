@@ -2,6 +2,7 @@ import { collection, doc, setDoc, getDocs, writeBatch } from "firebase/firestore
 import { db } from "../firebase/firestore";
 
 import Papa from 'papaparse';
+import { normalizeDateToYYYYMMDD } from "./utils";
 
 /**
  * Parses a CSV string into an array of objects.
@@ -88,7 +89,7 @@ function parseInstallment(str) {
 
     // If "Free", treat as 0 amount
     if (amountStr.toLowerCase() === 'free') {
-        return [{ amount: 0, date: dateStr, status: 'paid', note: 'Free' }];
+        return [{ amount: 0, date: normalizeDateToYYYYMMDD(dateStr), status: 'paid', note: 'Free' }];
     }
 
     // Try to extract numerical amount, stripping commas first
@@ -97,10 +98,10 @@ function parseInstallment(str) {
     if (numbers && numbers.length > 0) {
         // If there are multiple numbers e.g. "450 150", sum them
         const totalAmount = numbers.reduce((acc, curr) => acc + parseInt(curr, 10), 0);
-        return [{ amount: totalAmount, date: dateStr, status: 'paid' }];
+        return [{ amount: totalAmount, date: normalizeDateToYYYYMMDD(dateStr), status: 'paid' }];
     } else if (amountStr === '') {
         // If there's only a date (e.g. they forgot the amount), default to 0 to record the date history
-        return [{ amount: 0, date: dateStr, status: 'paid', note: 'Missing Amount' }];
+        return [{ amount: 0, date: normalizeDateToYYYYMMDD(dateStr), status: 'paid', note: 'Missing Amount' }];
     }
 
     return [];
@@ -110,13 +111,7 @@ function parseInstallment(str) {
  * Normalizes dates from DD-MM-YYYY to YYYY-MM-DD
  */
 function normalizeDate(dateStr) {
-    if (!dateStr || dateStr.trim() === '') return '';
-    const parts = dateStr.split('-');
-    if (parts.length === 3) {
-        if (parts[0].length === 4) return dateStr; // Already YYYY-MM-DD
-        return `${parts[2]}-${parts[1]}-${parts[0]}`; // Convert DD-MM-YYYY to YYYY-MM-DD
-    }
-    return dateStr;
+    return normalizeDateToYYYYMMDD(dateStr);
 }
 
 /**
@@ -191,7 +186,11 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Nariyawal') {
             const existingInst = dbData.installments || [];
             
             const mergedMap = new Map();
-            existingInst.forEach(inst => mergedMap.set(`${inst.date}_${inst.amount}`, inst));
+            existingInst.forEach(inst => {
+                const normDate = normalizeDateToYYYYMMDD(inst.date);
+                inst.date = normDate; // normalize for standard saving
+                mergedMap.set(`${normDate}_${inst.amount}`, inst);
+            });
             
             installments.forEach(inst => {
                 const key = `${inst.date}_${inst.amount}`;
