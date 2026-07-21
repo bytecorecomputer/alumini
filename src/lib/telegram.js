@@ -125,7 +125,10 @@ ${details.studentList}
 ✅ <b>Paid This Month:</b> ${details.paidCount} students
 ❌ <b>Pending This Month:</b> ${details.pendingCount} students
 
-<i>Note: Old/Expired students and Free Scholarship students (₹500 total fee) are intelligently excluded from the pending list.</i>
+<b>Pending Students List:</b>
+<code>${details.pendingList}</code>
+
+<i>Note: Old/Expired students and Free Scholarship students (₹500 total fee) are intelligently excluded from this list.</i>
 
 💳 <i>Log in to the Admin Dashboard for full details.</i>
 `.trim();

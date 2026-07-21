@@ -53,6 +53,7 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
         
         let report_paidThisMonth = 0;
         let report_pendingThisMonth = 0;
+        const studentsPendingThisMonth = [];
 
         snapshot.forEach((studentDoc) => {
             const data = studentDoc.data();
@@ -86,6 +87,11 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
                 report_paidThisMonth++;
             } else {
                 report_pendingThisMonth++;
+                studentsPendingThisMonth.push({
+                    fullName: data.fullName,
+                    registration: data.registration,
+                    balance
+                });
             }
 
             // 1. Helper to parse mixed date formats (YYYY-MM-DD or DD/MM/YYYY)
@@ -177,10 +183,20 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
         // Only run this globally (not for a specific student)
         if (!targetStudentId) {
             console.log(`Monthly Report: ${report_paidThisMonth} Paid, ${report_pendingThisMonth} Pending`);
+            
+            let pendingListText = '';
+            const maxPendingList = studentsPendingThisMonth.slice(0, 30);
+            maxPendingList.forEach((s, i) => {
+                pendingListText += `${i + 1}. ${s.fullName} (Reg: ${s.registration}) - Bal: ₹${s.balance}\n`;
+            });
+            if (studentsPendingThisMonth.length > 30) pendingListText += `...and ${studentsPendingThisMonth.length - 30} more.\n`;
+            if (pendingListText === '') pendingListText = '🎉 All active students have paid!';
+
             await sendTelegramNotification('monthly_fee_report', {
                 monthStr: `${monthNames[currentMonth - 1]} ${currentYear}`,
                 paidCount: report_paidThisMonth,
-                pendingCount: report_pendingThisMonth
+                pendingCount: report_pendingThisMonth,
+                pendingList: pendingListText
             });
         }
 
