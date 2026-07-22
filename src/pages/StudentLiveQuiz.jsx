@@ -79,17 +79,30 @@ export default function StudentLiveQuiz() {
 
     const joinRoom = useCallback(async (rId) => {
         try {
-            const myRef = doc(db, `live_quizzes/${rId}/participants/${student.registration}`);
+            if (!rId) return;
+            const cleanRoomId = rId.toString().trim();
+            const roomDocRef = doc(db, 'live_quizzes', cleanRoomId);
+            const roomDoc = await getDoc(roomDocRef);
+
+            if (!roomDoc.exists()) {
+                toast.error(`Live Room PIN ${cleanRoomId} not found or test ended.`);
+                setIsReconnecting(false);
+                return;
+            }
+
+            const participantId = (student.registration || student.fullName || 'student').toString().replace(/[/ \t\n.#$[\]]/g, '_');
+            const myRef = doc(db, `live_quizzes/${cleanRoomId}/participants/${participantId}`);
             await setDoc(myRef, {
                 name: student.fullName || student.studentName || 'Student',
                 joinedAt: Date.now()
             }, { merge: true });
             
+            setRoomId(cleanRoomId);
             setJoined(true);
             setIsReconnecting(false);
         } catch (err) {
-            console.error(err);
-            toast.error("Room not found or error joining. Please check the PIN.");
+            console.error("joinRoom error:", err);
+            toast.error("Error joining live session. Please check the PIN.");
             setIsReconnecting(false);
         }
     }, [student]);
@@ -116,11 +129,14 @@ export default function StudentLiveQuiz() {
         joinRoom(roomId);
     };
 
-    // Listen to Room (SYNC BUG FIXED: removed liveData from dependencies)
+    // Listen to Room
     useEffect(() => {
-        if (!joined || !roomId || !student?.registration) return;
+        if (!joined || !roomId || !student) return;
         
-        const roomRef = doc(db, 'live_quizzes', roomId);
+        const cleanRoomId = roomId.toString().trim();
+        const participantId = (student.registration || student.fullName || 'student').toString().replace(/[/ \t\n.#$[\]]/g, '_');
+
+        const roomRef = doc(db, 'live_quizzes', cleanRoomId);
         let prevIndex = null;
 
         const unsubscribe = onSnapshot(roomRef, (docSnap) => {
@@ -130,7 +146,7 @@ export default function StudentLiveQuiz() {
                 if (prevIndex !== null && data.currentQuestionIndex !== prevIndex) {
                     setHasAnswered(false);
                     // Clear lastAnswer in DB robustly
-                    updateDoc(doc(db, `live_quizzes/${roomId}/participants/${student.registration}`), {
+                    updateDoc(doc(db, `live_quizzes/${cleanRoomId}/participants/${participantId}`), {
                         lastAnswer: null
                     }).catch(e => console.error("Error clearing answer:", e));
                 }
@@ -146,7 +162,7 @@ export default function StudentLiveQuiz() {
         });
 
         // Listen to my own score
-        const myRef = doc(db, `live_quizzes/${roomId}/participants/${student.registration}`);
+        const myRef = doc(db, `live_quizzes/${cleanRoomId}/participants/${participantId}`);
         const unsubMe = onSnapshot(myRef, (snap) => {
             if (snap.exists()) {
                 const data = snap.data();
@@ -163,10 +179,10 @@ export default function StudentLiveQuiz() {
         });
 
         // Listen to all participants for leaderboard
-        const participantsRef = collection(db, `live_quizzes/${roomId}/participants`);
+        const participantsRef = collection(db, `live_quizzes/${cleanRoomId}/participants`);
         const unsubParticipants = onSnapshot(participantsRef, (snapshot) => {
             const parts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            parts.sort((a, b) => b.score - a.score);
+            parts.sort((a, b) => (b.score || 0) - (a.score || 0));
             setParticipants(parts);
         });
 
@@ -175,38 +191,34 @@ export default function StudentLiveQuiz() {
             unsubMe();
             unsubParticipants();
         };
-    }, [joined, roomId, student?.registration, navigate]);
+    }, [joined, roomId, student, navigate]);
 
     // Audio effects for results
     useEffect(() => {
-        if (liveData?.status === 'result' && myState) {
-            const courseData = combinedQuizData[liveData.courseId];
-            const currentQ = courseData?.modules[liveData.topicId]?.[liveData.currentQuestionIndex];
-            const hasAns = myState?.lastAnswer !== null && myState?.lastAnswer !== undefined;
-            const isCorrect = hasAns && currentQ?.correctAnswer === myState.lastAnswer;
-            
-            if (isCorrect) {
+        if (!liveData) return;
+
+        if (liveData.status === 'result') {
+            if (myState?.lastPoints > 0) {
                 playSuccess();
-                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
             } else {
                 playError();
             }
         }
-    }, [liveData?.status, liveData?.currentQuestionIndex, liveData?.courseId, liveData?.topicId, myState, combinedQuizData]);
+    }, [liveData?.status, myState?.lastPoints]);
 
     const handleAnswer = async (index) => {
-        if (hasAnswered || !liveData || liveData.isPaused) return;
-        
-        // Optimistic UI update
-        setHasAnswered(true);
-        setMyState(prev => ({ ...prev, lastAnswer: index }));
+        if (hasAnswered || liveData?.status !== 'active' || liveData?.isPaused) return;
 
-        const courseData = combinedQuizData[liveData.courseId];
-        const qList = courseData?.modules[liveData.topicId];
-        const currentQ = qList[liveData.currentQuestionIndex];
-        
-        const isCorrect = currentQ.correctAnswer === index;
-        
+        setHasAnswered(true);
+        const questions = combinedQuizData[liveData.courseId]?.modules[liveData.topicId] || [];
+        const currentQ = questions[liveData.currentQuestionIndex];
+        const isCorrect = index === currentQ?.correctAnswer;
+
+        setMyState(prev => ({
+            ...prev,
+            lastAnswer: index
+        }));
+
         // Calculate Speed Score
         let points = 0;
         if (isCorrect) {
@@ -217,7 +229,9 @@ export default function StudentLiveQuiz() {
         }
         
         try {
-            const myRef = doc(db, `live_quizzes/${roomId}/participants/${student.registration}`);
+            const cleanRoomId = roomId.toString().trim();
+            const participantId = (student.registration || student.fullName || 'student').toString().replace(/[/ \t\n.#$[\]]/g, '_');
+            const myRef = doc(db, `live_quizzes/${cleanRoomId}/participants/${participantId}`);
             await updateDoc(myRef, {
                 lastAnswer: index,
                 score: increment(points),

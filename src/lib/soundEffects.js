@@ -1,27 +1,37 @@
 let audioCtx = null;
 
 export function initAudio() {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+    try {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {});
+        }
+    } catch (e) {
+        // Silently ignore browser autoplay restrictions
     }
 }
 
 function getContext() {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    try {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().catch(() => {});
+        }
+        return audioCtx;
+    } catch (e) {
+        return null;
     }
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
-    return audioCtx;
 }
 
 function playTone(freq, type, duration, vol = 0.1) {
     try {
         const ctx = getContext();
+        if (!ctx || ctx.state !== 'running') return;
+        
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = type;
@@ -33,8 +43,21 @@ function playTone(freq, type, duration, vol = 0.1) {
         osc.start();
         osc.stop(ctx.currentTime + duration);
     } catch (e) {
-        console.error("Audio error", e);
+        // Ignore audio playback error
     }
+}
+
+// Auto-bind audio initialization to first user gesture
+if (typeof window !== 'undefined') {
+    const unlockAudio = () => {
+        initAudio();
+        window.removeEventListener('click', unlockAudio);
+        window.removeEventListener('touchstart', unlockAudio);
+        window.removeEventListener('keydown', unlockAudio);
+    };
+    window.addEventListener('click', unlockAudio, { passive: true });
+    window.addEventListener('touchstart', unlockAudio, { passive: true });
+    window.addEventListener('keydown', unlockAudio, { passive: true });
 }
 
 export const playCountdownBeep = () => playTone(600, 'sine', 0.2, 0.1);
@@ -43,7 +66,6 @@ export const playTick = () => playTone(800, 'square', 0.05, 0.05);
 
 export const playSuccess = () => {
     try {
-        // C Major Arpeggio
         [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
             setTimeout(() => playTone(freq, 'sine', 0.3, 0.1), i * 100);
         });
