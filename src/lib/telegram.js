@@ -11,6 +11,10 @@ const escapeHTML = (text) => {
 
 export const sendTelegramNotification = async (type, details) => {
     try {
+        // Default Fallback Telegram Credentials
+        const DEFAULT_BOT_TOKEN = "8231458651:AAGE9xiTBI5gfD9ninO_ysfL-PGUYv4PxJs";
+        const DEFAULT_CHAT_ID = "8037442083";
+
         let botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
         let chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
 
@@ -26,6 +30,10 @@ export const sendTelegramNotification = async (type, details) => {
                 console.warn("Failed to fetch Telegram config from Firestore:", e);
             }
         }
+
+        // Final Fallback to hardcoded default keys from config.js
+        botToken = botToken || DEFAULT_BOT_TOKEN;
+        chatId = chatId || DEFAULT_CHAT_ID;
 
         if (!botToken || !chatId) {
             console.warn("Telegram credentials not found in env or Firestore metadata/telegram_config");
