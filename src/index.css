@@ -19,6 +19,12 @@
     -webkit-touch-callout: none; /* Disable long-press context menu on iOS */
     -webkit-tap-highlight-color: transparent; /* Clean tap feedback */
   }
+
+  .font-hindi {
+    font-family: 'Noto Sans Devanagari', 'Hind', system-ui, -apple-system, sans-serif !important;
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+  }
 }
 
 @layer components {
