@@ -49,6 +49,11 @@ export default function CoachingAdmin() {
         fatherName: '', address: '', photoUrl: '', center: 'Nariyawal'
     });
 
+    // Telegram Settings Modal State
+    const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
+    const [telegramToken, setTelegramToken] = useState('');
+    const [telegramChatId, setTelegramChatId] = useState('');
+
     const isOwner = role === 'admin' || role === 'super_admin';
 
     useEffect(() => {
@@ -440,7 +445,14 @@ export default function CoachingAdmin() {
                             onClick={async () => {
                                 setIsUpdating(true);
                                 try {
-                                    await checkMonthlyFeeReminders();
+                                    const configSnap = await getDoc(doc(db, "metadata", "telegram_config"));
+                                    const hasEnv = import.meta.env.VITE_TELEGRAM_BOT_TOKEN && import.meta.env.VITE_TELEGRAM_CHAT_ID;
+                                    if (!configSnap.exists() && !hasEnv) {
+                                        setIsTelegramModalOpen(true);
+                                        setIsUpdating(false);
+                                        return;
+                                    }
+                                    await checkMonthlyFeeReminders(null, true);
                                     alert("Monthly Fee Audit Report sent to Telegram successfully!");
                                 } catch(e) {
                                     console.error(e);
@@ -455,6 +467,13 @@ export default function CoachingAdmin() {
                         >
                             <Bell size={16} className={cn(isUpdating && "animate-spin")} />
                             <span>{isUpdating ? "Auditing & Sending..." : "Send Telegram Report"}</span>
+                        </button>
+                        <button
+                            onClick={() => setIsTelegramModalOpen(true)}
+                            className="p-3 bg-slate-100 text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-200 hover:text-slate-900 transition-all shadow-sm"
+                            title="Configure Telegram Bot Token & Chat ID"
+                        >
+                            <Settings size={16} />
                         </button>
                     </div>
 
@@ -942,6 +961,61 @@ export default function CoachingAdmin() {
                                         Complete Entry
                                     </button>
                                 </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+
+                {/* Telegram Settings Modal */}
+                {isTelegramModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+                        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white rounded-[2.5rem] p-8 max-w-lg w-full shadow-2xl border border-slate-100 relative">
+                            <button onClick={() => setIsTelegramModalOpen(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-900 bg-slate-100 rounded-full transition-colors">
+                                <X size={18} />
+                            </button>
+                            
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-3 bg-amber-50 rounded-2xl text-amber-600">
+                                    <Bell size={24} />
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Telegram Bot Config</h2>
+                                    <p className="text-xs text-slate-500 font-bold">Connect your Telegram channel or group for instant fee reports.</p>
+                                </div>
+                            </div>
+
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                if (!telegramToken || !telegramChatId) {
+                                    alert("Please enter both Bot Token and Chat ID.");
+                                    return;
+                                }
+                                try {
+                                    setIsUpdating(true);
+                                    await setDoc(doc(db, "metadata", "telegram_config"), {
+                                        botToken: telegramToken.trim(),
+                                        chatId: telegramChatId.trim(),
+                                        updatedAt: Date.now()
+                                    });
+                                    setIsTelegramModalOpen(false);
+                                    alert("Telegram credentials saved to Firestore! Reports will now be sent directly to Telegram.");
+                                } catch(err) {
+                                    console.error(err);
+                                    alert("Failed to save credentials.");
+                                } finally {
+                                    setIsUpdating(false);
+                                }
+                            }} className="space-y-6">
+                                <Input label="Telegram Bot Token" value={telegramToken} onChange={setTelegramToken} placeholder="e.g. 712345678:AAFg..." />
+                                <Input label="Telegram Chat ID / Channel ID" value={telegramChatId} onChange={setTelegramChatId} placeholder="e.g. -100123456789 or @channelname" />
+                                
+                                <button
+                                    disabled={isUpdating}
+                                    className="w-full py-4 bg-amber-500 text-white rounded-2xl font-black uppercase tracking-wider text-xs shadow-lg shadow-amber-500/30 flex items-center justify-center gap-2 hover:bg-amber-600 active:scale-95 transition-all disabled:opacity-50"
+                                >
+                                    {isUpdating ? <Loader2 className="animate-spin" size={18} /> : <CheckCircle size={18} />}
+                                    Save & Connect Telegram
+                                </button>
                             </form>
                         </motion.div>
                     </div>

@@ -9,7 +9,7 @@ import { calculateCourseExpiry, parseDateToYYYYMM } from "./utils";
  * High Level logic to detect which students' monthly fee is due today,
  * and generates a Monthly Fee Performance Report.
  */
-export const checkMonthlyFeeReminders = async (targetStudentId = null) => {
+export const checkMonthlyFeeReminders = async (targetStudentId = null, forceSend = false) => {
     try {
         // 1. Authentication Guard
         const currentUser = auth.currentUser;

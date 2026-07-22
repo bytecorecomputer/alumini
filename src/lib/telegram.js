@@ -1,3 +1,6 @@
+import { db } from '../firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
+
 const escapeHTML = (text) => {
     if (!text) return 'N/A';
     return text.toString()
@@ -8,12 +11,25 @@ const escapeHTML = (text) => {
 
 export const sendTelegramNotification = async (type, details) => {
     try {
-        const botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-        const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
+        let botToken = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+        let chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID;
 
         if (!botToken || !chatId) {
-            console.warn("Telegram credentials not found");
-            return;
+            try {
+                const configSnap = await getDoc(doc(db, "metadata", "telegram_config"));
+                if (configSnap.exists()) {
+                    const cData = configSnap.data();
+                    botToken = botToken || cData.botToken;
+                    chatId = chatId || cData.chatId;
+                }
+            } catch (e) {
+                console.warn("Failed to fetch Telegram config from Firestore:", e);
+            }
+        }
+
+        if (!botToken || !chatId) {
+            console.warn("Telegram credentials not found in env or Firestore metadata/telegram_config");
+            return { success: false, reason: "Telegram credentials missing. Please set Bot Token & Chat ID in Admin Panel." };
         }
 
         // Fetch IP and Location info (optional, fails silently on CORS)
