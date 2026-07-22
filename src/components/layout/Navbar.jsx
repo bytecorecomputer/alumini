@@ -226,8 +226,8 @@ export default function Navbar() {
                                 </div>
 
                                 <div className="space-y-1 pt-6 border-t border-slate-100">
-                                    <p className="text-[10px] font-black text-amber-600 uppercase tracking-[0.2em] mb-4 ml-2">Alumni & Networking</p>
-                                    <MobileNavLink to="/directory" onClick={() => setIsOpen(false)}>Alumni Directory</MobileNavLink>
+                                    <p className="text-[10px] font-black text-amber-600 uppercase tracking-[0.2em] mb-4 ml-2">ByteCore Network</p>
+                                    <MobileNavLink to="/directory" onClick={() => setIsOpen(false)}>ByteCore Directory</MobileNavLink>
                                     <MobileNavLink to="/events" onClick={() => setIsOpen(false)}>Networking Events</MobileNavLink>
                                     <MobileNavLink to="/jobs" onClick={() => setIsOpen(false)}>Career & Jobs</MobileNavLink>
                                 </div>

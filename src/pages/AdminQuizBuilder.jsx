@@ -262,17 +262,34 @@ export default function AdminQuizBuilder() {
                                     <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Course Name</label>
                                     <input 
                                         type="text"
-                                        placeholder="e.g., Python Masterclass"
+                                        placeholder="e.g., ADCA, Python, CCC, Web Development"
                                         value={courseName}
                                         onChange={(e) => setCourseName(e.target.value)}
-                                        className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                                        className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-blue-500 focus:bg-white outline-none transition-all mb-3"
                                     />
+                                    {/* Quick Course Presets */}
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {['ADCA', 'CCC', 'DCA', 'Python', 'Web Dev', 'Tally Prime', 'C++', 'Graphic Design'].map((c) => (
+                                            <button
+                                                key={c}
+                                                type="button"
+                                                onClick={() => setCourseName(c)}
+                                                className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${
+                                                    courseName === c 
+                                                        ? 'bg-blue-600 text-white shadow-md' 
+                                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                                }`}
+                                            >
+                                                {c}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Topic Name</label>
+                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Topic / Chapter Name</label>
                                     <input 
                                         type="text"
-                                        placeholder="e.g., Variables & Data Types"
+                                        placeholder="e.g., Chapter 1: Fundamentals & MCQs"
                                         value={topicName}
                                         onChange={(e) => setTopicName(e.target.value)}
                                         className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-blue-500 focus:bg-white outline-none transition-all"

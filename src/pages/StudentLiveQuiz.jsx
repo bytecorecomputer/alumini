@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, Trophy, Loader2, Zap, AlertCircle, RefreshCw, Triangle, Square, Circle, Hexagon } from 'lucide-react';
 import { db } from '../firebase/firestore';
-import { doc, setDoc, onSnapshot, updateDoc, increment, collection } from 'firebase/firestore';
+import { doc, setDoc, getDoc, onSnapshot, updateDoc, increment, collection } from 'firebase/firestore';
 import { useAuth } from '../app/common/AuthContext';
 import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
 import confetti from 'canvas-confetti';
@@ -231,11 +231,75 @@ export default function StudentLiveQuiz() {
         }
     };
 
+    // Quick Login State for guest/unauthenticated students
+    const { loginStudent } = useAuth();
+    const [loginId, setLoginId] = useState('');
+    const [loginLoading, setLoginLoading] = useState(false);
+
+    const handleQuickStudentLogin = async (e) => {
+        e.preventDefault();
+        if (!loginId.trim()) return toast.error("Enter Registration No. or Mobile Number");
+        setLoginLoading(true);
+        try {
+            const cleanInput = loginId.trim();
+            // Try fetching by registration ID directly
+            const studentDoc = await getDoc(doc(db, "students", cleanInput));
+            if (studentDoc.exists()) {
+                const sData = { id: studentDoc.id, ...studentDoc.data() };
+                loginStudent(sData);
+                toast.success(`Welcome back, ${sData.fullName || 'Student'}!`);
+            } else {
+                // If not found in DB, allow temporary session for live test
+                const tempStudent = {
+                    registration: `TEMP_${Date.now()}`,
+                    fullName: cleanInput,
+                    course: 'Live Test Participant'
+                };
+                loginStudent(tempStudent);
+                toast.success(`Joined live session as ${cleanInput}`);
+            }
+        } catch (err) {
+            console.error("Login error:", err);
+            toast.error("Error logging in. Try again.");
+        } finally {
+            setLoginLoading(false);
+        }
+    };
+
     if (!student) {
         return (
-            <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white">
-                <Loader2 className="animate-spin text-indigo-500 mb-4" size={48} />
-                <p className="font-bold tracking-widest uppercase text-indigo-200">Loading Auth...</p>
+            <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 md:p-6 font-inter relative overflow-hidden text-white">
+                <ParticlesBackground />
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
+                
+                <motion.div 
+                    initial={{ y: 20, opacity: 0 }} 
+                    animate={{ y: 0, opacity: 1 }}
+                    className="relative z-10 w-full max-w-md bg-white/10 backdrop-blur-2xl rounded-[2.5rem] p-8 md:p-10 text-center shadow-2xl border border-white/20"
+                >
+                    <div className="w-16 h-16 bg-blue-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-600/30">
+                        <Zap size={32} />
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-black mb-2 tracking-tight">ByteCore Live Test</h2>
+                    <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-8">Enter your Registration No. or Name to join</p>
+
+                    <form onSubmit={handleQuickStudentLogin} className="space-y-4">
+                        <input 
+                            type="text"
+                            placeholder="Roll No. / Phone / Your Name"
+                            value={loginId}
+                            onChange={(e) => setLoginId(e.target.value)}
+                            className="w-full p-4 bg-black/40 border-2 border-white/10 rounded-2xl text-center font-bold text-white text-lg outline-none focus:border-blue-500 transition-all placeholder:text-slate-500"
+                        />
+                        <button
+                            type="submit"
+                            disabled={loginLoading || !loginId.trim()}
+                            className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-blue-600/30 disabled:opacity-50 flex items-center justify-center gap-2 text-sm"
+                        >
+                            {loginLoading ? <Loader2 className="animate-spin" size={18} /> : 'Continue to Live Test'}
+                        </button>
+                    </form>
+                </motion.div>
             </div>
         );
     }
@@ -519,9 +583,20 @@ export default function StudentLiveQuiz() {
                         <p className="text-6xl font-black text-yellow-400 drop-shadow-[0_0_20px_rgba(250,204,21,0.3)]">{myState?.score}</p>
                     </div>
 
-                    <button onClick={() => navigate('/student-portal')} className="px-8 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full font-black uppercase tracking-widest w-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-indigo-600/30 text-lg">
-                        Return Home
-                    </button>
+                    <div className="space-y-4">
+                        <button 
+                            onClick={() => navigate(`/certificate`)} 
+                            className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black uppercase tracking-widest w-full rounded-2xl transition-all shadow-xl shadow-emerald-500/20 text-sm flex items-center justify-center gap-2"
+                        >
+                            <Trophy size={18} /> Get ByteCore Certificate
+                        </button>
+                        <button 
+                            onClick={() => navigate('/student-portal')} 
+                            className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-black uppercase tracking-widest w-full transition-all text-xs"
+                        >
+                            Return Home
+                        </button>
+                    </div>
                 </motion.div>
             </div>
         );

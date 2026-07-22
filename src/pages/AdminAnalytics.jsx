@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { collection, query, getDocs, doc, getDoc } from 'firebase/firestore';
+import { collection, query, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { useAuth } from '../app/common/AuthContext';
 import { parseDateToYYYYMM, calculateCourseExpiry } from '../lib/utils';
@@ -9,7 +9,7 @@ import {
 } from 'recharts';
 import { 
     BarChart3, TrendingUp, Users, Wallet, AlertCircle, 
-    MapPin, ChevronLeft, Download, ShieldCheck, PieChart as PieChartIcon, Calendar, Zap, AlertTriangle, Building, Activity, Map, Smartphone
+    MapPin, ChevronLeft, Download, ShieldCheck, PieChart as PieChartIcon, Calendar, Zap, AlertTriangle, Building, Activity, Map, Smartphone, Award, CheckCircle, Briefcase
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -38,6 +38,7 @@ export default function AdminAnalytics() {
     const { user, role } = useAuth();
     const navigate = useNavigate();
     const [students, setStudents] = useState([]);
+    const [systemUsers, setSystemUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedMonth, setSelectedMonth] = useState('all');
     const [selectedCenter, setSelectedCenter] = useState('nariyawal');
@@ -46,26 +47,46 @@ export default function AdminAnalytics() {
 
     const isOwner = user?.role === 'admin' || role === 'super_admin';
 
+    const fetchAllData = async () => {
+        const q = query(collection(db, "students"));
+        const snap = await getDocs(q);
+        setStudents(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        
+        try {
+            const userSnap = await getDocs(query(collection(db, "users")));
+            setSystemUsers(userSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+        } catch(e) {
+            console.error("Error fetching system users:", e);
+        }
+
+        try {
+            const installDoc = await getDoc(doc(db, "analytics", "app_installs"));
+            if (installDoc.exists()) {
+                setAppInstalls(installDoc.data().count || 0);
+            }
+        } catch(e) {
+            console.error("Error fetching app installs:", e);
+        }
+
+        setLoading(false);
+    };
+
     useEffect(() => {
         if (!isOwner) return;
-        const fetchAllStudents = async () => {
-            const q = query(collection(db, "students"));
-            const snap = await getDocs(q);
-            setStudents(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-            
-            try {
-                const installDoc = await getDoc(doc(db, "analytics", "app_installs"));
-                if (installDoc.exists()) {
-                    setAppInstalls(installDoc.data().count || 0);
-                }
-            } catch(e) {
-                console.error("Error fetching app installs:", e);
-            }
-
-            setLoading(false);
-        };
-        fetchAllStudents();
+        fetchAllData();
     }, [isOwner]);
+
+    const handleVerifyAlumni = async (userId, currentVerifiedState) => {
+        try {
+            await updateDoc(doc(db, "users", userId), {
+                isVerified: !currentVerifiedState
+            });
+            setSystemUsers(prev => prev.map(u => u.id === userId ? { ...u, isVerified: !currentVerifiedState } : u));
+        } catch(e) {
+            console.error("Error toggling verification:", e);
+            alert("Failed to update verification state.");
+        }
+    };
 
     const exportToCSV = () => {
         if (!students || students.length === 0) return;
@@ -327,14 +348,28 @@ export default function AdminAnalytics() {
 
         const recoveryRate = totalBilled > 0 ? ((totalRevenue / totalBilled) * 100).toFixed(1) : 0;
 
+        // Alumni Analytics Calculation
+        const alumniList = systemUsers.filter(u => u.role === 'alumni');
+        const totalAlumniCount = alumniList.length;
+        const verifiedAlumniCount = alumniList.filter(u => u.isVerified).length;
+        const placedAlumniCount = alumniList.filter(u => u.company && u.company.trim() !== '').length;
+        const placementRate = totalAlumniCount > 0 ? ((placedAlumniCount / totalAlumniCount) * 100).toFixed(0) : 0;
+
         return {
             totalRevenue, totalRegistrationFees, totalArrears, totalEnrolled, activeStudentsCount,
             branchData, courseData, addressData, trendData, recoveryRate,
             defaulters: defaulters.slice(0, 50),
             monthlyPayers,
-            highRiskCount, projectedPipeline, badDebtRisk
+            highRiskCount, projectedPipeline, badDebtRisk,
+            alumniStats: {
+                alumniList,
+                totalAlumniCount,
+                verifiedAlumniCount,
+                placedAlumniCount,
+                placementRate
+            }
         };
-    }, [students, selectedMonth, selectedCenter, addressFilter]);
+    }, [students, systemUsers, selectedMonth, selectedCenter, addressFilter]);
 
     if (!isOwner) {
         return (
@@ -385,25 +420,6 @@ export default function AdminAnalytics() {
                             >
                                 <option value="nariyawal">HQ: Nariyawal</option>
                                 <option value="thiriya">Branch: Thiriya</option>
-                            </select>
-                        </div>
-
-                        <div className="bg-[#1e293b] border border-slate-700/50 p-2 rounded-xl flex items-center shadow-lg w-full md:w-auto">
-                            <MapPin size={16} className="text-emerald-400 ml-2" />
-                            <select 
-                                value={addressFilter}
-                                onChange={(e) => setAddressFilter(e.target.value)}
-                                className="bg-transparent border-none text-white font-black outline-none px-3 py-1.5 cursor-pointer uppercase text-[10px] tracking-wider w-full"
-                            >
-                                <option value="all">Global (All Locations)</option>
-                                <option value="Nariyawal">Nariyawal</option>
-                                <option value="Thiriya Nizamat Khan">Thiriya</option>
-                                <option value="Bareilly City">Bareilly City</option>
-                                <option value="Bithri Chainpur">Bithri Chainpur</option>
-                                <option value="Fargawan">Fargawan</option>
-                                <option value="Navadia">Navadia</option>
-                                <option value="Tuline">Tuline</option>
-                                <option value="Other Localities">Other Localities</option>
                             </select>
                         </div>
 
@@ -702,6 +718,113 @@ export default function AdminAnalytics() {
                                 </div>
                             )}
                         </div>
+                    </div>
+                </div>
+
+                {/* ByteCore Alumni & Placement Matrix Section */}
+                <div className="mt-10 bg-[#1e293b] p-6 md:p-8 rounded-3xl border border-slate-800 space-y-6">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+                        <div>
+                            <div className="flex items-center gap-2 mb-1">
+                                <Award size={20} className="text-amber-400" />
+                                <h3 className="text-lg font-black text-white uppercase tracking-wider">ByteCore Alumni & Placement Matrix</h3>
+                            </div>
+                            <p className="text-xs font-bold text-slate-400">Track career outcomes, company placements, and verify alumni credentials.</p>
+                        </div>
+                        
+                        <div className="flex flex-wrap items-center gap-4">
+                            <div className="px-4 py-2 bg-slate-800 rounded-2xl border border-slate-700 text-center">
+                                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Alumni</p>
+                                <p className="text-lg font-black text-white">{analytics.alumniStats.totalAlumniCount}</p>
+                            </div>
+                            <div className="px-4 py-2 bg-emerald-950/40 border border-emerald-800/40 rounded-2xl text-center">
+                                <p className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Placement Rate</p>
+                                <p className="text-lg font-black text-emerald-400">{analytics.alumniStats.placementRate}%</p>
+                            </div>
+                            <div className="px-4 py-2 bg-blue-950/40 border border-blue-800/40 rounded-2xl text-center">
+                                <p className="text-[9px] font-black text-blue-400 uppercase tracking-widest">Verified Alumni</p>
+                                <p className="text-lg font-black text-blue-400">{analytics.alumniStats.verifiedAlumniCount}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="border-b border-slate-800 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                    <th className="py-3 px-4">Alumni Name</th>
+                                    <th className="py-3 px-4">Batch / Course</th>
+                                    <th className="py-3 px-4">Company</th>
+                                    <th className="py-3 px-4">CTC / Package</th>
+                                    <th className="py-3 px-4 text-center">Status</th>
+                                    <th className="py-3 px-4 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-800/50 text-xs">
+                                {analytics.alumniStats.alumniList.map((alumni) => (
+                                    <tr key={alumni.id} className="hover:bg-slate-800/40 transition-colors">
+                                        <td className="py-4 px-4 font-bold text-white flex items-center gap-3">
+                                            <div className="h-8 w-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-black text-white uppercase overflow-hidden">
+                                                {alumni.photoURL ? (
+                                                    <img src={alumni.photoURL} alt="" className="h-full w-full object-cover" />
+                                                ) : (
+                                                    alumni.displayName?.[0] || 'A'
+                                                )}
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-white">{alumni.displayName || 'Unnamed Alumni'}</p>
+                                                <p className="text-[10px] text-slate-400 font-normal">{alumni.email}</p>
+                                            </div>
+                                        </td>
+                                        <td className="py-4 px-4 font-bold text-slate-300">
+                                            {alumni.course || 'N/A'} {alumni.batch ? `(${alumni.batch})` : ''}
+                                        </td>
+                                        <td className="py-4 px-4 font-bold text-blue-400">
+                                            {alumni.company ? (
+                                                <span className="flex items-center gap-1">
+                                                    <Briefcase size={12} /> {alumni.company}
+                                                </span>
+                                            ) : (
+                                                <span className="text-slate-500 font-normal italic">Unspecified</span>
+                                            )}
+                                        </td>
+                                        <td className="py-4 px-4 font-bold text-emerald-400">
+                                            {alumni.currentSalary || 'N/A'}
+                                        </td>
+                                        <td className="py-4 px-4 text-center">
+                                            {alumni.isVerified ? (
+                                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-black uppercase">
+                                                    <CheckCircle size={10} /> Verified
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-black uppercase">
+                                                    Pending Verification
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td className="py-4 px-4 text-right">
+                                            <button
+                                                onClick={() => handleVerifyAlumni(alumni.id, alumni.isVerified)}
+                                                className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
+                                                    alumni.isVerified
+                                                        ? "bg-slate-800 text-slate-400 hover:bg-red-500/20 hover:text-red-400"
+                                                        : "bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30"
+                                                }`}
+                                            >
+                                                {alumni.isVerified ? "Revoke Badge" : "Verify Badge"}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {analytics.alumniStats.alumniList.length === 0 && (
+                                    <tr>
+                                        <td colSpan="6" className="text-center py-8 text-slate-500 font-bold uppercase tracking-widest text-xs">
+                                            No alumni profiles registered yet.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 

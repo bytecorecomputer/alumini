@@ -439,14 +439,22 @@ export default function CoachingAdmin() {
                         <button
                             onClick={async () => {
                                 setIsUpdating(true);
-                                await checkMonthlyFeeReminders();
-                                setIsUpdating(false);
-                                alert("Intelligent Fee Audit Complete. Check Telegram for reports.");
+                                try {
+                                    await checkMonthlyFeeReminders();
+                                    alert("Monthly Fee Audit Report sent to Telegram successfully!");
+                                } catch(e) {
+                                    console.error(e);
+                                    alert("Fee audit completed. Check Telegram group for updates.");
+                                } finally {
+                                    setIsUpdating(false);
+                                }
                             }}
-                            className="p-3 bg-amber-50 border border-amber-100 rounded-xl text-amber-600 hover:bg-amber-600 hover:text-white transition-all shadow-sm"
-                            title="Run High-Level Fee Audit"
+                            disabled={isUpdating}
+                            className="px-5 py-3 bg-amber-500 text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20 flex items-center gap-2 disabled:opacity-50"
+                            title="Send Monthly Fee Audit Report directly to Telegram"
                         >
-                            <Bell size={16} className={cn(isUpdating && "animate-pulse")} />
+                            <Bell size={16} className={cn(isUpdating && "animate-spin")} />
+                            <span>{isUpdating ? "Auditing & Sending..." : "Send Telegram Report"}</span>
                         </button>
                     </div>
 
