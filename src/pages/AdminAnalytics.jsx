@@ -418,6 +418,7 @@ export default function AdminAnalytics() {
                                 onChange={(e) => setSelectedCenter(e.target.value)}
                                 className="bg-transparent border-none text-white font-black outline-none px-3 py-1.5 cursor-pointer uppercase text-[10px] tracking-wider w-full"
                             >
+                                <option value="all">All Centers (HQ + Branch)</option>
                                 <option value="nariyawal">HQ: Nariyawal</option>
                                 <option value="thiriya">Branch: Thiriya</option>
                             </select>
@@ -565,53 +566,9 @@ export default function AdminAnalytics() {
                 </AnimatePresence>
 
                 {/* Middle Charts Grid (BI Style) */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                    {/* Geographic / Demographic Insights */}
-                    <div className="lg:col-span-1 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col min-h-[450px]">
-                        <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center gap-2">
-                                <Map size={16} className="text-emerald-400" />
-                                <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Demographics / Location</h3>
-                            </div>
-                        </div>
-                        <div className="flex-1 w-full min-h-0 mb-4">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={analytics.addressData} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#334155" />
-                                    <XAxis type="number" hide />
-                                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#f8fafc', fontWeight: 700 }} width={90} />
-                                    <RechartsTooltip 
-                                        cursor={{ fill: '#334155', opacity: 0.4 }} 
-                                        formatter={(value) => [`${value} Students`, 'Enrolled']}
-                                        contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '12px', fontWeight: 700, color: '#fff' }} 
-                                    />
-                                    <Bar dataKey="students" radius={[0, 4, 4, 0]} barSize={20}>
-                                        {analytics.addressData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                        {/* Village / Address List */}
-                        <div className="mt-auto flex-shrink-0 overflow-y-auto custom-scrollbar pr-2 space-y-2 max-h-[160px]">
-                            {analytics.addressData.map((addr, idx) => (
-                                <div key={idx} className="flex justify-between items-center p-3 bg-slate-800/50 rounded-xl border border-slate-700/50 hover:bg-slate-800 transition-colors">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-2.5 h-2.5 rounded-full shadow-sm shadow-black/50" style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }}></div>
-                                        <p className="text-[11px] font-bold text-white truncate max-w-[130px]">{addr.name}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-[11px] font-black text-emerald-400">{addr.students} Students</p>
-                                        <p className="text-[9px] font-bold text-slate-500 tracking-wider mt-0.5">₹{addr.revenue.toLocaleString('en-IN')}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
+                <div className="grid grid-cols-1 gap-6 mb-6">
                     {/* Growth Velocity & Revenue Timeline */}
-                    <div className="lg:col-span-2 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col min-h-[400px] h-auto">
+                    <div className="bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col min-h-[400px] h-auto">
                         <div className="flex items-center gap-2 mb-6">
                             <TrendingUp size={16} className="text-blue-400" />
                             <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Revenue Velocity (Last 12 Mo)</h3>
