@@ -95,14 +95,8 @@ const OrbEffect = () => {
                 
                 <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-purple-500/5 rounded-full blur-[120px]" />
                 
-                <motion.div 
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 0.08, scale: 1 }}
-                    transition={{ duration: 2, ease: "easeOut" }}
-                    className="relative z-10 w-1/3 md:w-1/4 opacity-[0.08] grayscale select-none"
-                >
-                    <img src="/logo.png" alt="ByteCore Watermark" className="w-full h-full object-contain" />
-                </motion.div>
+                {/* Sleek Ambient Core Glow */}
+                <div className="relative z-10 w-48 h-48 md:w-72 md:h-72 rounded-full bg-gradient-to-tr from-blue-500/10 to-indigo-500/10 backdrop-blur-3xl border border-white/20 shadow-2xl animate-pulse" />
             </div>
 
             <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] bg-[length:50px_50px]"></div>
