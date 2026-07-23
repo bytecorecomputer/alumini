@@ -286,8 +286,9 @@ export default function StudentDetails() {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-center">
-                                <LedgerStat label="Total Payable" value={`₹${student.totalFees}`} color="slate" />
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 text-center">
+                                <LedgerStat label="Admission Fee" value={`₹${student.admissionFee || student.registrationFee || 0}`} color="slate" />
+                                <LedgerStat label="Tuition Payable" value={`₹${student.totalFees || 0}`} color="slate" />
                                 <LedgerStat label="Total Received" value={`₹${totalReceived}`} color="emerald" tooltip={`Inst: ₹${student.paidFees || 0} + Old: ₹${student.oldPaidFees || 0}`} />
                                 <LedgerStat label="Current Arrears" value={`₹${remainingFees}`} color="amber" />
                             </div>

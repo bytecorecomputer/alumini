@@ -17,7 +17,7 @@ import { compressImage } from '../lib/imageCompression';
 import { runThiriyaMigration } from '../lib/migrateBytecoreThiriya';
 import { syncAggregateStats } from '../lib/migrateStudents';
 import { checkMonthlyFeeReminders } from '../lib/feeAutomation';
-import { syncFromGoogleSheet } from '../lib/syncGoogleSheet';
+import { syncFromGoogleSheet, parseRawSheetText } from '../lib/syncGoogleSheet';
 import { limit, startAfter } from 'firebase/firestore';
 import { parseDateToYYYYMM } from '../lib/utils';
 
@@ -36,6 +36,12 @@ export default function CoachingAdmin() {
     const [hasMore, setHasMore] = useState(true);
     const PAGE_SIZE = 50;
 
+    // Raw Sheet Paste Modal State
+    const [isRawPasteModalOpen, setIsRawPasteModalOpen] = useState(false);
+    const [rawPasteText, setRawPasteText] = useState('');
+    const [rawPasteCenter, setRawPasteCenter] = useState('Thiriya');
+    const [parsedPreview, setParsedPreview] = useState(null);
+
     // Course Management States
     const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
     const [courseForm, setCourseForm] = useState({ name: '', fee: '' });
@@ -46,7 +52,7 @@ export default function CoachingAdmin() {
     const [studentForm, setStudentForm] = useState({
         registration: '', fullName: '', course: '', mobile: '',
         status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toISOString().split('T')[0],
-        fatherName: '', address: '', photoUrl: '', center: 'Nariyawal'
+        fatherName: '', address: '', photoUrl: '', center: 'Thiriya', admissionFee: ''
     });
 
     // Telegram Settings Modal State
@@ -284,7 +290,9 @@ export default function CoachingAdmin() {
     const filteredStudents = students.filter(s => {
         const matchesSearch = (s.fullName || "").toLowerCase().includes(searchTerm.toLowerCase()) || (s.registration || "").includes(searchTerm);
         const matchesStatus = filterStatus === 'all' || s.status === filterStatus;
-        const matchesCenter = centerFilter === 'all' || s.center === centerFilter;
+        const matchesCenter = centerFilter === 'all' || 
+            (s.center || '').toLowerCase() === centerFilter.toLowerCase() || 
+            (s.address || '').toLowerCase().includes(centerFilter.toLowerCase());
         return matchesSearch && matchesStatus && matchesCenter;
     });
 
@@ -492,6 +500,16 @@ export default function CoachingAdmin() {
                             <Plus size={18} /> New Admission
                         </button>
                         <button
+                            onClick={() => {
+                                setRawPasteText('');
+                                setParsedPreview(null);
+                                setIsRawPasteModalOpen(true);
+                            }}
+                            className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-200 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
+                        >
+                            <Database size={18} /> Paste Sheet Data
+                        </button>
+                        <button
                             onClick={() => navigate('/admin/certificates')}
                             className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-200 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
                         >
@@ -648,6 +666,10 @@ export default function CoachingAdmin() {
                                 <option value="all">All Centers</option>
                                 <option value="Thiriya">Thiriya Center</option>
                                 <option value="Nariyawal">Nariyawal Center</option>
+                                <option value="Manpuriya">Manpuriya Center</option>
+                                <option value="Mohanpur">Mohanpur Center</option>
+                                <option value="Harharpur">Harharpur Center</option>
+                                <option value="Parsona">Parsona Center</option>
                             </select>
                         </div>
                         <div className="relative flex-grow md:w-80 group">
@@ -1017,6 +1039,140 @@ export default function CoachingAdmin() {
                                     Save & Connect Telegram
                                 </button>
                             </form>
+                        </motion.div>
+                    </div>
+                )}
+
+                {/* Raw Google Sheet Direct Paste Modal */}
+                {isRawPasteModalOpen && (
+                    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsRawPasteModalOpen(false)} />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="bg-white w-full max-w-4xl p-8 md:p-12 rounded-[3rem] shadow-2xl relative z-10 m-auto max-h-[90vh] overflow-y-auto custom-scrollbar"
+                        >
+                            <div className="flex justify-between items-center mb-8">
+                                <div>
+                                    <h3 className="text-3xl font-black text-slate-900 tracking-tighter uppercase leading-none">Import Raw <span className="text-indigo-600">Sheet Data</span></h3>
+                                    <p className="text-xs text-slate-400 font-bold mt-1">Paste tabular rows directly from Google Sheet / Excel (Thiriya, Nariyawal, Manpuriya, etc.)</p>
+                                </div>
+                                <button onClick={() => setIsRawPasteModalOpen(false)} className="p-3 bg-slate-50 text-slate-400 rounded-2xl hover:text-slate-900"><X size={20} /></button>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                    <div className="flex items-center gap-3">
+                                        <label className="text-xs font-black uppercase text-slate-500">Default Center:</label>
+                                        <select
+                                            value={rawPasteCenter}
+                                            onChange={e => setRawPasteCenter(e.target.value)}
+                                            className="bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs font-bold outline-none"
+                                        >
+                                            <option value="Thiriya">Thiriya</option>
+                                            <option value="Nariyawal">Nariyawal</option>
+                                            <option value="Manpuriya">Manpuriya</option>
+                                            <option value="Mohanpur">Mohanpur</option>
+                                            <option value="Harharpur">Harharpur</option>
+                                            <option value="Parsona">Parsona</option>
+                                        </select>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            if (!rawPasteText.trim()) {
+                                                alert("Please paste data from your sheet first!");
+                                                return;
+                                            }
+                                            const parsed = parseRawSheetText(rawPasteText, rawPasteCenter);
+                                            setParsedPreview(parsed);
+                                        }}
+                                        className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 shadow-md shadow-indigo-200 transition-all"
+                                    >
+                                        Extract & Analyze Data
+                                    </button>
+                                </div>
+
+                                <textarea
+                                    rows={8}
+                                    value={rawPasteText}
+                                    onChange={e => {
+                                        setRawPasteText(e.target.value);
+                                        setParsedPreview(null);
+                                    }}
+                                    placeholder="Paste sheet rows here (e.g. 1  2001  Mohd Tauseef  Unpaid  ADCA  Ahmad Miya  9548277241  Thiriya  02-09-2025  6000  1000 (13-09-2025)...)"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-6 font-mono text-xs text-slate-800 outline-none focus:bg-white focus:ring-4 ring-indigo-50 transition-all custom-scrollbar"
+                                />
+
+                                {parsedPreview && (
+                                    <div className="space-y-4 bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100">
+                                        <div className="flex flex-wrap justify-between items-center">
+                                            <div>
+                                                <h4 className="font-black text-slate-900 text-lg uppercase">Extraction Analysis</h4>
+                                                <p className="text-xs font-bold text-indigo-600">
+                                                    Extracted {parsedPreview.length} Students | Total Paid Fees: ₹{parsedPreview.reduce((sum, s) => sum + (s.paidFees || 0), 0)}
+                                                </p>
+                                            </div>
+                                            <button
+                                                disabled={isUpdating || parsedPreview.length === 0}
+                                                onClick={async () => {
+                                                    setIsUpdating(true);
+                                                    try {
+                                                        let batch = writeBatch(db);
+                                                        let count = 0;
+                                                        const { doc, setDoc } = await import('firebase/firestore');
+
+                                                        for (const student of parsedPreview) {
+                                                            const docRef = doc(db, "students", student.registration);
+                                                            batch.set(docRef, student, { merge: true });
+                                                            count++;
+                                                            if (count % 400 === 0) {
+                                                                await batch.commit();
+                                                                batch = writeBatch(db);
+                                                            }
+                                                        }
+                                                        if (count % 400 !== 0) {
+                                                            await batch.commit();
+                                                        }
+
+                                                        await syncAggregateStats();
+                                                        alert(`Success! Imported ${parsedPreview.length} students to Firestore database.`);
+                                                        setIsRawPasteModalOpen(false);
+                                                        setRawPasteText('');
+                                                        setParsedPreview(null);
+                                                    } catch (err) {
+                                                        console.error(err);
+                                                        alert("Import failed: " + err.message);
+                                                    } finally {
+                                                        setIsUpdating(false);
+                                                    }
+                                                }}
+                                                className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-emerald-600 transition-all flex items-center gap-2"
+                                            >
+                                                {isUpdating ? <Loader2 className="animate-spin" size={16} /> : <CheckCircle size={16} />}
+                                                Save All to Database
+                                            </button>
+                                        </div>
+
+                                        <div className="max-h-60 overflow-y-auto rounded-2xl border border-indigo-100 bg-white p-4 custom-scrollbar space-y-2">
+                                            {parsedPreview.map((s, idx) => (
+                                                <div key={idx} className="flex justify-between items-center text-xs p-2 hover:bg-slate-50 rounded-xl border-b border-slate-50">
+                                                    <div>
+                                                        <span className="font-black text-slate-900">{s.fullName}</span>
+                                                        <span className="text-[10px] text-slate-400 font-bold ml-2">(Roll: {s.registration} | Center: {s.center})</span>
+                                                    </div>
+                                                    <div className="text-right font-mono text-[11px]">
+                                                        <span className="text-emerald-600 font-black">Paid: ₹{s.paidFees}</span>
+                                                        <span className="text-slate-400 ml-2">/ Total: ₹{s.totalFees}</span>
+                                                        <span className="text-blue-600 ml-2 font-bold">({s.installments?.length || 0} Inst.)</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </motion.div>
                     </div>
                 )}
