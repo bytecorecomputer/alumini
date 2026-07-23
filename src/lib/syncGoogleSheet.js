@@ -40,7 +40,16 @@ export function normalizeStatus(status) {
  * - "Free 500 (02-12-2025)"
  * - "(02-12-2025)"
  */
-export function parseInstallmentText(str) {
+/**
+ * Robust regex-based installment parser.
+ * Handles formats like:
+ * - "1000 (13-09-2025)"
+ * - "3000  (01-11-2025)"
+ * - "500 (17-06-2026" (missing closing parenthesis)
+ * - "1000 (14-04)" (short date)
+ * - "1000" (bare amount in installment column)
+ */
+export function parseInstallmentText(str, fallbackDate = '') {
     if (!str || typeof str !== 'string' || !str.trim()) return [];
 
     const clean = str.trim();
@@ -48,13 +57,11 @@ export function parseInstallmentText(str) {
 
     const results = [];
 
-    // Regex to match amount + date in any combination
-    // Group 1: Amount (digits)
-    // Group 2: Date string (DD-MM-YYYY, DD/MM/YYYY, etc.)
-    const regex = /(\d[\d,]*)\s*\(?\s*([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})/g;
+    // Regex 1: Full Date e.g. 1000 (13-09-2025) or 1000 (13-09-25) or 500 (17-06-2026
+    const fullDateRegex = /(\d[\d,]*)\s*\(?\s*([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})/g;
     let match;
 
-    while ((match = regex.exec(clean)) !== null) {
+    while ((match = fullDateRegex.exec(clean)) !== null) {
         const amtStr = match[1].replace(/,/g, '');
         const amt = parseInt(amtStr, 10);
         const rawDate = match[2];
@@ -70,21 +77,40 @@ export function parseInstallmentText(str) {
 
     if (results.length > 0) return results;
 
-    // Fallback: Check if date exists inside brackets or string
-    const dateMatch = clean.match(/([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})/);
-    if (dateMatch) {
-        const dateStr = dateMatch[1];
-        const numMatch = clean.replace(dateStr, '').match(/\d+/);
-        const amt = numMatch ? parseInt(numMatch[0], 10) : 0;
+    // Regex 2: Short Date e.g. 1000 (14-04) or 1000 (14/04)
+    const shortDateRegex = /(\d[\d,]*)\s*\(?\s*([0-9]{1,2}[-/.][0-9]{1,2})/g;
+    while ((match = shortDateRegex.exec(clean)) !== null) {
+        const amtStr = match[1].replace(/,/g, '');
+        const amt = parseInt(amtStr, 10);
+        const rawDate = match[2];
 
-        return [{
-            amount: amt,
-            date: normalizeDateToYYYYMMDD(dateStr),
-            status: 'paid'
-        }];
+        if (!isNaN(amt)) {
+            const currentYear = new Date().getFullYear();
+            const dateWithYear = `${rawDate}-${currentYear}`;
+            results.push({
+                amount: amt,
+                date: normalizeDateToYYYYMMDD(dateWithYear),
+                status: 'paid'
+            });
+        }
     }
 
-    return [];
+    if (results.length > 0) return results;
+
+    // Regex 3: Bare number without date e.g. "1000" or "500"
+    const numOnlyMatch = clean.replace(/,/g, '').match(/^\d+$/);
+    if (numOnlyMatch) {
+        const amt = parseInt(numOnlyMatch[0], 10);
+        if (!isNaN(amt) && amt > 0) {
+            results.push({
+                amount: amt,
+                date: fallbackDate || new Date().toISOString().split('T')[0],
+                status: 'paid'
+            });
+        }
+    }
+
+    return results;
 }
 
 /**
@@ -152,11 +178,14 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
             const cellVal = cols[j];
             if (!cellVal || cellVal === '-' || cellVal.toLowerCase() === 'unpaid') continue;
 
-            // Check if cell contains installment date pattern e.g. "1000 (13-09-2025)" or "(13-09-2025)"
-            const isInstallmentCell = /[0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4}/.test(cellVal);
+            const containsDigits = /\d+/.test(cellVal);
+            if (!containsDigits) continue;
 
-            if (isInstallmentCell) {
-                const parsedInsts = parseInstallmentText(cellVal);
+            // An installment cell is EITHER at column index >= 11 OR contains date pattern
+            const isInstallmentCol = j >= 11 || /[0-9]{1,2}[-/.][0-9]{1,2}/.test(cellVal);
+
+            if (isInstallmentCol && !cellVal.toLowerCase().includes('free')) {
+                const parsedInsts = parseInstallmentText(cellVal, normalizeDateToYYYYMMDD(admissionDateRaw));
                 if (parsedInsts.length > 0) {
                     installments = [...installments, ...parsedInsts];
                 }
