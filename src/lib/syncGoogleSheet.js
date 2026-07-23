@@ -49,6 +49,11 @@ export function normalizeStatus(status) {
  * - "1000 (14-04)" (short date)
  * - "1000" (bare amount in installment column)
  */
+/**
+ * Strict regex-based installment parser.
+ * Requires explicit date pattern e.g. "1000 (13-09-2025)" or "300(17-07-2026)" or "1000 (14-04)".
+ * Rejects bare numbers without dates and amounts > 50,000 to prevent S.No, Roll No, or Mobile numbers (6397712145) from ever becoming fee installments!
+ */
 export function parseInstallmentText(str, fallbackDate = '') {
     if (!str || typeof str !== 'string' || !str.trim()) return [];
 
@@ -57,7 +62,7 @@ export function parseInstallmentText(str, fallbackDate = '') {
 
     const results = [];
 
-    // Regex 1: Full Date e.g. 1000 (13-09-2025) or 1000 (13-09-25) or 500 (17-06-2026
+    // Regex 1: Full Date e.g. 1000 (13-09-2025) or 300(17-07-2026)
     const fullDateRegex = /(\d[\d,]*)\s*\(?\s*([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})/g;
     let match;
 
@@ -66,7 +71,7 @@ export function parseInstallmentText(str, fallbackDate = '') {
         const amt = parseInt(amtStr, 10);
         const rawDate = match[2];
 
-        if (!isNaN(amt) && amt >= 10) {
+        if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
             results.push({
                 amount: amt,
                 date: normalizeDateToYYYYMMDD(rawDate),
@@ -84,27 +89,12 @@ export function parseInstallmentText(str, fallbackDate = '') {
         const amt = parseInt(amtStr, 10);
         const rawDate = match[2];
 
-        if (!isNaN(amt) && amt >= 10) {
+        if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
             const currentYear = new Date().getFullYear();
             const dateWithYear = `${rawDate}-${currentYear}`;
             results.push({
                 amount: amt,
                 date: normalizeDateToYYYYMMDD(dateWithYear),
-                status: 'paid'
-            });
-        }
-    }
-
-    if (results.length > 0) return results;
-
-    // Regex 3: Bare number without date e.g. "1000" or "500" (Must be >= 10)
-    const numOnlyMatch = clean.replace(/,/g, '').match(/^\d+$/);
-    if (numOnlyMatch) {
-        const amt = parseInt(numOnlyMatch[0], 10);
-        if (!isNaN(amt) && amt >= 10) {
-            results.push({
-                amount: amt,
-                date: fallbackDate || new Date().toISOString().split('T')[0],
                 status: 'paid'
             });
         }
@@ -121,13 +111,9 @@ const RESERVED_HEADERS = [
 ];
 
 /**
- * Deep Dynamic Parser for raw TSV/CSV text (pasted directly from Google Sheets or Excel)
- * Traverses every cell across the entire row to extract student info, admission fee, total fee, and installments.
- */
-/**
- * Smart Adaptive Parser for raw TSV/CSV text (pasted directly from Google Sheets or Excel)
- * Automatically classifies cells into Name, Roll No, Course, Mobile, Admission Date, Admission Fee, Total Fee, and Month Installments
- * Works whether S.No or Roll No columns are present or absent!
+ * 3-Mode Adaptive Schema Parser for raw TSV/CSV text (pasted directly from Google Sheets or Excel)
+ * Isolates core identity metadata (Roll No, Name, Mobile, Admission Fee, Total Fee) from Month Installments (Cols 11+)
+ * Handles all row format variations without ever mixing mobile numbers (6397712145) or roll numbers into fee installments!
  */
 export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
     if (!text || typeof text !== 'string') return [];
@@ -143,11 +129,11 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
         let cols = line.includes('\t') ? line.split('\t') : line.split(',');
         cols = cols.map(c => c ? c.trim() : '');
 
-        // Skip header lines
+        // Skip header / title lines
         const firstCol = (cols[0] || '').toLowerCase();
         const secondCol = (cols[1] || '').toLowerCase();
         const thirdCol = (cols[2] || '').toLowerCase();
-        if (firstCol.includes('s.no') || firstCol.includes('sr') || secondCol.includes('roll') || secondCol.includes('registration') || thirdCol.includes('student name')) {
+        if (firstCol.includes('s.no') || firstCol.includes('sr') || secondCol.includes('roll') || secondCol.includes('registration') || thirdCol.includes('student name') || firstCol.includes('bytecore')) {
             continue;
         }
 
@@ -159,104 +145,51 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
         let mobileStr = '';
         let addressStr = '';
         let admissionDateRaw = '';
-        let admissionFeeRaw = 0;
-        let totalFeesRaw = 0;
-        let installments = [];
+        let admissionFeeRaw = '';
+        let totalFeesRaw = '';
+        let instStartIdx = 11;
 
-        const candidateNumbers = [];
-        let foundFirstInstallment = false;
-
-        for (let j = 0; j < cols.length; j++) {
-            const cellVal = cols[j];
-            if (!cellVal || cellVal === '-') continue;
-
-            const cleanVal = cellVal.trim();
-            const lowerVal = cleanVal.toLowerCase();
-            if (lowerVal === 'unpaid' && j < 4) {
-                statusStr = 'unpaid';
-                continue;
-            }
-
-            // 1. Explicit installment pattern e.g. "1000 (14-04-2026)" or "1000 (14-04)"
-            const parsedInsts = parseInstallmentText(cleanVal);
-            if (parsedInsts.length > 0) {
-                foundFirstInstallment = true;
-                installments = [...installments, ...parsedInsts];
-                continue;
-            }
-
-            // 2. Mobile Number (10 digits starting with 6, 7, 8, 9)
-            if (/^[6-9]\d{9}$/.test(cleanVal.replace(/[^0-9]/g, '')) && !mobileStr) {
-                mobileStr = cleanVal;
-                continue;
-            }
-
-            // 3. Standalone Date (e.g. "14-04-2026" or "02-09-2025")
-            if (/^([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})$/.test(cleanVal) && !admissionDateRaw) {
-                admissionDateRaw = cleanVal;
-                continue;
-            }
-
-            // 4. Status (pass, paid, complete, unpaid)
-            if ((lowerVal === 'paid' || lowerVal === 'unpaid' || lowerVal.includes('pass') || lowerVal.includes('complete')) && !statusStr) {
-                statusStr = cleanVal;
-                continue;
-            }
-
-            // 5. Course (ADCA, DCST, DCA, MDCA, Power BI, etc.)
-            if (/^(adca|dcst|dca|mdca|tally|ccc|power\s*bi|adca\s*\+\s*power\s*bi)$/i.test(cleanVal) && !courseStr) {
-                courseStr = cleanVal;
-                continue;
-            }
-
-            // 6. Numeric values: Roll No vs Fee Amounts
-            const isPureNum = /^\d+$/.test(cleanVal.replace(/,/g, ''));
-            if (isPureNum) {
-                const num = parseCurrency(cleanVal);
-                
-                // Roll number candidate e.g. 2001, 2050, 501
-                if (!regId && (num > 100 && num < 10000) && j <= 2) {
-                    regId = cleanVal;
-                    continue;
-                }
-
-                // If bare number appears after installments started, it is a month installment!
-                if (foundFirstInstallment && num >= 10) {
-                    installments.push({
-                        amount: num,
-                        date: normalizeDateToYYYYMMDD(admissionDateRaw) || new Date().toISOString().split('T')[0],
-                        status: 'paid'
-                    });
-                    continue;
-                }
-
-                candidateNumbers.push({ num, colIndex: j, str: cleanVal });
-                continue;
-            }
-
-            if (lowerVal.includes('free')) {
-                totalFeesRaw = 'FREE';
-                continue;
-            }
-
-            // 7. Text fields (Name, Father Name, Address)
-            if (!fullName && j <= 3 && !/^\d+$/.test(cleanVal)) {
-                fullName = cleanVal;
-            } else if (fullName && !fatherNameStr && j <= 5 && !/^\d+$/.test(cleanVal)) {
-                fatherNameStr = cleanVal;
-            } else if (!addressStr && (lowerVal.includes('thiriya') || lowerVal.includes('nariyawal') || lowerVal.includes('manpuriya') || lowerVal.includes('mohanpur') || lowerVal.includes('harharpur') || lowerVal.includes('parsona'))) {
-                addressStr = cleanVal;
-            }
+        // Mode 1: S.No (Col 0), Roll No (Col 1), Name (Col 2)
+        if (cols.length > 2 && /^\d+$/.test(cols[0]) && cols[1] !== '' && !/^[a-zA-Z\s]{3,}$/.test(cols[1])) {
+            regId = cols[1] || '';
+            fullName = cols[2] || '';
+            statusStr = cols[3] || '';
+            courseStr = cols[4] || '';
+            fatherNameStr = cols[5] || '';
+            mobileStr = cols[6] || '';
+            addressStr = cols[7] || '';
+            admissionDateRaw = cols[8] || '';
+            admissionFeeRaw = cols[9] || '';
+            totalFeesRaw = cols[10] || '';
+            instStartIdx = 11;
         }
-
-        // Classify candidate pre-installment numbers for Admission Fee vs Total Fee
-        candidateNumbers.forEach(item => {
-            if (item.num <= 1000 && !admissionFeeRaw) {
-                admissionFeeRaw = item.num;
-            } else if (item.num > 1000 && !totalFeesRaw) {
-                totalFeesRaw = item.num;
-            }
-        });
+        // Mode 2: Roll No (Col 0), Name (Col 1)
+        else if (cols.length > 1 && !/^[a-zA-Z\s]{3,}$/.test(cols[0]) && cols[0] !== '') {
+            regId = cols[0] || '';
+            fullName = cols[1] || '';
+            statusStr = cols[2] || '';
+            courseStr = cols[3] || '';
+            fatherNameStr = cols[4] || '';
+            mobileStr = cols[5] || '';
+            addressStr = cols[6] || '';
+            admissionDateRaw = cols[7] || '';
+            admissionFeeRaw = cols[8] || '';
+            totalFeesRaw = cols[9] || '';
+            instStartIdx = 10;
+        }
+        // Mode 3: Name (Col 0)
+        else {
+            fullName = cols[0] || '';
+            statusStr = cols[1] || '';
+            courseStr = cols[2] || '';
+            fatherNameStr = cols[3] || '';
+            mobileStr = cols[4] || '';
+            addressStr = cols[5] || '';
+            admissionDateRaw = cols[6] || '';
+            admissionFeeRaw = cols[7] || '';
+            totalFeesRaw = cols[8] || '';
+            instStartIdx = 9;
+        }
 
         if (!fullName && !regId) continue;
 
@@ -277,14 +210,24 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
         else if (addrLower.includes('parsona')) detectedCenter = 'Parsona';
         else if (addressStr && addressStr !== '-') detectedCenter = addressStr;
 
-        const parsedTotalFee = (totalFeesRaw === 'FREE' || (typeof totalFeesRaw === 'string' && totalFeesRaw.toLowerCase().includes('free'))) ? 0 : parseCurrency(totalFeesRaw);
+        const parsedTotalFee = (totalFeesRaw && String(totalFeesRaw).toLowerCase().includes('free')) ? 0 : parseCurrency(totalFeesRaw);
         const parsedAdmissionFee = parseCurrency(admissionFeeRaw);
 
-        // Clean installments array: Filter out totalFees or admissionFee duplicates
-        const cleanInstallments = installments.filter(inst => inst.amount !== parsedTotalFee && inst.amount >= 10);
+        // Strict Installment Extraction from instStartIdx onwards
+        let installments = [];
+        for (let j = instStartIdx; j < cols.length; j++) {
+            const cellVal = cols[j];
+            if (cellVal && cellVal.trim() !== '' && cellVal !== '-' && cellVal.toLowerCase() !== 'unpaid') {
+                const parsedInsts = parseInstallmentText(cellVal, admissionDateRaw);
+                if (parsedInsts.length > 0) {
+                    const cleanInsts = parsedInsts.filter(inst => inst.amount !== parsedTotalFee && inst.amount >= 10 && inst.amount <= 50000);
+                    installments = [...installments, ...cleanInsts];
+                }
+            }
+        }
 
         let totalPaid = 0;
-        cleanInstallments.forEach((inst, idx) => {
+        installments.forEach((inst, idx) => {
             inst.installmentNo = idx + 1;
             totalPaid += inst.amount;
         });
@@ -302,7 +245,7 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
             admissionFee: parsedAdmissionFee,
             registrationFee: parsedAdmissionFee,
             totalFees: parsedTotalFee,
-            installments: cleanInstallments,
+            installments: installments,
             paidFees: totalPaid,
             updatedAt: Date.now()
         };
