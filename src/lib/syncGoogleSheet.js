@@ -66,7 +66,7 @@ export function parseInstallmentText(str, fallbackDate = '') {
         const amt = parseInt(amtStr, 10);
         const rawDate = match[2];
 
-        if (!isNaN(amt)) {
+        if (!isNaN(amt) && amt >= 10) {
             results.push({
                 amount: amt,
                 date: normalizeDateToYYYYMMDD(rawDate),
@@ -84,7 +84,7 @@ export function parseInstallmentText(str, fallbackDate = '') {
         const amt = parseInt(amtStr, 10);
         const rawDate = match[2];
 
-        if (!isNaN(amt)) {
+        if (!isNaN(amt) && amt >= 10) {
             const currentYear = new Date().getFullYear();
             const dateWithYear = `${rawDate}-${currentYear}`;
             results.push({
@@ -97,11 +97,11 @@ export function parseInstallmentText(str, fallbackDate = '') {
 
     if (results.length > 0) return results;
 
-    // Regex 3: Bare number without date e.g. "1000" or "500"
+    // Regex 3: Bare number without date e.g. "1000" or "500" (Must be >= 10)
     const numOnlyMatch = clean.replace(/,/g, '').match(/^\d+$/);
     if (numOnlyMatch) {
         const amt = parseInt(numOnlyMatch[0], 10);
-        if (!isNaN(amt) && amt > 0) {
+        if (!isNaN(amt) && amt >= 10) {
             results.push({
                 amount: amt,
                 date: fallbackDate || new Date().toISOString().split('T')[0],
