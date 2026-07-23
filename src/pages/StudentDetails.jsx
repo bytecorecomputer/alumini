@@ -13,6 +13,8 @@ import { compressImage } from "../lib/imageCompression";
 import { syncAggregateStats } from "../lib/migrateStudents";
 import { cn } from "../lib/utils";
 
+import { sanitizeStudentData } from "../lib/feeAutomation";
+
 export default function StudentDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -31,11 +33,23 @@ export default function StudentDetails() {
         if (!id) return;
 
         // Use onSnapshot for real-time updates on this specific student
-        const unsub = onSnapshot(doc(db, "students", id), (doc) => {
-            if (doc.exists()) {
-                const data = doc.data();
-                setStudent({ id: doc.id, ...data });
-                setEditForm(data);
+        const unsub = onSnapshot(doc(db, "students", id), (docSnap) => {
+            if (docSnap.exists()) {
+                const rawData = docSnap.data();
+                const studentObj = { id: docSnap.id, ...rawData };
+                const sanitized = sanitizeStudentData(studentObj);
+
+                // Self-healing Firestore cleanup: if corrupted entries were filtered out, update Firestore document automatically!
+                if (Array.isArray(rawData.installments) && rawData.installments.length !== sanitized.installments.length) {
+                    updateDoc(doc(db, "students", docSnap.id), {
+                        installments: sanitized.installments,
+                        paidFees: sanitized.paidFees,
+                        updatedAt: Date.now()
+                    }).catch(console.error);
+                }
+
+                setStudent(sanitized);
+                setEditForm(sanitized);
             } else {
                 navigate('/admin/coaching');
             }

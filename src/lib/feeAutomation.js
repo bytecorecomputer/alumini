@@ -5,6 +5,39 @@ import { sendTelegramNotification } from "./telegram";
 import { calculateCourseExpiry, parseDateToYYYYMM } from "./utils";
 
 /**
+ * Automatically cleans up any corrupted or legacy installments (e.g. Total Fee ₹6000, Admission Fee ₹200, or amounts <= 1)
+ * from student object to ensure 100% clean financial ledger calculations.
+ */
+export function sanitizeStudentData(student) {
+    if (!student) return student;
+
+    const totalFees = parseInt(student.totalFees || 0, 10);
+    const admissionFee = parseInt(student.admissionFee || student.registrationFee || 0, 10);
+
+    let rawInsts = Array.isArray(student.installments) ? student.installments : [];
+
+    // Filter out total fee duplicates, admission fee duplicates, amounts <= 1, or amounts > 50,000 (mobile numbers)
+    const cleanInsts = rawInsts.filter(inst => {
+        const amt = parseInt(inst.amount || 0, 10);
+        if (isNaN(amt) || amt <= 1 || amt > 50000) return false;
+        if (totalFees > 0 && amt === totalFees) return false;
+        if (admissionFee > 0 && amt === admissionFee && rawInsts.length > 1) return false;
+        return true;
+    }).map((inst, idx) => ({
+        ...inst,
+        installmentNo: idx + 1
+    }));
+
+    const cleanPaidFees = cleanInsts.reduce((sum, inst) => sum + parseInt(inst.amount || 0, 10), 0);
+
+    return {
+        ...student,
+        installments: cleanInsts,
+        paidFees: cleanPaidFees
+    };
+}
+
+/**
  * Intelligent Fee Reminder Algorithm
  * High Level logic to detect which students' monthly fee is due today,
  * and generates a Monthly Fee Performance Report.

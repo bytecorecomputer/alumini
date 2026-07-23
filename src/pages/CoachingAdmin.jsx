@@ -16,7 +16,7 @@ import { uploadToSupabase } from '../lib/supabase';
 import { compressImage } from '../lib/imageCompression';
 import { runThiriyaMigration } from '../lib/migrateBytecoreThiriya';
 import { syncAggregateStats } from '../lib/migrateStudents';
-import { checkMonthlyFeeReminders } from '../lib/feeAutomation';
+import { checkMonthlyFeeReminders, sanitizeStudentData } from '../lib/feeAutomation';
 import { syncFromGoogleSheet, parseRawSheetText } from '../lib/syncGoogleSheet';
 import { limit, startAfter } from 'firebase/firestore';
 import { parseDateToYYYYMM } from '../lib/utils';
@@ -74,7 +74,7 @@ export default function CoachingAdmin() {
         // Single persistent realtime listener for students (Loaded once in memory for 0ms instant search)
         const q = query(collection(db, "students"), orderBy("updatedAt", "desc"));
         const unsubStudents = onSnapshot(q, (snap) => {
-            const results = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const results = snap.docs.map(doc => sanitizeStudentData({ id: doc.id, ...doc.data() }));
             setStudents(results);
             setLoading(false);
         });
