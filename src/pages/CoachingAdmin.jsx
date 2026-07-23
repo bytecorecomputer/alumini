@@ -61,6 +61,7 @@ export default function CoachingAdmin() {
     const [telegramChatId, setTelegramChatId] = useState('');
 
     const isOwner = role === 'admin' || role === 'super_admin';
+    const [visibleCount, setVisibleCount] = useState(50);
 
     useEffect(() => {
         if (!isOwner) return;
@@ -70,30 +71,13 @@ export default function CoachingAdmin() {
             if (snap.exists()) setGlobalStats(snap.data());
         });
 
-        // Student listener - Switches between Paginated and Full (for search/filter)
-        let unsubStudents;
-        const isFiltered = searchTerm || centerFilter !== 'all' || filterStatus !== 'all';
-
-        if (isFiltered) {
-            // If searching or filtering, fetch all to ensure results are complete
-            const q = query(collection(db, "students"), orderBy("updatedAt", "desc"));
-            unsubStudents = onSnapshot(q, (snap) => {
-                const results = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                setStudents(results);
-                setHasMore(false);
-                setLoading(false);
-            });
-        } else {
-            // Standard Paginated Load
-            const q = query(collection(db, "students"), orderBy("updatedAt", "desc"), limit(PAGE_SIZE));
-            unsubStudents = onSnapshot(q, (snap) => {
-                const newStudents = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                setStudents(newStudents);
-                setLastDoc(snap.docs[snap.docs.length - 1]);
-                setHasMore(snap.docs.length === PAGE_SIZE);
-                setLoading(false);
-            });
-        }
+        // Single persistent realtime listener for students (Loaded once in memory for 0ms instant search)
+        const q = query(collection(db, "students"), orderBy("updatedAt", "desc"));
+        const unsubStudents = onSnapshot(q, (snap) => {
+            const results = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setStudents(results);
+            setLoading(false);
+        });
 
         // Real-time courses listener
         const unsubCourses = onSnapshot(collection(db, "courses"), (snap) => {
@@ -105,7 +89,7 @@ export default function CoachingAdmin() {
             unsubStudents();
             unsubCourses();
         };
-    }, [isOwner, searchTerm, centerFilter, filterStatus]);
+    }, [isOwner]);
 
 
     const loadMoreStudents = async () => {
@@ -287,14 +271,38 @@ export default function CoachingAdmin() {
         });
     };
 
-    const filteredStudents = students.filter(s => {
-        const matchesSearch = (s.fullName || "").toLowerCase().includes(searchTerm.toLowerCase()) || (s.registration || "").includes(searchTerm);
-        const matchesStatus = filterStatus === 'all' || s.status === filterStatus;
-        const matchesCenter = centerFilter === 'all' || 
-            (s.center || '').toLowerCase() === centerFilter.toLowerCase() || 
-            (s.address || '').toLowerCase().includes(centerFilter.toLowerCase());
-        return matchesSearch && matchesStatus && matchesCenter;
-    });
+    const filteredStudents = React.useMemo(() => {
+        if (!searchTerm && filterStatus === 'all' && centerFilter === 'all') {
+            return students;
+        }
+
+        const query = searchTerm.toLowerCase().trim();
+        const centerQuery = centerFilter.toLowerCase();
+
+        return students.filter(s => {
+            // 1. Center filter match
+            if (centerFilter !== 'all') {
+                const sCenter = (s.center || '').toLowerCase();
+                const sAddr = (s.address || '').toLowerCase();
+                if (sCenter !== centerQuery && !sAddr.includes(centerQuery)) return false;
+            }
+
+            // 2. Status filter match
+            if (filterStatus !== 'all' && s.status !== filterStatus) return false;
+
+            // 3. Search query match
+            if (!query) return true;
+
+            const reg = (s.registration || '').toLowerCase();
+            const name = (s.fullName || '').toLowerCase();
+            const father = (s.fatherName || '').toLowerCase();
+            const mob = (s.mobile || '').toLowerCase();
+            const course = (s.course || '').toLowerCase();
+            const addr = (s.address || '').toLowerCase();
+
+            return reg.includes(query) || name.includes(query) || father.includes(query) || mob.includes(query) || course.includes(query) || addr.includes(query);
+        });
+    }, [students, searchTerm, filterStatus, centerFilter]);
 
     const stats = React.useMemo(() => {
         const isFiltered = searchTerm || centerFilter !== 'all' || filterStatus !== 'all';
