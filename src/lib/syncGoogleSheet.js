@@ -113,6 +113,13 @@ export function parseInstallmentText(str, fallbackDate = '') {
     return results;
 }
 
+const RESERVED_HEADERS = [
+    's.no', 'sr', 'sr.no', 'roll', 'roll no', 'registration', 'registration no.',
+    'student name', 'name', 'status', 'course', 'father', 'fathers name', 'father name',
+    'mobile', 'mob', 'mob. no.', 'address', 'center', 'admission date', 'date',
+    'registration fee', 'regi. fee', 'admission fee', 'reg fee', 'total fee', 'total fees', 'fee total'
+];
+
 /**
  * Deep Dynamic Parser for raw TSV/CSV text (pasted directly from Google Sheets or Excel)
  * Traverses every cell across the entire row to extract student info, admission fee, total fee, and installments.
@@ -172,6 +179,9 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
         const admissionFeeRaw = cols[9] || '';
         const totalFeesRaw = cols[10] || '';
 
+        const parsedTotalFee = (totalFeesRaw && String(totalFeesRaw).toLowerCase().includes('free')) ? 0 : parseCurrency(totalFeesRaw);
+        const parsedAdmissionFee = parseCurrency(admissionFeeRaw);
+
         const student = {
             registration: String(regId).trim(),
             fullName: fullName || 'Unknown Student',
@@ -182,9 +192,9 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
             address: rawAddress || '',
             center: detectedCenter,
             admissionDate: normalizeDateToYYYYMMDD(admissionDateRaw),
-            admissionFee: parseCurrency(admissionFeeRaw),
-            registrationFee: parseCurrency(admissionFeeRaw),
-            totalFees: (totalFeesRaw && String(totalFeesRaw).toLowerCase().includes('free')) ? 0 : parseCurrency(totalFeesRaw),
+            admissionFee: parsedAdmissionFee,
+            registrationFee: parsedAdmissionFee,
+            totalFees: parsedTotalFee,
             updatedAt: Date.now()
         };
 
@@ -195,7 +205,9 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
             if (cellVal && cellVal.trim() !== '' && cellVal !== '-' && cellVal.toLowerCase() !== 'unpaid') {
                 const parsedInsts = parseInstallmentText(cellVal, student.admissionDate);
                 if (parsedInsts.length > 0) {
-                    installments = [...installments, ...parsedInsts];
+                    // Exclude any installment matching totalFees or less than ₹10
+                    const cleanInsts = parsedInsts.filter(inst => inst.amount !== parsedTotalFee && inst.amount >= 10);
+                    installments = [...installments, ...cleanInsts];
                 }
             }
         }
@@ -270,14 +282,10 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
         if (!response.ok) throw new Error("Failed to fetch CSV from Google Sheets");
         const csvText = await response.text();
 
-        // Check if raw sheet paste format or standard CSV
-        let studentsList = [];
-        if (csvText.includes('\t') || !csvText.toLowerCase().includes('student name')) {
-            studentsList = parseRawSheetText(csvText, centerName);
-        }
+        let studentsList = parseRawSheetText(csvText, centerName);
 
         if (studentsList.length === 0) {
-            // Fallback to PapaParse mapping
+            // Fallback to PapaParse mapping with strict header filtering
             const data = parseCSV(csvText);
             for (const row of data) {
                 const regId = row['Registration'] || row['Registration NO.'] || row['Roll No'] || row['Roll No.'] || row['S.No'];
@@ -288,6 +296,9 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
                 if (address.toLowerCase().includes('thiriya')) center = 'Thiriya';
                 else if (address.toLowerCase().includes('nariyawal') || address.toLowerCase().includes('naryawal')) center = 'Nariyawal';
 
+                const totalFees = parseCurrency(row['Total Fee']);
+                const admissionFee = parseCurrency(row['Registration Fee'] || row['Regi. Fee'] || row['Admission Fee']);
+
                 const student = {
                     registration: String(regId).trim(),
                     fullName: row['Student Name ']?.trim() || row['Student Name']?.trim() || 'Unknown',
@@ -297,20 +308,25 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
                     mobile: row['Mob. No.']?.trim() || row['Mobile']?.trim() || '',
                     address: address.trim(),
                     admissionDate: normalizeDateToYYYYMMDD(row['Admission Date'] || ''),
-                    admissionFee: parseCurrency(row['Registration Fee'] || row['Regi. Fee'] || row['Admission Fee']),
-                    registrationFee: parseCurrency(row['Registration Fee'] || row['Regi. Fee'] || row['Admission Fee']),
-                    totalFees: parseCurrency(row['Total Fee']),
+                    admissionFee: admissionFee,
+                    registrationFee: admissionFee,
+                    totalFees: totalFees,
                     center: center,
                     updatedAt: Date.now()
                 };
 
-                // Installments extraction
+                // Installments extraction: Strictly exclude reserved headers!
                 let installments = [];
                 Object.keys(row).forEach(key => {
-                    const val = row[key];
-                    if (val && typeof val === 'string' && (key.toLowerCase().includes('fee') || key.toLowerCase().includes('date') || key.toLowerCase().includes('inst') || val.includes('('))) {
-                        const parsed = parseInstallmentText(val);
-                        installments = [...installments, ...parsed];
+                    const keyLower = key.toLowerCase().trim();
+                    const isReserved = RESERVED_HEADERS.some(rh => keyLower === rh || keyLower.includes('total fee') || keyLower.includes('regi. fee') || keyLower.includes('registration fee') || keyLower.includes('admission fee'));
+                    if (!isReserved) {
+                        const val = row[key];
+                        if (val && typeof val === 'string' && val.trim() !== '' && val !== '-' && val.toLowerCase() !== 'unpaid') {
+                            const parsed = parseInstallmentText(val, student.admissionDate);
+                            const cleanInsts = parsed.filter(inst => inst.amount !== totalFees && inst.amount >= 10);
+                            installments = [...installments, ...cleanInsts];
+                        }
                     }
                 });
 
@@ -332,39 +348,7 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
         let batch = writeBatch(db);
         let batchCount = 0;
 
-        // Fetch existing students to merge installments cleanly
-        const studentsSnap = await getDocs(collection(db, "students"));
-        const existingStudents = new Map();
-        studentsSnap.forEach(docSnap => existingStudents.set(docSnap.id, docSnap.data()));
-
         for (const student of studentsList) {
-            const dbData = existingStudents.get(student.registration) || {};
-            const existingInst = dbData.installments || [];
-
-            const mergedMap = new Map();
-            existingInst.forEach(inst => {
-                const normDate = normalizeDateToYYYYMMDD(inst.date);
-                inst.date = normDate;
-                mergedMap.set(`${normDate}_${inst.amount}`, inst);
-            });
-
-            (student.installments || []).forEach(inst => {
-                const normDate = normalizeDateToYYYYMMDD(inst.date);
-                inst.date = normDate;
-                const key = `${normDate}_${inst.amount}`;
-                if (!mergedMap.has(key)) mergedMap.set(key, inst);
-            });
-
-            const finalInstallments = Array.from(mergedMap.values());
-            let finalPaid = 0;
-            finalInstallments.forEach((inst, idx) => {
-                inst.installmentNo = idx + 1;
-                finalPaid += inst.amount;
-            });
-
-            student.installments = finalInstallments;
-            student.paidFees = finalPaid;
-
             const docRef = doc(db, "students", student.registration);
             batch.set(docRef, student, { merge: true });
 
@@ -384,7 +368,7 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
 
         return {
             success: true,
-            message: `Successfully synchronized ${processedCount} students with accurate date-wise fee breakdown.`
+            message: `Successfully synchronized ${processedCount} students cleanly.`
         };
 
     } catch (error) {
