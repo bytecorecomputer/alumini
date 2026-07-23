@@ -168,51 +168,9 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
         else if (addrLower.includes('parsona')) detectedCenter = 'Parsona';
         else if (rawAddress && rawAddress !== '-') detectedCenter = rawAddress;
 
-        let admissionDateRaw = '';
-        let admissionFeeRaw = '';
-        let totalFeesRaw = '';
-        let installments = [];
-
-        // Deep Traverse across ALL cells starting from index 8
-        for (let j = 8; j < cols.length; j++) {
-            const cellVal = cols[j];
-            if (!cellVal || cellVal === '-' || cellVal.toLowerCase() === 'unpaid') continue;
-
-            const containsDigits = /\d+/.test(cellVal);
-            if (!containsDigits) continue;
-
-            // An installment cell is EITHER at column index >= 11 OR contains date pattern
-            const isInstallmentCol = j >= 11 || /[0-9]{1,2}[-/.][0-9]{1,2}/.test(cellVal);
-
-            if (isInstallmentCol && !cellVal.toLowerCase().includes('free')) {
-                const parsedInsts = parseInstallmentText(cellVal, normalizeDateToYYYYMMDD(admissionDateRaw));
-                if (parsedInsts.length > 0) {
-                    installments = [...installments, ...parsedInsts];
-                }
-            } else {
-                // If it's a date without numbers (Admission Date candidate)
-                const isDateOnly = cellVal.match(/^([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})$/);
-                if (isDateOnly && !admissionDateRaw) {
-                    admissionDateRaw = cellVal;
-                } else if (!cellVal.toLowerCase().includes('free') && !isNaN(parseInt(cellVal.replace(/,/g, ''), 10))) {
-                    const numVal = parseCurrency(cellVal);
-                    if (!totalFeesRaw && numVal > 1000) {
-                        totalFeesRaw = cellVal;
-                    } else if (!admissionFeeRaw && numVal <= 1000) {
-                        admissionFeeRaw = cellVal;
-                    } else if (!totalFeesRaw) {
-                        totalFeesRaw = cellVal;
-                    }
-                } else if (cellVal.toLowerCase().includes('free')) {
-                    totalFeesRaw = 'FREE';
-                }
-            }
-        }
-
-        // Positional fallbacks
-        if (!admissionDateRaw && cols[8]) admissionDateRaw = cols[8];
-        if (!admissionFeeRaw && cols[9] && !cols[9].includes('(')) admissionFeeRaw = cols[9];
-        if (!totalFeesRaw && cols[10] && !cols[10].includes('(')) totalFeesRaw = cols[10];
+        const admissionDateRaw = cols[8] || '';
+        const admissionFeeRaw = cols[9] || '';
+        const totalFeesRaw = cols[10] || '';
 
         const student = {
             registration: String(regId).trim(),
@@ -226,9 +184,21 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
             admissionDate: normalizeDateToYYYYMMDD(admissionDateRaw),
             admissionFee: parseCurrency(admissionFeeRaw),
             registrationFee: parseCurrency(admissionFeeRaw),
-            totalFees: (totalFeesRaw && totalFeesRaw.toLowerCase().includes('free')) ? 0 : parseCurrency(totalFeesRaw),
+            totalFees: (totalFeesRaw && String(totalFeesRaw).toLowerCase().includes('free')) ? 0 : parseCurrency(totalFeesRaw),
             updatedAt: Date.now()
         };
+
+        // Parse ALL installment columns strictly from Index 11 onwards (Month 1, Month 2, Month 3, Month 4, etc.)
+        let installments = [];
+        for (let j = 11; j < cols.length; j++) {
+            const cellVal = cols[j];
+            if (cellVal && cellVal.trim() !== '' && cellVal !== '-' && cellVal.toLowerCase() !== 'unpaid') {
+                const parsedInsts = parseInstallmentText(cellVal, student.admissionDate);
+                if (parsedInsts.length > 0) {
+                    installments = [...installments, ...parsedInsts];
+                }
+            }
+        }
 
         // Sequence numbering and fee summation
         let totalPaid = 0;
