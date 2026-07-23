@@ -124,6 +124,11 @@ const RESERVED_HEADERS = [
  * Deep Dynamic Parser for raw TSV/CSV text (pasted directly from Google Sheets or Excel)
  * Traverses every cell across the entire row to extract student info, admission fee, total fee, and installments.
  */
+/**
+ * Smart Adaptive Parser for raw TSV/CSV text (pasted directly from Google Sheets or Excel)
+ * Automatically classifies cells into Name, Roll No, Course, Mobile, Admission Date, Admission Fee, Total Fee, and Month Installments
+ * Works whether S.No or Roll No columns are present or absent!
+ */
 export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
     if (!text || typeof text !== 'string') return [];
 
@@ -134,7 +139,7 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
         const line = rawLines[i].trim();
         if (!line) continue;
 
-        // Split by tab first (Google Sheet paste), or by comma
+        // Split by tab (Google Sheet paste) or comma
         let cols = line.includes('\t') ? line.split('\t') : line.split(',');
         cols = cols.map(c => c ? c.trim() : '');
 
@@ -146,81 +151,161 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
             continue;
         }
 
-        const sNo = cols[0] || '';
-        let regId = cols[1] || '';
-        const fullName = cols[2] || '';
-        const rawStatus = cols[3] || '';
-        const course = cols[4] || '';
-        const fatherName = cols[5] || '';
-        const mobile = cols[6] || '';
-        const rawAddress = cols[7] || '';
+        let regId = '';
+        let fullName = '';
+        let statusStr = '';
+        let courseStr = '';
+        let fatherNameStr = '';
+        let mobileStr = '';
+        let addressStr = '';
+        let admissionDateRaw = '';
+        let admissionFeeRaw = 0;
+        let totalFeesRaw = 0;
+        let installments = [];
 
-        // If both full name and registration ID are missing, skip row
+        const candidateNumbers = [];
+        let foundFirstInstallment = false;
+
+        for (let j = 0; j < cols.length; j++) {
+            const cellVal = cols[j];
+            if (!cellVal || cellVal === '-') continue;
+
+            const cleanVal = cellVal.trim();
+            const lowerVal = cleanVal.toLowerCase();
+            if (lowerVal === 'unpaid' && j < 4) {
+                statusStr = 'unpaid';
+                continue;
+            }
+
+            // 1. Explicit installment pattern e.g. "1000 (14-04-2026)" or "1000 (14-04)"
+            const parsedInsts = parseInstallmentText(cleanVal);
+            if (parsedInsts.length > 0) {
+                foundFirstInstallment = true;
+                installments = [...installments, ...parsedInsts];
+                continue;
+            }
+
+            // 2. Mobile Number (10 digits starting with 6, 7, 8, 9)
+            if (/^[6-9]\d{9}$/.test(cleanVal.replace(/[^0-9]/g, '')) && !mobileStr) {
+                mobileStr = cleanVal;
+                continue;
+            }
+
+            // 3. Standalone Date (e.g. "14-04-2026" or "02-09-2025")
+            if (/^([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})$/.test(cleanVal) && !admissionDateRaw) {
+                admissionDateRaw = cleanVal;
+                continue;
+            }
+
+            // 4. Status (pass, paid, complete, unpaid)
+            if ((lowerVal === 'paid' || lowerVal === 'unpaid' || lowerVal.includes('pass') || lowerVal.includes('complete')) && !statusStr) {
+                statusStr = cleanVal;
+                continue;
+            }
+
+            // 5. Course (ADCA, DCST, DCA, MDCA, Power BI, etc.)
+            if (/^(adca|dcst|dca|mdca|tally|ccc|power\s*bi|adca\s*\+\s*power\s*bi)$/i.test(cleanVal) && !courseStr) {
+                courseStr = cleanVal;
+                continue;
+            }
+
+            // 6. Numeric values: Roll No vs Fee Amounts
+            const isPureNum = /^\d+$/.test(cleanVal.replace(/,/g, ''));
+            if (isPureNum) {
+                const num = parseCurrency(cleanVal);
+                
+                // Roll number candidate e.g. 2001, 2050, 501
+                if (!regId && (num > 100 && num < 10000) && j <= 2) {
+                    regId = cleanVal;
+                    continue;
+                }
+
+                // If bare number appears after installments started, it is a month installment!
+                if (foundFirstInstallment && num >= 10) {
+                    installments.push({
+                        amount: num,
+                        date: normalizeDateToYYYYMMDD(admissionDateRaw) || new Date().toISOString().split('T')[0],
+                        status: 'paid'
+                    });
+                    continue;
+                }
+
+                candidateNumbers.push({ num, colIndex: j, str: cleanVal });
+                continue;
+            }
+
+            if (lowerVal.includes('free')) {
+                totalFeesRaw = 'FREE';
+                continue;
+            }
+
+            // 7. Text fields (Name, Father Name, Address)
+            if (!fullName && j <= 3 && !/^\d+$/.test(cleanVal)) {
+                fullName = cleanVal;
+            } else if (fullName && !fatherNameStr && j <= 5 && !/^\d+$/.test(cleanVal)) {
+                fatherNameStr = cleanVal;
+            } else if (!addressStr && (lowerVal.includes('thiriya') || lowerVal.includes('nariyawal') || lowerVal.includes('manpuriya') || lowerVal.includes('mohanpur') || lowerVal.includes('harharpur') || lowerVal.includes('parsona'))) {
+                addressStr = cleanVal;
+            }
+        }
+
+        // Classify candidate pre-installment numbers for Admission Fee vs Total Fee
+        candidateNumbers.forEach(item => {
+            if (item.num <= 1000 && !admissionFeeRaw) {
+                admissionFeeRaw = item.num;
+            } else if (item.num > 1000 && !totalFeesRaw) {
+                totalFeesRaw = item.num;
+            }
+        });
+
         if (!fullName && !regId) continue;
 
-        // Auto-generate ID if missing (e.g. for unassigned roll numbers)
-        if (!regId || regId === '-' || regId === ' ') {
+        // Auto-generate ID if missing
+        if (!regId) {
             const cleanName = fullName.replace(/[^a-zA-Z0-9]/g, '');
             regId = `REG_${cleanName || (Date.now() + i)}`;
         }
 
         // Center Detection
         let detectedCenter = defaultCenter;
-        const addrLower = rawAddress.toLowerCase();
+        const addrLower = (addressStr || '').toLowerCase();
         if (addrLower.includes('thiriya')) detectedCenter = 'Thiriya';
         else if (addrLower.includes('manpuriya') || addrLower.includes('munpuriya')) detectedCenter = 'Manpuriya';
         else if (addrLower.includes('naryawal') || addrLower.includes('nariyawal')) detectedCenter = 'Nariyawal';
         else if (addrLower.includes('mohanpur')) detectedCenter = 'Mohanpur';
         else if (addrLower.includes('harharpur')) detectedCenter = 'Harharpur';
         else if (addrLower.includes('parsona')) detectedCenter = 'Parsona';
-        else if (rawAddress && rawAddress !== '-') detectedCenter = rawAddress;
+        else if (addressStr && addressStr !== '-') detectedCenter = addressStr;
 
-        const admissionDateRaw = cols[8] || '';
-        const admissionFeeRaw = cols[9] || '';
-        const totalFeesRaw = cols[10] || '';
-
-        const parsedTotalFee = (totalFeesRaw && String(totalFeesRaw).toLowerCase().includes('free')) ? 0 : parseCurrency(totalFeesRaw);
+        const parsedTotalFee = (totalFeesRaw === 'FREE' || (typeof totalFeesRaw === 'string' && totalFeesRaw.toLowerCase().includes('free'))) ? 0 : parseCurrency(totalFeesRaw);
         const parsedAdmissionFee = parseCurrency(admissionFeeRaw);
+
+        // Clean installments array: Filter out totalFees or admissionFee duplicates
+        const cleanInstallments = installments.filter(inst => inst.amount !== parsedTotalFee && inst.amount >= 10);
+
+        let totalPaid = 0;
+        cleanInstallments.forEach((inst, idx) => {
+            inst.installmentNo = idx + 1;
+            totalPaid += inst.amount;
+        });
 
         const student = {
             registration: String(regId).trim(),
             fullName: fullName || 'Unknown Student',
-            status: normalizeStatus(rawStatus),
-            course: course || 'N/A',
-            fatherName: fatherName || '',
-            mobile: mobile || '',
-            address: rawAddress || '',
+            status: normalizeStatus(statusStr),
+            course: courseStr || 'N/A',
+            fatherName: fatherNameStr || '',
+            mobile: mobileStr || '',
+            address: addressStr || '',
             center: detectedCenter,
             admissionDate: normalizeDateToYYYYMMDD(admissionDateRaw),
             admissionFee: parsedAdmissionFee,
             registrationFee: parsedAdmissionFee,
             totalFees: parsedTotalFee,
+            installments: cleanInstallments,
+            paidFees: totalPaid,
             updatedAt: Date.now()
         };
-
-        // Parse ALL installment columns strictly from Index 11 onwards (Month 1, Month 2, Month 3, Month 4, etc.)
-        let installments = [];
-        for (let j = 11; j < cols.length; j++) {
-            const cellVal = cols[j];
-            if (cellVal && cellVal.trim() !== '' && cellVal !== '-' && cellVal.toLowerCase() !== 'unpaid') {
-                const parsedInsts = parseInstallmentText(cellVal, student.admissionDate);
-                if (parsedInsts.length > 0) {
-                    // Exclude any installment matching totalFees or less than ₹10
-                    const cleanInsts = parsedInsts.filter(inst => inst.amount !== parsedTotalFee && inst.amount >= 10);
-                    installments = [...installments, ...cleanInsts];
-                }
-            }
-        }
-
-        // Sequence numbering and fee summation
-        let totalPaid = 0;
-        installments.forEach((inst, idx) => {
-            inst.installmentNo = idx + 1;
-            totalPaid += inst.amount;
-        });
-
-        student.installments = installments;
-        student.paidFees = totalPaid;
 
         parsedStudents.push(student);
     }
