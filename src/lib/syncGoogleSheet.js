@@ -1,7 +1,8 @@
-import { collection, doc, setDoc, getDocs, writeBatch } from "firebase/firestore";
+import { doc, setDoc, writeBatch } from "firebase/firestore";
 import { db } from "../firebase/firestore";
 import Papa from 'papaparse';
 import { normalizeDateToYYYYMMDD } from "./utils";
+import { sanitizeStudentData } from "./feeAutomation";
 
 /**
  * Normalizes numbers by removing commas and extra characters
@@ -31,14 +32,38 @@ export function normalizeStatus(status) {
 }
 
 /**
- * Deep multi-entry single-cell installment parser.
- * Handles all complex cell formats:
- * - "1000 (13-09-2025)" or "1000 (13/09/2025)"
- * - "1000 (15-08-2025) 1000 (15-09-2025)" (multiple entries in one single cell)
- * - "1000 - 15/08/2025" or "1000 / 15-08-2025" or "15/08/2025: 1000"
- * - "1000 (14-04)" (short date)
- * - "500+500" or "500 + 500" (multiple payments in one cell)
- * - "1000" (bare amount in fee/date column using headerDate or fallbackDate)
+ * Extracts date string from header text or cell string.
+ */
+function extractDateFromText(text) {
+    if (!text) return null;
+    const str = String(text).trim();
+    
+    // Full date DD-MM-YYYY or YYYY-MM-DD or DD/MM/YYYY
+    const fullMatch = str.match(/([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})/);
+    if (fullMatch) return normalizeDateToYYYYMMDD(fullMatch[1]);
+
+    // Short date DD-MM or DD/MM
+    const shortMatch = str.match(/([0-9]{1,2}[-/.][0-9]{1,2})/);
+    if (shortMatch) {
+        const curYear = new Date().getFullYear();
+        return normalizeDateToYYYYMMDD(`${shortMatch[1]}-${curYear}`);
+    }
+
+    // Month name e.g. "Sep/25", "Sep 2025"
+    const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+    for (let m = 0; m < months.length; m++) {
+        if (str.toLowerCase().includes(months[m])) {
+            const yearMatch = str.match(/20\d{2}|\d{2}/);
+            const year = yearMatch ? (yearMatch[0].length === 2 ? `20${yearMatch[0]}` : yearMatch[0]) : new Date().getFullYear();
+            const monthNum = String(m + 1).padStart(2, '0');
+            return `${year}-${monthNum}-15`;
+        }
+    }
+    return null;
+}
+
+/**
+ * Parses installment cell text cleanly into array of { amount, date, status: 'paid' }.
  */
 export function parseInstallmentText(str, fallbackDate = '', headerText = '') {
     if (!str || (typeof str !== 'string' && typeof str !== 'number')) return [];
@@ -47,42 +72,14 @@ export function parseInstallmentText(str, fallbackDate = '', headerText = '') {
     if (!clean) return [];
 
     const lower = clean.toLowerCase();
-    if (lower === 'unpaid' || lower === '-' || lower === 'free' || lower === 'nil' || lower === 'none' || lower === 'n/a') return [];
+    if (lower === 'unpaid' || lower === '-' || lower === 'free' || lower === 'nil' || lower === 'none' || lower === 'n/a' || lower === 'pass') return [];
 
     const results = [];
+    const headerDate = extractDateFromText(headerText);
+    const defaultDate = headerDate || extractDateFromText(fallbackDate) || normalizeDateToYYYYMMDD(fallbackDate) || new Date().toISOString().split('T')[0];
 
-    // Helper to extract date from header or string
-    const extractDate = (text) => {
-        if (!text) return null;
-        // Full date DD-MM-YYYY or YYYY-MM-DD or DD/MM/YYYY
-        const fullMatch = text.match(/([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})/);
-        if (fullMatch) return normalizeDateToYYYYMMDD(fullMatch[1]);
-
-        // Short date DD-MM or DD/MM
-        const shortMatch = text.match(/([0-9]{1,2}[-/.][0-9]{1,2})/);
-        if (shortMatch) {
-            const curYear = new Date().getFullYear();
-            return normalizeDateToYYYYMMDD(`${shortMatch[1]}-${curYear}`);
-        }
-
-        // Month name e.g. "Sep/25", "Sep 2025"
-        const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-        for (let m = 0; m < months.length; m++) {
-            if (text.toLowerCase().includes(months[m])) {
-                const yearMatch = text.match(/20\d{2}|\d{2}/);
-                const year = yearMatch ? (yearMatch[0].length === 2 ? `20${yearMatch[0]}` : yearMatch[0]) : new Date().getFullYear();
-                const monthNum = String(m + 1).padStart(2, '0');
-                return `${year}-${monthNum}-15`;
-            }
-        }
-        return null;
-    };
-
-    const headerDate = extractDate(headerText);
-    const defaultDate = headerDate || normalizeDateToYYYYMMDD(fallbackDate) || new Date().toISOString().split('T')[0];
-
-    // Pattern 1: Multiple full date entries inside one single cell e.g. "1000 (15-08-2025) 1000 (15-09-2025)"
-    const fullDateRegex = /(\d[\d,]*)\s*[(/-:]*\s*([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})\)?/g;
+    // Pattern 1: Amount with full date e.g. "1000 (15-08-2025)" or "1000 - 15/08/2025" or "1000/15-08-2025"
+    const fullDateRegex = /(\d[\d,]*)\s*[(/.:-]*\s*([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})\)?/g;
     let match;
     let foundCount = 0;
 
@@ -90,7 +87,7 @@ export function parseInstallmentText(str, fallbackDate = '', headerText = '') {
         foundCount++;
         const amt = parseInt(match[1].replace(/,/g, ''), 10);
         const rawDate = match[2];
-        if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
+        if (!isNaN(amt) && amt >= 50 && amt <= 30000) {
             results.push({
                 amount: amt,
                 date: normalizeDateToYYYYMMDD(rawDate),
@@ -100,13 +97,13 @@ export function parseInstallmentText(str, fallbackDate = '', headerText = '') {
     }
     if (foundCount > 0) return results;
 
-    // Pattern 2: Short Date inside single cell e.g. "1000 (14-04)"
-    const shortDateRegex = /(\d[\d,]*)\s*[(/-:]*\s*([0-9]{1,2}[-/.][0-9]{1,2})\)?/g;
+    // Pattern 2: Amount with short date e.g. "1000 (14-04)"
+    const shortDateRegex = /(\d[\d,]*)\s*[(/.:-]*\s*([0-9]{1,2}[-/.][0-9]{1,2})\)?/g;
     while ((match = shortDateRegex.exec(clean)) !== null) {
         foundCount++;
         const amt = parseInt(match[1].replace(/,/g, ''), 10);
         const rawDate = match[2];
-        if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
+        if (!isNaN(amt) && amt >= 50 && amt <= 30000) {
             const currentYear = new Date().getFullYear();
             results.push({
                 amount: amt,
@@ -117,13 +114,13 @@ export function parseInstallmentText(str, fallbackDate = '', headerText = '') {
     }
     if (foundCount > 0) return results;
 
-    // Pattern 3: Plus or comma separated bare amounts e.g. "500+500" or "500, 500"
+    // Pattern 3: Plus or comma separated amounts e.g. "500+500" or "1000, 1000" or bare "1000"
     const parts = clean.split(/[,+]/);
     for (const part of parts) {
         const digitsOnly = part.replace(/,/g, '').replace(/[^\d]/g, '');
         if (digitsOnly) {
             const amt = parseInt(digitsOnly, 10);
-            if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
+            if (!isNaN(amt) && amt >= 50 && amt <= 30000) {
                 results.push({
                     amount: amt,
                     date: defaultDate,
@@ -136,211 +133,132 @@ export function parseInstallmentText(str, fallbackDate = '', headerText = '') {
     return results;
 }
 
-const METADATA_KEYWORDS = [
-    's.no', 'sr', 'sr.no', 'sr.', 'roll', 'roll no', 'registration', 'registration no.',
-    'student name', 'name', 'student', 'status', 'course', 'father', 'fathers name', 'father name',
-    'mobile', 'mob', 'mob. no.', 'address', 'center', 'admission date', 'date of admission',
-    'registration fee', 'regi. fee', 'admission fee', 'reg fee', 'total fee', 'total fees', 'fee total'
-];
-
 /**
- * Deduplicates installments by unique combination of amount + date.
+ * Pure PapaParse Google Sheet CSV/TSV Synchronizer.
  */
-export function deduplicateInstallments(installments = [], totalFees = 0) {
-    if (!Array.isArray(installments)) return [];
+export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
+    try {
+        const response = await fetch(csvUrl);
+        if (!response.ok) throw new Error("Failed to fetch CSV from Google Sheets");
+        const csvText = await response.text();
 
-    const map = new Map();
-    installments.forEach(inst => {
-        const amt = parseInt(inst.amount || 0, 10);
-        const dt = inst.date || '';
-        if (isNaN(amt) || amt < 10 || amt > 50000) return;
-        if (totalFees > 0 && amt === totalFees) return; // Exclude accidental total fee duplication
-
-        const key = `${amt}_${dt}`;
-        if (!map.has(key)) {
-            map.set(key, {
-                amount: amt,
-                date: dt,
-                status: 'paid',
-                note: inst.note || 'Synced from Sheet'
-            });
+        // 1. Parse CSV/TSV using PapaParse
+        const parsed = Papa.parse(csvText, { skipEmptyLines: true });
+        if (!parsed.data || parsed.data.length < 2) {
+            return { success: false, message: "No valid data found in CSV sheet." };
         }
-    });
 
-    const sorted = Array.from(map.values()).sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-    sorted.forEach((inst, idx) => {
-        inst.installmentNo = idx + 1;
-    });
+        const rows = parsed.data;
 
-    return sorted;
-}
-
-/**
- * Smart Schema Parser for Google Sheet CSV / TSV text.
- * Dynamically identifies metadata headers and extracts all installment/fee-date columns.
- * Automatically deduplicates student records and installment entries.
- */
-export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
-    if (!text || typeof text !== 'string') return [];
-
-    const rawLines = text.split(/\r?\n/);
-    if (rawLines.length === 0) return [];
-
-    let headerRowIdx = -1;
-    let colMap = {};
-    let headers = [];
-
-    // Find Header Row
-    for (let i = 0; i < Math.min(10, rawLines.length); i++) {
-        const line = rawLines[i].trim();
-        if (!line) continue;
-
-        const cols = line.includes('\t') ? line.split('\t') : line.split(',');
-        const lowerCols = cols.map(c => c.trim().toLowerCase());
-
-        const hasName = lowerCols.some(c => c.includes('name') || c.includes('student'));
-        const hasRoll = lowerCols.some(c => c.includes('roll') || c.includes('registration') || c.includes('s.no') || c.includes('sr'));
-
-        if (hasName || hasRoll) {
-            headerRowIdx = i;
-            headers = cols.map(c => c.trim());
-
-            lowerCols.forEach((h, idx) => {
-                if (h.includes('roll') || h.includes('registration')) colMap.regId = idx;
-                else if (h.includes('student name') || (h.includes('name') && !h.includes('father'))) colMap.fullName = idx;
-                else if (h.includes('status')) colMap.status = idx;
-                else if (h.includes('course')) colMap.course = idx;
-                else if (h.includes('father')) colMap.fatherName = idx;
-                else if (h.includes('mob') || h.includes('phone') || h.includes('mobile')) colMap.mobile = idx;
-                else if (h.includes('address') || h.includes('center')) colMap.address = idx;
-                else if (h.includes('admission date') || h.includes('adm date')) colMap.admissionDate = idx;
-                else if (h.includes('regi. fee') || h.includes('registration fee') || h.includes('admission fee')) colMap.admissionFee = idx;
-                else if (h.includes('total fee') || h.includes('total fees') || h.includes('fee total')) colMap.totalFees = idx;
-            });
-            break;
-        }
-    }
-
-    const studentMap = new Map();
-    const startLine = headerRowIdx !== -1 ? headerRowIdx + 1 : 0;
-
-    for (let i = startLine; i < rawLines.length; i++) {
-        const line = rawLines[i].trim();
-        if (!line) continue;
-
-        let cols = line.includes('\t') ? line.split('\t') : line.split(',');
-        cols = cols.map(c => c ? c.trim() : '');
-
-        const firstCol = (cols[0] || '').toLowerCase();
-        if (firstCol.includes('s.no') || firstCol.includes('bytecore') || firstCol.includes('sr.')) continue;
-
-        let regId = '';
-        let fullName = '';
-        let statusStr = '';
-        let courseStr = '';
-        let fatherNameStr = '';
-        let mobileStr = '';
-        let addressStr = '';
-        let admissionDateRaw = '';
-        let admissionFeeRaw = '';
-        let totalFeesRaw = '';
-        let installmentColIndices = [];
-
-        if (headerRowIdx !== -1) {
-            regId = colMap.regId !== undefined ? cols[colMap.regId] : '';
-            fullName = colMap.fullName !== undefined ? cols[colMap.fullName] : '';
-            statusStr = colMap.status !== undefined ? cols[colMap.status] : '';
-            courseStr = colMap.course !== undefined ? cols[colMap.course] : '';
-            fatherNameStr = colMap.fatherName !== undefined ? cols[colMap.fatherName] : '';
-            mobileStr = colMap.mobile !== undefined ? cols[colMap.mobile] : '';
-            addressStr = colMap.address !== undefined ? cols[colMap.address] : '';
-            admissionDateRaw = colMap.admissionDate !== undefined ? cols[colMap.admissionDate] : '';
-            admissionFeeRaw = colMap.admissionFee !== undefined ? cols[colMap.admissionFee] : '';
-            totalFeesRaw = colMap.totalFees !== undefined ? cols[colMap.totalFees] : '';
-
-            headers.forEach((h, idx) => {
-                const hLower = h.toLowerCase();
-                const isMetadata = METADATA_KEYWORDS.some(k => hLower === k || hLower.startsWith(k));
-                if (!isMetadata || hLower.includes('fee/date') || hLower.includes('installment') || idx > (colMap.totalFees ?? 10)) {
-                    installmentColIndices.push(idx);
-                }
-            });
-        } else {
-            if (cols.length > 2 && /^\d+$/.test(cols[0]) && cols[1] !== '') {
-                regId = cols[1];
-                fullName = cols[2];
-                statusStr = cols[3];
-                courseStr = cols[4];
-                fatherNameStr = cols[5];
-                mobileStr = cols[6];
-                addressStr = cols[7];
-                admissionDateRaw = cols[8];
-                admissionFeeRaw = cols[9];
-                totalFeesRaw = cols[10];
-                for (let j = 11; j < cols.length; j++) installmentColIndices.push(j);
-            } else {
-                regId = cols[0];
-                fullName = cols[1];
-                statusStr = cols[2];
-                courseStr = cols[3];
-                fatherNameStr = cols[4];
-                mobileStr = cols[5];
-                addressStr = cols[6];
-                admissionDateRaw = cols[7];
-                admissionFeeRaw = cols[8];
-                totalFeesRaw = cols[9];
-                for (let j = 10; j < cols.length; j++) installmentColIndices.push(j);
+        // 2. Find Header Row dynamically
+        let headerRowIndex = -1;
+        for (let i = 0; i < Math.min(10, rows.length); i++) {
+            const rowStr = rows[i].map(c => String(c || '').toLowerCase()).join(' ');
+            if (rowStr.includes('student name') || rowStr.includes('name') || rowStr.includes('registration') || rowStr.includes('roll')) {
+                headerRowIndex = i;
+                break;
             }
         }
 
-        if (!fullName && !regId) continue;
+        if (headerRowIndex === -1) headerRowIndex = 0;
 
-        if (!regId) {
-            const cleanName = fullName.replace(/[^a-zA-Z0-9]/g, '');
-            regId = `REG_${cleanName || (Date.now() + i)}`;
-        }
+        const headers = rows[headerRowIndex].map(h => String(h || '').trim());
+        const colMap = {};
 
-        const cleanRegKey = String(regId).trim();
+        headers.forEach((h, idx) => {
+            const hLower = h.toLowerCase();
+            if (hLower.includes('roll') || hLower.includes('registration') || hLower.includes('reg.')) colMap.regId = idx;
+            else if (hLower.includes('student name') || (hLower.includes('name') && !hLower.includes('father'))) colMap.fullName = idx;
+            else if (hLower.includes('status')) colMap.status = idx;
+            else if (hLower.includes('course') || hLower.includes('trade')) colMap.course = idx;
+            else if (hLower.includes('father')) colMap.fatherName = idx;
+            else if (hLower.includes('mob') || hLower.includes('phone') || hLower.includes('mobile')) colMap.mobile = idx;
+            else if (hLower.includes('address') || hLower.includes('center')) colMap.address = idx;
+            else if (hLower.includes('admission date') || hLower.includes('adm date') || (hLower.includes('date') && !hLower.includes('fee'))) colMap.admissionDate = idx;
+            else if (hLower.includes('regi. fee') || hLower.includes('registration fee') || hLower.includes('admission fee') || hLower.includes('reg fee')) colMap.admissionFee = idx;
+            else if (hLower.includes('total fee') || hLower.includes('total fees') || hLower.includes('fee total') || hLower.includes('course fee')) colMap.totalFees = idx;
+        });
 
-        // Center Detection
-        let detectedCenter = defaultCenter;
-        const addrLower = (addressStr || '').toLowerCase();
-        if (addrLower.includes('thiriya')) detectedCenter = 'Thiriya';
-        else if (addrLower.includes('naryawal') || addrLower.includes('nariyawal')) detectedCenter = 'Nariyawal';
-        else if (addressStr && addressStr !== '-') detectedCenter = addressStr;
+        // Identify Installment Column Indices
+        const installmentColIndices = [];
+        headers.forEach((h, idx) => {
+            const hLower = h.toLowerCase();
+            const isSNo = hLower === 's.no' || hLower === 'sr' || hLower === 'sr.no' || hLower === 'sr.' || hLower === 'sl.no' || hLower === 's.n';
+            const isRoll = hLower.includes('roll') || hLower.includes('registration') || hLower.includes('reg. no') || hLower.includes('reg no');
+            const isName = hLower.includes('name') && !hLower.includes('father');
+            const isFather = hLower.includes('father');
+            const isCourse = hLower === 'course' || hLower.includes('trade');
+            const isStatus = hLower.includes('status');
+            const isMobile = hLower.includes('mob') || hLower.includes('phone') || hLower.includes('mobile');
+            const isAddress = hLower.includes('address') || hLower.includes('center');
+            const isAdmDate = hLower.includes('admission date') || hLower.includes('adm date');
+            const isAdmFee = hLower.includes('registration fee') || hLower.includes('regi. fee') || hLower.includes('admission fee') || hLower.includes('reg fee');
+            const isTotalFee = hLower.includes('total fee') || hLower.includes('total fees') || hLower.includes('fee total') || hLower.includes('course fee');
 
-        const parsedTotalFee = (totalFeesRaw && String(totalFeesRaw).toLowerCase().includes('free')) ? 0 : parseCurrency(totalFeesRaw);
-        const parsedAdmissionFee = parseCurrency(admissionFeeRaw);
+            const isMetadata = isSNo || isRoll || isName || isFather || isCourse || isStatus || isMobile || isAddress || isAdmDate || isAdmFee || isTotalFee;
 
-        // Extract raw installments from fee/date columns
-        let rawInstallments = [];
-        for (const j of installmentColIndices) {
-            const cellVal = cols[j];
-            const headerText = headers[j] || '';
-            if (cellVal && cellVal.trim() !== '' && cellVal !== '-' && cellVal.toLowerCase() !== 'unpaid') {
-                const parsedInsts = parseInstallmentText(cellVal, admissionDateRaw, headerText);
-                if (parsedInsts.length > 0) {
-                    rawInstallments = [...rawInstallments, ...parsedInsts];
+            if (!isMetadata) {
+                installmentColIndices.push(idx);
+            }
+        });
+
+        // 3. Process Data Rows
+        const studentMap = new Map();
+
+        for (let i = headerRowIndex + 1; i < rows.length; i++) {
+            const rowData = rows[i];
+            if (!rowData || rowData.length === 0) continue;
+
+            const firstCol = String(rowData[0] || '').toLowerCase();
+            if (firstCol.includes('s.no') || firstCol.includes('bytecore') || firstCol.includes('sr.')) continue;
+
+            let regId = colMap.regId !== undefined ? rowData[colMap.regId] : (rowData[1] || rowData[0] || '');
+            let fullName = colMap.fullName !== undefined ? rowData[colMap.fullName] : (rowData[2] || rowData[1] || '');
+            let statusStr = colMap.status !== undefined ? rowData[colMap.status] : (rowData[3] || '');
+            let courseStr = colMap.course !== undefined ? rowData[colMap.course] : (rowData[4] || '');
+            let fatherNameStr = colMap.fatherName !== undefined ? rowData[colMap.fatherName] : (rowData[5] || '');
+            let mobileStr = colMap.mobile !== undefined ? rowData[colMap.mobile] : (rowData[6] || '');
+            let addressStr = colMap.address !== undefined ? rowData[colMap.address] : (rowData[7] || '');
+            let admissionDateRaw = colMap.admissionDate !== undefined ? rowData[colMap.admissionDate] : (rowData[8] || '');
+            let admissionFeeRaw = colMap.admissionFee !== undefined ? rowData[colMap.admissionFee] : (rowData[9] || '');
+            let totalFeesRaw = colMap.totalFees !== undefined ? rowData[colMap.totalFees] : (rowData[10] || '');
+
+            regId = String(regId || '').trim();
+            fullName = String(fullName || '').trim();
+
+            if (!fullName && !regId) continue;
+
+            if (!regId) {
+                const cleanName = fullName.replace(/[^a-zA-Z0-9]/g, '');
+                regId = `REG_${cleanName || (Date.now() + i)}`;
+            }
+
+            const cleanRegKey = regId;
+
+            // Center Detection
+            let detectedCenter = centerName;
+            const addrLower = String(addressStr || '').toLowerCase();
+            if (addrLower.includes('thiriya')) detectedCenter = 'Thiriya';
+            else if (addrLower.includes('naryawal') || addrLower.includes('nariyawal')) detectedCenter = 'Nariyawal';
+            else if (addressStr && addressStr !== '-') detectedCenter = addressStr;
+
+            const parsedTotalFee = (totalFeesRaw && String(totalFeesRaw).toLowerCase().includes('free')) ? 0 : parseCurrency(totalFeesRaw);
+            const parsedAdmissionFee = parseCurrency(admissionFeeRaw);
+
+            // Extract Installments from Fee/Date columns
+            let rawInstallments = [];
+            for (const j of installmentColIndices) {
+                const cellVal = rowData[j];
+                const headerText = headers[j] || '';
+                if (cellVal && String(cellVal).trim() !== '' && cellVal !== '-' && String(cellVal).toLowerCase() !== 'unpaid') {
+                    const parsedInsts = parseInstallmentText(cellVal, admissionDateRaw, headerText);
+                    if (parsedInsts.length > 0) {
+                        rawInstallments = [...rawInstallments, ...parsedInsts];
+                    }
                 }
             }
-        }
 
-        // Check if student already exists in map (Deduplicate Students)
-        if (studentMap.has(cleanRegKey)) {
-            const existing = studentMap.get(cleanRegKey);
-            const combinedInsts = [...existing.installments, ...rawInstallments];
-            const cleanInsts = deduplicateInstallments(combinedInsts, existing.totalFees || parsedTotalFee);
-            const totalPaid = cleanInsts.reduce((s, inst) => s + inst.amount, 0);
-
-            existing.installments = cleanInsts;
-            existing.paidFees = totalPaid;
-            if (parsedTotalFee > 0) existing.totalFees = parsedTotalFee;
-            if (detectedCenter) existing.center = detectedCenter;
-        } else {
-            const cleanInsts = deduplicateInstallments(rawInstallments, parsedTotalFee);
-            const totalPaid = cleanInsts.reduce((s, inst) => s + inst.amount, 0);
-
-            studentMap.set(cleanRegKey, {
+            const studentObj = {
                 registration: cleanRegKey,
                 fullName: fullName || 'Unknown Student',
                 status: normalizeStatus(statusStr),
@@ -353,122 +271,31 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
                 admissionFee: parsedAdmissionFee,
                 registrationFee: parsedAdmissionFee,
                 totalFees: parsedTotalFee,
-                installments: cleanInsts,
-                paidFees: totalPaid,
+                installments: rawInstallments,
+                paidFees: 0,
                 updatedAt: Date.now()
-            });
-        }
-    }
+            };
 
-    return Array.from(studentMap.values());
-}
-
-/**
- * Parses CSV string via PapaParse with smart column mapping.
- */
-function parseCSV(str) {
-    const parsed = Papa.parse(str, { skipEmptyLines: true });
-    if (parsed.errors.length) console.warn("PapaParse Warnings:", parsed.errors);
-
-    const rows = parsed.data;
-    if (rows.length < 2) return [];
-
-    let headerRowIndex = 0;
-    for (let i = 0; i < Math.min(5, rows.length); i++) {
-        const rowStr = rows[i].join('').toLowerCase();
-        if (rowStr.includes('student name') || rowStr.includes('registration') || rowStr.includes('course')) {
-            headerRowIndex = i;
-            break;
-        }
-    }
-
-    const headers = rows[headerRowIndex].map(h => typeof h === 'string' ? h.trim() : '');
-    const dataObjects = [];
-
-    for (let i = headerRowIndex + 1; i < rows.length; i++) {
-        const rowData = rows[i];
-        const obj = {};
-        for (let j = 0; j < headers.length; j++) {
-            const h = headers[j];
-            if (!h) continue;
-            const val = rowData[j] ? (typeof rowData[j] === 'string' ? rowData[j].trim() : String(rowData[j]).trim()) : '';
-            obj[h] = val;
-        }
-        dataObjects.push(obj);
-    }
-
-    return dataObjects;
-}
-
-export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
-    try {
-        const response = await fetch(csvUrl);
-        if (!response.ok) throw new Error("Failed to fetch CSV from Google Sheets");
-        const csvText = await response.text();
-
-        let studentsList = parseRawSheetText(csvText, centerName);
-
-        if (studentsList.length === 0) {
-            // Fallback to PapaParse mapping
-            const data = parseCSV(csvText);
-            const studentMap = new Map();
-
-            for (const row of data) {
-                const regId = row['Registration'] || row['Registration NO.'] || row['Roll No'] || row['Roll No.'] || row['S.No'];
-                if (!regId || regId === '') continue;
-
-                const cleanRegKey = String(regId).trim();
-                const address = row['Address '] || row['Address'] || '';
-                let center = centerName;
-                if (address.toLowerCase().includes('thiriya')) center = 'Thiriya';
-                else if (address.toLowerCase().includes('nariyawal') || address.toLowerCase().includes('naryawal')) center = 'Nariyawal';
-
-                const totalFees = parseCurrency(row['Total Fee']);
-                const admissionFee = parseCurrency(row['Registration Fee'] || row['Regi. Fee'] || row['Admission Fee']);
-
-                let rawInstallments = [];
-                Object.keys(row).forEach(key => {
-                    const keyLower = key.toLowerCase().trim();
-                    const isReserved = METADATA_KEYWORDS.some(rh => keyLower === rh || keyLower.includes('total fee') || keyLower.includes('regi. fee') || keyLower.includes('registration fee') || keyLower.includes('admission fee'));
-                    if (!isReserved || keyLower.includes('fee/date') || keyLower.includes('installment')) {
-                        const val = row[key];
-                        if (val && typeof val === 'string' && val.trim() !== '' && val !== '-' && val.toLowerCase() !== 'unpaid') {
-                            const parsed = parseInstallmentText(val, row['Admission Date'] || '', key);
-                            if (parsed.length > 0) {
-                                rawInstallments = [...rawInstallments, ...parsed];
-                            }
-                        }
-                    }
+            // Deduplicate Students if registration is repeated
+            if (studentMap.has(cleanRegKey)) {
+                const existing = studentMap.get(cleanRegKey);
+                const mergedInsts = [...existing.installments, ...rawInstallments];
+                const sanitized = sanitizeStudentData({
+                    ...existing,
+                    installments: mergedInsts,
+                    totalFees: parsedTotalFee > 0 ? parsedTotalFee : existing.totalFees
                 });
-
-                const cleanInsts = deduplicateInstallments(rawInstallments, totalFees);
-                const totalPaid = cleanInsts.reduce((s, inst) => s + inst.amount, 0);
-
-                const student = {
-                    registration: cleanRegKey,
-                    fullName: row['Student Name ']?.trim() || row['Student Name']?.trim() || 'Unknown',
-                    status: normalizeStatus(row['Status '] || row['Status'] || 'unpaid'),
-                    course: row['Course ']?.trim() || row['Course']?.trim() || '',
-                    fatherName: row['Fathers Name ']?.trim() || row['Fathers Name']?.trim() || '',
-                    mobile: row['Mob. No.']?.trim() || row['Mobile']?.trim() || '',
-                    address: address.trim(),
-                    admissionDate: normalizeDateToYYYYMMDD(row['Admission Date'] || ''),
-                    admissionFee: admissionFee,
-                    registrationFee: admissionFee,
-                    totalFees: totalFees,
-                    installments: cleanInsts,
-                    paidFees: totalPaid,
-                    center: center,
-                    updatedAt: Date.now()
-                };
-
-                studentMap.set(cleanRegKey, student);
+                studentMap.set(cleanRegKey, sanitized);
+            } else {
+                const sanitized = sanitizeStudentData(studentObj);
+                studentMap.set(cleanRegKey, sanitized);
             }
-            studentsList = Array.from(studentMap.values());
         }
 
-        if (studentsList.length === 0) return { success: false, message: "No valid student data found in the sheet." };
+        const studentsList = Array.from(studentMap.values());
+        if (studentsList.length === 0) return { success: false, message: "No valid student records found." };
 
+        // 4. Batch Commit to Firestore
         let processedCount = 0;
         let batch = writeBatch(db);
         let batchCount = 0;
@@ -493,11 +320,89 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
 
         return {
             success: true,
-            message: `Successfully synchronized ${processedCount} students cleanly with zero duplicates.`
+            message: `PapaParse Google Sheet Sync Complete! Synchronized ${processedCount} students cleanly.`
         };
 
     } catch (error) {
-        console.error("Google Sheets Sync Error:", error);
+        console.error("PapaParse Google Sheets Sync Error:", error);
         return { success: false, message: error.message };
     }
+}
+
+/**
+ * Fallback Raw Sheet Text parser (TSV / CSV text pasted directly)
+ */
+export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
+    const parsed = Papa.parse(text, { skipEmptyLines: true });
+    if (!parsed.data || parsed.data.length < 2) return [];
+
+    const rows = parsed.data;
+    let headerRowIndex = 0;
+
+    for (let i = 0; i < Math.min(5, rows.length); i++) {
+        const rowStr = rows[i].map(c => String(c || '').toLowerCase()).join(' ');
+        if (rowStr.includes('student name') || rowStr.includes('name') || rowStr.includes('registration') || rowStr.includes('roll')) {
+            headerRowIndex = i;
+            break;
+        }
+    }
+
+    const headers = rows[headerRowIndex].map(h => String(h || '').trim());
+    const colMap = {};
+
+    headers.forEach((h, idx) => {
+        const hLower = h.toLowerCase();
+        if (hLower.includes('roll') || hLower.includes('registration')) colMap.regId = idx;
+        else if (hLower.includes('student name') || (hLower.includes('name') && !hLower.includes('father'))) colMap.fullName = idx;
+        else if (hLower.includes('status')) colMap.status = idx;
+        else if (hLower.includes('course')) colMap.course = idx;
+        else if (hLower.includes('father')) colMap.fatherName = idx;
+        else if (hLower.includes('mob') || hLower.includes('phone') || hLower.includes('mobile')) colMap.mobile = idx;
+        else if (hLower.includes('address') || hLower.includes('center')) colMap.address = idx;
+        else if (hLower.includes('admission date') || hLower.includes('adm date')) colMap.admissionDate = idx;
+        else if (hLower.includes('regi. fee') || hLower.includes('registration fee') || hLower.includes('admission fee')) colMap.admissionFee = idx;
+        else if (hLower.includes('total fee') || hLower.includes('total fees') || hLower.includes('fee total')) colMap.totalFees = idx;
+    });
+
+    const installmentColIndices = [];
+    headers.forEach((h, idx) => {
+        const hLower = h.toLowerCase();
+        const isMetadata = hLower.includes('s.no') || hLower.includes('roll') || hLower.includes('name') || hLower.includes('father') || hLower.includes('course') || hLower.includes('status') || hLower.includes('mob') || hLower.includes('address') || hLower.includes('admission date') || hLower.includes('fee');
+        if (!isMetadata || hLower.includes('fee/date') || hLower.includes('installment')) {
+            installmentColIndices.push(idx);
+        }
+    });
+
+    const students = [];
+    for (let i = headerRowIndex + 1; i < rows.length; i++) {
+        const rowData = rows[i];
+        if (!rowData) continue;
+
+        let regId = colMap.regId !== undefined ? rowData[colMap.regId] : rowData[0];
+        let fullName = colMap.fullName !== undefined ? rowData[colMap.fullName] : rowData[1];
+        if (!fullName && !regId) continue;
+
+        let rawInsts = [];
+        for (const j of installmentColIndices) {
+            const val = rowData[j];
+            if (val) {
+                const parsedInsts = parseInstallmentText(val, rowData[colMap.admissionDate] || '', headers[j] || '');
+                rawInsts = [...rawInsts, ...parsedInsts];
+            }
+        }
+
+        const student = sanitizeStudentData({
+            registration: String(regId || '').trim() || `REG_${Date.now()}_${i}`,
+            fullName: String(fullName || '').trim(),
+            course: String(rowData[colMap.course] || 'N/A'),
+            totalFees: parseCurrency(rowData[colMap.totalFees]),
+            admissionFee: parseCurrency(rowData[colMap.admissionFee]),
+            installments: rawInsts,
+            center: defaultCenter
+        });
+
+        students.push(student);
+    }
+
+    return students;
 }
