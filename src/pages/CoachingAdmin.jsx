@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, getDocs, doc, updateDoc, arrayUnion, orderBy, setDoc, deleteDoc, onSnapshot, getDoc } from 'firebase/firestore';
+import { collection, query, getDocs, doc, updateDoc, arrayUnion, orderBy, setDoc, deleteDoc, onSnapshot, getDoc, writeBatch } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { useAuth } from '../app/common/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';

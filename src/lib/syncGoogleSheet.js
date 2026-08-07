@@ -31,111 +31,185 @@ export function normalizeStatus(status) {
 }
 
 /**
- * Robust regex-based installment parser.
+ * Comprehensive installment parser.
  * Handles formats like:
- * - "1000 (13-09-2025)"
+ * - "1000 (13-09-2025)" or "1000 (13/09/2025)"
  * - "3000  (01-11-2025)"
- * - "500 (17-06-2026" (missing closing parenthesis)
- * - "750 (13-09-2025)"
- * - "Free 500 (02-12-2025)"
- * - "(02-12-2025)"
- */
-/**
- * Robust regex-based installment parser.
- * Handles formats like:
- * - "1000 (13-09-2025)"
- * - "3000  (01-11-2025)"
- * - "500 (17-06-2026" (missing closing parenthesis)
+ * - "500 (17-06-2026"
+ * - "1000 - 15/08/2025" or "1000 / 15-08-2025" or "15/08/2025: 1000"
  * - "1000 (14-04)" (short date)
- * - "1000" (bare amount in installment column)
+ * - "500+500" (multiple payments in one cell)
+ * - "1000" (bare amount in fee/date column, using headerDate or fallbackDate)
  */
-/**
- * Strict regex-based installment parser.
- * Requires explicit date pattern e.g. "1000 (13-09-2025)" or "300(17-07-2026)" or "1000 (14-04)".
- * Rejects bare numbers without dates and amounts > 50,000 to prevent S.No, Roll No, or Mobile numbers (6397712145) from ever becoming fee installments!
- */
-export function parseInstallmentText(str, fallbackDate = '') {
-    if (!str || typeof str !== 'string' || !str.trim()) return [];
+export function parseInstallmentText(str, fallbackDate = '', headerText = '') {
+    if (!str || (typeof str !== 'string' && typeof str !== 'number')) return [];
 
-    const clean = str.trim();
-    if (clean.toLowerCase() === 'unpaid' || clean.toLowerCase() === '-' || clean === '') return [];
+    const clean = String(str).trim();
+    if (!clean) return [];
+    
+    const lower = clean.toLowerCase();
+    if (lower === 'unpaid' || lower === '-' || lower === 'free' || lower === 'nil' || lower === 'none' || lower === 'n/a') return [];
 
     const results = [];
 
-    // Regex 1: Full Date e.g. 1000 (13-09-2025) or 300(17-07-2026)
-    const fullDateRegex = /(\d[\d,]*)\s*\(?\s*([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})/g;
-    let match;
+    // Helper to extract date from header or string
+    const extractDate = (text) => {
+        if (!text) return null;
+        // Full date DD-MM-YYYY or YYYY-MM-DD or DD/MM/YYYY
+        const fullMatch = text.match(/([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})/);
+        if (fullMatch) return normalizeDateToYYYYMMDD(fullMatch[1]);
 
-    while ((match = fullDateRegex.exec(clean)) !== null) {
-        const amtStr = match[1].replace(/,/g, '');
-        const amt = parseInt(amtStr, 10);
-        const rawDate = match[2];
-
-        if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
-            results.push({
-                amount: amt,
-                date: normalizeDateToYYYYMMDD(rawDate),
-                status: 'paid'
-            });
+        // Short date DD-MM or DD/MM
+        const shortMatch = text.match(/([0-9]{1,2}[-/.][0-9]{1,2})/);
+        if (shortMatch) {
+            const curYear = new Date().getFullYear();
+            return normalizeDateToYYYYMMDD(`${shortMatch[1]}-${curYear}`);
         }
-    }
 
-    if (results.length > 0) return results;
+        // Month name e.g. "Sep/25", "Sep 2025"
+        const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+        for (let m = 0; m < months.length; m++) {
+            if (text.toLowerCase().includes(months[m])) {
+                const yearMatch = text.match(/20\d{2}|\d{2}/);
+                const year = yearMatch ? (yearMatch[0].length === 2 ? `20${yearMatch[0]}` : yearMatch[0]) : new Date().getFullYear();
+                const monthNum = String(m + 1).padStart(2, '0');
+                return `${year}-${monthNum}-15`;
+            }
+        }
+        return null;
+    };
 
-    // Regex 2: Short Date e.g. 1000 (14-04) or 1000 (14/04)
-    const shortDateRegex = /(\d[\d,]*)\s*\(?\s*([0-9]{1,2}[-/.][0-9]{1,2})/g;
-    while ((match = shortDateRegex.exec(clean)) !== null) {
-        const amtStr = match[1].replace(/,/g, '');
-        const amt = parseInt(amtStr, 10);
-        const rawDate = match[2];
+    const headerDate = extractDate(headerText);
+    const defaultDate = headerDate || normalizeDateToYYYYMMDD(fallbackDate) || new Date().toISOString().split('T')[0];
 
-        if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
-            const currentYear = new Date().getFullYear();
-            const dateWithYear = `${rawDate}-${currentYear}`;
-            results.push({
-                amount: amt,
-                date: normalizeDateToYYYYMMDD(dateWithYear),
-                status: 'paid'
-            });
+    // Split cell if it has comma-separated or plus-separated entries (without dates inside brackets)
+    const subParts = clean.includes(',') 
+        ? clean.split(',') 
+        : (clean.includes('+') && !clean.includes('(') ? clean.split('+') : [clean]);
+
+    for (const part of subParts) {
+        const subClean = part.trim();
+        if (!subClean || subClean === '-' || subClean.toLowerCase() === 'unpaid') continue;
+
+        // Pattern 1: Full Date inside cell e.g. "1000 (13-09-2025)", "1000 - 13/09/2025", "1000: 13-09-2025"
+        const fullDateRegex = /(\d[\d,]*)\s*[(/-:]*\s*([0-9]{1,2}[-/.][0-9]{1,2}[-/.][0-9]{2,4})/g;
+        let match;
+        let matched = false;
+
+        while ((match = fullDateRegex.exec(subClean)) !== null) {
+            matched = true;
+            const amt = parseInt(match[1].replace(/,/g, ''), 10);
+            const rawDate = match[2];
+            if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
+                results.push({
+                    amount: amt,
+                    date: normalizeDateToYYYYMMDD(rawDate),
+                    status: 'paid'
+                });
+            }
+        }
+        if (matched) continue;
+
+        // Pattern 2: Short Date inside cell e.g. "1000 (14-04)", "1000 - 14/04"
+        const shortDateRegex = /(\d[\d,]*)\s*[(/-:]*\s*([0-9]{1,2}[-/.][0-9]{1,2})/g;
+        while ((match = shortDateRegex.exec(subClean)) !== null) {
+            matched = true;
+            const amt = parseInt(match[1].replace(/,/g, ''), 10);
+            const rawDate = match[2];
+            if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
+                const currentYear = new Date().getFullYear();
+                results.push({
+                    amount: amt,
+                    date: normalizeDateToYYYYMMDD(`${rawDate}-${currentYear}`),
+                    status: 'paid'
+                });
+            }
+        }
+        if (matched) continue;
+
+        // Pattern 3: Bare amount in cell e.g. "1000", "₹1000", "1000 paid"
+        const digitsOnly = subClean.replace(/,/g, '').replace(/[^\d]/g, '');
+        if (digitsOnly) {
+            const amt = parseInt(digitsOnly, 10);
+            if (!isNaN(amt) && amt >= 10 && amt <= 50000) {
+                results.push({
+                    amount: amt,
+                    date: defaultDate,
+                    status: 'paid'
+                });
+            }
         }
     }
 
     return results;
 }
 
-const RESERVED_HEADERS = [
-    's.no', 'sr', 'sr.no', 'roll', 'roll no', 'registration', 'registration no.',
-    'student name', 'name', 'status', 'course', 'father', 'fathers name', 'father name',
-    'mobile', 'mob', 'mob. no.', 'address', 'center', 'admission date', 'date',
+const METADATA_KEYWORDS = [
+    's.no', 'sr', 'sr.no', 'sr.', 'roll', 'roll no', 'registration', 'registration no.',
+    'student name', 'name', 'student', 'status', 'course', 'father', 'fathers name', 'father name',
+    'mobile', 'mob', 'mob. no.', 'address', 'center', 'admission date', 'date of admission',
     'registration fee', 'regi. fee', 'admission fee', 'reg fee', 'total fee', 'total fees', 'fee total'
 ];
 
 /**
- * 3-Mode Adaptive Schema Parser for raw TSV/CSV text (pasted directly from Google Sheets or Excel)
- * Isolates core identity metadata (Roll No, Name, Mobile, Admission Fee, Total Fee) from Month Installments (Cols 11+)
- * Handles all row format variations without ever mixing mobile numbers (6397712145) or roll numbers into fee installments!
+ * Smart Schema Parser for Google Sheet CSV / TSV text.
+ * Dynamically identifies metadata headers and extracts all installment/fee-date columns.
  */
 export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
     if (!text || typeof text !== 'string') return [];
 
     const rawLines = text.split(/\r?\n/);
-    const parsedStudents = [];
+    if (rawLines.length === 0) return [];
 
-    for (let i = 0; i < rawLines.length; i++) {
+    let headerRowIdx = -1;
+    let colMap = {};
+    let headers = [];
+
+    // Find Header Row
+    for (let i = 0; i < Math.min(10, rawLines.length); i++) {
         const line = rawLines[i].trim();
         if (!line) continue;
 
-        // Split by tab (Google Sheet paste) or comma
+        const cols = line.includes('\t') ? line.split('\t') : line.split(',');
+        const lowerCols = cols.map(c => c.trim().toLowerCase());
+
+        const hasName = lowerCols.some(c => c.includes('name') || c.includes('student'));
+        const hasRoll = lowerCols.some(c => c.includes('roll') || c.includes('registration') || c.includes('s.no') || c.includes('sr'));
+        
+        if (hasName || hasRoll) {
+            headerRowIdx = i;
+            headers = cols.map(c => c.trim());
+            
+            // Map column indices
+            lowerCols.forEach((h, idx) => {
+                if (h.includes('roll') || h.includes('registration')) colMap.regId = idx;
+                else if (h.includes('student name') || (h.includes('name') && !h.includes('father'))) colMap.fullName = idx;
+                else if (h.includes('status')) colMap.status = idx;
+                else if (h.includes('course')) colMap.course = idx;
+                else if (h.includes('father')) colMap.fatherName = idx;
+                else if (h.includes('mob') || h.includes('phone') || h.includes('mobile')) colMap.mobile = idx;
+                else if (h.includes('address') || h.includes('center')) colMap.address = idx;
+                else if (h.includes('admission date') || h.includes('adm date')) colMap.admissionDate = idx;
+                else if (h.includes('regi. fee') || h.includes('registration fee') || h.includes('admission fee')) colMap.admissionFee = idx;
+                else if (h.includes('total fee') || h.includes('total fees') || h.includes('fee total')) colMap.totalFees = idx;
+            });
+            break;
+        }
+    }
+
+    const parsedStudents = [];
+    const startLine = headerRowIdx !== -1 ? headerRowIdx + 1 : 0;
+
+    for (let i = startLine; i < rawLines.length; i++) {
+        const line = rawLines[i].trim();
+        if (!line) continue;
+
         let cols = line.includes('\t') ? line.split('\t') : line.split(',');
         cols = cols.map(c => c ? c.trim() : '');
 
-        // Skip header / title lines
+        // Skip header lines if repeated
         const firstCol = (cols[0] || '').toLowerCase();
-        const secondCol = (cols[1] || '').toLowerCase();
-        const thirdCol = (cols[2] || '').toLowerCase();
-        if (firstCol.includes('s.no') || firstCol.includes('sr') || secondCol.includes('roll') || secondCol.includes('registration') || thirdCol.includes('student name') || firstCol.includes('bytecore')) {
-            continue;
-        }
+        if (firstCol.includes('s.no') || firstCol.includes('bytecore') || firstCol.includes('sr.')) continue;
 
         let regId = '';
         let fullName = '';
@@ -147,53 +221,59 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
         let admissionDateRaw = '';
         let admissionFeeRaw = '';
         let totalFeesRaw = '';
-        let instStartIdx = 11;
+        let installmentColIndices = [];
 
-        // Mode 1: S.No (Col 0), Roll No (Col 1), Name (Col 2)
-        if (cols.length > 2 && /^\d+$/.test(cols[0]) && cols[1] !== '' && !/^[a-zA-Z\s]{3,}$/.test(cols[1])) {
-            regId = cols[1] || '';
-            fullName = cols[2] || '';
-            statusStr = cols[3] || '';
-            courseStr = cols[4] || '';
-            fatherNameStr = cols[5] || '';
-            mobileStr = cols[6] || '';
-            addressStr = cols[7] || '';
-            admissionDateRaw = cols[8] || '';
-            admissionFeeRaw = cols[9] || '';
-            totalFeesRaw = cols[10] || '';
-            instStartIdx = 11;
-        }
-        // Mode 2: Roll No (Col 0), Name (Col 1)
-        else if (cols.length > 1 && !/^[a-zA-Z\s]{3,}$/.test(cols[0]) && cols[0] !== '') {
-            regId = cols[0] || '';
-            fullName = cols[1] || '';
-            statusStr = cols[2] || '';
-            courseStr = cols[3] || '';
-            fatherNameStr = cols[4] || '';
-            mobileStr = cols[5] || '';
-            addressStr = cols[6] || '';
-            admissionDateRaw = cols[7] || '';
-            admissionFeeRaw = cols[8] || '';
-            totalFeesRaw = cols[9] || '';
-            instStartIdx = 10;
-        }
-        // Mode 3: Name (Col 0)
-        else {
-            fullName = cols[0] || '';
-            statusStr = cols[1] || '';
-            courseStr = cols[2] || '';
-            fatherNameStr = cols[3] || '';
-            mobileStr = cols[4] || '';
-            addressStr = cols[5] || '';
-            admissionDateRaw = cols[6] || '';
-            admissionFeeRaw = cols[7] || '';
-            totalFeesRaw = cols[8] || '';
-            instStartIdx = 9;
+        if (headerRowIdx !== -1) {
+            regId = colMap.regId !== undefined ? cols[colMap.regId] : '';
+            fullName = colMap.fullName !== undefined ? cols[colMap.fullName] : '';
+            statusStr = colMap.status !== undefined ? cols[colMap.status] : '';
+            courseStr = colMap.course !== undefined ? cols[colMap.course] : '';
+            fatherNameStr = colMap.fatherName !== undefined ? cols[colMap.fatherName] : '';
+            mobileStr = colMap.mobile !== undefined ? cols[colMap.mobile] : '';
+            addressStr = colMap.address !== undefined ? cols[colMap.address] : '';
+            admissionDateRaw = colMap.admissionDate !== undefined ? cols[colMap.admissionDate] : '';
+            admissionFeeRaw = colMap.admissionFee !== undefined ? cols[colMap.admissionFee] : '';
+            totalFeesRaw = colMap.totalFees !== undefined ? cols[colMap.totalFees] : '';
+
+            // Find all installment columns (any column not matching metadata keywords or occurring after totalFees)
+            headers.forEach((h, idx) => {
+                const hLower = h.toLowerCase();
+                const isMetadata = METADATA_KEYWORDS.some(k => hLower === k || hLower.startsWith(k));
+                if (!isMetadata || hLower.includes('fee/date') || hLower.includes('installment') || idx > (colMap.totalFees ?? 10)) {
+                    installmentColIndices.push(idx);
+                }
+            });
+        } else {
+            // Fallback Mode: Standard column order
+            if (cols.length > 2 && /^\d+$/.test(cols[0]) && cols[1] !== '') {
+                regId = cols[1];
+                fullName = cols[2];
+                statusStr = cols[3];
+                courseStr = cols[4];
+                fatherNameStr = cols[5];
+                mobileStr = cols[6];
+                addressStr = cols[7];
+                admissionDateRaw = cols[8];
+                admissionFeeRaw = cols[9];
+                totalFeesRaw = cols[10];
+                for (let j = 11; j < cols.length; j++) installmentColIndices.push(j);
+            } else {
+                regId = cols[0];
+                fullName = cols[1];
+                statusStr = cols[2];
+                courseStr = cols[3];
+                fatherNameStr = cols[4];
+                mobileStr = cols[5];
+                addressStr = cols[6];
+                admissionDateRaw = cols[7];
+                admissionFeeRaw = cols[8];
+                totalFeesRaw = cols[9];
+                for (let j = 10; j < cols.length; j++) installmentColIndices.push(j);
+            }
         }
 
         if (!fullName && !regId) continue;
 
-        // Auto-generate ID if missing
         if (!regId) {
             const cleanName = fullName.replace(/[^a-zA-Z0-9]/g, '');
             regId = `REG_${cleanName || (Date.now() + i)}`;
@@ -203,31 +283,31 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
         let detectedCenter = defaultCenter;
         const addrLower = (addressStr || '').toLowerCase();
         if (addrLower.includes('thiriya')) detectedCenter = 'Thiriya';
-        else if (addrLower.includes('manpuriya') || addrLower.includes('munpuriya')) detectedCenter = 'Manpuriya';
         else if (addrLower.includes('naryawal') || addrLower.includes('nariyawal')) detectedCenter = 'Nariyawal';
-        else if (addrLower.includes('mohanpur')) detectedCenter = 'Mohanpur';
-        else if (addrLower.includes('harharpur')) detectedCenter = 'Harharpur';
-        else if (addrLower.includes('parsona')) detectedCenter = 'Parsona';
         else if (addressStr && addressStr !== '-') detectedCenter = addressStr;
 
         const parsedTotalFee = (totalFeesRaw && String(totalFeesRaw).toLowerCase().includes('free')) ? 0 : parseCurrency(totalFeesRaw);
         const parsedAdmissionFee = parseCurrency(admissionFeeRaw);
 
-        // Strict Installment Extraction from instStartIdx onwards
-        let installments = [];
-        for (let j = instStartIdx; j < cols.length; j++) {
+        // Extract Installments from fee/date columns
+        let rawInstallments = [];
+        for (const j of installmentColIndices) {
             const cellVal = cols[j];
+            const headerText = headers[j] || '';
             if (cellVal && cellVal.trim() !== '' && cellVal !== '-' && cellVal.toLowerCase() !== 'unpaid') {
-                const parsedInsts = parseInstallmentText(cellVal, admissionDateRaw);
+                const parsedInsts = parseInstallmentText(cellVal, admissionDateRaw, headerText);
                 if (parsedInsts.length > 0) {
                     const cleanInsts = parsedInsts.filter(inst => inst.amount !== parsedTotalFee && inst.amount >= 10 && inst.amount <= 50000);
-                    installments = [...installments, ...cleanInsts];
+                    rawInstallments = [...rawInstallments, ...cleanInsts];
                 }
             }
         }
 
+        // Sort installments chronologically by date
+        rawInstallments.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
         let totalPaid = 0;
-        installments.forEach((inst, idx) => {
+        rawInstallments.forEach((inst, idx) => {
             inst.installmentNo = idx + 1;
             totalPaid += inst.amount;
         });
@@ -245,7 +325,7 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
             admissionFee: parsedAdmissionFee,
             registrationFee: parsedAdmissionFee,
             totalFees: parsedTotalFee,
-            installments: installments,
+            installments: rawInstallments,
             paidFees: totalPaid,
             updatedAt: Date.now()
         };
@@ -257,14 +337,11 @@ export function parseRawSheetText(text, defaultCenter = 'Thiriya') {
 }
 
 /**
- * Parses a CSV string into an array of objects via PapaParse with smart column mapping.
+ * Parses CSV string via PapaParse with smart column mapping.
  */
 function parseCSV(str) {
     const parsed = Papa.parse(str, { skipEmptyLines: true });
-
-    if (parsed.errors.length) {
-        console.warn("PapaParse Warnings/Errors:", parsed.errors);
-    }
+    if (parsed.errors.length) console.warn("PapaParse Warnings:", parsed.errors);
 
     const rows = parsed.data;
     if (rows.length < 2) return [];
@@ -288,15 +365,7 @@ function parseCSV(str) {
             const h = headers[j];
             if (!h) continue;
             const val = rowData[j] ? (typeof rowData[j] === 'string' ? rowData[j].trim() : String(rowData[j]).trim()) : '';
-            if (obj[h] !== undefined) {
-                if (Array.isArray(obj[h])) {
-                    obj[h].push(val);
-                } else {
-                    obj[h] = [obj[h], val];
-                }
-            } else {
-                obj[h] = val;
-            }
+            obj[h] = val;
         }
         dataObjects.push(obj);
     }
@@ -313,7 +382,7 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
         let studentsList = parseRawSheetText(csvText, centerName);
 
         if (studentsList.length === 0) {
-            // Fallback to PapaParse mapping with strict header filtering
+            // Fallback to PapaParse mapping
             const data = parseCSV(csvText);
             for (const row of data) {
                 const regId = row['Registration'] || row['Registration NO.'] || row['Roll No'] || row['Roll No.'] || row['S.No'];
@@ -343,28 +412,29 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
                     updatedAt: Date.now()
                 };
 
-                // Installments extraction: Strictly exclude reserved headers!
-                let installments = [];
+                let rawInstallments = [];
                 Object.keys(row).forEach(key => {
                     const keyLower = key.toLowerCase().trim();
-                    const isReserved = RESERVED_HEADERS.some(rh => keyLower === rh || keyLower.includes('total fee') || keyLower.includes('regi. fee') || keyLower.includes('registration fee') || keyLower.includes('admission fee'));
-                    if (!isReserved) {
+                    const isReserved = METADATA_KEYWORDS.some(rh => keyLower === rh || keyLower.includes('total fee') || keyLower.includes('regi. fee') || keyLower.includes('registration fee') || keyLower.includes('admission fee'));
+                    if (!isReserved || keyLower.includes('fee/date') || keyLower.includes('installment')) {
                         const val = row[key];
                         if (val && typeof val === 'string' && val.trim() !== '' && val !== '-' && val.toLowerCase() !== 'unpaid') {
-                            const parsed = parseInstallmentText(val, student.admissionDate);
+                            const parsed = parseInstallmentText(val, student.admissionDate, key);
                             const cleanInsts = parsed.filter(inst => inst.amount !== totalFees && inst.amount >= 10);
-                            installments = [...installments, ...cleanInsts];
+                            rawInstallments = [...rawInstallments, ...cleanInsts];
                         }
                     }
                 });
 
+                rawInstallments.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
                 let totalPaid = 0;
-                installments.forEach((inst, idx) => {
+                rawInstallments.forEach((inst, idx) => {
                     inst.installmentNo = idx + 1;
                     totalPaid += inst.amount;
                 });
 
-                student.installments = installments;
+                student.installments = rawInstallments;
                 student.paidFees = totalPaid;
                 studentsList.push(student);
             }
