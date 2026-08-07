@@ -5,7 +5,7 @@ import { sendTelegramNotification } from "./telegram";
 import { calculateCourseExpiry, parseDateToYYYYMM } from "./utils";
 
 /**
- * Automatically cleans up any corrupted or legacy installments (e.g. Total Fee ₹6000, Admission Fee ₹200, or amounts <= 1)
+ * Automatically cleans up any corrupted or legacy installments (e.g. Total Fee ₹6000, S.No, Roll No, Mobile No, or amounts < 50)
  * from student object to ensure 100% clean financial ledger calculations.
  */
 export function sanitizeStudentData(student) {
@@ -13,20 +13,37 @@ export function sanitizeStudentData(student) {
 
     const totalFees = parseInt(student.totalFees || 0, 10);
     const admissionFee = parseInt(student.admissionFee || student.registrationFee || 0, 10);
+    const regIdNum = parseInt(String(student.registration || '').replace(/\D/g, ''), 10);
+    const mobileNum = parseInt(String(student.mobile || '').replace(/\D/g, ''), 10);
 
     let rawInsts = Array.isArray(student.installments) ? student.installments : [];
 
-    // Filter out total fee duplicates, admission fee duplicates, amounts <= 1, or amounts > 50,000 (mobile numbers)
-    const cleanInsts = rawInsts.filter(inst => {
+    // Filter out metadata artifacts (Roll No, S.No, Mobile No, Total Fee duplicates)
+    const validInsts = rawInsts.filter(inst => {
         const amt = parseInt(inst.amount || 0, 10);
-        if (isNaN(amt) || amt <= 1 || amt > 50000) return false;
-        if (totalFees > 0 && amt === totalFees) return false;
-        if (admissionFee > 0 && amt === admissionFee && rawInsts.length > 1) return false;
+        if (isNaN(amt) || amt < 50 || amt > 30000) return false;
+        if (totalFees > 0 && amt === totalFees && rawInsts.length > 1) return false;
+        if (regIdNum > 0 && amt === regIdNum) return false;
+        if (mobileNum > 0 && amt === mobileNum) return false;
+        if (admissionFee > 0 && amt === admissionFee && rawInsts.length > 1 && inst.note?.includes('Reg')) return false;
         return true;
-    }).map((inst, idx) => ({
-        ...inst,
-        installmentNo: idx + 1
-    }));
+    });
+
+    // Deduplicate by unique amount + date
+    const uniqueMap = new Map();
+    validInsts.forEach(inst => {
+        const amt = parseInt(inst.amount || 0, 10);
+        const dt = inst.date || '';
+        const key = `${amt}_${dt}`;
+        if (!uniqueMap.has(key)) {
+            uniqueMap.set(key, inst);
+        }
+    });
+
+    const cleanInsts = Array.from(uniqueMap.values()).sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    cleanInsts.forEach((inst, idx) => {
+        inst.installmentNo = idx + 1;
+    });
 
     const cleanPaidFees = cleanInsts.reduce((sum, inst) => sum + parseInt(inst.amount || 0, 10), 0);
 
@@ -44,7 +61,6 @@ export function sanitizeStudentData(student) {
  */
 export const checkMonthlyFeeReminders = async (targetStudentId = null, forceSend = false) => {
     try {
-        // 1. Authentication Guard
         const currentUser = auth.currentUser;
         if (!currentUser && !targetStudentId) {
             console.log("Fee Audit: Skipping (unauthenticated).");
@@ -53,7 +69,6 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null, forceSend
 
         console.log(`Initializing Intelligent Fee Audit${targetStudentId ? ` for Reg: ${targetStudentId}` : "..."}`);
 
-        // 2. Avoid duplicate checks for the same day (Global Audit only)
         const todayStr = new Date().toISOString().split('T')[0];
         const metaRef = doc(db, "metadata", "last_fee_check");
 
@@ -61,27 +76,21 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null, forceSend
             const metaSnap = await getDoc(metaRef);
             if (metaSnap.exists() && metaSnap.data().date === todayStr) {
                 console.log("Fee audit already completed for today.");
-                // We still might want to run it manually if triggered from admin
-                // return;
             }
         }
 
         let snapshot;
         if (targetStudentId) {
-            // Precise check for single student
             const q = query(collection(db, "students"), where("registration", "==", targetStudentId.toString()));
             snapshot = await getDocs(q);
         } else {
-            // Full collection for bulk audit
             snapshot = await getDocs(collection(db, "students"));
         }
         
         const studentsDue = [];
         const today = new Date();
-        const currentDay = today.getDate();
         const currentMonth = today.getMonth() + 1;
         const currentYear = today.getFullYear();
-        const currentMonthYYYYMM = `${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
         const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         
         let report_paidThisMonth = 0;
@@ -89,156 +98,71 @@ export const checkMonthlyFeeReminders = async (targetStudentId = null, forceSend
         const studentsPendingThisMonth = [];
 
         snapshot.forEach((studentDoc) => {
-            const data = studentDoc.data();
+            const rawData = studentDoc.data();
+            const data = sanitizeStudentData(rawData);
 
-            // Ignore passed out students
             if (data.status === 'pass') return;
 
-            // Check Expiry Logic
             const expiryInfo = calculateCourseExpiry(data);
-            if (expiryInfo && expiryInfo.isCompleted) {
-                return; // Ignore students whose course duration is over
-            }
+            if (expiryInfo && expiryInfo.isCompleted) return;
 
+            const registrationFee = data.registrationFee ? Number(data.registrationFee) : 0;
+            const totalCourseFee = Number(data.totalFees || 0);
+            const totalPayable = totalCourseFee + registrationFee;
             const totalPaid = (data.paidFees || 0) + (data.oldPaidFees || 0);
-            const balance = (Number(data.totalFees) || 0) - totalPaid;
-            
-            // If they are fully paid, they don't owe anything this month or ever
-            // Special Rule: If totalFees == 500, they are scholarship/free students. 
-            // Once they pay 500, balance is <= 0, so they are safely ignored here.
-            if (balance <= 0) return;
+            const pendingBalance = Math.max(0, totalPayable - totalPaid);
 
-            // --- DEEP ALGORITHM START ---
+            if (pendingBalance <= 0) return;
 
-            // Check if they paid in the current calendar month
+            const currentMonthPrefix = `${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
             const hasPaidThisMonth = data.installments?.some(inst => {
-                const instMonth = parseDateToYYYYMM(inst.date);
-                return instMonth === currentMonthYYYYMM;
+                if (!inst.date) return false;
+                const formatted = parseDateToYYYYMM(inst.date);
+                return formatted === currentMonthPrefix;
             });
 
             if (hasPaidThisMonth) {
-                report_paidThisMonth++;
+                const paidAmtThisMonth = data.installments
+                    .filter(inst => parseDateToYYYYMM(inst.date) === currentMonthPrefix)
+                    .reduce((sum, i) => sum + Number(i.amount || 0), 0);
+                report_paidThisMonth += paidAmtThisMonth;
             } else {
-                report_pendingThisMonth++;
+                report_pendingThisMonth += Math.min(pendingBalance, 1000);
                 studentsPendingThisMonth.push({
-                    fullName: data.fullName,
-                    registration: data.registration,
-                    balance
+                    name: data.fullName || 'Student',
+                    reg: data.registration,
+                    mobile: data.mobile || 'N/A',
+                    course: data.course || 'N/A',
+                    pending: pendingBalance,
+                    center: data.center || 'Main'
                 });
             }
-
-            // 1. Helper to parse mixed date formats (YYYY-MM-DD or DD/MM/YYYY)
-            const parseToDate = (str) => {
-                if (!str || str === 'N/A') return null;
-                if (str.includes('-')) return new Date(str); // ISO
-                if (str.includes('/')) {
-                    const [d, m, y] = str.split('/');
-                    return new Date(`${y}-${m}-${d}`);
-                }
-                return null;
-            };
-
-            // 2. Determine Timeline Reference (Admission or Last Installment)
-            let lastInteraction = parseToDate(data.admissionDate);
-            let lastInteractionType = "Admission";
-
-            if (data.installments && data.installments.length > 0) {
-                data.installments.forEach(inst => {
-                    const instDate = parseToDate(inst.date);
-                    if (instDate && (!lastInteraction || instDate > lastInteraction)) {
-                        lastInteraction = instDate;
-                        lastInteractionType = "Last Payment";
-                    }
-                });
-            }
-
-            if (!lastInteraction || isNaN(lastInteraction.getTime())) return;
-
-            // 3. Logic: Is Today exactly 1 month (or more) after the last interaction?
-            const lastDay = lastInteraction.getDate();
-            const lastMonthNum = lastInteraction.getMonth() + 1;
-            const lastYear = lastInteraction.getFullYear();
-            const monthDiff = (currentYear - lastYear) * 12 + (currentMonth - lastMonthNum);
-
-            if (monthDiff >= 1) {
-                const daysInCurrentMonth = new Date(currentYear, currentMonth, 0).getDate();
-                const targetDay = Math.min(lastDay, daysInCurrentMonth);
-
-                if (currentDay === targetDay) {
-                    // Final Check: Ensure they haven't ALREADY paid in the current target month
-                    if (!hasPaidThisMonth) {
-                        studentsDue.push({
-                            ...data,
-                            balance,
-                            lastInteractionType,
-                            lastInteractionDate: lastInteraction.toLocaleDateString('en-GB'),
-                            dueDate: `${targetDay}/${currentMonth}/${currentYear}`
-                        });
-                    }
-                }
-            }
-            // --- DEEP ALGORITHM END ---
         });
 
-        // Broadcast Daily Reminders
-        if (studentsDue.length > 0) {
-            console.log(`Audited: ${studentsDue.length} students are due for fees today.`);
-            let studentListText = '';
-            
-            // For huge lists, limit text to avoid Telegram 4096 char limit
-            const maxList = studentsDue.slice(0, 20);
-            
-            maxList.forEach((s, i) => {
-                studentListText += `${i + 1}. <b>${s.fullName}</b> (Reg: ${s.registration})\n   💰 Bal: ₹${s.balance} | 📅 ${s.lastInteractionType}: ${s.lastInteractionDate}\n\n`;
-
-                // Also send individual alert for high-priority tracking
-                sendTelegramNotification('fee_reminder', {
-                    fullName: s.fullName,
-                    registration: s.registration,
-                    mobile: s.mobile,
-                    course: s.course,
-                    balance: s.balance,
-                    dueDate: s.dueDate,
-                    lastInteractionType: s.lastInteractionType,
-                    lastInteractionDate: s.lastInteractionDate
-                });
+        if (forceSend || (studentsPendingThisMonth.length > 0 && !targetStudentId)) {
+            await sendTelegramNotification('fee_report', {
+                month: monthNames[currentMonth - 1],
+                year: currentYear,
+                totalPendingCount: studentsPendingThisMonth.length,
+                pendingAmount: report_pendingThisMonth,
+                paidAmount: report_paidThisMonth,
+                pendingStudents: studentsPendingThisMonth.slice(0, 15)
             });
 
-            if (studentsDue.length > 20) studentListText += `\n...and ${studentsDue.length - 20} more.`;
-
-            await sendTelegramNotification('bulk_fee_reminder', {
-                count: studentsDue.length,
-                studentList: studentListText
-            });
-        }
-        
-        // Broadcast Monthly Performance Report
-        // Only run this globally (not for a specific student)
-        if (!targetStudentId) {
-            console.log(`Monthly Report: ${report_paidThisMonth} Paid, ${report_pendingThisMonth} Pending`);
-            
-            let pendingListText = '';
-            const maxPendingList = studentsPendingThisMonth.slice(0, 30);
-            maxPendingList.forEach((s, i) => {
-                pendingListText += `${i + 1}. ${s.fullName} (Reg: ${s.registration}) - Bal: ₹${s.balance}\n`;
-            });
-            if (studentsPendingThisMonth.length > 30) pendingListText += `...and ${studentsPendingThisMonth.length - 30} more.\n`;
-            if (pendingListText === '') pendingListText = '🎉 All active students have paid!';
-
-            await sendTelegramNotification('monthly_fee_report', {
-                monthStr: `${monthNames[currentMonth - 1]} ${currentYear}`,
-                paidCount: report_paidThisMonth,
-                pendingCount: report_pendingThisMonth,
-                pendingList: pendingListText
-            });
+            if (!targetStudentId) {
+                await setDoc(metaRef, { date: todayStr, timestamp: Date.now() });
+            }
         }
 
-        // 4. Finalize
-        if (!targetStudentId) {
-            await setDoc(metaRef, { date: todayStr, count: studentsDue.length });
-        }
+        return {
+            success: true,
+            pendingCount: studentsPendingThisMonth.length,
+            pendingAmount: report_pendingThisMonth,
+            paidAmount: report_paidThisMonth
+        };
 
     } catch (err) {
-        console.error("Fee Automation Error:", err);
+        console.error("Error running fee reminders:", err);
+        return { success: false, error: err.message };
     }
 };

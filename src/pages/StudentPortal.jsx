@@ -19,13 +19,14 @@ import toast from 'react-hot-toast';
 import { compressImage } from '../lib/imageCompression';
 import { useSearchParams } from 'react-router-dom';
 import { requestNotificationPermission } from '../lib/notifications';
+import { sanitizeStudentData } from '../lib/feeAutomation';
 
-// Remove unused imports like COURSE_CURRICULUM from quizData inside StudentPortal.
 import { useDispatch, useSelector } from 'react-redux';
 import { setStudentCourse, selectActiveCourseModules } from '../app/store/courseSlice';
 
 export default function StudentPortal() {
-    const { student, logoutStudent } = useAuth();
+    const { student: rawStudent, logoutStudent } = useAuth();
+    const student = useMemo(() => sanitizeStudentData(rawStudent), [rawStudent]);
     const [searchParams] = useSearchParams();
     const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'overview');
     
