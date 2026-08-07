@@ -615,6 +615,7 @@ export default function CoachingAdmin() {
                                     const result = await syncFromGoogleSheet(csvUrl, "Nariyawal");
                                     if (result.success) {
                                         alert("Google Sheets Sync Complete!\n" + result.message);
+                                        window.location.reload();
                                     } else {
                                         throw new Error(result.message);
                                     }
@@ -645,6 +646,7 @@ export default function CoachingAdmin() {
                                     const result = await syncFromGoogleSheet(csvUrl, "Thiriya");
                                     if (result.success) {
                                         alert("Thiriya Google Sheets Sync Complete!\n" + result.message);
+                                        window.location.reload();
                                     } else {
                                         throw new Error(result.message);
                                     }
