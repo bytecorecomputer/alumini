@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Hash, Phone, ArrowRight, Loader2, ShieldCheck, Database, Zap, Sparkles } from 'lucide-react';
+import { Hash, Phone, ArrowRight, Loader2, Zap } from 'lucide-react';
 import { useAuth } from '../app/common/AuthContext';
 import { sendTelegramNotification } from '../lib/telegram';
 
@@ -27,44 +27,96 @@ export default function StudentLogin() {
         setIsLoading(true);
         setError('');
 
+        const cleanReg = registration.trim();
+        const cleanMob = mobile.trim();
+
+        if (!cleanReg && !cleanMob) {
+            setError('Please enter your Registration ID / Roll Number or Mobile Number.');
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            const response = await fetch('/api/student-login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ registration, mobile })
-            });
+            let apiSuccess = false;
 
-            const contentType = response.headers.get("content-type");
-            if (!contentType || !contentType.includes("application/json")) {
-                throw new Error("Backend not running. Please use 'npx vercel dev' instead of 'npm run dev'.");
+            // 1. Try Vercel API Endpoint if available
+            try {
+                const response = await fetch('/api/student-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ registration: cleanReg, mobile: cleanMob })
+                });
+
+                const contentType = response.headers.get("content-type");
+                if (response.ok && contentType && contentType.includes("application/json")) {
+                    const data = await response.json();
+                    if (data.token) {
+                        const { signInWithCustomToken } = await import('firebase/auth');
+                        const { auth } = await import('../firebase/auth');
+                        await signInWithCustomToken(auth, data.token);
+                    }
+                    loginStudent(data.studentData);
+                    await sendTelegramNotification('login', {
+                        displayName: data.studentData.fullName || cleanReg || cleanMob,
+                        email: data.studentData.email || 'N/A',
+                        role: `Student (${data.studentData.course || 'N/A'})`
+                    });
+                    apiSuccess = true;
+                    navigate('/student-portal');
+                    return;
+                }
+            } catch (apiErr) {
+                console.warn("Backend API not reachable, attempting direct Firestore search...", apiErr);
             }
 
-            const data = await response.json();
+            // 2. Direct Firestore Search Fallback (Roll No or Mobile No)
+            if (!apiSuccess) {
+                let studentData = null;
 
-            if (!response.ok) {
-                setError(data.error || 'Invalid Registration or Mobile Number.');
-                setIsLoading(false);
-                return;
+                // Direct document ID lookup by registration
+                if (cleanReg) {
+                    const docSnap = await getDoc(doc(db, "students", cleanReg));
+                    if (docSnap.exists()) {
+                        studentData = { id: docSnap.id, ...docSnap.data() };
+                    }
+                }
+
+                // Query lookup by registration or mobile
+                if (!studentData) {
+                    const studentsRef = collection(db, "students");
+                    let qSnap = null;
+
+                    if (cleanReg && cleanMob) {
+                        const q = query(studentsRef, where("registration", "==", cleanReg), where("mobile", "==", cleanMob));
+                        qSnap = await getDocs(q);
+                    } else if (cleanReg) {
+                        const q = query(studentsRef, where("registration", "==", cleanReg));
+                        qSnap = await getDocs(q);
+                    } else if (cleanMob) {
+                        const q = query(studentsRef, where("mobile", "==", cleanMob));
+                        qSnap = await getDocs(q);
+                    }
+
+                    if (qSnap && !qSnap.empty) {
+                        studentData = { id: qSnap.docs[0].id, ...qSnap.docs[0].data() };
+                    }
+                }
+
+                if (studentData) {
+                    loginStudent(studentData);
+                    await sendTelegramNotification('login', {
+                        displayName: studentData.fullName || cleanReg || cleanMob,
+                        email: studentData.email || 'N/A',
+                        role: `Student (${studentData.course || 'N/A'})`
+                    });
+                    navigate('/student-portal');
+                } else {
+                    setError('No student record found matching this Roll No. or Mobile Number.');
+                }
             }
-
-            // Secure Firebase login with custom token
-            const { signInWithCustomToken } = await import('firebase/auth');
-            const { auth } = await import('../firebase/auth');
-            await signInWithCustomToken(auth, data.token);
-
-            // Send Telegram Notification
-            await sendTelegramNotification('login', {
-                displayName: data.studentData.fullName || registration,
-                email: data.studentData.email || 'N/A',
-                role: `Student (${data.studentData.course || 'N/A'})`
-            });
-
-            navigate('/student-portal');
         } catch (err) {
             console.error("Student login error:", err);
-            setError(err.message === "Backend not running. Please use 'npx vercel dev' instead of 'npm run dev'." 
-                ? err.message 
-                : 'System connectivity error. Try again.');
+            setError('Login error. Please verify your Roll No. or Mobile Number.');
         } finally {
             setIsLoading(false);
         }
@@ -119,17 +171,16 @@ export default function StudentLogin() {
 
                     <form onSubmit={handleLogin} className="space-y-6 relative z-10">
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-blue-200 uppercase tracking-wider ml-4">Registration ID</label>
+                            <label className="text-xs font-bold text-blue-200 uppercase tracking-wider ml-4">Registration ID / Roll No.</label>
                             <div className="relative group">
                                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                                     <Hash className="h-5 w-5 text-blue-300/50 group-focus-within:text-blue-400 transition-colors" />
                                 </div>
                                 <input
                                     type="text"
-                                    required
                                     value={registration}
                                     onChange={(e) => setRegistration(e.target.value)}
-                                    placeholder="Enter Reg ID"
+                                    placeholder="Enter Roll / Reg No"
                                     className="w-full bg-slate-900/50 border border-white/10 text-white rounded-2xl py-4 pl-12 pr-4 font-bold placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all hover:bg-slate-900/70"
                                 />
                             </div>
@@ -143,10 +194,9 @@ export default function StudentLogin() {
                                 </div>
                                 <input
                                     type="text"
-                                    required
                                     value={mobile}
                                     onChange={(e) => setMobile(e.target.value)}
-                                    placeholder="Registered Mobile"
+                                    placeholder="Registered Mobile No"
                                     className="w-full bg-slate-900/50 border border-white/10 text-white rounded-2xl py-4 pl-12 pr-4 font-bold placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all hover:bg-slate-900/70"
                                 />
                             </div>
