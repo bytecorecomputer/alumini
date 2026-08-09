@@ -248,17 +248,22 @@ export async function syncFromGoogleSheet(csvUrl, centerName = 'Thiriya') {
 
             const studentObj = {
                 registration: cleanRegKey,
+                regNo: cleanRegKey,
                 fullName: fullName || 'Unknown Student',
+                name: fullName || 'Unknown Student',
                 status: normalizeStatus(statusStr),
                 course: courseStr || 'N/A',
+                trade: courseStr || 'N/A',
                 fatherName: fatherNameStr || '',
                 mobile: mobileStr || '',
+                mob: mobileStr || '',
                 address: addressStr || '',
                 center: detectedCenter,
                 admissionDate: normalizeDateToYYYYMMDD(admissionDateRaw),
                 admissionFee: parsedAdmissionFee,
                 registrationFee: parsedAdmissionFee,
                 totalFees: parsedTotalFee,
+                totalFee: parsedTotalFee,
                 installments: rawInstallments,
                 paidFees: 0,
                 updatedAt: Date.now()
