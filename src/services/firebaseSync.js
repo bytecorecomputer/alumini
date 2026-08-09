@@ -2,11 +2,11 @@
  * firebaseSync.js
  * -----------------------------------------------------------------------
  * Writes parsed student objects from fee-sync-kit directly to Firestore.
- * Updates global students collection safely without sub-collection permission errors.
+ * Updates global students collection safely without permission errors.
  * -----------------------------------------------------------------------
  */
 
-import { writeBatch, doc, collection } from 'firebase/firestore';
+import { writeBatch, doc } from 'firebase/firestore';
 import { fetchSheetRows } from './googleSheetFetch';
 import { buildStudentsFromRows } from '../utils/csvToStudents';
 
@@ -32,17 +32,9 @@ export async function syncStudentsToFirestore(db, centreId, students) {
     for (const student of chunk) {
       const safeId = String(student.regNo || student.registration).trim().replace(/[/\\]/g, '_');
       
-      // Write to global students path (Allowed by Firestore Security Rules)
+      // Write ONLY to main 'students' collection (Guaranteed write permissions in Firestore rules)
       const globalRef = doc(db, 'students', safeId);
       batch.set(globalRef, student, { merge: true });
-
-      // Try writing to centre-specific subcollection silently (swallow rules permission errors)
-      try {
-        const centreRef = doc(collection(db, `centres/${centreId}/students`), safeId);
-        batch.set(centreRef, student, { merge: true });
-      } catch (e) {
-        // Ignore permission warnings on subcollection
-      }
     }
 
     await batch.commit();
