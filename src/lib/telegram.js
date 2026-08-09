@@ -170,17 +170,25 @@ ${details.studentList}
 `.trim();
         }
 
-        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text: message,
-                parse_mode: 'HTML'
-            })
-        });
+        try {
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            }).catch(async () => {
+                await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${encodeURIComponent(chatId)}&text=${encodeURIComponent(message)}&parse_mode=HTML`, {
+                    mode: 'no-cors'
+                });
+            });
+        } catch (e) {
+            // Swallow network/CORS errors silently so app UI is never blocked
+        }
 
     } catch (error) {
-        console.error("Telegram notification failed:", error);
+        console.warn("Telegram notification warning (suppressed):", error.message);
     }
 };

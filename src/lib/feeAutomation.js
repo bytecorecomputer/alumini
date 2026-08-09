@@ -8,13 +8,17 @@ import { calculateCourseExpiry, parseDateToYYYYMM } from "./utils";
  * Automatically cleans up any corrupted or legacy installments (e.g. Total Fee ₹6000, S.No, Roll No, Mobile No, or amounts < 50)
  * from student object to ensure 100% clean financial ledger calculations.
  */
+/**
+ * Automatically cleans up any corrupted or legacy installments (e.g. Total Fee ₹6000, S.No, Roll No, Mobile No, or amounts < 50)
+ * from student object to ensure 100% clean financial ledger calculations.
+ */
 export function sanitizeStudentData(student) {
     if (!student) return student;
 
-    const totalFees = parseInt(student.totalFees || 0, 10);
-    const admissionFee = parseInt(student.admissionFee || student.registrationFee || 0, 10);
-    const regIdNum = parseInt(String(student.registration || '').replace(/\D/g, ''), 10);
-    const mobileNum = parseInt(String(student.mobile || '').replace(/\D/g, ''), 10);
+    const totalFees = parseInt(student.totalFees ?? student.totalFee ?? 0, 10);
+    const admissionFee = parseInt(student.admissionFee ?? student.registrationFee ?? 0, 10);
+    const regIdNum = parseInt(String(student.registration || student.regNo || '').replace(/\D/g, ''), 10);
+    const mobileNum = parseInt(String(student.mobile || student.mob || '').replace(/\D/g, ''), 10);
 
     let rawInsts = Array.isArray(student.installments) ? student.installments : [];
 
@@ -49,8 +53,16 @@ export function sanitizeStudentData(student) {
 
     return {
         ...student,
+        course: student.course || student.trade || 'N/A',
+        mobile: student.mobile || student.mob || '',
+        totalFees: totalFees,
+        totalFee: totalFees,
+        admissionFee: admissionFee,
+        registrationFee: admissionFee,
         installments: cleanInsts,
-        paidFees: cleanPaidFees
+        paidFees: cleanPaidFees,
+        totalPaid: cleanPaidFees,
+        balanceDue: Math.max(0, totalFees - cleanPaidFees)
     };
 }
 
