@@ -9,6 +9,7 @@ import {
     Loader2, Lock, Sparkles, Zap, Heart, Info, Monitor
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import StudentGraduatesShowcase from '../components/home/StudentGraduatesShowcase';
 
 // Import Static Assets for Collage Hero
 import labImg1 from '../assets/images/computer lab/students (1).webp';
@@ -283,7 +284,6 @@ const Gallery = () => {
                                                     {item.category}
                                                 </div>
                                             </div>
-                                            <h3 className="text-2xl font-black text-white tracking-tighter uppercase italic line-clamp-1">{item.title}</h3>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -292,6 +292,9 @@ const Gallery = () => {
                     </div>
                 )}
             </div>
+
+            {/* Star Graduates Showcase Section */}
+            <StudentGraduatesShowcase />
 
             {/* Lightbox Rendering */}
             <AnimatePresence>

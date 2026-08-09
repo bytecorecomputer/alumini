@@ -14,6 +14,7 @@ import { QUIZ_BANK } from '../lib/quizData';
 import { db } from '../firebase/firestore';
 import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import LabGalleryPreview from '../components/home/LabGalleryPreview';
+import StudentGraduatesShowcase from '../components/home/StudentGraduatesShowcase';
 
 export default function Home() {
     const { user, role } = useAuth();
@@ -156,6 +157,9 @@ export default function Home() {
                     </Link>
                 </motion.div>
             </div>
+
+            {/* --- STAR GRADUATES SHOWCASE --- */}
+            <StudentGraduatesShowcase />
 
             {/* --- CODERAFROJ ARENA BANNER --- */}
             <div className="py-20 px-6 bg-slate-950 relative overflow-hidden">
