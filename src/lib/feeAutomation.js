@@ -15,8 +15,14 @@ import { calculateCourseExpiry, parseDateToYYYYMM } from "./utils";
 export function sanitizeStudentData(student) {
     if (!student) return student;
 
-    const totalFees = parseInt(student.totalFees ?? student.totalFee ?? 0, 10);
-    const admissionFee = parseInt(student.admissionFee ?? student.registrationFee ?? 0, 10);
+    let rawTotal = parseInt(String(student.totalFees ?? student.totalFee ?? 0).replace(/[^0-9.]/g, ''), 10);
+    if (isNaN(rawTotal) || rawTotal > 50000 || rawTotal < 0) {
+        rawTotal = 6000;
+    }
+
+    let admissionFee = parseInt(String(student.admissionFee ?? student.registrationFee ?? 0).replace(/[^0-9.]/g, ''), 10);
+    if (isNaN(admissionFee) || admissionFee > 5000) admissionFee = 200;
+
     const regIdNum = parseInt(String(student.registration || student.regNo || '').replace(/\D/g, ''), 10);
     const mobileNum = parseInt(String(student.mobile || student.mob || '').replace(/\D/g, ''), 10);
 
@@ -24,23 +30,29 @@ export function sanitizeStudentData(student) {
 
     // Filter out metadata artifacts (Roll No, S.No, Mobile No, Total Fee duplicates)
     const validInsts = rawInsts.filter(inst => {
-        const amt = parseInt(inst.amount || 0, 10);
+        const amtStr = String(inst.amount || inst.amountDisplay || '').replace(/[^0-9.]/g, '');
+        const amt = parseInt(amtStr || 0, 10);
         if (isNaN(amt) || amt < 50 || amt > 30000) return false;
-        if (totalFees > 0 && amt === totalFees && rawInsts.length > 1) return false;
+        if (rawTotal > 0 && amt === rawTotal && rawInsts.length > 1) return false;
         if (regIdNum > 0 && amt === regIdNum) return false;
         if (mobileNum > 0 && amt === mobileNum) return false;
-        if (admissionFee > 0 && amt === admissionFee && rawInsts.length > 1 && inst.note?.includes('Reg')) return false;
         return true;
     });
 
     // Deduplicate by unique amount + date
     const uniqueMap = new Map();
     validInsts.forEach(inst => {
-        const amt = parseInt(inst.amount || 0, 10);
-        const dt = inst.date || '';
+        const amtStr = String(inst.amount || inst.amountDisplay || '').replace(/[^0-9.]/g, '');
+        const amt = parseInt(amtStr || 0, 10);
+        const dt = inst.date || inst.dateDisplay || '';
         const key = `${amt}_${dt}`;
         if (!uniqueMap.has(key)) {
-            uniqueMap.set(key, inst);
+            uniqueMap.set(key, {
+                ...inst,
+                amount: amt,
+                date: dt,
+                dateDisplay: dt
+            });
         }
     });
 
@@ -49,20 +61,21 @@ export function sanitizeStudentData(student) {
         inst.installmentNo = idx + 1;
     });
 
-    const cleanPaidFees = cleanInsts.reduce((sum, inst) => sum + parseInt(inst.amount || 0, 10), 0);
+    const cleanPaidSum = cleanInsts.reduce((sum, inst) => sum + (Number(inst.amount) || 0), 0);
+    const cleanPaidFees = Math.min(cleanPaidSum, rawTotal);
 
     return {
         ...student,
         course: student.course || student.trade || 'N/A',
         mobile: student.mobile || student.mob || '',
-        totalFees: totalFees,
-        totalFee: totalFees,
+        totalFees: rawTotal,
+        totalFee: rawTotal,
         admissionFee: admissionFee,
         registrationFee: admissionFee,
         installments: cleanInsts,
         paidFees: cleanPaidFees,
         totalPaid: cleanPaidFees,
-        balanceDue: Math.max(0, totalFees - cleanPaidFees)
+        balanceDue: Math.max(0, rawTotal - cleanPaidFees)
     };
 }
 

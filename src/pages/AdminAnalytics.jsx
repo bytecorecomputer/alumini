@@ -9,10 +9,13 @@ import {
 } from 'recharts';
 import { 
     BarChart3, TrendingUp, Users, Wallet, AlertCircle, 
-    MapPin, ChevronLeft, Download, ShieldCheck, PieChart as PieChartIcon, Calendar, Zap, AlertTriangle, Building, Activity, Map, Smartphone, Award, CheckCircle, Briefcase
+    MapPin, ChevronLeft, Download, ShieldCheck, PieChart as PieChartIcon, Calendar, Zap, AlertTriangle, Building, Activity, Map, Smartphone, Award, CheckCircle, Briefcase, RefreshCw
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { sanitizeStudentData } from '../lib/feeAutomation';
+import { syncAllCentres } from '../services/studentLookup';
+import toast from 'react-hot-toast';
 
 const COLORS = ['#2563eb', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#f43f5e', '#84cc16'];
 const PIE_COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f43f5e', '#84cc16'];
@@ -45,12 +48,30 @@ export default function AdminAnalytics() {
     const [addressFilter, setAddressFilter] = useState('all');
     const [appInstalls, setAppInstalls] = useState(0);
 
+    const [syncing, setSyncing] = useState(false);
     const isOwner = user?.role === 'admin' || role === 'super_admin';
 
     const fetchAllData = async () => {
-        const q = query(collection(db, "students"));
-        const snap = await getDocs(q);
-        setStudents(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        setLoading(true);
+        try {
+            const q = query(collection(db, "students"));
+            const snap = await getDocs(q);
+            const rawDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+            const cleanStudents = rawDocs
+                .map(s => sanitizeStudentData(s))
+                .filter(s => {
+                    const regStr = String(s.registration || s.id || '');
+                    if (!regStr || regStr === 'undefined' || regStr === 'null') return false;
+                    const nameStr = String(s.fullName || s.studentName || '').trim();
+                    if (!nameStr || nameStr === 'N/A' || nameStr === '594' || nameStr === '1417') return false;
+                    return true;
+                });
+
+            setStudents(cleanStudents);
+        } catch (e) {
+            console.error("Error fetching students analytics:", e);
+        }
         
         try {
             const userSnap = await getDocs(query(collection(db, "users")));
@@ -69,6 +90,21 @@ export default function AdminAnalytics() {
         }
 
         setLoading(false);
+    };
+
+    const handleSyncLiveSheet = async () => {
+        try {
+            setSyncing(true);
+            toast.loading("Syncing with live Google Sheets...", { id: "sheet-sync" });
+            await syncAllCentres(db);
+            await fetchAllData();
+            toast.success("Live Sheet synchronization complete!", { id: "sheet-sync" });
+        } catch (err) {
+            console.error("Sync error:", err);
+            toast.error("Failed to sync live sheet.", { id: "sheet-sync" });
+        } finally {
+            setSyncing(false);
+        }
     };
 
     useEffect(() => {
@@ -346,7 +382,8 @@ export default function AdminAnalytics() {
             return b.pending - a.pending;
         });
 
-        const recoveryRate = totalBilled > 0 ? ((totalRevenue / totalBilled) * 100).toFixed(1) : 0;
+        const rawRate = totalBilled > 0 ? (totalRevenue / totalBilled) * 100 : 0;
+        const recoveryRate = Math.min(100, Math.max(0, rawRate)).toFixed(1);
 
         // Alumni Analytics Calculation
         const alumniList = systemUsers.filter(u => u.role === 'alumni');
@@ -434,6 +471,14 @@ export default function AdminAnalytics() {
                                 {monthOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                             </select>
                         </div>
+
+                        <button 
+                            onClick={handleSyncLiveSheet} 
+                            disabled={syncing}
+                            className="w-full md:w-auto justify-center px-5 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-emerald-900/50 flex items-center gap-2 transition-all active:scale-95 disabled:opacity-50"
+                        >
+                            <RefreshCw size={14} className={syncing ? "animate-spin" : ""} /> {syncing ? "Syncing..." : "Sync Live Sheet"}
+                        </button>
 
                         <button onClick={exportToCSV} className="w-full md:w-auto justify-center px-6 py-3.5 bg-blue-600 text-white rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-blue-900/50 flex items-center gap-2 hover:bg-blue-500 transition-all active:scale-95">
                             <Download size={14} /> Export Report
