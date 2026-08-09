@@ -16,8 +16,10 @@ import { uploadToSupabase } from '../lib/supabase';
 import { compressImage } from '../lib/imageCompression';
 import { runThiriyaMigration } from '../lib/migrateBytecoreThiriya';
 import { syncAggregateStats } from '../lib/migrateStudents';
-import { checkMonthlyFeeReminders, sanitizeStudentData } from '../lib/feeAutomation';
 import { syncFromGoogleSheet, parseRawSheetText } from '../lib/syncGoogleSheet';
+import { checkMonthlyFeeReminders, sanitizeStudentData } from '../lib/feeAutomation';
+import { syncAllCentres } from '../services/studentLookup';
+import AdminFeeOverview from '../components/AdminFeeOverview';
 import { limit, startAfter } from 'firebase/firestore';
 import { parseDateToYYYYMM } from '../lib/utils';
 
@@ -607,21 +609,16 @@ export default function CoachingAdmin() {
                         </button>
                         <button
                             onClick={async () => {
-                                if (!window.confirm("Sync Student Data from Live Google Sheet?")) return;
+                                if (!window.confirm("Sync Student Data from Live Google Sheets (Nariyawal & Thiriya) using fee-sync-kit?")) return;
                                 setIsUpdating(true);
                                 try {
-                                    // https://docs.google.com/spreadsheets/d/e/2PACX-1vSR3LLRHq4DsbOplvZ0JPfEOXjrR-wGfOUqpSUnunRD6PGiCCAX9VVcC-80-d8GEoTqQF--fX4bDjbh/pub?gid=0&single=true&output=csv
-                                    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSR3LLRHq4DsbOplvZ0JPfEOXjrR-wGfOUqpSUnunRD6PGiCCAX9VVcC-80-d8GEoTqQF--fX4bDjbh/pub?gid=0&single=true&output=csv";
-                                    const result = await syncFromGoogleSheet(csvUrl, "Nariyawal");
-                                    if (result.success) {
-                                        alert("Google Sheets Sync Complete!\n" + result.message);
-                                        window.location.reload();
-                                    } else {
-                                        throw new Error(result.message);
-                                    }
+                                    const results = await syncAllCentres(db);
+                                    const totalWritten = Object.values(results).reduce((sum, r) => sum + r.totalWritten, 0);
+                                    alert(`Fee Sync Kit Complete!\nSuccessfully updated ${totalWritten} students from Nariyawal & Thiriya Google Sheets.`);
+                                    window.location.reload();
                                 } catch (err) {
                                     console.error(err);
-                                    alert(`Google Sheets Sync failed: ${err.message}`);
+                                    alert(`Fee Sync failed: ${err.message}`);
                                 } finally {
                                     setIsUpdating(false);
                                 }
@@ -631,41 +628,10 @@ export default function CoachingAdmin() {
                                 "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
                                 isUpdating ? "bg-emerald-100 text-emerald-400 cursor-not-allowed" : "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white"
                             )}
-                            title="Sync Live Nariyawal Google Sheet"
+                            title="Sync Both Centres via Fee Sync Kit"
                         >
                             {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
-                            <span className="font-black text-[10px] uppercase">Sync G-Sheet</span>
-                        </button>
-
-                        <button
-                            onClick={async () => {
-                                if (!window.confirm("Sync Student Data from Thiriya Live Google Sheet?")) return;
-                                setIsUpdating(true);
-                                try {
-                                    const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRE02PgxnsZb22qYQRIqe3CQZIoCNlPmJ8975fmmrT2KIn40KPYO2PhBrEuNKgEu6ebCr-r0-yFMqzd/pub?gid=967039806&single=true&output=csv";
-                                    const result = await syncFromGoogleSheet(csvUrl, "Thiriya");
-                                    if (result.success) {
-                                        alert("Thiriya Google Sheets Sync Complete!\n" + result.message);
-                                        window.location.reload();
-                                    } else {
-                                        throw new Error(result.message);
-                                    }
-                                } catch (err) {
-                                    console.error(err);
-                                    alert(`Thiriya Google Sheets Sync failed: ${err.message}`);
-                                } finally {
-                                    setIsUpdating(false);
-                                }
-                            }}
-                            disabled={isUpdating}
-                            className={cn(
-                                "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
-                                isUpdating ? "bg-purple-100 text-purple-400 cursor-not-allowed" : "bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white"
-                            )}
-                            title="Sync Live Thiriya Google Sheet"
-                        >
-                            {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
-                            <span className="font-black text-[10px] uppercase">Sync Thiriya Sheet</span>
+                            <span className="font-black text-[10px] uppercase">Sync Both Sheets (Kit)</span>
                         </button>
                         <div className="flex gap-2">
                             <select
