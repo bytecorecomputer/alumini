@@ -2,7 +2,7 @@
  * csvToStudents.js
  * -----------------------------------------------------------------------
  * Raw Google Sheet CSV to clean student objects converter from fee-sync-kit.
- * Dynamic header detection matching columns by name, not fixed hardcoded index.
+ * Dynamic header detection matching columns by name.
  * -----------------------------------------------------------------------
  */
 
@@ -17,7 +17,7 @@ function normalizeHeader(text) {
 }
 
 const KNOWN_COLUMNS = {
-  registration: ['registration', 'reg no', 'registration no', 'roll no', 'sr no'],
+  registration: ['roll no', 'reg no', 'registration', 'registration no', 'sr no'],
   studentName: ['student name', 'name'],
   status: ['status'],
   course: ['course', 'trade'],
@@ -54,14 +54,20 @@ export function detectColumnMap(rows) {
     columnIndex[key] = idx;
   }
 
+  // Ensure Registration column doesn't pick S.No if Roll No exists in column 1
+  if (columnIndex.registration === 0 && headerCells[1] && (headerCells[1].includes('roll') || headerCells[1].includes('reg'))) {
+    columnIndex.registration = 1;
+  }
+
   const feeDateColumns = [];
   headerCells.forEach((cell, idx) => {
-    if (cell.includes('fee') && cell.includes('date')) {
+    // Explicitly exclude metadata columns (Admission Fee, Total Fee, etc.)
+    if (idx >= 11 || (cell.includes('fee') && cell.includes('date') && !cell.includes('admission') && !cell.includes('total'))) {
       feeDateColumns.push(idx);
     }
   });
 
-  // Fallback for fee date columns if headers are labeled differently (e.g. Cols 11+)
+  // Fallback for fee date columns starting at index 11
   if (feeDateColumns.length === 0) {
     for (let idx = 11; idx < headerCells.length; idx++) {
       feeDateColumns.push(idx);
