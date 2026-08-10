@@ -284,7 +284,8 @@ export default function AdminAnalytics() {
 
                 if (s.installments && s.installments.length > 0) {
                     s.installments.forEach(inst => {
-                        const instMonth = parseDateToYYYYMM(inst.date);
+                        const instDate = inst.date || inst.dateDisplay || inst.raw || '';
+                        const instMonth = parseDateToYYYYMM(instDate);
                         if (instMonth === selectedMonth) paidThisMonth += (Number(inst.amount) || 0);
                     });
                 } else if (isAdmittedThisMonth) {
@@ -328,7 +329,8 @@ export default function AdminAnalytics() {
                 // Installments
                 if (s.installments && s.installments.length > 0) {
                     s.installments.forEach(inst => {
-                        if (parseDateToYYYYMM(inst.date) === selectedMonth) paidThisMonth += (Number(inst.amount) || 0);
+                        const instDate = inst.date || inst.dateDisplay || inst.raw || '';
+                        if (parseDateToYYYYMM(instDate) === selectedMonth) paidThisMonth += (Number(inst.amount) || 0);
                     });
                 } else if (admMonth === selectedMonth) {
                     paidThisMonth += (Number(s.oldPaidFees) || 0);

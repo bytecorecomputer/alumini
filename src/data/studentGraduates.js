@@ -78,9 +78,9 @@ export const STUDENT_GRADUATES = [
   },
   {
     "id": "grad_10",
-    "name": "Anish (tally0",
-    "course": "GRADUATE",
-    "displayName": "Anish (tally0 (GRADUATE)",
+    "name": "Anish",
+    "course": "TALLY",
+    "displayName": "Anish (TALLY)",
     "src": "/images/students/ANISH%20(TALLY0.jpg",
     "rawFile": "ANISH (TALLY0.jpg"
   },
@@ -510,9 +510,9 @@ export const STUDENT_GRADUATES = [
   },
   {
     "id": "grad_64",
-    "name": "Surajbhan  (adca0",
-    "course": "GRADUATE",
-    "displayName": "Surajbhan  (adca0 (GRADUATE)",
+    "name": "Surajbhan",
+    "course": "ADCA",
+    "displayName": "Surajbhan (ADCA)",
     "src": "/images/students/SURAJBHAN%20%20(ADCA0.jpg",
     "rawFile": "SURAJBHAN  (ADCA0.jpg"
   },

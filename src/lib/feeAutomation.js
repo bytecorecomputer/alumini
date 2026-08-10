@@ -3,6 +3,7 @@ import { auth } from "../firebase/auth";
 import { collection, getDocs, doc, setDoc, getDoc, query, where } from "firebase/firestore";
 import { sendTelegramNotification } from "./telegram";
 import { calculateCourseExpiry, parseDateToYYYYMM } from "./utils";
+import { STUDENT_GRADUATES } from "../data/studentGraduates";
 
 /**
  * Automatically cleans up any corrupted or legacy installments (e.g. Total Fee ₹6000, S.No, Roll No, Mobile No, or amounts < 50)
@@ -64,10 +65,26 @@ export function sanitizeStudentData(student) {
     const cleanPaidSum = cleanInsts.reduce((sum, inst) => sum + (Number(inst.amount) || 0), 0);
     const cleanPaidFees = Math.min(cleanPaidSum, rawTotal);
 
+    let photoUrl = student.photoUrl || student.photo || '';
+    if (!photoUrl) {
+        const nameToSearch = String(student.fullName || student.name || student.studentName || '').toLowerCase().trim();
+        const firstName = nameToSearch.split(' ')[0];
+        if (firstName.length > 2) {
+            const matchedGrad = STUDENT_GRADUATES.find(g => {
+                const gName = g.name.toLowerCase();
+                return nameToSearch.includes(gName) || gName.includes(firstName);
+            });
+            if (matchedGrad) {
+                photoUrl = matchedGrad.src;
+            }
+        }
+    }
+
     return {
         ...student,
         course: student.course || student.trade || 'N/A',
         mobile: student.mobile || student.mob || '',
+        photoUrl: photoUrl,
         totalFees: rawTotal,
         totalFee: rawTotal,
         admissionFee: admissionFee,
