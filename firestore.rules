@@ -16,9 +16,15 @@ service cloud.firestore {
       allow delete: if request.auth != null && request.auth.uid == userId;
     }
 
-    // 2. Students: Public read (for client-side login), Restricted write
+    // 2. Students: contains PII (name, father's name, mobile, address, fees).
+    // Reads require either: the student's own authenticated session (their
+    // Firebase Auth uid == the doc id, set by /api/student-login after
+    // verifying registration + mobile server-side), or an admin. Login
+    // itself never needs a client-side Firestore read of this collection —
+    // it goes through the secure server API which uses the Admin SDK and
+    // bypasses these rules entirely.
     match /students/{studentId} {
-      allow read: if true; 
+      allow read: if isAdmin() || (request.auth != null && request.auth.uid == studentId);
       // Allow updates only to photoUrl and updatedAt to prevent tampering with fees or course data
       allow update: if request.auth != null && request.auth.uid == studentId && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['photoUrl', 'updatedAt']); 
       // Full write still requires admin role

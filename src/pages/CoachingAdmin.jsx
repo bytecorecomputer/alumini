@@ -14,7 +14,6 @@ import {
 import { cn } from '../lib/utils';
 import { uploadToSupabase } from '../lib/supabase';
 import { compressImage } from '../lib/imageCompression';
-import { runThiriyaMigration } from '../lib/migrateBytecoreThiriya';
 import { syncAggregateStats } from '../lib/migrateStudents';
 import { syncFromGoogleSheet, parseRawSheetText } from '../lib/syncGoogleSheet';
 import { checkMonthlyFeeReminders, sanitizeStudentData } from '../lib/feeAutomation';
@@ -542,79 +541,12 @@ export default function CoachingAdmin() {
                     <div className="flex flex-wrap gap-4 w-full md:w-auto">
                         <button
                             onClick={async () => {
-                                if (!window.confirm("Initiate Global Database Sync? \nThis will merge CSV installments and enforce standard fees.")) return;
-                                setIsUpdating(true);
-                                try {
-                                    // Small delay for UI feel
-                                    await new Promise(r => setTimeout(r, 500));
-
-                                    const response = await fetch('/ByteCore%20%20(1).csv');
-                                    if (!response.ok) throw new Error("CSV file not found");
-                                    const text = await response.text();
-
-                                    const { runMigration, applyStandardFees } = await import('../lib/migrateStudents');
-
-                                    console.log("Starting Migration...");
-                                    const migratedCount = await runMigration(text);
-
-                                    console.log("Applying Standard Fees...");
-                                    const standardizedCount = await applyStandardFees();
-
-                                    alert(`Sync Complete!\n- Processed: ${migratedCount} students\n- Fees Standardized: ${standardizedCount} students`);
-                                } catch (err) {
-                                    console.error(err);
-                                    alert(`Sync failed: ${err.message}`);
-                                } finally {
-                                    setIsUpdating(false);
-                                }
-                            }}
-                            disabled={isUpdating}
-                            className={cn(
-                                "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
-                                isUpdating ? "bg-blue-100 text-blue-400 cursor-not-allowed" : "bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white"
-                            )}
-                            title="Global Database Sync"
-                        >
-                            {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
-                            <span className="font-black text-[10px] uppercase">Sync Database</span>
-                        </button>
-
-                        <button
-                            onClick={async () => {
-                                if (!window.confirm("Sync Student Data from 'bytecore thiriya.csv'?")) return;
-                                setIsUpdating(true);
-                                try {
-                                    const response = await fetch('/bytecore%20thiriya.csv');
-                                    if (!response.ok) throw new Error("CSV file not found");
-                                    const text = await response.text();
-
-                                    const migratedCount = await runThiriyaMigration(text);
-                                    alert(`Thiriya Sync Complete!\n- Processed: ${migratedCount} students`);
-                                } catch (err) {
-                                    console.error(err);
-                                    alert(`Thiriya Sync failed: ${err.message}`);
-                                } finally {
-                                    setIsUpdating(false);
-                                }
-                            }}
-                            disabled={isUpdating}
-                            className={cn(
-                                "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
-                                isUpdating ? "bg-amber-100 text-amber-400 cursor-not-allowed" : "bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white"
-                            )}
-                            title="Sync Thiriya CSV"
-                        >
-                            {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
-                            <span className="font-black text-[10px] uppercase">Sync Thiriya</span>
-                        </button>
-                        <button
-                            onClick={async () => {
-                                if (!window.confirm("Sync Student Data from Live Google Sheets (Nariyawal & Thiriya) using fee-sync-kit?")) return;
+                                if (!window.confirm("Sync all student data from the live Nariyawal & Thiriya Google Sheets?\nThis is the single source of truth — nothing else will overwrite it.")) return;
                                 setIsUpdating(true);
                                 try {
                                     const results = await syncAllCentres(db);
                                     const totalWritten = Object.values(results).reduce((sum, r) => sum + r.totalWritten, 0);
-                                    alert(`Fee Sync Kit Complete!\nSuccessfully updated ${totalWritten} students from Nariyawal & Thiriya Google Sheets.`);
+                                    alert(`Google Sheets Sync Complete!\nSuccessfully updated ${totalWritten} students from Nariyawal & Thiriya Google Sheets.`);
                                     window.location.reload();
                                 } catch (err) {
                                     console.error(err);
@@ -628,10 +560,10 @@ export default function CoachingAdmin() {
                                 "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
                                 isUpdating ? "bg-emerald-100 text-emerald-400 cursor-not-allowed" : "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white"
                             )}
-                            title="Sync Both Centres via Fee Sync Kit"
+                            title="Sync Both Centres from Live Google Sheets"
                         >
                             {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
-                            <span className="font-black text-[10px] uppercase">Sync Both Sheets (Kit)</span>
+                            <span className="font-black text-[10px] uppercase">Sync From Google Sheets</span>
                         </button>
                         <div className="flex gap-2">
                             <select
@@ -690,7 +622,8 @@ export default function CoachingAdmin() {
                                         </div>
                                         <div className="min-w-0 flex-1">
                                             <h4 className="font-black text-slate-900 text-base tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span className="text-[9px] font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-md tracking-wider">#{student.registration}</span>
                                                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
                                                 <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
                                             </div>
@@ -750,7 +683,8 @@ export default function CoachingAdmin() {
                                                 </div>
                                                 <div className="min-w-0">
                                                     <h4 className="font-black text-slate-900 text-lg tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
-                                                    <div className="flex items-center gap-2">
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md tracking-wider">#{student.registration}</span>
                                                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
                                                         <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
                                                     </div>
@@ -772,7 +706,7 @@ export default function CoachingAdmin() {
                                             </div>
                                         </td>
                                         <td className="px-10 py-6">
-                                            <div className="space-y-2 min-w-[80px]">
+                                            <div className="space-y-2 min-w-[100px]">
                                                 <div className="flex justify-between text-[10px] font-black text-slate-500">
                                                     <span>₹{(student.paidFees || 0) + (student.oldPaidFees || 0)}</span>
                                                     <span className="opacity-40">/ {student.totalFees || 0}</span>
@@ -780,6 +714,11 @@ export default function CoachingAdmin() {
                                                 <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
                                                     <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(100, (((student.paidFees || 0) + (student.oldPaidFees || 0)) / (student.totalFees || 1)) * 100)}%` }} className="h-full bg-blue-500 rounded-full" />
                                                 </div>
+                                                {student.installments?.length > 0 && (
+                                                    <p className="text-[9px] font-bold text-slate-400">
+                                                        {student.installments.length} installment{student.installments.length > 1 ? 's' : ''} · last {student.installments[student.installments.length - 1]?.date || '-'}
+                                                    </p>
+                                                )}
                                             </div>
                                         </td>
                                         <td className="px-10 py-6 text-right">

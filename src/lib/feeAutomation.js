@@ -5,6 +5,22 @@ import { sendTelegramNotification } from "./telegram";
 import { calculateCourseExpiry, parseDateToYYYYMM } from "./utils";
 import { STUDENT_GRADUATES } from "../data/studentGraduates";
 
+// Precompute a lowercase-name lookup ONCE at module load instead of doing an
+// O(72) Array.find() with per-item toLowerCase() calls for every single
+// student on every single Firestore snapshot re-render. With a few hundred
+// students this loop was re-running thousands of times per sync and was the
+// main cause of the admin panel feeling slow.
+const _graduateNameIndex = STUDENT_GRADUATES.map(g => ({ ...g, _lower: g.name.toLowerCase() }));
+
+function findGraduateByName(nameToSearch, firstName) {
+    for (const g of _graduateNameIndex) {
+        if (nameToSearch.includes(g._lower) || g._lower.includes(firstName)) {
+            return g;
+        }
+    }
+    return null;
+}
+
 /**
  * Automatically cleans up any corrupted or legacy installments (e.g. Total Fee ₹6000, S.No, Roll No, Mobile No, or amounts < 50)
  * from student object to ensure 100% clean financial ledger calculations.
@@ -16,13 +32,18 @@ import { STUDENT_GRADUATES } from "../data/studentGraduates";
 export function sanitizeStudentData(student) {
     if (!student) return student;
 
+    // NOTE: previously this silently replaced any totalFees > ₹50,000 with a
+    // hardcoded ₹6000, and any admissionFee > ₹5000 with a hardcoded ₹200.
+    // That destroyed real fee values coming from the Google Sheet on every
+    // single read. We now only correct genuinely invalid values (NaN /
+    // negative) and otherwise trust the real number from the sheet.
     let rawTotal = parseInt(String(student.totalFees ?? student.totalFee ?? 0).replace(/[^0-9.]/g, ''), 10);
-    if (isNaN(rawTotal) || rawTotal > 50000 || rawTotal < 0) {
-        rawTotal = 6000;
+    if (isNaN(rawTotal) || rawTotal < 0) {
+        rawTotal = 0;
     }
 
     let admissionFee = parseInt(String(student.admissionFee ?? student.registrationFee ?? 0).replace(/[^0-9.]/g, ''), 10);
-    if (isNaN(admissionFee) || admissionFee > 5000) admissionFee = 200;
+    if (isNaN(admissionFee) || admissionFee < 0) admissionFee = 0;
 
     const regIdNum = parseInt(String(student.registration || student.regNo || '').replace(/\D/g, ''), 10);
     const mobileNum = parseInt(String(student.mobile || student.mob || '').replace(/\D/g, ''), 10);
@@ -70,10 +91,7 @@ export function sanitizeStudentData(student) {
         const nameToSearch = String(student.fullName || student.name || student.studentName || '').toLowerCase().trim();
         const firstName = nameToSearch.split(' ')[0];
         if (firstName.length > 2) {
-            const matchedGrad = STUDENT_GRADUATES.find(g => {
-                const gName = g.name.toLowerCase();
-                return nameToSearch.includes(gName) || gName.includes(firstName);
-            });
+            const matchedGrad = findGraduateByName(nameToSearch, firstName);
             if (matchedGrad) {
                 photoUrl = matchedGrad.src;
             }

@@ -1,68 +1,18 @@
 import React, { useState } from 'react';
 import SEO from '../components/common/SEO';
 import { motion } from 'framer-motion';
-import { Database, Loader2, Zap, Building, ArrowRight, CheckCircle, Star } from 'lucide-react';
+import { Building, ArrowRight, Star } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../app/common/AuthContext';
-import { runMigration } from '../lib/migrateStudents';
-import { cn } from '../lib/utils';
-import toast from 'react-hot-toast';
 
 import HeroSection from '../components/home/HeroSection';
 import CourseCarousel from '../components/home/CourseCarousel';
-import { QUIZ_BANK } from '../lib/quizData';
-import { db } from '../firebase/firestore';
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import LabGalleryPreview from '../components/home/LabGalleryPreview';
 import StudentGraduatesShowcase from '../components/home/StudentGraduatesShowcase';
 
 export default function Home() {
     const { user, role } = useAuth();
-    const [isMigrating, setIsMigrating] = useState(false);
-    const [migrationDone, setMigrationDone] = useState(false);
     const navigate = useNavigate();
-
-    const isOwner = role === 'admin' || role === 'super_admin';
-
-    const handleDataMigration = async () => {
-        try {
-            setIsMigrating(true);
-            
-            // Seed Quizzes
-            for (const key of ['c_programming', 'python']) {
-                if (QUIZ_BANK[key]) {
-                    const quizData = QUIZ_BANK[key];
-                    const qRef = collection(db, 'custom_quizzes');
-                    const qSnap = await getDocs(query(qRef, where('courseId', '==', quizData.title)));
-                    if (qSnap.empty) {
-                        await addDoc(qRef, {
-                            courseId: quizData.title,
-                            topicId: quizData.description,
-                            questions: quizData.questions.map(q => ({
-                                question: q.q,
-                                options: q.options,
-                                correctAnswer: q.correct,
-                                explanation: q.explanation
-                            })),
-                            createdAt: new Date(),
-                            createdBy: 'System Seed'
-                        });
-                    }
-                }
-            }
-
-            const response = await fetch('/student data.csv');
-            const csvText = await response.text();
-            const count = await runMigration(csvText);
-            setMigrationDone(true);
-            toast.success(`Success! ${count} students migrated to database.`);
-        } catch (err) {
-            console.error("Migration failed:", err);
-            toast.error("Migration failed. Check console.");
-        } finally {
-            setIsMigrating(false);
-        }
-    };
 
     return (
         <div className="bg-white overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
@@ -233,37 +183,12 @@ export default function Home() {
                 </div>
             </div >
 
-            {/* --- SECRET ADMIN MIGRATION TOOL --- */}
-            {
-                isOwner && (
-                    <div className="fixed bottom-10 left-10 z-[100]">
-                        <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="bg-white p-5 rounded-[2rem] shadow-2xl border border-slate-100 flex items-center gap-4"
-                        >
-                            <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl">
-                                <Database size={20} />
-                            </div>
-                            <div>
-                                <div className="text-[9px] font-black uppercase tracking-widest text-slate-400">Admin</div>
-                                <h4 className="text-xs font-black text-slate-900 uppercase">MIGRATE DATA</h4>
-                            </div>
-                            <button
-                                disabled={isMigrating || migrationDone}
-                                onClick={handleDataMigration}
-                                className={cn(
-                                    "py-2 px-5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 text-white transition-all shadow-md active:scale-95",
-                                    migrationDone ? "bg-emerald-500 shadow-emerald-200" : "bg-blue-600 shadow-blue-200 hover:bg-blue-700"
-                                )}
-                            >
-                                {isMigrating ? <Loader2 className="animate-spin" size={14} /> : (migrationDone ? <CheckCircle size={14} /> : <Zap size={14} />)}
-                                {migrationDone ? 'Done' : 'Execute'}
-                            </button>
-                        </motion.div>
-                    </div>
-                )
-            }
+            {/* Legacy one-time CSV migration tool removed: student data now
+                syncs exclusively from the live Google Sheets (see Admin >
+                Coaching > "Sync From Google Sheets"). Keeping this around
+                meant a real student-data CSV had to be publicly hosted in
+                /public, which was a data leak regardless of this button's
+                visibility. */}
         </div >
     );
 }

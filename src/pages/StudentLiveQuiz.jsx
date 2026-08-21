@@ -256,22 +256,21 @@ export default function StudentLiveQuiz() {
         setLoginLoading(true);
         try {
             const cleanInput = loginId.trim();
-            // Try fetching by registration ID directly
-            const studentDoc = await getDoc(doc(db, "students", cleanInput));
-            if (studentDoc.exists()) {
-                const sData = { id: studentDoc.id, ...studentDoc.data() };
-                loginStudent(sData);
-                toast.success(`Welcome back, ${sData.fullName || 'Student'}!`);
-            } else {
-                // If not found in DB, allow temporary session for live test
-                const tempStudent = {
-                    registration: `TEMP_${Date.now()}`,
-                    fullName: cleanInput,
-                    course: 'Live Test Participant'
-                };
-                loginStudent(tempStudent);
-                toast.success(`Joined live session as ${cleanInput}`);
-            }
+            // NOTE: this used to fetch the full student record directly by
+            // registration ID with no mobile/password check — anyone typing
+            // a guessed roll number here would be logged into that student's
+            // real account (mobile, fees, everything). Quick-join for a live
+            // quiz doesn't need or deserve full account access, so this now
+            // only ever creates a lightweight guest participant using the
+            // entered text as a display name. Full account login (with
+            // mobile verification) still happens on the Student Login page.
+            const tempStudent = {
+                registration: `GUEST_${Date.now()}`,
+                fullName: cleanInput,
+                course: 'Live Test Participant'
+            };
+            loginStudent(tempStudent);
+            toast.success(`Joined live session as ${cleanInput}`);
         } catch (err) {
             console.error("Login error:", err);
             toast.error("Error logging in. Try again.");

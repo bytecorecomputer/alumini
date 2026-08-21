@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
-import { db } from '../firebase/firestore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Hash, Phone, ArrowRight, Loader2, Zap } from 'lucide-react';
 import { useAuth } from '../app/common/AuthContext';
@@ -36,84 +34,48 @@ export default function StudentLogin() {
             return;
         }
 
+        if (!cleanMob) {
+            setError('Please enter your Mobile Number to verify your identity.');
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            let apiSuccess = false;
+            // Login goes exclusively through the server API, which verifies
+            // Registration ID + Mobile Number together using Firebase Admin
+            // (bypasses client Firestore rules, never exposes other students'
+            // data). We previously had a client-side Firestore fallback here
+            // that could log a person into ANY student's account just from a
+            // guessed Registration ID, with no mobile check at all — that has
+            // been removed.
+            const response = await fetch('/api/student-login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ registration: cleanReg, mobile: cleanMob })
+            });
 
-            // 1. Try Vercel API Endpoint if available
-            try {
-                const response = await fetch('/api/student-login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ registration: cleanReg, mobile: cleanMob })
-                });
+            const contentType = response.headers.get("content-type");
+            const data = contentType && contentType.includes("application/json")
+                ? await response.json()
+                : null;
 
-                const contentType = response.headers.get("content-type");
-                if (response.ok && contentType && contentType.includes("application/json")) {
-                    const data = await response.json();
-                    if (data.token) {
-                        const { signInWithCustomToken } = await import('firebase/auth');
-                        const { auth } = await import('../firebase/auth');
-                        await signInWithCustomToken(auth, data.token);
-                    }
-                    loginStudent(data.studentData);
-                    await sendTelegramNotification('login', {
-                        displayName: data.studentData.fullName || cleanReg || cleanMob,
-                        email: data.studentData.email || 'N/A',
-                        role: `Student (${data.studentData.course || 'N/A'})`
-                    });
-                    apiSuccess = true;
-                    navigate('/student-portal');
-                    return;
-                }
-            } catch (apiErr) {
-                console.warn("Backend API not reachable, attempting direct Firestore search...", apiErr);
+            if (!response.ok || !data?.token) {
+                setError(data?.error || 'Invalid Registration ID or Mobile Number.');
+                setIsLoading(false);
+                return;
             }
 
-            // 2. Direct Firestore Search Fallback (Roll No or Mobile No)
-            if (!apiSuccess) {
-                let studentData = null;
+            const { signInWithCustomToken } = await import('firebase/auth');
+            const { auth } = await import('../firebase/auth');
+            await signInWithCustomToken(auth, data.token);
 
-                // Direct document ID lookup by registration
-                if (cleanReg) {
-                    const docSnap = await getDoc(doc(db, "students", cleanReg));
-                    if (docSnap.exists()) {
-                        studentData = { id: docSnap.id, ...docSnap.data() };
-                    }
-                }
-
-                // Query lookup by registration or mobile
-                if (!studentData) {
-                    const studentsRef = collection(db, "students");
-                    let qSnap = null;
-
-                    if (cleanReg && cleanMob) {
-                        const q = query(studentsRef, where("registration", "==", cleanReg), where("mobile", "==", cleanMob));
-                        qSnap = await getDocs(q);
-                    } else if (cleanReg) {
-                        const q = query(studentsRef, where("registration", "==", cleanReg));
-                        qSnap = await getDocs(q);
-                    } else if (cleanMob) {
-                        const q = query(studentsRef, where("mobile", "==", cleanMob));
-                        qSnap = await getDocs(q);
-                    }
-
-                    if (qSnap && !qSnap.empty) {
-                        studentData = { id: qSnap.docs[0].id, ...qSnap.docs[0].data() };
-                    }
-                }
-
-                if (studentData) {
-                    loginStudent(studentData);
-                    await sendTelegramNotification('login', {
-                        displayName: studentData.fullName || cleanReg || cleanMob,
-                        email: studentData.email || 'N/A',
-                        role: `Student (${studentData.course || 'N/A'})`
-                    });
-                    navigate('/student-portal');
-                } else {
-                    setError('No student record found matching this Roll No. or Mobile Number.');
-                }
-            }
+            loginStudent(data.studentData);
+            await sendTelegramNotification('login', {
+                displayName: data.studentData.fullName || cleanReg || cleanMob,
+                email: data.studentData.email || 'N/A',
+                role: `Student (${data.studentData.course || 'N/A'})`
+            });
+            navigate('/student-portal');
         } catch (err) {
             console.error("Student login error:", err);
             setError('Login error. Please verify your Roll No. or Mobile Number.');

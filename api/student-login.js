@@ -64,11 +64,23 @@ export default async function handler(req, res) {
 
         const db = getFirestore();
         const studentsRef = db.collection('students');
-        
-        // Query the students collection
-        const snapshot = await studentsRef
-            .where('registration', '==', registration.trim())
-            .where('mobile', '==', mobile.trim())
+        const cleanReg = registration.toString().trim();
+
+        // Mobile numbers were historically stored in inconsistent formats
+        // across the two sync pipelines (raw text with spaces/+91 vs. clean
+        // digits-only). Normalize to the last 10 digits here and compare
+        // against a normalized version of the stored value so login works
+        // no matter which sync wrote that student's record.
+        const last10 = (v) => v.toString().replace(/\D/g, '').slice(-10);
+        const cleanMobile = last10(mobile);
+
+        if (cleanMobile.length !== 10) {
+            return res.status(400).json({ error: 'Please enter a valid 10-digit mobile number' });
+        }
+
+        // Try an exact match first (fast path, uses the Firestore index).
+        let snapshot = await studentsRef
+            .where('registration', '==', cleanReg)
             .limit(1)
             .get();
 
@@ -78,6 +90,10 @@ export default async function handler(req, res) {
 
         const studentDoc = snapshot.docs[0];
         const studentData = studentDoc.data();
+
+        if (last10(studentData.mobile || studentData.mob || '') !== cleanMobile) {
+            return res.status(401).json({ error: 'Invalid Registration or Mobile Number' });
+        }
 
         // Create Custom Token using registration ID as the UID
         const customToken = await getAuth().createCustomToken(studentData.registration, {
