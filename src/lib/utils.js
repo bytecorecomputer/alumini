@@ -34,13 +34,28 @@ export function parseDateToYYYYMM(dateStr) {
     if (slashMatch) {
         let y = slashMatch[3];
         if (y.length === 2) y = "20" + y;
-        
-        let m = slashMatch[2].padStart(2, '0');
-        
+
+        // The "Admission Date" column comes straight from Google Sheets'
+        // auto-formatted date cells, which (for a sheet on the default US
+        // locale) export as M/D/YYYY, not D/M/YYYY. We previously assumed
+        // the SECOND number was the month (D/M/YYYY) and only swapped when
+        // that number was > 12. That's backwards for M/D/YYYY data: any date
+        // where the day happened to be ≤ 12 got its day value used as the
+        // month instead of the real month, e.g. "3/7/2024" (7 Mar 2024) was
+        // silently filed under July. This is why one month's numbers looked
+        // wildly inflated — it was quietly absorbing entries from every
+        // other month whose day-of-month matched the affected month number.
+        //
+        // Fix: treat the FIRST number as the month (M/D/YYYY) by default,
+        // and only swap to D/M/YYYY if the first number is > 12 (which can
+        // only happen if it's actually a day, proving the format really is
+        // D/M/YYYY for that particular cell).
+        let m = slashMatch[1].padStart(2, '0');
+
         if (parseInt(m, 10) > 12) {
-            m = slashMatch[1].padStart(2, '0');
+            m = slashMatch[2].padStart(2, '0');
         }
-        
+
         if (parseInt(m, 10) > 12 || parseInt(m, 10) === 0) return null;
         return `${y}-${m}`;
     }
