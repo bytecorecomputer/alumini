@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CertificateTemplate from '../components/certificate/CertificateTemplate';
+import { subscribeCertificateBranding, DEFAULT_BRANDING } from '../lib/certificateBranding';
 import {
     generateCertificateNumber,
     generateMarksheetNumber,
@@ -52,6 +53,15 @@ export default function CertificateGenerator() {
     const [studentPhoto, setStudentPhoto] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [searching, setSearching] = useState(false);
+
+    // Live logo/signature/signatory settings (Admin > Certificate Branding).
+    // Subscribing here means the moment an admin updates the branding, the
+    // very next certificate generated (even in another open tab) uses it.
+    const [branding, setBranding] = useState(DEFAULT_BRANDING);
+    useEffect(() => {
+        const unsub = subscribeCertificateBranding(setBranding);
+        return () => unsub();
+    }, []);
 
     const [formData, setFormData] = useState({
         studentName: '',
@@ -591,6 +601,7 @@ export default function CertificateGenerator() {
                                 <div style={{ transform: 'scale(0.4)', transformOrigin: 'top left', width: '250%' }}>
                                     <CertificateTemplate
                                         ref={certificateRef}
+                                        branding={branding}
                                         data={{
                                             ...formData,
                                             studentPhoto,
@@ -616,6 +627,7 @@ export default function CertificateGenerator() {
                 <div style={{ position: 'fixed', top: '100vh', left: 0, pointerEvents: 'none', zIndex: -1 }}>
                     <CertificateTemplate
                         ref={printRef}
+                        branding={branding}
                         data={{
                             ...formData,
                             studentPhoto,

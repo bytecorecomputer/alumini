@@ -194,6 +194,13 @@ export default function AdminDashboard() {
                             color="emerald"
                         />
                         <ActionCard
+                            title="Certificate Branding"
+                            subtitle="Logo, Signature & Signatory"
+                            icon={<PenTool />}
+                            href="/admin/certificates/branding"
+                            color="purple"
+                        />
+                        <ActionCard
                             title="Live Events"
                             subtitle="Campus Activity"
                             icon={<Calendar />}

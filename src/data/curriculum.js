@@ -29,3 +29,55 @@ export const COURSE_MODULES_MAP = {
     // Fuzzy matching fallback
     "default": ["ms_word", "internet_basics"]
 };
+
+// -----------------------------------------------------------------------
+// MODULE_ID_ALIASES
+// -----------------------------------------------------------------------
+// The module IDs above (e.g. "c_programming", "ms_powerpoint", "html") are
+// the canonical IDs used everywhere in the app for UI, progress-tracking,
+// and certificates. But the actual quiz QUESTION BANKS live in
+// hindiQuizData.js under whatever key they were originally authored with,
+// which doesn't always match the canonical ID (e.g. the real question data
+// for "c_programming" is stored under "C Programming Foundation").
+//
+// This alias map lets the quiz-loading code look up the RIGHT key in
+// hindiQuizData.js for each canonical module ID, so a student's course sees
+// its real quiz instead of a "Coming Soon" placeholder. Add an entry here
+// whenever hindiQuizData.js's top-level key doesn't already equal the
+// module ID (in lowercase).
+export const MODULE_ID_ALIASES = {
+    "ms_powerpoint": "powerpoint",
+    "internet_basics": "fundamentals",
+    "c_programming": "C Programming Foundation",
+    // O-Level's web track currently shares one combined quiz bank.
+    "html": "web_design",
+    "css": "web_design",
+    "js": "web_design",
+};
+
+// -----------------------------------------------------------------------
+// flattenQuizCourseShape
+// -----------------------------------------------------------------------
+// A few question banks in hindiQuizData.js (e.g. "C Programming
+// Foundation") were authored in a "multi-topic" shape —
+// { topicName: { modules: { "Master Assessment": [...] } } } — instead of
+// the flat single-course shape { modules: { topicName: [...] } } that the
+// rest of the app expects (student quiz dashboard, live quiz builder).
+// Call this on any raw HINDI_QUIZ_DATA[key] before using it so both shapes
+// work everywhere without repeating this logic.
+export function flattenQuizCourseShape(raw, fallbackTitle) {
+    if (!raw) return raw;
+    if (raw.modules) return raw; // already flat-course shaped
+    const modules = {};
+    Object.entries(raw).forEach(([topicName, topic]) => {
+        const qs = topic?.modules?.["Master Assessment"];
+        if (Array.isArray(qs)) modules[topicName] = qs;
+    });
+    return {
+        title: fallbackTitle || 'Assessment',
+        description: "Comprehensive topic-wise assessment.",
+        icon: "brain",
+        color: "indigo",
+        modules
+    };
+}

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     User, Book, CreditCard, Award, LogOut,
     Calendar, Phone, Hash, CheckCircle,
-    Clock, ChevronRight, Play, FileText,
+    ChevronRight, Play, FileText,
     TrendingUp, ShieldCheck, Zap, Star, Target
 } from 'lucide-react';
 import { useAuth } from '../app/common/AuthContext';
@@ -77,6 +77,42 @@ export default function StudentPortal() {
 
     const [resources, setResources] = useState([]);
     const [resourcesLoading, setResourcesLoading] = useState(true);
+
+    // Real quiz progress (replaces the old hardcoded "92% Attendance" /
+    // "75% Course Completed" numbers that weren't tied to any actual data).
+    const [quizProgress, setQuizProgress] = useState({ completedModules: [], unlockedBadges: [], totalScore: 0 });
+    useEffect(() => {
+        if (!student?.registration) return;
+        const unsubscribe = onSnapshot(doc(db, 'quiz_progress', student.registration), (snap) => {
+            if (snap.exists()) setQuizProgress(snap.data());
+        });
+        return () => unsubscribe();
+    }, [student?.registration]);
+
+    const totalAvailableModules = useMemo(() => {
+        return (courseModules || []).reduce((sum, mod) => sum + Object.keys(QUIZ_BANK[mod.id]?.modules || {}).length, 0);
+    }, [courseModules]);
+    const completedModuleCount = quizProgress.completedModules?.length || 0;
+    const courseProgressPct = totalAvailableModules > 0
+        ? Math.min(100, Math.round((completedModuleCount / totalAvailableModules) * 100))
+        : 0;
+
+    const feePaidPct = student?.totalFees > 0
+        ? Math.min(100, Math.round(((student.paidFees || 0) / student.totalFees) * 100))
+        : 0;
+
+    // Real recent activity, built from actual fee payments — no fabricated
+    // "Attendance Marked" / "Quiz Completed" placeholder entries.
+    const recentActivity = useMemo(() => {
+        const insts = Array.isArray(student?.installments) ? [...student.installments] : [];
+        return insts
+            .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+            .slice(0, 5)
+            .map(inst => ({
+                title: `Fee Paid: ₹${(inst.amount || 0).toLocaleString('en-IN')}`,
+                date: inst.dateDisplay || inst.date || '',
+            }));
+    }, [student?.installments]);
 
     useEffect(() => {
         if (!student?.course) return;
@@ -282,23 +318,23 @@ export default function StudentPortal() {
                                                 <Award size={100} />
                                             </div>
                                             <div className="relative z-10">
-                                                <p className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-4">Course Status</p>
-                                                <h3 className="text-3xl font-black text-slate-900 mb-2">{student.status}</h3>
+                                                <p className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-4">Quiz Progress</p>
+                                                <h3 className="text-3xl font-black text-slate-900 mb-2">{completedModuleCount} / {totalAvailableModules || '—'} Modules</h3>
                                                 <div className="w-full h-2 bg-slate-100 rounded-full mt-4 overflow-hidden">
-                                                    <div className="w-3/4 h-full bg-blue-600 rounded-full" />
+                                                    <div className="h-full bg-blue-600 rounded-full transition-all duration-500" style={{ width: `${courseProgressPct}%` }} />
                                                 </div>
-                                                <p className="text-[10px] font-bold text-blue-600 mt-2 uppercase tracking-widest">75% Course Completed</p>
+                                                <p className="text-[10px] font-bold text-blue-600 mt-2 uppercase tracking-widest">{courseProgressPct}% Course Completed</p>
                                             </div>
                                         </div>
                                         <div className="p-8 bg-slate-900 text-white rounded-[2.5rem] shadow-2xl shadow-slate-200 relative overflow-hidden group">
                                             <div className="absolute -bottom-10 -right-10 p-8 text-white/5 group-hover:scale-125 transition-transform duration-700">
-                                                <Zap size={180} />
+                                                <CreditCard size={180} />
                                             </div>
                                             <div className="relative z-10">
-                                                <p className="text-white/40 font-bold uppercase tracking-widest text-xs mb-4">Attendance Rate</p>
-                                                <h3 className="text-5xl font-black mb-2">92%</h3>
-                                                <p className="text-emerald-400 font-bold text-xs uppercase tracking-widest mt-2 flex items-center gap-1">
-                                                    <TrendingUp size={14} /> Exceptional performance
+                                                <p className="text-white/40 font-bold uppercase tracking-widest text-xs mb-4">Fee Paid</p>
+                                                <h3 className="text-5xl font-black mb-2">{feePaidPct}%</h3>
+                                                <p className={cn("font-bold text-xs uppercase tracking-widest mt-2 flex items-center gap-1", feePaidPct >= 100 ? "text-emerald-400" : "text-amber-400")}>
+                                                    <TrendingUp size={14} /> ₹{(student.paidFees || 0).toLocaleString('en-IN')} of ₹{(student.totalFees || 0).toLocaleString('en-IN')}
                                                 </p>
                                             </div>
                                         </div>
@@ -307,23 +343,29 @@ export default function StudentPortal() {
                                     {/* Recent Activity */}
                                     <div className="bg-white rounded-[2.5rem] border border-slate-100 p-8 shadow-sm">
                                         <div className="flex items-center justify-between mb-8">
-                                            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Recent Activity</h3>
-                                            <button className="text-blue-600 font-black text-[10px] uppercase tracking-widest hover:underline">View All</button>
+                                            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Recent Fee Payments</h3>
+                                            <button onClick={() => setActiveTab('fees')} className="text-blue-600 font-black text-[10px] uppercase tracking-widest hover:underline">View All</button>
                                         </div>
-                                        <div className="space-y-6">
-                                            {[1, 2, 3].map(i => (
-                                                <div key={i} className="flex items-center gap-4 group cursor-pointer">
-                                                    <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                                                        <Clock size={20} />
+                                        {recentActivity.length > 0 ? (
+                                            <div className="space-y-6">
+                                                {recentActivity.map((activity, i) => (
+                                                    <div key={i} className="flex items-center gap-4 group cursor-pointer" onClick={() => setActiveTab('fees')}>
+                                                        <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                                                            <CreditCard size={20} />
+                                                        </div>
+                                                        <div className="flex-1">
+                                                            <p className="font-black text-slate-900 text-sm">{activity.title}</p>
+                                                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{activity.date}</p>
+                                                        </div>
+                                                        <ChevronRight size={16} className="text-slate-300 group-hover:translate-x-1 transition-transform" />
                                                     </div>
-                                                    <div className="flex-1">
-                                                        <p className="font-black text-slate-900 text-sm">{i === 1 ? 'Attendance Marked' : i === 2 ? 'Quiz Completed: MS Word' : 'Monthly Fee Paid'}</p>
-                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{i * 2} days ago • 10:30 AM</p>
-                                                    </div>
-                                                    <ChevronRight size={16} className="text-slate-300 group-hover:translate-x-1 transition-transform" />
-                                                </div>
-                                            ))}
-                                        </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="text-center py-8">
+                                                <p className="text-slate-400 font-bold text-sm">No fee payments recorded yet.</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -349,7 +391,7 @@ export default function StudentPortal() {
                                             <div className="flex items-center gap-4">
                                                 <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><Phone size={18} /></div>
                                                 <div>
-                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Emergency Contact</p>
+                                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Mobile Number</p>
                                                     <p className="font-black text-slate-900 text-sm">{student.mobile}</p>
                                                 </div>
                                             </div>
@@ -359,9 +401,19 @@ export default function StudentPortal() {
                                     <div className="p-1 bg-gradient-to-br from-blue-600 to-blue-700 rounded-[2.5rem] shadow-2xl shadow-blue-200">
                                         <div className="p-8 backdrop-blur-xl rounded-[2.4rem] text-white">
                                             <Star className="text-yellow-400 mb-4 fill-yellow-400" size={24} />
-                                            <h4 className="text-xl font-black mb-2">Academic Badge</h4>
-                                            <p className="text-blue-100 font-bold text-xs leading-relaxed mb-6">Complete your pending modules to unlock the "Master App" certificate.</p>
-                                            <button className="w-full py-4 bg-white text-blue-600 rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-transform">Claim Badge</button>
+                                            <h4 className="text-xl font-black mb-2">
+                                                {quizProgress.unlockedBadges?.length > 0
+                                                    ? `${quizProgress.unlockedBadges.length} Badge${quizProgress.unlockedBadges.length > 1 ? 's' : ''} Earned`
+                                                    : 'Academic Badge'}
+                                            </h4>
+                                            <p className="text-blue-100 font-bold text-xs leading-relaxed mb-6">
+                                                {quizProgress.unlockedBadges?.length > 0
+                                                    ? 'Great work! Keep completing modules to earn more.'
+                                                    : 'Complete your pending modules to unlock your first diploma badge.'}
+                                            </p>
+                                            <button onClick={() => setActiveTab('learning')} className="w-full py-4 bg-white text-blue-600 rounded-[1.5rem] font-black uppercase tracking-widest text-[10px] hover:scale-105 transition-transform">
+                                                {quizProgress.unlockedBadges?.length > 0 ? 'View Badges' : 'Go to Learning Hub'}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

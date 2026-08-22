@@ -8,7 +8,9 @@ import {
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { HINDI_QUIZ_DATA } from '../../data/hindiQuizData';
+import { MODULE_ID_ALIASES, flattenQuizCourseShape } from '../../data/curriculum';
 import { studentQuizProfileInit, getStudentQuizProgress, markModuleCompleted, awardMasterBadge } from '../../lib/quizDb';
+import { subscribeCertificateBranding, DEFAULT_BRANDING } from '../../lib/certificateBranding';
 import { selectActiveCourseModules, selectActiveStudentCourse } from '../../app/store/courseSlice';
 import toast from 'react-hot-toast';
 import ProgressCharts from './ProgressCharts';
@@ -34,6 +36,13 @@ export default function QuizModule({ student }) {
     // Fetch dynamic modules mapped to this specific student's compound course (e.g., O Level + Accounting)
     const activeModules = useSelector(selectActiveCourseModules);
     const compoundCourseName = useSelector(selectActiveStudentCourse) || student.course || "DCA";
+
+    // Admin-configurable diploma branding (logo, signature image, signatory name/title)
+    const [branding, setBranding] = useState(DEFAULT_BRANDING);
+    useEffect(() => {
+        const unsub = subscribeCertificateBranding(setBranding);
+        return () => unsub();
+    }, []);
 
     // Quiz Progress State from Firebase
     const [progress, setProgress] = useState({ completedModules: [], unlockedBadges: [], totalScore: 0 });
@@ -65,11 +74,11 @@ export default function QuizModule({ student }) {
     const courseData = React.useMemo(() => {
         // Deep clone base data to safely inject custom quizzes
         const mergedBaseData = JSON.parse(JSON.stringify(HINDI_QUIZ_DATA));
-        
+
         customQuizzes.forEach(quiz => {
             const cId = (quiz.courseId || "").toLowerCase().trim();
             const tId = (quiz.topicId || "").trim();
-            
+
             if (!mergedBaseData[cId]) {
                 mergedBaseData[cId] = {
                     title: quiz.courseId,
@@ -84,12 +93,27 @@ export default function QuizModule({ student }) {
             mergedBaseData[cId].modules[tId] = quiz.questions;
         });
 
+        // Some question banks (e.g. "C Programming Foundation") were
+        // authored in a "multi-topic" shape — { topicName: { modules: {
+        // "Master Assessment": [...] } } } — instead of the flat single-
+        // course shape { modules: { topicName: [...] } } everything else
+        // here uses. Flatten those on the fly so both shapes work.
+        const toFlatCourseShape = flattenQuizCourseShape;
+
         const activeData = {};
         if (activeModules && activeModules.length > 0) {
             activeModules.forEach(mod => {
                 const modId = mod.id.toLowerCase();
-                if (mergedBaseData[modId]) {
-                    activeData[mod.id] = mergedBaseData[modId];
+                // A canonical module ID (e.g. "c_programming") may not be
+                // the exact key its question bank was authored under (e.g.
+                // "C Programming Foundation") — check the alias map first.
+                const aliasKey = MODULE_ID_ALIASES[modId];
+                const dataKey = mergedBaseData[modId]
+                    ? modId
+                    : (aliasKey && mergedBaseData[aliasKey] ? aliasKey : null);
+
+                if (dataKey) {
+                    activeData[mod.id] = toFlatCourseShape(mergedBaseData[dataKey], mod.title);
                 } else {
                     // Inject a placeholder so the UI looks complete even if no questions exist yet
                     activeData[mod.id] = {
@@ -731,14 +755,14 @@ export default function QuizModule({ student }) {
 
                         {/* Background Watermark */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] grayscale pointer-events-none">
-                            <img src="/logo.png" alt="" className="w-2/3 object-contain" />
+                            <img src={branding.logoUrl} alt="" className="w-2/3 object-contain" />
                         </div>
 
                         {/* Certificate Content */}
                         <div className="relative z-10 w-full h-full flex flex-col items-center pt-20 px-24 text-center">
                             
                             <div className="flex items-center gap-6 mb-12">
-                                <img src="/logo.png" alt="ByteCore" className="h-20" />
+                                <img src={branding.logoUrl} alt="ByteCore" className="h-20" />
                                 <div className="text-left border-l-2 border-slate-200 pl-6">
                                     <h1 className="text-3xl font-black text-slate-900 tracking-tighter uppercase leading-none">ByteCore</h1>
                                     <p className="text-sm font-bold text-amber-600 tracking-[0.3em] uppercase mt-1">Computer Centre</p>
@@ -766,9 +790,13 @@ export default function QuizModule({ student }) {
                             <div className="w-full flex justify-between items-end mt-auto pb-16 px-10">
                                 <div className="text-center">
                                     <div className="w-48 h-12 flex items-center justify-center font-serif text-3xl text-slate-800 border-b border-slate-400 mb-2">
-                                        Rahul
+                                        {branding.signatureUrl ? (
+                                            <img src={branding.signatureUrl} alt="Signature" className="h-10 object-contain" />
+                                        ) : (
+                                            branding.signatoryName
+                                        )}
                                     </div>
-                                    <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Rahul Sir<br/>Director, ByteCore</p>
+                                    <p className="text-xs font-black text-slate-500 uppercase tracking-widest">{branding.signatoryName}<br/>{branding.signatoryTitle}</p>
                                 </div>
 
                                 <div className="w-40 h-40 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-2xl relative">

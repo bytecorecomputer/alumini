@@ -293,6 +293,14 @@ export default function AdminAnalytics() {
                     paidThisMonth += (Number(s.oldPaidFees) || 0);
                 }
 
+                // Safety net: one student can never have genuinely paid more
+                // in a single month than their entire course fee. If this
+                // ever fires it means a stale/mis-dated installment slipped
+                // through (e.g. from data synced before the date-parsing fix)
+                // — cap it instead of letting one bad row blow up the
+                // whole centre's monthly total.
+                paidThisMonth = Math.min(paidThisMonth, stuTotalBilledAllTime || paidThisMonth);
+
                 const totalRevThisMonth = paidThisMonth + regFeeThisMonth;
                 totalRevenue += totalRevThisMonth;
                 
@@ -335,6 +343,9 @@ export default function AdminAnalytics() {
                 } else if (admMonth === selectedMonth) {
                     paidThisMonth += (Number(s.oldPaidFees) || 0);
                 }
+
+                // Same safety clamp as above.
+                paidThisMonth = Math.min(paidThisMonth, (Number(s.totalFees) || paidThisMonth));
 
                 if (paidThisMonth > 0) {
                     monthlyPayers.push({

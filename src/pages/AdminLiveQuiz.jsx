@@ -6,6 +6,7 @@ import {
     Triangle, Square, Circle, Hexagon
 } from 'lucide-react';
 import { HINDI_QUIZ_DATA } from '../data/hindiQuizData';
+import { flattenQuizCourseShape } from '../data/curriculum';
 import { db } from '../firebase/firestore';
 import { doc, setDoc, updateDoc, collection, onSnapshot, deleteDoc, increment } from 'firebase/firestore';
 import toast from 'react-hot-toast';
@@ -53,7 +54,13 @@ export default function AdminLiveQuiz() {
     }, []);
 
     const combinedQuizData = useMemo(() => {
-        const data = { ...HINDI_QUIZ_DATA };
+        const data = {};
+        // Normalize every base course to the flat { modules: {...} } shape
+        // (some, like "C Programming Foundation", are authored differently)
+        // so the topic dropdown below always has something to show.
+        Object.entries(HINDI_QUIZ_DATA).forEach(([key, raw]) => {
+            data[key] = flattenQuizCourseShape(raw, raw?.title || key);
+        });
         Object.keys(customQuizzes).forEach(cId => {
             if (!data[cId]) {
                 data[cId] = customQuizzes[cId];

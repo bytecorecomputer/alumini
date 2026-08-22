@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/common/SEO';
-import { Search, Download, FileImage, FileText, ArrowLeft, Loader2, CheckCircle2, Shield } from 'lucide-react';
+import { Search, Download, FileImage, FileText, ArrowLeft, Loader2, CheckCircle2, Shield, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
 import diplomaData from '../Diploma.json';
-import Trophy3D from '../components/common/Trophy3D';
+
+// Trophy3D pulls in @react-three/fiber + drei (~700KB) purely for a decorative
+// spinning 3D trophy shown before the user has even searched. Lazy-loading it
+// means the 3D engine only downloads once it's actually needed, instead of
+// blocking/bloating every visit to this page.
+const Trophy3D = lazy(() => import('../components/common/Trophy3D'));
 
 export default function CertificateDownload() {
     const [rollNo, setRollNo] = useState('');
@@ -301,7 +306,9 @@ export default function CertificateDownload() {
                                     className="h-full w-full border-2 border-dashed border-slate-800 rounded-[2.5rem] flex flex-col items-center justify-center text-center p-8 bg-slate-900/10 relative overflow-hidden group"
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-t from-blue-500/5 to-transparent pointer-events-none" />
-                                    <Trophy3D size="h-64 w-full mb-2 pointer-events-auto" />
+                                    <Suspense fallback={<Trophy size={80} className="text-amber-400/40 mb-2" />}>
+                                        <Trophy3D size="h-64 w-full mb-2 pointer-events-auto" />
+                                    </Suspense>
                                     <h3 className="text-xl font-bold text-white mb-2 z-10 relative">No Record Selected</h3>
                                     <p className="text-slate-500 max-w-xs text-sm">Enter your roll number and associated date of birth to view and download your official certificate.</p>
                                 </motion.div>

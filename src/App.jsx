@@ -36,6 +36,7 @@ const StudentDetails = lazy(() => import("./pages/StudentDetails"));
 const CertificateGenerator = lazy(() => import("./pages/CertificateGenerator"));
 const CertificateDownload = lazy(() => import("./pages/CertificateDownload"));
 const AdminCertificateUpload = lazy(() => import("./pages/AdminCertificateUpload"));
+const AdminCertificateBranding = lazy(() => import("./pages/AdminCertificateBranding"));
 const AdminNotifications = lazy(() => import("./pages/AdminNotifications"));
 const LabGallery = lazy(() => import("./pages/LabGallery"));
 const ResourceManager = lazy(() => import("./pages/ResourceManager"));
@@ -154,6 +155,11 @@ export default function App() {
               <Route path="/admin/certificates/upload" element={
                 <AdminRoute>
                   <AdminCertificateUpload />
+                </AdminRoute>
+              } />
+              <Route path="/admin/certificates/branding" element={
+                <AdminRoute>
+                  <AdminCertificateBranding />
                 </AdminRoute>
               } />
               <Route path="/admin/notifications" element={

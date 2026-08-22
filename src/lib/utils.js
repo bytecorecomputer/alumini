@@ -65,13 +65,28 @@ export function parseDateToYYYYMM(dateStr) {
 export function normalizeDateToYYYYMMDD(dateStr) {
     if (!dateStr || dateStr.trim() === '') return '';
     let str = dateStr.trim();
-    
-    // Handle DD-MM-YYYY or DD/MM/YYYY
+
     const parts = str.split(/[-/]/);
     if (parts.length === 3) {
         if (parts[0].length === 4) return `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`; // Already YYYY-MM-DD
-        if (parts[2].length === 4) return `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`; // DD-MM-YYYY -> YYYY-MM-DD
-        if (parts[2].length === 2) return `20${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`; // DD-MM-YY -> YYYY-MM-DD
+
+        // Same ambiguity as parseDateToYYYYMM above: this sheet's dates
+        // export as M/D/YYYY (US format), not D/M/YYYY. We used to always
+        // treat parts[0] as the day, which silently mis-filed any
+        // installment whose day was ≤ 12 into the wrong month (e.g. a
+        // payment made on 7 March got recorded as "July"). Now we treat
+        // parts[0] as the month by default, and only swap to D/M/YYYY when
+        // parts[0] > 12 proves it can't be a month.
+        let month = parts[0].padStart(2, '0');
+        let day = parts[1].padStart(2, '0');
+        if (parseInt(month, 10) > 12) {
+            const tmp = month;
+            month = day;
+            day = tmp;
+        }
+
+        if (parts[2].length === 4) return `${parts[2]}-${month}-${day}`;
+        if (parts[2].length === 2) return `20${parts[2]}-${month}-${day}`;
     }
     return str; // Fallback
 }

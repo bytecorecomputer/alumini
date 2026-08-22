@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import logo from '../../assets/format/logo.png';
+import defaultLogo from '../../assets/format/logo.png';
 
-const CertificateTemplate = forwardRef(({ data }, ref) => {
+const CertificateTemplate = forwardRef(({ data, branding }, ref) => {
     const {
         studentName = '',
         fatherName = '',
@@ -20,6 +20,13 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
         grade = '',
         division = '',
     } = data;
+
+    // Admin-configurable logo/signature (Admin > Certificate Branding).
+    // Falls back to the bundled defaults if nothing has been set yet.
+    const logo = branding?.logoUrl || defaultLogo;
+    const signatureUrl = branding?.signatureUrl || '';
+    const signatoryName = branding?.signatoryName || 'ByteCore';
+    const signatoryTitle = branding?.signatoryTitle || 'CENTRE HEAD';
 
     return (
         <div
@@ -540,18 +547,26 @@ const CertificateTemplate = forwardRef(({ data }, ref) => {
 
                         {/* Signature */}
                         <div style={{ textAlign: 'center' }}>
-                            <div style={{
-                                fontSize: '10px',
-                                fontWeight: '900',
-                                color: '#1e3a8a',
-                                marginBottom: '35px',
-                                textTransform: 'uppercase',
-                                fontStyle: 'italic'
-                            }}>
-                                ByteCore
-                            </div>
+                            {signatureUrl ? (
+                                <img
+                                    src={signatureUrl}
+                                    alt="Signature"
+                                    style={{ height: '38px', maxWidth: '160px', objectFit: 'contain', marginBottom: '4px' }}
+                                />
+                            ) : (
+                                <div style={{
+                                    fontSize: '10px',
+                                    fontWeight: '900',
+                                    color: '#1e3a8a',
+                                    marginBottom: '35px',
+                                    textTransform: 'uppercase',
+                                    fontStyle: 'italic'
+                                }}>
+                                    {signatoryName}
+                                </div>
+                            )}
                             <div style={{ borderBottom: '1px solid #1e3a8a', width: '100%' }}></div>
-                            <div style={{ fontSize: '9px', fontWeight: 'bold', color: '#1e3a8a', marginTop: '4px' }}>CENTRE HEAD</div>
+                            <div style={{ fontSize: '9px', fontWeight: 'bold', color: '#1e3a8a', marginTop: '4px' }}>{signatoryTitle}</div>
                         </div>
                     </div>
                 </div>

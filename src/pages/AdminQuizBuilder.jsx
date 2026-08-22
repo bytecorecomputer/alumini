@@ -8,6 +8,8 @@ import {
     BookOpen, Layers, Edit3, X, Copy, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { COURSE_MODULES_MAP } from '../data/curriculum';
+import { QUIZ_BANK } from '../lib/quizData';
 
 export default function AdminQuizBuilder() {
     const navigate = useNavigate();
@@ -20,6 +22,16 @@ export default function AdminQuizBuilder() {
 
     const [courseName, setCourseName] = useState('');
     const [topicName, setTopicName] = useState('');
+    // "Which student course is this quiz for" — drives the two dropdowns
+    // below. Selecting Course + Module sets courseName to the EXACT
+    // canonical module ID (e.g. "c_programming") that a logged-in
+    // student's own dashboard looks up, so the quiz shows up there
+    // immediately instead of only on the public /quiz-hub page.
+    const [selectedCourseCategory, setSelectedCourseCategory] = useState('');
+    const [useCustomCourseId, setUseCustomCourseId] = useState(false);
+    const courseOptions = Object.keys(COURSE_MODULES_MAP).filter(k => k !== 'default');
+    const moduleOptions = selectedCourseCategory ? (COURSE_MODULES_MAP[selectedCourseCategory] || []) : [];
+    const moduleLabel = (id) => QUIZ_BANK[id]?.title || id.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     const [questions, setQuestions] = useState([
         { question: '', options: ['', '', '', ''], correctAnswer: 0, explanation: '' }
     ]);
@@ -37,6 +49,8 @@ export default function AdminQuizBuilder() {
     const resetForm = () => {
         setCourseName('');
         setTopicName('');
+        setSelectedCourseCategory('');
+        setUseCustomCourseId(false);
         setQuestions([{ question: '', options: ['', '', '', ''], correctAnswer: 0, explanation: '' }]);
         setEditingQuizId(null);
         setShowQuizList(true);
@@ -50,6 +64,16 @@ export default function AdminQuizBuilder() {
     const handleEditQuiz = (quiz) => {
         setCourseName(quiz.courseId);
         setTopicName(quiz.topicId);
+        // If this quiz's courseId matches a known module id, pre-select the
+        // right course category so the dropdown stays in sync; otherwise
+        // fall back to free-text editing so nothing existing breaks.
+        const ownerCourse = Object.entries(COURSE_MODULES_MAP).find(([, mods]) => mods.includes(quiz.courseId));
+        if (ownerCourse) {
+            setSelectedCourseCategory(ownerCourse[0]);
+            setUseCustomCourseId(false);
+        } else {
+            setUseCustomCourseId(true);
+        }
         setQuestions(quiz.questions || []);
         setEditingQuizId(quiz.id);
         setShowQuizList(false);
@@ -217,7 +241,7 @@ export default function AdminQuizBuilder() {
                                 existingQuizzes.map(quiz => (
                                     <div key={quiz.id} className="bg-slate-50 border border-slate-200 rounded-2xl p-6 hover:shadow-lg transition-all group flex flex-col">
                                         <div className="flex-1">
-                                            <h3 className="text-xl font-black text-slate-900 mb-1 line-clamp-1">{quiz.courseId}</h3>
+                                            <h3 className="text-xl font-black text-slate-900 mb-1 line-clamp-1">{QUIZ_BANK[quiz.courseId]?.title || quiz.courseId}</h3>
                                             <p className="text-blue-600 font-bold text-sm mb-4 line-clamp-1">{quiz.topicId}</p>
                                             <div className="inline-flex items-center gap-2 px-3 py-1 bg-white rounded-lg border border-slate-200 text-xs font-black text-slate-500 uppercase">
                                                 <span>{quiz.questions?.length || 0} Questions</span>
@@ -259,31 +283,59 @@ export default function AdminQuizBuilder() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Course Name</label>
-                                    <input 
-                                        type="text"
-                                        placeholder="e.g., ADCA, Python, CCC, Web Development"
-                                        value={courseName}
-                                        onChange={(e) => setCourseName(e.target.value)}
-                                        className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-blue-500 focus:bg-white outline-none transition-all mb-3"
-                                    />
-                                    {/* Quick Course Presets */}
-                                    <div className="flex flex-wrap gap-1.5">
-                                        {['ADCA', 'CCC', 'DCA', 'Python', 'Web Dev', 'Tally Prime', 'C++', 'Graphic Design'].map((c) => (
-                                            <button
-                                                key={c}
-                                                type="button"
-                                                onClick={() => setCourseName(c)}
-                                                className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${
-                                                    courseName === c 
-                                                        ? 'bg-blue-600 text-white shadow-md' 
-                                                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                                }`}
+                                    <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Course</label>
+                                    {!useCustomCourseId ? (
+                                        <>
+                                            <select
+                                                value={selectedCourseCategory}
+                                                onChange={(e) => {
+                                                    setSelectedCourseCategory(e.target.value);
+                                                    setCourseName(''); // force re-pick of module below
+                                                }}
+                                                className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-blue-500 focus:bg-white outline-none transition-all mb-3"
                                             >
-                                                {c}
+                                                <option value="">Select a course…</option>
+                                                {courseOptions.map(c => <option key={c} value={c}>{c}</option>)}
+                                            </select>
+                                            {selectedCourseCategory && (
+                                                <select
+                                                    value={courseName}
+                                                    onChange={(e) => setCourseName(e.target.value)}
+                                                    className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                                                >
+                                                    <option value="">Select a module…</option>
+                                                    {moduleOptions.map(id => <option key={id} value={id}>{moduleLabel(id)}</option>)}
+                                                </select>
+                                            )}
+                                            <button
+                                                type="button"
+                                                onClick={() => { setUseCustomCourseId(true); setCourseName(''); setSelectedCourseCategory(''); }}
+                                                className="text-[10px] font-black text-blue-600 uppercase tracking-wider mt-2 hover:underline"
+                                            >
+                                                Not in the list? Type a custom name →
                                             </button>
-                                        ))}
-                                    </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g., Special Workshop Quiz"
+                                                value={courseName}
+                                                onChange={(e) => setCourseName(e.target.value)}
+                                                className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-xl font-bold text-slate-900 focus:border-blue-500 focus:bg-white outline-none transition-all"
+                                            />
+                                            <p className="text-[10px] font-bold text-amber-600 mt-2">
+                                                Note: a custom name only appears on the public Quiz Hub, not on a specific course's student dashboard.
+                                            </p>
+                                            <button
+                                                type="button"
+                                                onClick={() => { setUseCustomCourseId(false); setCourseName(''); }}
+                                                className="text-[10px] font-black text-blue-600 uppercase tracking-wider mt-2 hover:underline"
+                                            >
+                                                ← Pick from course list instead
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
                                 <div>
                                     <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2">Topic / Chapter Name</label>
