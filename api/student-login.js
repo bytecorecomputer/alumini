@@ -95,8 +95,8 @@ export default async function handler(req, res) {
             return res.status(401).json({ error: 'Invalid Registration or Mobile Number' });
         }
 
-        // Create Custom Token using registration ID as the UID
-        const customToken = await getAuth().createCustomToken(studentData.registration, {
+        // Create Custom Token using document ID as the UID
+        const customToken = await getAuth().createCustomToken(studentDoc.id, {
             role: 'student',
             course: studentData.course
         });
@@ -104,7 +104,7 @@ export default async function handler(req, res) {
         return res.status(200).json({
             success: true,
             token: customToken,
-            studentData: studentData
+            studentData: { ...studentData, id: studentDoc.id, registration: studentDoc.id }
         });
 
     } catch (error) {

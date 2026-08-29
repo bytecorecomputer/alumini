@@ -94,52 +94,35 @@ export default function Login() {
         const studentRegClean = String(studentReg).trim();
         const studentMobileClean = String(studentMobile).trim();
         
-        let studentData = null;
+        const response = await fetch('/api/student-login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ registration: studentRegClean, mobile: studentMobileClean })
+        });
 
-        // 1. Try fetching by Document ID exactly
-        const studentRef = doc(db, "students", studentRegClean);
-        const studentSnap = await getDoc(studentRef);
+        const contentType = response.headers.get("content-type");
+        const data = contentType && contentType.includes("application/json")
+            ? await response.json()
+            : null;
 
-        if (studentSnap.exists()) {
-          studentData = studentSnap.data();
-        } else {
-          // 2. Fallback: Search the collection where registration field matches (in case Doc ID is slightly different)
-          const q = query(collection(db, "students"), where("registration", "==", studentRegClean));
-          const querySnapshot = await getDocs(q);
-          
-          if (!querySnapshot.empty) {
-            studentData = querySnapshot.docs[0].data();
-          }
+        if (!response.ok || !data?.token) {
+            setError(data?.error || 'Invalid Registration ID or Mobile Number.');
+            setLoading(false);
+            return;
         }
 
-        if (!studentData) {
-          setError('Invalid Registration Number. Profile not found.');
-          setLoading(false);
-          return;
-        }
+        await signInWithCustomToken(auth, data.token);
 
-        // Verify mobile number matches for security (safe casting to String)
-        const dbMobile = String(studentData.mobile || '').trim();
-        
-        if (dbMobile === studentMobileClean) {
-          // Use context provider properly to keep everything in sync
-          loginStudent(studentData);
+        loginStudent(data.studentData);
 
-          sendTelegramNotification('login', {
-            displayName: studentData.fullName,
-            email: `Reg: ${studentData.registration}`,
-            role: 'student_portal'
-          });
+        sendTelegramNotification('login', {
+          displayName: data.studentData.fullName || studentRegClean,
+          email: `Reg: ${data.studentData.registration}`,
+          role: 'student_portal'
+        });
 
-          // Trigger Targeted Fee Audit
-          checkMonthlyFeeReminders(studentData.registration);
+        checkMonthlyFeeReminders(data.studentData.registration);
 
-          // Navigation handled by the useEffect above
-        } else {
-          // Providing a masked hint of the actual registered mobile number
-          const hint = dbMobile.length >= 4 ? `...${dbMobile.slice(-4)}` : "unknown";
-          setError(`Invalid Mobile Number. Database expects number ending in ${hint}.`);
-        }
       } catch (err) {
         console.error("Student Login Error:", err);
         setError(`System error: ${err.message || 'Unknown error occurred.'}`);
