@@ -1,8 +1,6 @@
 import Razorpay from 'razorpay';
 
 export default async function handler(req, res) {
-    console.log('--- Order Creation Protocol Initiated ---');
-
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS,POST');
@@ -29,17 +27,11 @@ export default async function handler(req, res) {
         keyId = rawKeyId.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
         keySecret = rawKeySecret.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
 
-
-        console.log('Checking Credentials:', {
-            hasKeyId: !!keyId,
-            hasKeySecret: !!keySecret,
-            keyIdPreview: keyId ? `${keyId.substring(0, 8)}...` : 'None'
-        });
-
         if (!keyId || !keySecret) {
-            return res.status(500).json({ 
-                error: 'Configuration Error', 
-                details: `Razorpay keys are missing on the server. Please add VITE_RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to Vercel Environment Variables. (KeyID: ${!!keyId}, Secret: ${!!keySecret})` 
+            console.error('Razorpay keys missing on server');
+            return res.status(500).json({
+                error: 'Configuration Error',
+                details: 'Payment gateway is not configured. Please contact the site administrator.'
             });
         }
 
@@ -66,48 +58,28 @@ export default async function handler(req, res) {
             receipt: `receipt_${Date.now()}`,
         };
 
-        console.log('Sending request to Razorpay API with options:', { ...options, amount: options.amount });
         const order = await razorpay.orders.create(options);
-        
-        console.log('Order created successfully:', order.id);
         return res.status(200).json(order);
     } catch (error) {
-        console.error('CRITICAL FAILURE in create-order:', error);
-        
-        let detailedError = 'Unknown error occurred';
+        console.error('Razorpay order creation failed:', error);
+
+        let detailedError = 'Unable to create payment order. Please try again.';
         let errorCode = 'UNKNOWN_ERROR';
 
         if (error.error && error.error.description) {
             detailedError = error.error.description; // Razorpay specific error format
             errorCode = error.error.code || 'RAZORPAY_ERROR';
-        } else if (error.message) {
-            detailedError = error.message;
-            errorCode = error.code || 'INTERNAL_ERROR';
         }
 
-        // Catch Authentication specifically
-        if (detailedError.toLowerCase().includes('authentication') || error.statusCode === 401) {
-            detailedError = "Razorpay Authentication Failed: The API key or secret is invalid for this environment.";
+        if (error.statusCode === 401) {
+            detailedError = 'Payment gateway authentication failed. Please contact the site administrator.';
         }
 
-        return res.status(500).json({ 
-            error: 'Razorpay API Connection Failed', 
+        return res.status(500).json({
+            error: 'Razorpay API Connection Failed',
             details: detailedError,
-            code: errorCode,
-            debug: {
-                keyIdProvided: !!keyId,
-                keySecretProvided: !!keySecret,
-                keyIdPreview: keyId ? `${keyId.substring(0, 8)}...` : 'None',
-                keyIdLength: keyId.length,
-                keySecretLength: keySecret.length,
-                keySecretPreview: keySecret ? `***${keySecret.substring(Math.max(0, keySecret.length - 4))}` : 'None',
-                envKeys: Object.keys(process.env).filter(k => k.includes('RAZORPAY')),
-                requestId: error.headers?.['x-request-id']
-            },
-            raw: error
+            code: errorCode
         });
     }
 }
-
-
 

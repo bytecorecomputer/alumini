@@ -53,12 +53,12 @@ export default function Events() {
     };
 
     const handleDelete = async (id) => {
-        if (!window.confirm("Permanent deletion protocol required. Continue?")) return;
+        if (!window.confirm("Delete this event permanently?")) return;
         try {
             await deleteDoc(doc(db, "events", id));
             setEvents(events.filter(e => e.id !== id));
         } catch (error) {
-            alert("Protocol failure: deletion aborted.");
+            alert("Failed to delete. Please try again.");
         }
     };
 
@@ -120,7 +120,7 @@ export default function Events() {
             closeModal();
         } catch (error) {
             console.error(error);
-            alert("Database synchronization failed.");
+            alert("Failed to save changes. Please try again.");
         }
     };
 
@@ -182,7 +182,7 @@ export default function Events() {
                             <Calendar size={64} />
                         </div>
                         <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Network Quiet Mode</h2>
-                        <p className="text-slate-500 font-bold">No synchronization points found on the horizon.</p>
+                        <p className="text-slate-500 font-bold">No events scheduled yet.</p>
                     </motion.div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -278,7 +278,7 @@ export default function Events() {
                                     <h2 className="text-3xl font-black text-slate-900 tracking-tighter">
                                         {editingEvent ? "Calibrate Event" : "Define New Pivot"}
                                     </h2>
-                                    <p className="text-slate-500 text-xs font-black uppercase tracking-widest mt-1">Network Synchronization Protocol</p>
+                                    <p className="text-slate-500 text-xs font-black uppercase tracking-widest mt-1">Manage Campus Events</p>
                                 </div>
                                 <button onClick={closeModal} className="p-4 bg-white rounded-2xl text-slate-400 hover:text-slate-950 transition-all shadow-sm">
                                     <X size={24} />

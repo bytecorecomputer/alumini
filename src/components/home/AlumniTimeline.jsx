@@ -6,7 +6,7 @@ const AlumniTimeline = () => {
     const steps = [
         { icon: <Code2 size={24} />, title: "Day 1: The Foundation", desc: "Started with zero coding knowledge in our intensive tech bootcamp.", color: "bg-slate-800" },
         { icon: <Briefcase size={24} />, title: "Month 3: Building Real Projects", desc: "Developed 5+ full-stack applications solving real-world problems.", color: "bg-blue-600" },
-        { icon: <GraduationCap size={24} />, title: "Month 6: ISO Certification", desc: "Graduated with top honors and a verified professional tech portfolio.", color: "bg-purple-600" },
+        { icon: <GraduationCap size={24} />, title: "Month 6: ISO Certification", desc: "Graduated with top honors and a verified professional tech portfolio.", color: "bg-indigo-600" },
         { icon: <Trophy size={24} />, title: "Today: Industry Placed", desc: "Working as a Software Engineer at a top IT firm with a 300% salary hike.", color: "bg-emerald-500" }
     ];
 
@@ -27,7 +27,7 @@ const AlumniTimeline = () => {
                         initial={{ height: 0 }}
                         whileInView={{ height: '100%' }}
                         transition={{ duration: 2, ease: "easeInOut" }}
-                        className="absolute left-1/2 top-0 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-emerald-500 transform -translate-x-1/2 rounded-full hidden md:block"
+                        className="absolute left-1/2 top-0 w-1 bg-gradient-to-b from-blue-500 via-indigo-500 to-emerald-500 transform -translate-x-1/2 rounded-full hidden md:block"
                     ></motion.div>
 
                     {/* Timeline Items */}

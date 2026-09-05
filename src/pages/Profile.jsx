@@ -127,7 +127,7 @@ export default function Profile() {
                     className="premium-card bg-white overflow-hidden"
                 >
                     {/* Premium Header/Cover */}
-                    <div className="h-48 md:h-64 relative bg-gradient-to-br from-purple-600 via-blue-600 to-slate-900">
+                    <div className="h-48 md:h-64 relative bg-gradient-to-br from-indigo-600 via-blue-600 to-slate-900">
                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20"></div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
 
@@ -176,8 +176,8 @@ export default function Profile() {
                                     </span>
                                 )}
                                 {(displayRole === 'admin' || displayRole === 'super_admin') && (
-                                    <span className="px-4 py-2 rounded-2xl bg-purple-50 text-purple-700 text-sm font-black flex items-center gap-2 border border-purple-100 shadow-sm">
-                                        <Shield className="text-purple-500" size={18} /> Administrative Access
+                                    <span className="px-4 py-2 rounded-2xl bg-indigo-50 text-indigo-700 text-sm font-black flex items-center gap-2 border border-indigo-100 shadow-sm">
+                                        <Shield className="text-indigo-500" size={18} /> Administrative Access
                                     </span>
                                 )}
                             </div>
@@ -221,7 +221,7 @@ export default function Profile() {
                             {/* Section: Connectivity */}
                             <div className="p-8 md:p-10 rounded-[2.5rem] bg-slate-50/50 border border-slate-100 space-y-8">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-purple-50 rounded-xl text-purple-600">
+                                    <div className="p-2 bg-indigo-50 rounded-xl text-indigo-600">
                                         <Phone size={20} />
                                     </div>
                                     <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Social Links</h2>
@@ -233,7 +233,7 @@ export default function Profile() {
                                             name="phoneNumber"
                                             value={formData.phoneNumber}
                                             onChange={handleChange}
-                                            className="w-full px-6 py-4 rounded-2xl bg-white border-2 border-transparent focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold shadow-sm"
+                                            className="w-full px-6 py-4 rounded-2xl bg-white border-2 border-transparent focus:border-indigo-100 focus:ring-4 focus:ring-indigo-50 outline-none transition-all text-slate-800 font-bold shadow-sm"
                                             placeholder="+1 (555) 000-0000"
                                         />
                                     </div>
@@ -245,7 +245,7 @@ export default function Profile() {
                                                 name="linkedin"
                                                 value={formData.linkedin}
                                                 onChange={handleChange}
-                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white border-2 border-transparent focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold shadow-sm"
+                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white border-2 border-transparent focus:border-indigo-100 focus:ring-4 focus:ring-indigo-50 outline-none transition-all text-slate-800 font-bold shadow-sm"
                                                 placeholder="linkedin.com/in/handle"
                                             />
                                         </div>
@@ -258,7 +258,7 @@ export default function Profile() {
                                                 name="github"
                                                 value={formData.github}
                                                 onChange={handleChange}
-                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white border-2 border-transparent focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold shadow-sm"
+                                                className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white border-2 border-transparent focus:border-indigo-100 focus:ring-4 focus:ring-indigo-50 outline-none transition-all text-slate-800 font-bold shadow-sm"
                                                 placeholder="github.com/handle"
                                             />
                                         </div>

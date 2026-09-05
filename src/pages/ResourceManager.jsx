@@ -92,7 +92,7 @@ export default function ResourceManager() {
             }
             // 2. Delete from Firestore
             await deleteDoc(doc(db, "resources", resource.id));
-            alert("Resource purged from database.");
+            alert("Resource deleted.");
         } catch (error) {
             console.error("Delete Error:", error);
             alert("Failed to delete: " + error.message);
@@ -196,7 +196,7 @@ export default function ResourceManager() {
                                 <div className="flex items-start justify-between mb-8">
                                     <div className={cn(
                                         "h-14 w-14 rounded-2xl flex items-center justify-center text-white shadow-xl rotate-0 group-hover:-rotate-6 transition-transform",
-                                        res.category === 'Syllabus' ? 'bg-purple-600' :
+                                        res.category === 'Syllabus' ? 'bg-indigo-600' :
                                         res.category === 'Notes' ? 'bg-blue-600' :
                                         res.category === 'Assignment' ? 'bg-emerald-600' : 'bg-slate-600'
                                     )}>

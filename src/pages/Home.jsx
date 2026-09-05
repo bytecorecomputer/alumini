@@ -68,7 +68,7 @@ export default function Home() {
             {/* --- STUDENT LAB GALLERY (Bento Grid) --- */}
             <div className="py-32 bg-slate-950 border-t border-slate-900 relative overflow-hidden">
                 <div className="absolute top-0 left-1/2 w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[200px] -z-10 transform -translate-x-1/2"></div>
-                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[150px] -z-10"></div>
+                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-600/5 rounded-full blur-[150px] -z-10"></div>
 
                 <div className="max-w-7xl mx-auto text-center z-10 relative mb-16 px-6">
                     <motion.div
@@ -150,7 +150,7 @@ export default function Home() {
                                     <div className="text-blue-400">function <span className="text-yellow-200">solveProblem</span>() {'{'}</div>
                                     <div className="pl-4 text-emerald-400">// Master data structures</div>
                                     <div className="pl-4 text-emerald-400">// Ace technical interviews</div>
-                                    <div className="pl-4 text-purple-400">return <span className="text-orange-300">"Success"</span>;</div>
+                                    <div className="pl-4 text-indigo-400">return <span className="text-orange-300">"Success"</span>;</div>
                                     <div className="text-blue-400">{'}'}</div>
                                 </div>
                             </div>
@@ -163,7 +163,7 @@ export default function Home() {
             < div className="py-20 px-6 bg-slate-50" >
                 <div className="max-w-5xl mx-auto">
                     <div className="relative rounded-[3rem] bg-slate-900 overflow-hidden p-12 md:p-20 text-center shadow-2xl">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-transparent opacity-50"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-indigo-600/20 to-transparent opacity-50"></div>
                         <div className="absolute top-0 right-0 p-8 opacity-10">
                             <Building className="w-64 h-64 text-white" />
                         </div>

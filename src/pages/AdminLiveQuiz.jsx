@@ -324,7 +324,7 @@ export default function AdminLiveQuiz() {
                 <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] mix-blend-overlay"></div>
                 <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-600 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
-                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-600 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
+                <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-600 rounded-full blur-[100px] opacity-40 pointer-events-none"></div>
 
                 <div className="max-w-xl w-full bg-white/10 backdrop-blur-3xl p-8 md:p-12 rounded-[3rem] shadow-[0_0_50px_rgba(0,0,0,0.3)] border border-white/20 relative z-10">
                     <div className="absolute top-8 right-8 text-white/10">
@@ -650,7 +650,7 @@ export default function AdminLiveQuiz() {
                                         className="flex items-center bg-white/10 backdrop-blur-xl rounded-2xl p-5 border border-white/20 shadow-lg"
                                     >
                                         <div className="w-16 text-center text-3xl font-black text-white/30">#{index + 1}</div>
-                                        <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center font-black text-2xl text-white mr-6 shadow-inner border border-white/20">
+                                        <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-500 rounded-full flex items-center justify-center font-black text-2xl text-white mr-6 shadow-inner border border-white/20">
                                             {p.name[0].toUpperCase()}
                                         </div>
                                         <div className="flex-1 text-3xl font-bold text-white truncate pr-4">{p.name}</div>

@@ -176,7 +176,7 @@ export default function StudentDetails() {
     };
 
     const handleDeleteStudent = async () => {
-        if (!window.confirm("CRITICAL WARNING: Are you sure you want to PERMANENTLY DELETE this student? This action cannot be undone.")) return;
+        if (!window.confirm("Delete this student permanently? This action cannot be undone.")) return;
         setIsUpdating(true);
         try {
             await deleteDoc(doc(db, "students", id));
@@ -290,7 +290,7 @@ export default function StudentDetails() {
                             <div className="flex justify-between items-center mb-10">
                                 <div>
                                     <h3 className="text-2xl font-black text-slate-900 tracking-tighter uppercase">Financial <span className="text-blue-600">Ledger</span></h3>
-                                    <p className="text-slate-400 font-bold text-xs">Real-time revenue synchronization.</p>
+                                    <p className="text-slate-400 font-bold text-xs">Updates automatically.</p>
                                 </div>
                                 <button
                                     onClick={() => setIsFeeModalOpen(true)}

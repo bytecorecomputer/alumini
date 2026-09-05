@@ -98,7 +98,7 @@ export default function AdminAnalytics() {
             toast.loading("Syncing with live Google Sheets...", { id: "sheet-sync" });
             await syncAllCentres(db);
             await fetchAllData();
-            toast.success("Live Sheet synchronization complete!", { id: "sheet-sync" });
+            toast.success("Data synced successfully!", { id: "sheet-sync" });
         } catch (err) {
             console.error("Sync error:", err);
             toast.error("Failed to sync live sheet.", { id: "sheet-sync" });
@@ -529,13 +529,13 @@ export default function AdminAnalytics() {
                     {/* Recovery Rate */}
                     <div className="bg-[#1e293b] p-5 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden">
                         <div className="flex justify-between items-start mb-4">
-                            <div className="p-2 bg-purple-500/20 text-purple-400 rounded-lg"><Activity size={16} /></div>
+                            <div className="p-2 bg-indigo-500/20 text-indigo-400 rounded-lg"><Activity size={16} /></div>
                         </div>
                         <div>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Recovery Rate</p>
                             <h3 className="text-2xl font-black text-white truncate">{analytics.recoveryRate}%</h3>
                             <div className="w-full bg-slate-800 h-1.5 mt-2 rounded-full overflow-hidden">
-                                <div className="bg-purple-500 h-full rounded-full" style={{ width: `${analytics.recoveryRate}%`}}></div>
+                                <div className="bg-indigo-500 h-full rounded-full" style={{ width: `${analytics.recoveryRate}%`}}></div>
                             </div>
                         </div>
                     </div>
@@ -658,7 +658,7 @@ export default function AdminAnalytics() {
                     {/* Course Popularity */}
                     <div className="xl:col-span-1 bg-[#1e293b] p-6 rounded-2xl border border-slate-800 flex flex-col min-h-[400px] h-auto">
                         <div className="flex items-center gap-2 mb-4">
-                            <PieChartIcon size={16} className="text-purple-400" />
+                            <PieChartIcon size={16} className="text-indigo-400" />
                             <h3 className="text-[11px] font-black text-white uppercase tracking-widest">Course Revenue Share</h3>
                         </div>
                         <div className="flex-1 w-full min-h-0">

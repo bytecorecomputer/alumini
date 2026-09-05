@@ -148,7 +148,7 @@ const CourseDetails = () => {
                             <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/95 to-slate-900/70"></div>
                         </>
                     ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/40 to-purple-900/40 opacity-80"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/40 to-indigo-900/40 opacity-80"></div>
                     )}
                 </div>
 
@@ -340,7 +340,7 @@ const CourseDetails = () => {
                                 {course.image ? (
                                     <img src={course.image.startsWith('/') || course.image.startsWith('http') ? course.image : `/${course.image}`} alt={course.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                                 ) : (
-                                    <div className="w-full h-full bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
+                                    <div className="w-full h-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
                                         <BookMarked className="w-20 h-20 text-slate-200" />
                                     </div>
                                 )}

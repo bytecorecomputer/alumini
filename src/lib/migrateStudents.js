@@ -119,11 +119,6 @@ const parseCSV = (csvText) => {
             updatedAt: Date.now()
         };
 
-        // Specialized debugging for reported issues
-        if (fullName.includes("Ramlakha")) {
-            console.log("DEBUG [Ramlakhan Found]:", studentData);
-        }
-
         results.push(studentData);
     }
     return results;
@@ -186,7 +181,6 @@ export const runMigration = async (csvText) => {
 };
 
 export const syncAggregateStats = async () => {
-    console.log("Syncing Aggregate Stats...");
     const snapshot = await getDocs(collection(db, "students"));
     const stats = {
         totalEnrollments: 0,
@@ -210,7 +204,6 @@ export const syncAggregateStats = async () => {
     });
 
     await setDoc(doc(db, "metadata", "coaching_stats"), stats, { merge: true });
-    console.log("Stats Synced:", stats);
     return stats;
 };
 

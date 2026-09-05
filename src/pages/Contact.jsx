@@ -36,7 +36,7 @@ const Contact = () => {
             timing: "Mon - Sat: 8:00 AM - 7:00 PM (Sunday Off)",
             mapUrl: "https://www.google.com/maps/embed?pb=...", // Placeholder or real
             features: ["Advanced Coding Labs", "Student Hub", "Doubt Sessions"],
-            gradient: "from-purple-600 to-pink-600"
+            gradient: "from-indigo-600 to-pink-600"
         }
     ];
 
@@ -56,7 +56,7 @@ const Contact = () => {
 
                 {/* Decorative Lights */}
                 <div className="absolute top-0 right-1/4 w-[30%] h-[50%] bg-blue-500/20 rounded-full blur-[100px] animate-pulse"></div>
-                <div className="absolute bottom-0 left-1/4 w-[30%] h-[50%] bg-purple-500/20 rounded-full blur-[100px] animate-pulse delay-700"></div>
+                <div className="absolute bottom-0 left-1/4 w-[30%] h-[50%] bg-indigo-500/20 rounded-full blur-[100px] animate-pulse delay-700"></div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
                     <motion.div initial="hidden" animate="visible" variants={containerVariants} className="max-w-3xl mx-auto">
@@ -65,7 +65,7 @@ const Contact = () => {
                             <span className="text-[10px] font-black uppercase tracking-widest text-blue-300">We Are Here For You</span>
                         </motion.div>
                         <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-6 drop-shadow-xl">
-                            Let's Build Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Future.</span>
+                            Let's Build Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Future.</span>
                         </motion.h1>
                         <motion.p variants={itemVariants} className="text-lg md:text-xl text-slate-300 font-medium">
                             Reach out to our experts at <strong className="text-white">ByteCore Computer Centre</strong>. We have two state-of-the-art campuses in Bareilly ready to transform your career.
@@ -161,7 +161,7 @@ const Contact = () => {
             <div className="py-20 bg-white border-t border-slate-100">
                 <div className="max-w-4xl mx-auto px-6">
                     <div className="bg-slate-900 rounded-[3rem] p-10 md:p-16 text-center relative overflow-hidden shadow-2xl">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20"></div>
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-blue-500/20 rounded-full blur-[80px] -z-10"></div>
 
                         <div className="relative z-10">

@@ -43,7 +43,7 @@ const CourseAssessment = () => {
     const getRecommendation = () => {
         const { logic, design, theory } = score;
         if (logic >= 2) return { title: "Python & AI Data Science", desc: "You have a highly logical mind. Python is your golden ticket.", icon: <Database size={40} className="text-blue-500" /> };
-        if (design >= 2) return { title: "React JS Frontend", desc: "You are a creator. You should build beautiful UIs with React.", icon: <Paintbrush size={40} className="text-purple-500" /> };
+        if (design >= 2) return { title: "React JS Frontend", desc: "You are a creator. You should build beautiful UIs with React.", icon: <Paintbrush size={40} className="text-indigo-500" /> };
         if (theory >= 2) return { title: "ADCA / IT Foundation", desc: "You need a solid foundation. ADCA is perfect for general IT jobs.", icon: <MonitorPlay size={40} className="text-emerald-500" /> };
         return { title: "Full Stack Development", desc: "You are an all-rounder. Master both logic and design.", icon: <Code size={40} className="text-indigo-500" /> };
     };

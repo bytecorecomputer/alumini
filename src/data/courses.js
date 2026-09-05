@@ -56,7 +56,7 @@ export const courses = [
         tags: ["high-demand", "ai"],
         category: "Data Science",
         level: "Advanced",
-        color: "from-purple-600 to-pink-700",
+        color: "from-indigo-600 to-pink-700",
         image: "/images/courseimg/ai.jpg",
         illustration: "/images/courseimg/ai.jpg",
         lottieUrl: "https://assets5.lottiefiles.com/packages/lf20_qw8p9fzp.json",
@@ -439,7 +439,7 @@ export const courses = [
         tags: ["ai", "math-heavy"],
         category: "Data Science",
         level: "Intermediate",
-        color: "from-purple-600 to-pink-700",
+        color: "from-indigo-600 to-pink-700",
         image: "/images/courseimg/ai.jpg",
         illustration: "/images/courseimg/ai.jpg",
         what_you_will_learn: [
@@ -507,7 +507,7 @@ export const courses = [
         tags: ["foundation", "advanced"],
         category: "Programming",
         level: "Intermediate",
-        color: "from-blue-700 to-purple-800",
+        color: "from-blue-700 to-indigo-800",
         image: "https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=600&auto=format&fit=crop",
         illustration: "https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=600&auto=format&fit=crop",
         what_you_will_learn: [
@@ -643,7 +643,7 @@ export const courses = [
         tags: ["software", "technical"],
         category: "Certification",
         level: "Intermediate",
-        color: "from-indigo-600 to-purple-700",
+        color: "from-indigo-600 to-indigo-700",
         image: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=600&auto=format&fit=crop",
         illustration: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=600&auto=format&fit=crop",
         what_you_will_learn: [

@@ -13,10 +13,10 @@ export default function Terms() {
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <div className="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+                    <div className="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner">
                         <FileText size={32} />
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter text-slate-900">Terms of <span className="text-purple-600">Service</span></h1>
+                    <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter text-slate-900">Terms of <span className="text-indigo-600">Service</span></h1>
                     <p className="text-lg text-slate-500 font-medium">Last updated: {new Date().toLocaleDateString()}</p>
                 </div>
 
@@ -42,7 +42,7 @@ export default function Terms() {
                         </div>
                         <div>
                             <p className="text-xs font-black uppercase tracking-widest text-slate-400 mb-1">Support Contact</p>
-                            <a href="mailto:bytecore.info@gmail.com" className="text-purple-600 font-bold hover:underline">bytecore.info@gmail.com</a>
+                            <a href="mailto:bytecore.info@gmail.com" className="text-indigo-600 font-bold hover:underline">bytecore.info@gmail.com</a>
                         </div>
                     </div>
                 </div>

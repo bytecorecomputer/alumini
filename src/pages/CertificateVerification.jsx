@@ -171,7 +171,7 @@ export default function CertificateVerification() {
                         className="inline-flex items-center justify-center gap-2 px-5 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-8 relative z-10 shadow-[0_0_20px_rgba(16,185,129,0.15)]"
                     >
                         <ShieldCheck size={18} className="text-emerald-400" />
-                        <span className="text-emerald-400 font-black uppercase tracking-[0.25em] text-[10px]">Secure Verification Protocol</span>
+                        <span className="text-emerald-400 font-black uppercase tracking-[0.25em] text-[10px]">Officially Verified Certificate</span>
                     </motion.div>
 
                     <div className="flex flex-col md:flex-row items-center justify-center gap-6 relative z-10">

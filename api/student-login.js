@@ -36,6 +36,24 @@ if (!getApps().length) {
     }
 }
 
+// Lightweight in-memory rate limit: blocks repeated wrong-guess attempts per IP.
+// Resets when the serverless instance recycles — good enough to stop casual
+// brute-forcing of registration numbers without adding an external service.
+const loginAttempts = new Map();
+const MAX_ATTEMPTS = 5;
+const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+
+function isRateLimited(ip) {
+    const now = Date.now();
+    const entry = loginAttempts.get(ip);
+    if (!entry || now - entry.firstAttempt > WINDOW_MS) {
+        loginAttempts.set(ip, { count: 1, firstAttempt: now });
+        return false;
+    }
+    entry.count++;
+    return entry.count > MAX_ATTEMPTS;
+}
+
 export default async function handler(req, res) {
     // Enable CORS for potential standalone frontend hits, mostly local dev
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -52,6 +70,11 @@ export default async function handler(req, res) {
     }
 
     try {
+        const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim();
+        if (isRateLimited(ip)) {
+            return res.status(429).json({ error: 'Too many attempts. Please try again in a few minutes.' });
+        }
+
         const { registration, mobile } = req.body;
 
         if (!registration || !mobile) {

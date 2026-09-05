@@ -262,7 +262,7 @@ export default function Jobs() {
                                             onClick={() => handleDelete(job.id)}
                                             className="px-6 py-3 rounded-2xl bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 border border-transparent hover:border-red-100 transition-all font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2"
                                         >
-                                            <Trash2 size={14} /> Sever Protocol
+                                            <Trash2 size={14} /> Delete Listing
                                         </button>
                                     )}
                                 </div>

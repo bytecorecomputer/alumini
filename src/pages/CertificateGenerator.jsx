@@ -566,7 +566,7 @@ export default function CertificateGenerator() {
                                 </div>
                                 <div>
                                     <span className="text-slate-600">Division:</span>
-                                    <span className="ml-2 font-bold text-purple-600">{totals.division}</span>
+                                    <span className="ml-2 font-bold text-indigo-600">{totals.division}</span>
                                 </div>
                             </div>
                         </div>

@@ -49,7 +49,7 @@ export default function Login() {
       const password = e.target.password.value.trim();
 
       if (!email || !password) {
-        setError("Credentials required for system access");
+        setError("Please enter your email and password.");
         setLoading(false);
         return;
       }
@@ -60,7 +60,7 @@ export default function Login() {
 
         if (!snap.exists()) {
           await signOut(auth);
-          setError("Access denied: Your profile was not found in the system. Contact Admin.");
+          setError("We couldn't find your account. Please contact the admin.");
           setLoading(false);
           return;
         }
@@ -78,7 +78,7 @@ export default function Login() {
         // The useEffect hook will naturally catch the population of `user` and `role` 
         // from the AuthContext and redirect safely, preventing Auth Observer race conditions.
       } catch (err) {
-        setError(err.code === 'auth/invalid-credential' ? "Identity verification failed." : "Authentication failed.");
+        setError(err.code === 'auth/invalid-credential' ? "Incorrect email or password." : "Login failed. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -125,7 +125,7 @@ export default function Login() {
 
       } catch (err) {
         console.error("Student Login Error:", err);
-        setError(`System error: ${err.message || 'Unknown error occurred.'}`);
+        setError(err.message || 'Something went wrong. Please try again.');
       } finally {
         setLoading(false);
       }
@@ -139,14 +139,14 @@ export default function Login() {
     setResetSuccess("");
 
     if (!resetEmail) {
-      setResetError("Email is required for identity recovery.");
+      setResetError("Please enter your email address.");
       setResetLoading(false);
       return;
     }
 
     try {
       await sendPasswordResetEmail(auth, resetEmail);
-      setResetSuccess("Recovery link dispatched to your inbox!");
+      setResetSuccess("Reset link sent to your inbox!");
       // Close modal after delay
       setTimeout(() => {
         setIsResetModalOpen(false);
@@ -158,7 +158,7 @@ export default function Login() {
       if (err.code === 'auth/user-not-found') {
         setResetError("No account associated with this email.");
       } else {
-        setResetError("Recovery protocol failed. Try again later.");
+        setResetError("Something went wrong. Please try again.");
       }
     } finally {
       setResetLoading(false);
@@ -169,7 +169,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center py-20 px-4 bg-slate-50 relative overflow-hidden font-inter">
       {/* Background Orbs */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-30">
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-200 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-200 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-100 rounded-full blur-[120px] animate-pulse delay-700"></div>
       </div>
 
@@ -183,12 +183,12 @@ export default function Login() {
             <motion.div
               initial={{ rotate: -10, scale: 0.9 }}
               animate={{ rotate: 0, scale: 1 }}
-              className="mx-auto h-16 w-16 bg-slate-900 rounded-2xl flex items-center justify-center text-white mb-6 shadow-2xl"
+              className="mx-auto h-16 w-16 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-2xl shadow-blue-200"
             >
               <GraduationCap size={32} />
             </motion.div>
             <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-2">
-              {loginMode === "alumni" ? "Identity Login" : "Student Portal"}
+              {loginMode === "alumni" ? "Welcome Back" : "Student Portal"}
             </h2>
             <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px]">Bytecore Computer Centre</p>
           </div>
@@ -211,7 +211,7 @@ export default function Login() {
                 loginMode === "alumni" ? "text-slate-900" : "text-slate-400"
               )}
             >
-              Network
+              Staff / Alumni
             </button>
             <button
               onClick={() => { setLoginMode("student"); setError(""); }}
@@ -238,13 +238,13 @@ export default function Login() {
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Email Address</label>
                     <div className="relative group-focus-within:scale-[1.01] transition-transform">
                       <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                        <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                        <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                       </div>
                       <input
                         name="email"
                         type="email"
                         autoComplete="email"
-                        className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                        className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
                         placeholder="name@alumni.edu"
                       />
                     </div>
@@ -254,13 +254,13 @@ export default function Login() {
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
                     <div className="relative group-focus-within:scale-[1.01] transition-transform">
                       <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                        <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                        <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                       </div>
                       <input
                         name="password"
                         type="password"
                         autoComplete="current-password"
-                        className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                        className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
                         placeholder="••••••••"
                       />
                     </div>
@@ -268,9 +268,9 @@ export default function Login() {
                       <button
                         type="button"
                         onClick={() => setIsResetModalOpen(true)}
-                        className="text-[9px] font-black text-purple-600 uppercase tracking-widest hover:text-purple-800 transition-colors"
+                        className="text-[9px] font-black text-blue-600 uppercase tracking-widest hover:text-blue-800 transition-colors"
                       >
-                        Forgot Identity Password?
+                        Forgot password?
                       </button>
                     </div>
                   </div>
@@ -332,8 +332,7 @@ export default function Login() {
               type="submit"
               disabled={loading}
               className={cn(
-                "btn-premium w-full flex items-center justify-center py-4 group disabled:opacity-50 shadow-xl transition-all",
-                loginMode === "alumni" ? "shadow-purple-100" : "shadow-blue-100 bg-blue-600 hover:bg-blue-700",
+                "btn-premium w-full flex items-center justify-center py-4 group disabled:opacity-50 shadow-xl transition-all bg-blue-600 hover:bg-blue-700 shadow-blue-100",
                 loading && "animate-pulse"
               )}
             >
@@ -341,7 +340,7 @@ export default function Login() {
                 <Loader2 className="animate-spin h-5 w-5" />
               ) : (
                 <>
-                  Connect Now
+                  Log In
                   <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
                 </>
               )}
@@ -350,20 +349,20 @@ export default function Login() {
             <div className="pt-8 border-t border-slate-50 flex flex-col gap-4 text-center">
               <p className="text-xs font-bold text-slate-500">
                 New user?{" "}
-                <Link to="/register" className="text-purple-600 font-black hover:underline underline-offset-4">
+                <Link to="/register" className="text-blue-600 font-black hover:underline underline-offset-4">
                   Register
                 </Link>
               </p>
               <div className="flex items-center justify-center gap-2 text-slate-300">
                 <ShieldCheck size={14} />
-                <span className="text-[10px] uppercase font-black tracking-widest leading-none">End-to-End Encryption Enabled</span>
+                <span className="text-[10px] uppercase font-black tracking-widest leading-none">Secure Login</span>
               </div>
             </div>
           </form>
         </div>
       </motion.div>
 
-      {/* Forgot Password Premium Modal */}
+      {/* Forgot Password Modal */}
       <AnimatePresence>
         {isResetModalOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
@@ -375,8 +374,8 @@ export default function Login() {
             >
               <div className="flex justify-between items-center p-10 bg-slate-50/50 border-b border-slate-100">
                 <div>
-                  <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Recover Access</h2>
-                  <p className="text-slate-500 text-xs font-black uppercase tracking-widest mt-1">Identity Restoration Protocol</p>
+                  <h2 className="text-3xl font-black text-slate-900 tracking-tighter">Reset Password</h2>
+                  <p className="text-slate-500 text-xs font-black uppercase tracking-widest mt-1">We'll email you a reset link</p>
                 </div>
                 <button
                   onClick={() => setIsResetModalOpen(false)}
@@ -398,7 +397,7 @@ export default function Login() {
                       required
                       value={resetEmail}
                       onChange={(e) => setResetEmail(e.target.value)}
-                      className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 outline-none text-slate-800 font-bold transition-all"
+                      className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 outline-none text-slate-800 font-bold transition-all"
                       placeholder="recovery@alumni.edu"
                     />
                   </div>
@@ -420,7 +419,7 @@ export default function Login() {
                   type="submit"
                   disabled={resetLoading}
                   className={cn(
-                    "w-full btn-premium py-5 bg-slate-900 text-white shadow-2xl shadow-purple-900/20 uppercase tracking-[0.3em] font-black text-sm active:scale-95 disabled:opacity-50",
+                    "w-full btn-premium py-5 bg-gradient-to-br from-indigo-600 to-blue-600 text-white shadow-2xl shadow-blue-900/20 uppercase tracking-[0.3em] font-black text-sm active:scale-95 disabled:opacity-50",
                     resetLoading && "animate-pulse"
                   )}
                 >
@@ -429,7 +428,7 @@ export default function Login() {
                   ) : (
                     <>
                       <Zap size={20} className="mr-2" />
-                      Initiate Recovery
+                      Send Reset Link
                     </>
                   )}
                 </button>

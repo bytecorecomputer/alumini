@@ -153,18 +153,18 @@ export default function ExpertManager() {
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
                     <div>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 border border-purple-100">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 border border-indigo-100">
                             <Users size={12} /> Expert Management
                         </div>
                         <h1 className="text-5xl font-black text-slate-900 tracking-tighter">
-                            Our <span className="text-purple-600">Experts.</span>
+                            Our <span className="text-indigo-600">Experts.</span>
                         </h1>
                         <p className="text-slate-500 font-bold mt-2 text-lg">Manage team members displayed on the About page.</p>
                     </div>
 
                     <button 
                         onClick={() => openModal()}
-                        className="flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-[1.5rem] font-black uppercase tracking-widest text-xs shadow-2xl hover:bg-purple-600 transition-all active:scale-95"
+                        className="flex items-center justify-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-[1.5rem] font-black uppercase tracking-widest text-xs shadow-2xl hover:bg-indigo-600 transition-all active:scale-95"
                     >
                         <Plus size={18} /> Add Expert
                     </button>
@@ -172,7 +172,7 @@ export default function ExpertManager() {
 
                 {loading ? (
                     <div className="flex flex-col items-center justify-center py-40 gap-4">
-                        <Loader2 className="animate-spin text-purple-600" size={40} />
+                        <Loader2 className="animate-spin text-indigo-600" size={40} />
                     </div>
                 ) : experts.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -186,7 +186,7 @@ export default function ExpertManager() {
                             >
                                 <div className="flex items-center gap-4 mb-6 border-b border-slate-50 pb-6">
                                     {exp.image ? (
-                                        <img src={exp.image} alt={exp.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-purple-50 shadow-sm" />
+                                        <img src={exp.image} alt={exp.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-indigo-50 shadow-sm" />
                                     ) : (
                                         <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
                                             <Users size={24} />
@@ -194,7 +194,7 @@ export default function ExpertManager() {
                                     )}
                                     <div>
                                         <h3 className="text-xl font-black text-slate-900 leading-tight">{exp.name}</h3>
-                                        <p className="text-purple-600 font-bold text-xs">{exp.role}</p>
+                                        <p className="text-indigo-600 font-bold text-xs">{exp.role}</p>
                                     </div>
                                 </div>
                                 <p className="text-slate-500 text-sm font-medium line-clamp-3 mb-6 h-16">
@@ -224,7 +224,7 @@ export default function ExpertManager() {
                         <p className="text-slate-500 font-medium mb-6">Add your team members here to show them on the public About page.</p>
                         <button 
                             onClick={() => openModal()}
-                            className="px-8 py-3 bg-purple-600 text-white rounded-xl font-black text-sm"
+                            className="px-8 py-3 bg-indigo-600 text-white rounded-xl font-black text-sm"
                         >
                             Add Your First Expert
                         </button>
@@ -251,15 +251,15 @@ export default function ExpertManager() {
                             <form onSubmit={handleSubmit} className="p-8 space-y-5">
                                 <div>
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-2 mb-1 block">Full Name</label>
-                                    <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-purple-100 font-bold" placeholder="e.g. Rahul Sir" />
+                                    <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-indigo-100 font-bold" placeholder="e.g. Rahul Sir" />
                                 </div>
                                 <div>
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-2 mb-1 block">Role / Title</label>
-                                    <input type="text" required value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-purple-100 font-bold" placeholder="e.g. Senior Teacher" />
+                                    <input type="text" required value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-indigo-100 font-bold" placeholder="e.g. Senior Teacher" />
                                 </div>
                                 <div>
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-2 mb-1 block">WhatsApp Number (with country code)</label>
-                                    <input type="text" required value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-purple-100 font-bold" placeholder="e.g. 917455098949" />
+                                    <input type="text" required value={formData.whatsapp} onChange={e => setFormData({...formData, whatsapp: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-indigo-100 font-bold" placeholder="e.g. 917455098949" />
                                 </div>
                                 <div>
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-2 mb-1 block">Profile Image</label>
@@ -268,10 +268,10 @@ export default function ExpertManager() {
                                 </div>
                                 <div>
                                     <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-2 mb-1 block">Short Description</label>
-                                    <textarea required value={formData.desc} onChange={e => setFormData({...formData, desc: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-purple-100 font-medium h-24 resize-none" placeholder="Short bio..." />
+                                    <textarea required value={formData.desc} onChange={e => setFormData({...formData, desc: e.target.value})} className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none outline-none focus:ring-2 focus:ring-indigo-100 font-medium h-24 resize-none" placeholder="Short bio..." />
                                 </div>
                                 <div className="pt-4">
-                                    <button disabled={isUploading} type="submit" className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-slate-200 hover:bg-purple-600 active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50">
+                                    <button disabled={isUploading} type="submit" className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-slate-200 hover:bg-indigo-600 active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50">
                                         {isUploading ? <><Loader2 size={16} className="animate-spin" /> Saving...</> : 'Save Expert'}
                                     </button>
                                 </div>

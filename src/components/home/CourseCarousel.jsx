@@ -17,7 +17,7 @@ const CourseCarousel = () => {
                     <div>
                         <span className="text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] mb-4 block">Accelerate Your Coding Career</span>
                         <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter">
-                            World-Class <span className="text-purple-600">IT Training</span>.
+                            World-Class <span className="text-indigo-600">IT Training</span>.
                         </h2>
                     </div>
                     <button onClick={() => navigate('/courses')} className="px-6 py-3 rounded-full bg-slate-50 text-slate-600 font-black uppercase tracking-widest text-xs border border-slate-200 hover:border-slate-300 transition-all flex items-center gap-2 group active:scale-95">

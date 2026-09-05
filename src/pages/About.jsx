@@ -94,7 +94,7 @@ const About = () => {
             {/* Hero Section */}
             <section className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[100px] -mr-32 -mt-32 animate-pulse"></div>
-                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[100px] -ml-32 -mb-32 animate-pulse" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[100px] -ml-32 -mb-32 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
                 <div className="relative z-10 text-center">
                     <motion.span
@@ -146,7 +146,7 @@ const About = () => {
                         viewport={{ once: true }}
                         className="lg:w-1/2 relative group"
                     >
-                        <div className="absolute -inset-4 bg-gradient-to-tr from-blue-200 to-purple-200 opacity-50 blur-2xl rounded-[2.5rem] group-hover:opacity-70 transition-opacity duration-700"></div>
+                        <div className="absolute -inset-4 bg-gradient-to-tr from-blue-200 to-indigo-200 opacity-50 blur-2xl rounded-[2.5rem] group-hover:opacity-70 transition-opacity duration-700"></div>
                         <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
                             <img src="/images/courseimg/BANNER.jpg" alt="Bytecore team working together" className="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-700" />
                         </div>
@@ -170,7 +170,7 @@ const About = () => {
                         viewport={{ once: true }}
                         className="lg:w-1/2"
                     >
-                        <h2 className="text-3xl md:text-5xl font-black mb-8 tracking-tighter text-slate-900">Our <span className="text-purple-600">Story</span></h2>
+                        <h2 className="text-3xl md:text-5xl font-black mb-8 tracking-tighter text-slate-900">Our <span className="text-indigo-600">Story</span></h2>
                         <div className="space-y-6 text-lg text-slate-600 font-medium leading-relaxed">
                             <p>
                                 Every great legacy begins with a humble spark. ByteCore Computer Centre was founded in <span className="text-slate-900 font-bold">2024</span> with a single, powerful mission: to bring elite technical education to the heart of the community.
@@ -179,7 +179,7 @@ const About = () => {
                                 We started our journey in <strong className="text-slate-900">Nariyawal</strong> with nothing but <strong className="text-blue-600 italic">two laptops</strong> and an unshakeable belief in the potential of our students. What began as a small initiative quickly grew through word-of-mouth and proven results.
                             </p>
                             <p>
-                                Driven by the success of our Nariyawal students, we expanded our horizons and established our <strong className="text-purple-600">second campus at Thiriya</strong>. Today, ByteCore stands as a symbol of growth, quality, and dedication, transforming lives through modern tech skills.
+                                Driven by the success of our Nariyawal students, we expanded our horizons and established our <strong className="text-indigo-600">second campus at Thiriya</strong>. Today, ByteCore stands as a symbol of growth, quality, and dedication, transforming lives through modern tech skills.
                             </p>
                         </div>
                         <div className="grid grid-cols-2 gap-6 mt-12">
@@ -188,7 +188,7 @@ const About = () => {
                                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Founded</div>
                             </div>
                             <div className="p-6 rounded-2xl bg-white shadow-xl shadow-slate-100 border border-slate-50 hover:-translate-y-1 transition-transform">
-                                <div className="text-4xl font-black text-purple-600 mb-2 tracking-tighter">2</div>
+                                <div className="text-4xl font-black text-indigo-600 mb-2 tracking-tighter">2</div>
                                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Campuses</div>
                             </div>
                         </div>
@@ -225,10 +225,10 @@ const About = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.2 }}
-                            className="bg-slate-50 p-10 rounded-[2rem] border border-slate-100 group hover:bg-purple-50/50 transition-colors duration-300"
+                            className="bg-slate-50 p-10 rounded-[2rem] border border-slate-100 group hover:bg-indigo-50/50 transition-colors duration-300"
                         >
-                            <div className="w-16 h-16 rounded-2xl bg-purple-100 flex items-center justify-center mb-8 group-hover:bg-purple-600 transition-colors duration-300 shadow-inner">
-                                <Eye className="text-purple-600 group-hover:text-white transition-colors w-8 h-8" />
+                            <div className="w-16 h-16 rounded-2xl bg-indigo-100 flex items-center justify-center mb-8 group-hover:bg-indigo-600 transition-colors duration-300 shadow-inner">
+                                <Eye className="text-indigo-600 group-hover:text-white transition-colors w-8 h-8" />
                             </div>
                             <h3 className="text-2xl font-black mb-4 text-slate-900 tracking-tight">Our Vision</h3>
                             <p className="text-slate-600 leading-relaxed font-medium">
@@ -242,12 +242,12 @@ const About = () => {
             {/* Timeline */}
             <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-slate-900">Our <span className="text-purple-600">Journey</span></h2>
+                    <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-slate-900">Our <span className="text-indigo-600">Journey</span></h2>
                     <p className="text-lg text-slate-500 font-medium max-w-2xl mx-auto">Milestones in our growth and success.</p>
                 </div>
 
                 <div className="max-w-3xl mx-auto relative">
-                    <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-200 via-purple-200 to-transparent rounded-full"></div>
+                    <div className="absolute left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-200 via-indigo-200 to-transparent rounded-full"></div>
 
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
@@ -273,11 +273,11 @@ const About = () => {
                         viewport={{ once: true }}
                         className="relative pl-24 pb-12 group"
                     >
-                        <div className="absolute left-[26px] top-6 w-5 h-5 rounded-full bg-purple-600 border-[5px] border-white shadow-xl z-10 transition-transform group-hover:scale-125"></div>
-                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl shadow-slate-100 group-hover:shadow-purple-100/50 transition-all">
+                        <div className="absolute left-[26px] top-6 w-5 h-5 rounded-full bg-indigo-600 border-[5px] border-white shadow-xl z-10 transition-transform group-hover:scale-125"></div>
+                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl shadow-slate-100 group-hover:shadow-indigo-100/50 transition-all">
                             <div className="flex flex-wrap justify-between items-center mb-6 gap-4 border-b border-slate-50 pb-4">
                                 <h3 className="text-2xl font-black text-slate-900">The Humble Start</h3>
-                                <span className="bg-purple-50 text-purple-600 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-purple-100">May 2024</span>
+                                <span className="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border border-indigo-100">May 2024</span>
                             </div>
                             <p className="text-slate-500 font-medium leading-relaxed">
                                 ByteCore officially opened its doors in Nariyawal with just two laptops and a massive dream.
@@ -322,7 +322,7 @@ const About = () => {
             {/* Testimonials */}
             <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-slate-900">Success <span className="text-purple-600">Stories</span></h2>
+                    <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter text-slate-900">Success <span className="text-indigo-600">Stories</span></h2>
                     <p className="text-lg text-slate-500 font-medium max-w-2xl mx-auto">Hear from our students who have transformed their careers.</p>
                 </div>
 

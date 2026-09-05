@@ -25,13 +25,13 @@ export default function Register() {
     const role = e.target.role.value;
 
     if (!name || !email || !password) {
-      setError("Identity formation requires all parameters");
+      setError("Please fill in all fields.");
       setLoading(false);
       return;
     }
 
     if (password.length < 6) {
-      setError("Security protocol requires 6+ characters");
+      setError("Password must be at least 6 characters.");
       setLoading(false);
       return;
     }
@@ -70,9 +70,9 @@ export default function Register() {
     } catch (err) {
       console.error(err);
       if (err.code === 'auth/email-already-in-use') {
-        setError("Identifier already registered in network");
+        setError("An account already exists with this email.");
       } else {
-        setError("Network initialization failure: " + err.message);
+        setError("Registration failed: " + err.message);
       }
     } finally {
       setLoading(false);
@@ -83,7 +83,7 @@ export default function Register() {
     <div className="min-h-screen flex items-center justify-center py-20 px-4 bg-slate-50 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full -z-10 opacity-30">
-        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-purple-100 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-indigo-100 rounded-full blur-[120px] animate-pulse"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-50 rounded-full blur-[120px] animate-pulse delay-500"></div>
       </div>
 
@@ -97,7 +97,7 @@ export default function Register() {
             <motion.div
               initial={{ rotate: 10, scale: 0.9 }}
               animate={{ rotate: 0, scale: 1 }}
-              className="mx-auto h-16 w-16 bg-slate-900 rounded-2xl flex items-center justify-center text-white mb-6 shadow-2xl"
+              className="mx-auto h-16 w-16 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center text-white mb-6 shadow-2xl shadow-blue-200"
             >
               <Zap size={32} />
             </motion.div>
@@ -111,13 +111,13 @@ export default function Register() {
                 <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Full Name</label>
                 <div className="relative group-focus-within:scale-[1.01] transition-transform">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                    <User className="h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                   </div>
                   <input
                     name="name"
                     type="text"
                     required
-                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
                     placeholder="Your Name"
                   />
                 </div>
@@ -127,13 +127,13 @@ export default function Register() {
                 <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Email Address</label>
                 <div className="relative group-focus-within:scale-[1.01] transition-transform">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                    <Mail className="h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                   </div>
                   <input
                     name="email"
                     type="email"
                     required
-                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
                     placeholder="name@alumni.edu"
                   />
                 </div>
@@ -143,13 +143,13 @@ export default function Register() {
                 <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
                 <div className="relative group-focus-within:scale-[1.01] transition-transform">
                   <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                    <Lock className="h-5 w-5 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                   </div>
                   <input
                     name="password"
                     type="password"
                     required
-                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-purple-100 focus:ring-4 focus:ring-purple-50 outline-none transition-all text-slate-800 font-bold"
+                    className="w-full pl-14 pr-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-blue-100 focus:ring-4 focus:ring-blue-50 outline-none transition-all text-slate-800 font-bold"
                     placeholder="Min. 6 characters"
                   />
                 </div>
@@ -161,13 +161,13 @@ export default function Register() {
               <div className="grid grid-cols-2 gap-4">
                 <label className="cursor-pointer group">
                   <input type="radio" name="role" value="student" className="peer sr-only" defaultChecked />
-                  <div className="rounded-2xl border-2 border-slate-50 p-5 text-center font-black uppercase tracking-widest text-xs peer-checked:border-purple-100 peer-checked:bg-purple-50/50 peer-checked:text-purple-700 hover:bg-slate-50 transition-all shadow-sm">
-                    Fellow
+                  <div className="rounded-2xl border-2 border-slate-50 p-5 text-center font-black uppercase tracking-widest text-xs peer-checked:border-blue-100 peer-checked:bg-blue-50/50 peer-checked:text-blue-700 hover:bg-slate-50 transition-all shadow-sm">
+                    Student
                   </div>
                 </label>
                 <label className="cursor-pointer group">
                   <input type="radio" name="role" value="alumni" className="peer sr-only" />
-                  <div className="rounded-2xl border-2 border-slate-50 p-5 text-center font-black uppercase tracking-widest text-xs peer-checked:border-blue-100 peer-checked:bg-blue-50/50 peer-checked:text-blue-700 hover:bg-slate-50 transition-all shadow-sm">
+                  <div className="rounded-2xl border-2 border-slate-50 p-5 text-center font-black uppercase tracking-widest text-xs peer-checked:border-indigo-100 peer-checked:bg-indigo-50/50 peer-checked:text-indigo-700 hover:bg-slate-50 transition-all shadow-sm">
                     Alumni
                   </div>
                 </label>
@@ -188,7 +188,7 @@ export default function Register() {
               type="submit"
               disabled={loading}
               className={cn(
-                "btn-premium w-full flex items-center justify-center py-5 group disabled:opacity-50 shadow-2xl shadow-purple-100",
+                "btn-premium w-full flex items-center justify-center py-5 group disabled:opacity-50 shadow-2xl shadow-blue-100 bg-blue-600 hover:bg-blue-700",
                 loading && "animate-pulse"
               )}
             >
@@ -205,13 +205,13 @@ export default function Register() {
             <div className="pt-10 border-t border-slate-50 text-center space-y-4">
               <p className="text-xs font-bold text-slate-500">
                 Already have an account?{" "}
-                <Link to="/login" className="text-purple-600 font-black hover:underline underline-offset-4">
+                <Link to="/login" className="text-blue-600 font-black hover:underline underline-offset-4">
                   Login
                 </Link>
               </p>
               <div className="flex items-center justify-center gap-2 text-slate-300">
                 <ShieldCheck size={14} />
-                <span className="text-[10px] uppercase font-black tracking-widest leading-none">Global Privacy Standards Compliant</span>
+                <span className="text-[10px] uppercase font-black tracking-widest leading-none">Your data is kept private and secure</span>
               </div>
             </div>
           </form>

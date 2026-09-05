@@ -97,8 +97,9 @@ export default function StudentPortal() {
         ? Math.min(100, Math.round((completedModuleCount / totalAvailableModules) * 100))
         : 0;
 
+    const totalPaidOverall = (student?.paidFees || 0) + (student?.oldPaidFees || 0);
     const feePaidPct = student?.totalFees > 0
-        ? Math.min(100, Math.round(((student.paidFees || 0) / student.totalFees) * 100))
+        ? Math.min(100, Math.round((totalPaidOverall / student.totalFees) * 100))
         : 0;
 
     // Real recent activity, built from actual fee payments — no fabricated
@@ -334,7 +335,7 @@ export default function StudentPortal() {
                                                 <p className="text-white/40 font-bold uppercase tracking-widest text-xs mb-4">Fee Paid</p>
                                                 <h3 className="text-5xl font-black mb-2">{feePaidPct}%</h3>
                                                 <p className={cn("font-bold text-xs uppercase tracking-widest mt-2 flex items-center gap-1", feePaidPct >= 100 ? "text-emerald-400" : "text-amber-400")}>
-                                                    <TrendingUp size={14} /> ₹{(student.paidFees || 0).toLocaleString('en-IN')} of ₹{(student.totalFees || 0).toLocaleString('en-IN')}
+                                                    <TrendingUp size={14} /> ₹{totalPaidOverall.toLocaleString('en-IN')} of ₹{(student.totalFees || 0).toLocaleString('en-IN')}
                                                 </p>
                                             </div>
                                         </div>
@@ -444,7 +445,7 @@ export default function StudentPortal() {
 
                                 {/* Dynamic Resources Section */}
                                 {((student.course || "").toLowerCase().includes('o level') || (student.course || "").toLowerCase().includes('ccc')) && (
-                                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[2.5rem] p-8 shadow-xl shadow-indigo-500/20 mb-12 text-white relative overflow-hidden">
+                                    <div className="bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-[2.5rem] p-8 shadow-xl shadow-indigo-500/20 mb-12 text-white relative overflow-hidden">
                                         <div className="absolute top-0 right-0 p-8 opacity-10"><Book size={120} /></div>
                                         <div className="relative z-10">
                                             <div className="flex items-center gap-3 mb-4">
@@ -577,6 +578,40 @@ export default function StudentPortal() {
                                 ? [...student.installments].sort((a, b) => (a.date || '').localeCompare(b.date || ''))
                                 : [];
 
+                            // Group installments by month for the "monthly fees" view.
+                            // Dates coming from the sheet aren't always ISO, so we try a
+                            // couple of common formats before giving up on a given entry.
+                            const parseInstallmentDate = (raw) => {
+                                if (!raw) return null;
+                                const direct = new Date(raw);
+                                if (!isNaN(direct.getTime())) return direct;
+                                const match = String(raw).match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+                                if (match) {
+                                    let [, d, m, y] = match;
+                                    if (y.length === 2) y = `20${y}`;
+                                    const parsed = new Date(`${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`);
+                                    if (!isNaN(parsed.getTime())) return parsed;
+                                }
+                                return null;
+                            };
+
+                            const monthlyMap = new Map();
+                            sortedInstallments.forEach(inst => {
+                                const parsed = parseInstallmentDate(inst.date || inst.dateDisplay);
+                                const key = parsed
+                                    ? `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}`
+                                    : 'Undated';
+                                const label = parsed
+                                    ? parsed.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })
+                                    : 'Date not recorded';
+                                if (!monthlyMap.has(key)) monthlyMap.set(key, { label, total: 0, count: 0 });
+                                const entry = monthlyMap.get(key);
+                                entry.total += Number(inst.amount) || 0;
+                                entry.count += 1;
+                            });
+                            const monthlyBreakdown = Array.from(monthlyMap.entries())
+                                .sort((a, b) => b[0].localeCompare(a[0]));
+
                             return (
                                 <div className="max-w-4xl mx-auto space-y-8">
                                     <div className="p-12 bg-white rounded-[3rem] border border-slate-100 shadow-sm relative overflow-hidden text-center">
@@ -603,11 +638,38 @@ export default function StudentPortal() {
                                         </div>
                                     </div>
 
+                                    {monthlyBreakdown.length > 0 && (
+                                        <div className="bg-white rounded-[3rem] p-8 border border-slate-100 shadow-sm">
+                                            <div className="mb-6">
+                                                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Month-wise Fees Paid</h3>
+                                                <p className="text-xs text-slate-400 font-medium mt-1">How much you paid, grouped by month</p>
+                                            </div>
+                                            <div className="divide-y divide-slate-100">
+                                                {monthlyBreakdown.map(([key, data]) => (
+                                                    <div key={key} className="py-4 flex items-center justify-between">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+                                                                <Calendar size={18} />
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-black text-slate-900 text-sm">{data.label}</p>
+                                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                                    {data.count} payment{data.count > 1 ? 's' : ''}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p className="font-black text-slate-900 text-lg">₹{data.total.toLocaleString('en-IN')}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
                                     <div className="bg-white rounded-[3rem] p-8 border border-slate-100 shadow-sm">
                                         <div className="flex items-center justify-between mb-8">
                                             <div>
                                                 <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Date-wise Installments</h3>
-                                                <p className="text-xs text-slate-400 font-medium mt-1">Chronological record of all fee receipts synchronized with your profile</p>
+                                                <p className="text-xs text-slate-400 font-medium mt-1">A record of all your fee payments</p>
                                             </div>
                                             <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest">
                                                 <ShieldCheck size={14} /> Verified Receipts

@@ -93,7 +93,7 @@ const OrbEffect = () => {
                     className="absolute inset-[10%] rounded-full border-[1px] border-indigo-500/10 shadow-[inner_0_0_80px_rgba(99,102,241,0.05)]"
                 />
                 
-                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-purple-500/5 rounded-full blur-[120px]" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 via-transparent to-indigo-500/5 rounded-full blur-[120px]" />
                 
                 {/* Sleek Ambient Core Glow */}
                 <div className="relative z-10 w-48 h-48 md:w-72 md:h-72 rounded-full bg-gradient-to-tr from-blue-500/10 to-indigo-500/10 backdrop-blur-3xl border border-white/20 shadow-2xl animate-pulse" />

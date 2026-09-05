@@ -63,12 +63,12 @@ export default function AdminDashboard() {
             await updateDoc(doc(db, "users", editingUser.id), {
                 ...editForm
             });
-            alert("Member profile synchronized successfully.");
+            alert("Profile updated successfully.");
             setEditingUser(null);
             fetchUsers();
         } catch (e) {
             console.error(e);
-            alert("Database Error: " + e.message);
+            alert("Error: " + e.message);
         }
     };
 
@@ -93,7 +93,7 @@ export default function AdminDashboard() {
     };
 
     const handleDelete = async (userId) => {
-        if (!window.confirm("CRITICAL: Permanently purge this member from the network?")) return;
+        if (!window.confirm("Delete this user permanently? This cannot be undone.")) return;
         try {
             await deleteDoc(doc(db, "users", userId));
             fetchUsers();
@@ -117,12 +117,12 @@ export default function AdminDashboard() {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="inline-block px-4 py-1.5 mb-6 rounded-full bg-purple-50 text-purple-600 text-xs font-black uppercase tracking-[0.2em] border border-purple-100"
+                            className="inline-block px-4 py-1.5 mb-6 rounded-full bg-indigo-50 text-indigo-600 text-xs font-black uppercase tracking-[0.2em] border border-indigo-100"
                         >
-                            Administrative Control Center
+                            Admin Dashboard
                         </motion.div>
                         <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter">
-                            Network <span className="text-purple-600">Governance</span>
+                            Manage Your <span className="text-blue-600">Platform</span>
                         </h1>
                     </div>
                 </div>
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
                         <div className="p-2 bg-blue-600 rounded-lg text-white">
                             <Zap size={18} />
                         </div>
-                        <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Quick Terminal</h2>
+                        <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Quick Actions</h2>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                         <ActionCard
@@ -250,7 +250,7 @@ export default function AdminDashboard() {
                     <StatCard
                         label="Privileged Admins"
                         value={stats.admins}
-                        icon={<Shield className="text-purple-600" />}
+                        icon={<Shield className="text-indigo-600" />}
                         color="purple"
                     />
                 </div>
@@ -267,11 +267,11 @@ export default function AdminDashboard() {
                             <p className="text-slate-500 font-medium">Verify, manage, and audit all platform users.</p>
                         </div>
                         <div className="relative group w-full md:w-96">
-                            <Search className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
+                            <Search className="absolute left-4 top-3.5 h-5 w-5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
                             <input
                                 type="text"
                                 placeholder="Filter by name, email or role..."
-                                className="w-full pl-12 pr-6 py-3.5 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-purple-100 outline-none transition-all text-slate-800 placeholder-slate-400 font-bold"
+                                className="w-full pl-12 pr-6 py-3.5 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-100 outline-none transition-all text-slate-800 placeholder-slate-400 font-bold"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -292,7 +292,7 @@ export default function AdminDashboard() {
                             </thead>
                             <tbody className="divide-y divide-slate-50">
                                 {loading ? (
-                                    <tr><td colSpan="5" className="p-20 text-center text-slate-400 font-black uppercase tracking-widest text-sm animate-pulse">Synchronizing Database</td></tr>
+                                    <tr><td colSpan="5" className="p-20 text-center text-slate-400 font-black uppercase tracking-widest text-sm animate-pulse">Loading users…</td></tr>
                                 ) : (
                                     filteredUsers.map((u) => (
                                         <tr key={u.id} className="hover:bg-slate-50/50 transition-colors group">
@@ -434,7 +434,7 @@ export default function AdminDashboard() {
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
                                         <input
                                             type="text"
-                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-purple-100 outline-none font-bold text-slate-800"
+                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-100 outline-none font-bold text-slate-800"
                                             value={editForm.displayName || ""}
                                             onChange={(e) => setEditForm({ ...editForm, displayName: e.target.value })}
                                         />
@@ -442,7 +442,7 @@ export default function AdminDashboard() {
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Network Role</label>
                                         <select
-                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-purple-100 outline-none font-bold text-slate-800 appearance-none"
+                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-100 outline-none font-bold text-slate-800 appearance-none"
                                             value={editForm.role || "student"}
                                             onChange={(e) => setEditForm({ ...editForm, role: e.target.value })}
                                         >
@@ -458,7 +458,7 @@ export default function AdminDashboard() {
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Headline</label>
                                     <input
                                         type="text"
-                                        className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-purple-100 outline-none font-bold text-slate-800"
+                                        className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-100 outline-none font-bold text-slate-800"
                                         value={editForm.headline || ""}
                                         onChange={(e) => setEditForm({ ...editForm, headline: e.target.value })}
                                     />
@@ -469,7 +469,7 @@ export default function AdminDashboard() {
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Affiliation / Company</label>
                                         <input
                                             type="text"
-                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-purple-100 outline-none font-bold text-slate-800"
+                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-100 outline-none font-bold text-slate-800"
                                             value={editForm.company || ""}
                                             onChange={(e) => setEditForm({ ...editForm, company: e.target.value })}
                                         />
@@ -478,7 +478,7 @@ export default function AdminDashboard() {
                                         <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Course / Major</label>
                                         <input
                                             type="text"
-                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-purple-100 outline-none font-bold text-slate-800"
+                                            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-100 outline-none font-bold text-slate-800"
                                             value={editForm.course || ""}
                                             onChange={(e) => setEditForm({ ...editForm, course: e.target.value })}
                                         />
@@ -497,7 +497,7 @@ export default function AdminDashboard() {
                                     onClick={handleEditSave}
                                     className="px-10 py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-slate-200 hover:bg-slate-800 active:scale-95 transition-all"
                                 >
-                                    Synchronize Database
+                                    Save Changes
                                 </button>
                             </div>
                         </motion.div>
@@ -555,7 +555,7 @@ function StatCard({ label, value, icon, color, trend }) {
         blue: "bg-blue-50 text-blue-600 ring-blue-100",
         amber: "bg-amber-50 text-amber-600 ring-amber-100",
         emerald: "bg-emerald-50 text-emerald-600 ring-emerald-100",
-        purple: "bg-purple-50 text-purple-600 ring-purple-100"
+        purple: "bg-indigo-50 text-indigo-600 ring-indigo-100"
     };
 
     return (
@@ -583,7 +583,7 @@ function StatCard({ label, value, icon, color, trend }) {
 
 function RoleBadge({ role }) {
     const variants = {
-        admin: "bg-purple-100 text-purple-700 border-purple-200",
+        admin: "bg-indigo-100 text-indigo-700 border-indigo-200",
         super_admin: "bg-slate-900 text-white border-slate-900",
         alumni: "bg-amber-100 text-amber-700 border-amber-200",
         student: "bg-emerald-100 text-emerald-700 border-emerald-200"
@@ -622,7 +622,7 @@ function AdminActionButtons({ user, onEdit, onPromote, onRevoke, onDelete }) {
             ) : (
                 <button
                     onClick={() => onPromote(user.id)}
-                    className="p-2.5 text-purple-600 hover:bg-purple-50 rounded-xl transition-all border border-transparent hover:border-purple-100"
+                    className="p-2.5 text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all border border-transparent hover:border-indigo-100"
                     title="Promote to Admin"
                 >
                     <ShieldAlert size={16} />

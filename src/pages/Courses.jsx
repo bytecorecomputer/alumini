@@ -110,7 +110,7 @@ const Courses = () => {
             {/* Hero Section */}
             <div className="relative max-w-7xl mx-auto mb-16 text-center z-10">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[100px] -z-10 animate-pulse"></div>
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px] -z-10 animate-pulse" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] -z-10 animate-pulse" style={{ animationDelay: '2s' }}></div>
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -229,7 +229,7 @@ const Courses = () => {
                                     className="group relative bg-white rounded-[2rem] p-6 shadow-xl shadow-slate-200/50 border border-slate-100 hover:border-blue-200 transition-all duration-500 flex flex-col h-full overflow-hidden cursor-pointer"
                                 >
                                     {/* Hover effect background */}
-                                    <div className={`absolute -inset-0.5 bg-gradient-to-br ${course.color || "from-blue-500 to-purple-500"} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-[2rem] z-0`}></div>
+                                    <div className={`absolute -inset-0.5 bg-gradient-to-br ${course.color || "from-blue-500 to-indigo-500"} opacity-0 group-hover:opacity-5 transition-opacity duration-500 rounded-[2rem] z-0`}></div>
 
                                     <div className="relative z-10 flex-grow flex flex-col">
                                         {/* Course Image Wrapper */}
@@ -288,7 +288,7 @@ const Courses = () => {
                                                 </span>
                                             </div>
                                             <div className="flex flex-col items-center justify-center text-center border-x border-slate-200">
-                                                <Users className="w-4 h-4 text-purple-500 mb-1.5" />
+                                                <Users className="w-4 h-4 text-indigo-500 mb-1.5" />
                                                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
                                                     {course.enrolled || "50+"} Enrolled
                                                 </span>

@@ -281,7 +281,7 @@ export default function Directory() {
                                             )}
                                             {profile.portfolioUrl && (
                                                 <div className="flex items-center gap-3">
-                                                    <div className="p-2 bg-purple-50 text-purple-600 rounded-xl shrink-0">
+                                                    <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl shrink-0">
                                                         <Zap size={16} />
                                                     </div>
                                                     <div className="min-w-0">
@@ -368,8 +368,8 @@ function RoleBadge({ role, isVerified }) {
 
     if (role === 'admin' || role === 'super_admin') {
         return (
-            <span className="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider border bg-purple-50 text-purple-700 border-purple-200 shadow-sm flex items-center gap-1">
-                <Shield size={12} className="text-purple-600" /> Admin
+            <span className="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider border bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm flex items-center gap-1">
+                <Shield size={12} className="text-indigo-600" /> Admin
             </span>
         );
     }

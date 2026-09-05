@@ -22,6 +22,46 @@ import AdminFeeOverview from '../components/AdminFeeOverview';
 import { limit, startAfter } from 'firebase/firestore';
 import { parseDateToYYYYMM } from '../lib/utils';
 
+// Pure helper — lives outside the component so memoized rows can call it
+// directly without needing a fresh prop (and fresh object reference) on
+// every parent re-render.
+function calculateCourseExpiry(student) {
+    if (!student.admissionDate || !student.course) return null;
+
+    let durationMonths = 6; // Default fallback
+    const course = student.course.toUpperCase();
+    const totalFees = student.totalFees || 0;
+
+    if (course.includes('DCST') || course.includes('CCC')) {
+        durationMonths = 3;
+    } else if (course.includes('ACCOUNTING') || course.includes('DFA') || course === 'DCA' || course.includes('GRAPHIC')) {
+        durationMonths = 6;
+    } else if (course.includes('O LEVEL')) {
+        durationMonths = 12;
+    } else if (course.includes('ADCA') || course.includes('MDCA')) {
+        durationMonths = 12; // Default 1 year
+        // Smart Expiry: If any installment is >= 1000, consider it a 6-month fast-track
+        const hasHighInstallments = student.installments && student.installments.some(inst => Number(inst.amount) >= 1000);
+        if (hasHighInstallments || totalFees < 4500) {
+            durationMonths = 6;
+        }
+    }
+
+    const admission = new Date(student.admissionDate);
+    if (isNaN(admission.getTime())) return null;
+
+    const expiryDate = new Date(admission);
+    expiryDate.setMonth(expiryDate.getMonth() + durationMonths);
+
+    const isCompleted = new Date() > expiryDate;
+
+    return {
+        duration: durationMonths,
+        expiryDate: expiryDate.toLocaleDateString(),
+        isCompleted: isCompleted
+    };
+}
+
 export default function CoachingAdmin() {
     const { user, role } = useAuth();
     const navigate = useNavigate();
@@ -62,35 +102,57 @@ export default function CoachingAdmin() {
     const [telegramChatId, setTelegramChatId] = useState('');
 
     const isOwner = role === 'admin' || role === 'super_admin';
-    const [visibleCount, setVisibleCount] = useState(50);
 
     useEffect(() => {
         if (!isOwner) return;
 
-        // Instant Global Stats fetch
+        // Instant Global Stats fetch (single small doc — cheap to keep live)
         const unsubStats = onSnapshot(doc(db, "metadata", "coaching_stats"), (snap) => {
             if (snap.exists()) setGlobalStats(snap.data());
         });
 
-        // Single persistent realtime listener for students (Loaded once in memory for 0ms instant search)
+        // Students: one-time load instead of a live listener.
+        // A live listener on the whole collection re-downloads and
+        // re-renders EVERY student on EVERY write (including your own
+        // saves/imports), which is what was making this page feel slow.
+        // We load once here and update local state directly after any
+        // add/edit/import, so the UI stays instant without needing a
+        // full round trip to Firestore every time.
+        let cancelled = false;
         const q = query(collection(db, "students"), orderBy("updatedAt", "desc"));
-        const unsubStudents = onSnapshot(q, (snap) => {
+        getDocs(q).then((snap) => {
+            if (cancelled) return;
             const results = snap.docs.map(doc => sanitizeStudentData({ id: doc.id, ...doc.data() }));
             setStudents(results);
             setLoading(false);
+        }).catch((err) => {
+            console.error("Failed to load students:", err);
+            setLoading(false);
         });
 
-        // Real-time courses listener
+        // Real-time courses listener (small collection — cheap to keep live)
         const unsubCourses = onSnapshot(collection(db, "courses"), (snap) => {
             setCourses(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
         });
 
         return () => {
+            cancelled = true;
             unsubStats();
-            unsubStudents();
             unsubCourses();
         };
     }, [isOwner]);
+
+    // Manually re-pull the student list from Firestore (used after bulk
+    // imports, where merging hundreds of rows by hand isn't worth it).
+    const refreshStudents = async () => {
+        try {
+            const q = query(collection(db, "students"), orderBy("updatedAt", "desc"));
+            const snap = await getDocs(q);
+            setStudents(snap.docs.map(doc => sanitizeStudentData({ id: doc.id, ...doc.data() })));
+        } catch (err) {
+            console.error("Failed to refresh students:", err);
+        }
+    };
 
 
     const loadMoreStudents = async () => {
@@ -149,8 +211,20 @@ export default function CoachingAdmin() {
 
             await setDoc(studentRef, data, { merge: true });
 
-            // Background sync stats
-            await syncAggregateStats();
+            // Update the on-screen list immediately instead of waiting on
+            // a network round trip — this is what makes the save feel instant.
+            setStudents(prev => {
+                const existing = prev.find(s => s.id === trimmedReg);
+                const merged = existing
+                    ? { ...existing, ...data, id: trimmedReg }
+                    : { ...data, id: trimmedReg, paidFees: 0, installments: [] };
+                const rest = prev.filter(s => s.id !== trimmedReg);
+                return [merged, ...rest];
+            });
+
+            // Stats recalculation runs in the background so the admin isn't
+            // stuck waiting on a full-collection scan after every save.
+            syncAggregateStats().catch(err => console.error("Stats sync failed:", err));
 
             setIsAddEditModalOpen(false);
             setStudentForm({
@@ -305,6 +379,8 @@ export default function CoachingAdmin() {
         });
     }, [students, searchTerm, filterStatus, centerFilter]);
 
+    const goToStudent = React.useCallback((id) => navigate(`/admin/coaching/student/${id}`), [navigate]);
+
     const stats = React.useMemo(() => {
         const isFiltered = searchTerm || centerFilter !== 'all' || filterStatus !== 'all';
         
@@ -383,43 +459,6 @@ export default function CoachingAdmin() {
             .slice(-12) // Last 12 months with data
             .map(k => ({ month: k, revenue: trends[k] }));
     }, [filteredStudents]);
-
-    const calculateCourseExpiry = (student) => {
-        if (!student.admissionDate || !student.course) return null;
-        
-        let durationMonths = 6; // Default fallback
-        const course = student.course.toUpperCase();
-        const totalFees = student.totalFees || 0;
-
-        if (course.includes('DCST') || course.includes('CCC')) {
-            durationMonths = 3;
-        } else if (course.includes('ACCOUNTING') || course.includes('DFA') || course === 'DCA' || course.includes('GRAPHIC')) {
-            durationMonths = 6;
-        } else if (course.includes('O LEVEL')) {
-            durationMonths = 12;
-        } else if (course.includes('ADCA') || course.includes('MDCA')) {
-            durationMonths = 12; // Default 1 year
-            // Smart Expiry: If any installment is >= 1000, consider it a 6-month fast-track
-            const hasHighInstallments = student.installments && student.installments.some(inst => Number(inst.amount) >= 1000);
-            if (hasHighInstallments || totalFees < 4500) {
-                durationMonths = 6;
-            }
-        }
-
-        const admission = new Date(student.admissionDate);
-        if (isNaN(admission.getTime())) return null;
-
-        const expiryDate = new Date(admission);
-        expiryDate.setMonth(expiryDate.getMonth() + durationMonths);
-        
-        const isCompleted = new Date() > expiryDate;
-        
-        return {
-            duration: durationMonths,
-            expiryDate: expiryDate.toLocaleDateString(),
-            isCompleted: isCompleted
-        };
-    };
 
     if (!isOwner) {
         return (
@@ -608,54 +647,13 @@ export default function CoachingAdmin() {
                     <div className="md:hidden flex flex-col divide-y divide-slate-50">
                         {loading ? (
                             <div className="py-24 text-center"><Loader2 size={40} className="animate-spin mx-auto text-blue-200" /></div>
-                        ) : filteredStudents.map(student => {
-                            const expiryInfo = calculateCourseExpiry(student);
-                            return (
-                                <div 
-                                    key={student.id} 
-                                    onClick={() => navigate(`/admin/coaching/student/${student.id}`)}
-                                    className="p-5 hover:bg-blue-50/30 active:bg-blue-50 transition-all cursor-pointer"
-                                >
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <div className="h-12 w-12 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black text-xs shadow-lg shrink-0 overflow-hidden border-2 border-white">
-                                            {student.photoUrl ? <img src={student.photoUrl} alt="" className="w-full h-full object-cover" /> : student.registration}
-                                        </div>
-                                        <div className="min-w-0 flex-1">
-                                            <h4 className="font-black text-slate-900 text-base tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
-                                            <div className="flex items-center gap-2 flex-wrap">
-                                                <span className="text-[9px] font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-md tracking-wider">#{student.registration}</span>
-                                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
-                                                <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-3 mb-4">
-                                        <div className="bg-slate-50 rounded-xl p-3">
-                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Course</p>
-                                            <div className="flex items-center gap-1.5">
-                                                <BookOpen size={12} className="text-blue-500" />
-                                                <span className="text-[10px] font-black text-slate-700 truncate">{student.course}</span>
-                                            </div>
-                                        </div>
-                                        <div className="bg-slate-50 rounded-xl p-3">
-                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
-                                            <div className="flex items-center gap-1.5">
-                                                {expiryInfo?.isCompleted ? <span className="text-[9px] font-black text-red-600">FINISHED</span> : <span className="text-[9px] font-black text-emerald-600">ACTIVE</span>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between text-[10px] font-black text-slate-500">
-                                            <span>₹{(student.paidFees || 0) + (student.oldPaidFees || 0)}</span>
-                                            <span className="opacity-40">/ {student.totalFees || 0}</span>
-                                        </div>
-                                        <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
-                                            <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(100, (((student.paidFees || 0) + (student.oldPaidFees || 0)) / (student.totalFees || 1)) * 100)}%` }} className="h-full bg-blue-500 rounded-full" />
-                                        </div>
-                                    </div>
-                                </div>
-                            )
-                        })}
+                        ) : filteredStudents.map(student => (
+                            <StudentCardMobile
+                                key={student.id}
+                                student={student}
+                                onGoToStudent={goToStudent}
+                            />
+                        ))}
                     </div>
 
                     {/* Desktop Table View */}
@@ -672,62 +670,13 @@ export default function CoachingAdmin() {
                             <tbody className="divide-y divide-slate-50">
                                 {loading ? (
                                     <tr><td colSpan="4" className="py-24 text-center"><Loader2 size={40} className="animate-spin mx-auto text-blue-200" /></td></tr>
-                                ) : filteredStudents.map(student => {
-                                    const expiryInfo = calculateCourseExpiry(student);
-                                    return (
-                                    <tr key={student.id} className="hover:bg-blue-50/30 transition-all group cursor-pointer" onClick={() => navigate(`/admin/coaching/student/${student.id}`)}>
-                                        <td className="px-10 py-6">
-                                            <div className="flex items-center gap-5">
-                                                <div className="h-14 w-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-black text-xs shadow-lg group-hover:scale-110 transition-transform shrink-0 overflow-hidden border-2 border-white">
-                                                    {student.photoUrl ? <img src={student.photoUrl} alt="" className="w-full h-full object-cover" /> : student.registration}
-                                                </div>
-                                                <div className="min-w-0">
-                                                    <h4 className="font-black text-slate-900 text-lg tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
-                                                    <div className="flex items-center gap-2 flex-wrap">
-                                                        <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md tracking-wider">#{student.registration}</span>
-                                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
-                                                        <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-10 py-6">
-                                            <div className="flex flex-col gap-2">
-                                                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-100 rounded-xl w-fit">
-                                                    <BookOpen size={12} className="text-blue-500" />
-                                                    <span className="text-xs font-black text-slate-700">{student.course}</span>
-                                                    {expiryInfo && <span className="text-[9px] text-slate-400 font-bold ml-1">({expiryInfo.duration}m)</span>}
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 rounded-full", student.status === 'pass' ? "text-emerald-500 bg-emerald-50" : "text-amber-500 bg-amber-50")}>{student.status}</span>
-                                                    {expiryInfo?.isCompleted && <span className="flex items-center gap-1 text-[9px] font-black text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100"><AlertCircle size={10} /> FINISHED</span>}
-                                                    {expiryInfo && !expiryInfo.isCompleted && <span className="flex items-center gap-1 text-[9px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100"><CheckCircle size={10} /> ACTIVE</span>}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-10 py-6">
-                                            <div className="space-y-2 min-w-[100px]">
-                                                <div className="flex justify-between text-[10px] font-black text-slate-500">
-                                                    <span>₹{(student.paidFees || 0) + (student.oldPaidFees || 0)}</span>
-                                                    <span className="opacity-40">/ {student.totalFees || 0}</span>
-                                                </div>
-                                                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
-                                                    <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(100, (((student.paidFees || 0) + (student.oldPaidFees || 0)) / (student.totalFees || 1)) * 100)}%` }} className="h-full bg-blue-500 rounded-full" />
-                                                </div>
-                                                {student.installments?.length > 0 && (
-                                                    <p className="text-[9px] font-bold text-slate-400">
-                                                        {student.installments.length} installment{student.installments.length > 1 ? 's' : ''} · last {student.installments[student.installments.length - 1]?.date || '-'}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td className="px-10 py-6 text-right">
-                                            <div className="flex justify-end gap-2">
-                                                <button className="p-3 bg-white text-slate-400 group-hover:text-blue-600 border border-slate-100 rounded-xl transition-all shadow-sm"><ChevronRight size={16} /></button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )})}
+                                ) : filteredStudents.map(student => (
+                                    <StudentRowDesktop
+                                        key={student.id}
+                                        student={student}
+                                        onGoToStudent={goToStudent}
+                                    />
+                                ))}
                             </tbody>
                         </table>
                     </div>
@@ -812,7 +761,7 @@ export default function CoachingAdmin() {
                                     value={studentForm.registration}
                                     onChange={v => setStudentForm({ ...studentForm, registration: v })}
                                 />
-                                <Input label="Full Identity Name" value={studentForm.fullName} onChange={v => setStudentForm({ ...studentForm, fullName: v })} />
+                                <Input label="Full Name" value={studentForm.fullName} onChange={v => setStudentForm({ ...studentForm, fullName: v })} />
 
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Academic Course</label>
@@ -821,7 +770,7 @@ export default function CoachingAdmin() {
                                         value={studentForm.course}
                                         onChange={e => onCourseChange(e.target.value)}
                                     >
-                                        <option value="">Select Protocol...</option>
+                                        <option value="">Select a course...</option>
                                         {courses.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
                                     </select>
                                 </div>
@@ -1051,7 +1000,8 @@ export default function CoachingAdmin() {
                                                             await batch.commit();
                                                         }
 
-                                                        await syncAggregateStats();
+                                                        syncAggregateStats().catch(err => console.error("Stats sync failed:", err));
+                                                        await refreshStudents();
                                                         alert(`Success! Imported ${parsedPreview.length} students to Firestore database.`);
                                                         setIsRawPasteModalOpen(false);
                                                         setRawPasteText('');
@@ -1095,6 +1045,122 @@ export default function CoachingAdmin() {
         </div >
     );
 }
+
+// Memoized so typing in the search box or paginating doesn't force every
+// row to re-render — only rows whose underlying student data changed do.
+const StudentCardMobile = React.memo(function StudentCardMobile({ student, onGoToStudent }) {
+    const expiryInfo = calculateCourseExpiry(student);
+    const totalPaid = (student.paidFees || 0) + (student.oldPaidFees || 0);
+    return (
+        <div
+            onClick={() => onGoToStudent(student.id)}
+            className="p-5 hover:bg-blue-50/30 active:bg-blue-50 transition-all cursor-pointer"
+        >
+            <div className="flex items-center gap-4 mb-4">
+                <div className="h-12 w-12 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black text-xs shadow-lg shrink-0 overflow-hidden border-2 border-white">
+                    {student.photoUrl ? <img src={student.photoUrl} alt="" className="w-full h-full object-cover" /> : student.registration}
+                </div>
+                <div className="min-w-0 flex-1">
+                    <h4 className="font-black text-slate-900 text-base tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
+                    <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[9px] font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-md tracking-wider">#{student.registration}</span>
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
+                        <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
+                    </div>
+                </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-slate-50 rounded-xl p-3">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Course</p>
+                    <div className="flex items-center gap-1.5">
+                        <BookOpen size={12} className="text-blue-500" />
+                        <span className="text-[10px] font-black text-slate-700 truncate">{student.course}</span>
+                    </div>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-3">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                    <div className="flex items-center gap-1.5">
+                        {expiryInfo?.isCompleted ? <span className="text-[9px] font-black text-red-600">FINISHED</span> : <span className="text-[9px] font-black text-emerald-600">ACTIVE</span>}
+                    </div>
+                </div>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between text-[10px] font-black text-slate-500">
+                    <span>₹{totalPaid}</span>
+                    <span className="opacity-40">/ {student.totalFees || 0}</span>
+                </div>
+                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
+                    <div
+                        style={{ width: `${Math.min(100, (totalPaid / (student.totalFees || 1)) * 100)}%` }}
+                        className="h-full bg-blue-500 rounded-full transition-[width] duration-300"
+                    />
+                </div>
+            </div>
+        </div>
+    );
+});
+
+const StudentRowDesktop = React.memo(function StudentRowDesktop({ student, onGoToStudent }) {
+    const expiryInfo = calculateCourseExpiry(student);
+    const totalPaid = (student.paidFees || 0) + (student.oldPaidFees || 0);
+    return (
+        <tr className="hover:bg-blue-50/30 transition-all group cursor-pointer" onClick={() => onGoToStudent(student.id)}>
+            <td className="px-10 py-6">
+                <div className="flex items-center gap-5">
+                    <div className="h-14 w-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-black text-xs shadow-lg group-hover:scale-110 transition-transform shrink-0 overflow-hidden border-2 border-white">
+                        {student.photoUrl ? <img src={student.photoUrl} alt="" className="w-full h-full object-cover" /> : student.registration}
+                    </div>
+                    <div className="min-w-0">
+                        <h4 className="font-black text-slate-900 text-lg tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md tracking-wider">#{student.registration}</span>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
+                            <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td className="px-10 py-6">
+                <div className="flex flex-col gap-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-100 rounded-xl w-fit">
+                        <BookOpen size={12} className="text-blue-500" />
+                        <span className="text-xs font-black text-slate-700">{student.course}</span>
+                        {expiryInfo && <span className="text-[9px] text-slate-400 font-bold ml-1">({expiryInfo.duration}m)</span>}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 rounded-full", student.status === 'pass' ? "text-emerald-500 bg-emerald-50" : "text-amber-500 bg-amber-50")}>{student.status}</span>
+                        {expiryInfo?.isCompleted && <span className="flex items-center gap-1 text-[9px] font-black text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100"><AlertCircle size={10} /> FINISHED</span>}
+                        {expiryInfo && !expiryInfo.isCompleted && <span className="flex items-center gap-1 text-[9px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100"><CheckCircle size={10} /> ACTIVE</span>}
+                    </div>
+                </div>
+            </td>
+            <td className="px-10 py-6">
+                <div className="space-y-2 min-w-[100px]">
+                    <div className="flex justify-between text-[10px] font-black text-slate-500">
+                        <span>₹{totalPaid}</span>
+                        <span className="opacity-40">/ {student.totalFees || 0}</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
+                        <div
+                            style={{ width: `${Math.min(100, (totalPaid / (student.totalFees || 1)) * 100)}%` }}
+                            className="h-full bg-blue-500 rounded-full transition-[width] duration-300"
+                        />
+                    </div>
+                    {student.installments?.length > 0 && (
+                        <p className="text-[9px] font-bold text-slate-400">
+                            {student.installments.length} installment{student.installments.length > 1 ? 's' : ''} · last {student.installments[student.installments.length - 1]?.date || '-'}
+                        </p>
+                    )}
+                </div>
+            </td>
+            <td className="px-10 py-6 text-right">
+                <div className="flex justify-end gap-2">
+                    <button className="p-3 bg-white text-slate-400 group-hover:text-blue-600 border border-slate-100 rounded-xl transition-all shadow-sm"><ChevronRight size={16} /></button>
+                </div>
+            </td>
+        </tr>
+    );
+});
 
 function StatCard({ label, value, icon, color, delay = 0 }) {
     const colors = {

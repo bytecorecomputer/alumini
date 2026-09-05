@@ -33,7 +33,7 @@ export default function Privacy() {
 
                     <section>
                         <h2 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">3. Data Security & Storage</h2>
-                        <p>We employ enterprise-grade security protocols to protect your personal information. Digital certificates are securely maintained in our encrypted Vault systems for perpetual verification.</p>
+                        <p>We use industry-standard security practices to protect your personal information. Digital certificates are stored securely so they remain available for verification.</p>
                     </section>
 
                     <div className="pt-8 mt-8 border-t border-slate-100 flex items-center gap-4 bg-slate-50 p-6 rounded-2xl">

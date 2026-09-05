@@ -120,7 +120,7 @@ export default function AdminCertificateUpload() {
 
 
     return (
-        <div className="min-h-screen bg-[#020617] pt-24 pb-12 px-4 relative flex flex-col items-center selection:bg-purple-500/30">
+        <div className="min-h-screen bg-[#020617] pt-24 pb-12 px-4 relative flex flex-col items-center selection:bg-indigo-500/30">
             <Helmet>
                 <title>Upload Certificate | Admin Panel</title>
                 <meta name="robots" content="noindex, nofollow" />
@@ -128,7 +128,7 @@ export default function AdminCertificateUpload() {
 
             {/* Premium Background Effects */}
             <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-[10%] left-[-10%] w-[50%] h-[50%] bg-purple-600/10 rounded-full blur-[120px] mix-blend-screen" />
+                <div className="absolute top-[10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 rounded-full blur-[120px] mix-blend-screen" />
                 <div className="absolute bottom-[20%] right-[-10%] w-[50%] h-[50%] bg-pink-600/10 rounded-full blur-[120px] mix-blend-screen" />
                 <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'radial-gradient(white 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
             </div>
@@ -147,13 +147,13 @@ export default function AdminCertificateUpload() {
                             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                             Admin Dashboard
                         </Link>
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-black uppercase tracking-widest rounded-full">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black uppercase tracking-widest rounded-full">
                             <ShieldCheck size={14} /> Secured
                         </div>
                     </div>
 
                     <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-4 text-left w-full">
-                        Secure <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-300">Upload</span> System
+                        Secure <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-300">Upload</span> System
                     </h1>
                     <p className="text-slate-400 text-left w-full text-base">
                         Deploy student certificates directly into the encrypted Firebase Vault. This instantly activates them for public verification.
@@ -166,13 +166,13 @@ export default function AdminCertificateUpload() {
                     transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                     className="w-full bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden"
                 >
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500" />
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-pink-500" />
 
                     <form onSubmit={handleSubmit} className="space-y-6">
 
                         {/* Secret Token Input - Dynamic Insertion */}
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-purple-400 uppercase tracking-widest pl-1 flex items-center gap-1.5">
+                            <label className="text-[10px] font-black text-indigo-400 uppercase tracking-widest pl-1 flex items-center gap-1.5">
                                 <Key size={10} /> GitHub Secret Token (Active Session)
                             </label>
                             <div className="relative group">
@@ -182,12 +182,12 @@ export default function AdminCertificateUpload() {
                                     onChange={(e) => handleTokenChange(e.target.value)}
                                     placeholder="Enter your ghp_... token here"
                                     disabled={isUploading}
-                                    className="w-full bg-slate-950/80 border border-slate-800 text-white rounded-xl px-4 py-3 pr-12 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-mono text-sm placeholder:text-slate-800 disabled:opacity-50"
+                                    className="w-full bg-slate-950/80 border border-slate-800 text-white rounded-xl px-4 py-3 pr-12 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-mono text-sm placeholder:text-slate-800 disabled:opacity-50"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowToken(!showToken)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-purple-400 transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-indigo-400 transition-colors"
                                 >
                                     {showToken ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -204,7 +204,7 @@ export default function AdminCertificateUpload() {
                                     onChange={(e) => setRollNo(e.target.value)}
                                     placeholder="e.g. 1044"
                                     disabled={isUploading}
-                                    className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-bold placeholder:text-slate-700 disabled:opacity-50"
+                                    className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-bold placeholder:text-slate-700 disabled:opacity-50"
                                 />
                             </div>
 
@@ -216,7 +216,7 @@ export default function AdminCertificateUpload() {
                                     onChange={(e) => setDob(e.target.value)}
                                     placeholder="DD/MM/YYYY"
                                     disabled={isUploading}
-                                    className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all font-bold placeholder:text-slate-700 disabled:opacity-50"
+                                    className="w-full bg-slate-950 border border-slate-800 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all font-bold placeholder:text-slate-700 disabled:opacity-50"
                                 />
                             </div>
                         </div>
@@ -229,7 +229,7 @@ export default function AdminCertificateUpload() {
                                 <div
                                     onDragOver={(e) => e.preventDefault()}
                                     onDrop={handleDrop}
-                                    className="w-full h-48 border-2 border-dashed border-slate-700 hover:border-purple-500/50 rounded-2xl bg-slate-900/50 flex flex-col items-center justify-center cursor-pointer transition-colors group relative overflow-hidden"
+                                    className="w-full h-48 border-2 border-dashed border-slate-700 hover:border-indigo-500/50 rounded-2xl bg-slate-900/50 flex flex-col items-center justify-center cursor-pointer transition-colors group relative overflow-hidden"
                                 >
                                     <input
                                         type="file"
@@ -238,7 +238,7 @@ export default function AdminCertificateUpload() {
                                         className="absolute inset-0 opacity-0 cursor-pointer z-10"
                                         disabled={isUploading}
                                     />
-                                    <div className="w-14 h-14 bg-slate-800 group-hover:bg-purple-500/20 text-slate-400 group-hover:text-purple-400 rounded-full flex items-center justify-center mb-4 transition-colors">
+                                    <div className="w-14 h-14 bg-slate-800 group-hover:bg-indigo-500/20 text-slate-400 group-hover:text-indigo-400 rounded-full flex items-center justify-center mb-4 transition-colors">
                                         <UploadCloud size={24} />
                                     </div>
                                     <p className="text-white font-bold mb-1">Upload JPG or PDF</p>
@@ -296,7 +296,7 @@ export default function AdminCertificateUpload() {
                             <button
                                 type="submit"
                                 disabled={isUploading || !file || !rollNo || !dob || !token}
-                                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-black uppercase tracking-widest text-sm rounded-xl py-4 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:grayscale active:scale-[0.98] shadow-lg shadow-purple-600/20 relative overflow-hidden group"
+                                className="w-full bg-gradient-to-r from-indigo-600 to-pink-600 text-white font-black uppercase tracking-widest text-sm rounded-xl py-4 flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:grayscale active:scale-[0.98] shadow-lg shadow-indigo-600/20 relative overflow-hidden group"
                             >
                                 {isUploading ? (
                                     <>

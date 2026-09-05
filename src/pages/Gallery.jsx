@@ -179,7 +179,7 @@ const Gallery = () => {
                         animate={{ opacity: 1, scale: 1 }}
                         className="inline-block px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.5em] mb-12"
                     >
-                        Sector Archive Protocol
+                        Photo Gallery
                     </motion.div>
                     <motion.h1
                         initial={{ opacity: 0, y: 30 }}

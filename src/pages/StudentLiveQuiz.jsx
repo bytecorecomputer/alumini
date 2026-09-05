@@ -319,7 +319,7 @@ export default function StudentLiveQuiz() {
 
     if (!joined) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 flex flex-col items-center justify-center p-4 md:p-6 font-inter relative overflow-hidden">
+            <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-indigo-600 to-indigo-800 flex flex-col items-center justify-center p-4 md:p-6 font-inter relative overflow-hidden">
                 <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
                 
@@ -543,7 +543,7 @@ export default function StudentLiveQuiz() {
 
     if (status === 'leaderboard') {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-purple-900 flex flex-col items-center justify-center p-6 text-center text-white font-inter relative overflow-hidden">
+            <div className="min-h-screen bg-gradient-to-br from-indigo-900 to-indigo-900 flex flex-col items-center justify-center p-6 text-center text-white font-inter relative overflow-hidden">
                 <ParticlesBackground />
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
                 

@@ -102,7 +102,7 @@ export default function StudentLogin() {
                         x: [0, 100, 0],
                     }}
                     transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -bottom-[20%] -left-[10%] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px]"
+                    className="absolute -bottom-[20%] -left-[10%] w-[600px] h-[600px] bg-indigo-600/30 rounded-full blur-[120px]"
                 />
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
             </div>

@@ -30,8 +30,8 @@ const FeatureSlider = () => {
             title: "Direct Industry Mentorship",
             desc: "Learn from instructors with 10+ years of industry experience building software for fortune 500 companies and leading startups.",
             icon: <Users size={32} />,
-            color: "bg-purple-600",
-            shadow: "shadow-purple-500/20",
+            color: "bg-indigo-600",
+            shadow: "shadow-indigo-500/20",
             extra: "Personalized Career Coaching"
         },
         {
@@ -94,7 +94,7 @@ const FeatureSlider = () => {
                                 </div>
                                 <div className="hidden md:block flex-1 h-full">
                                     <div className="w-full h-full bg-white rounded-[3rem] border border-slate-100 shadow-inner overflow-hidden relative group">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-purple-600/5 opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                                         <div className="absolute inset-0 flex items-center justify-center p-12">
                                             {React.cloneElement(feature.icon, { size: 180, className: "text-slate-100 group-hover:scale-110 transition-transform duration-1000" })}
                                         </div>

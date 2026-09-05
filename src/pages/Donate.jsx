@@ -54,7 +54,7 @@ export default function Donate() {
 
         // Validate Key Presence
         if (!import.meta.env.VITE_RAZORPAY_KEY_ID) {
-            alert("Online payments are currently unavailable. Please use the Manual Transfer Protocol below.");
+            alert("Online payments are currently unavailable. Please use the Manual Bank Transfer below.");
             setIsLoading(false);
             const manualSection = document.getElementById('manual-transfer');
             if (manualSection) manualSection.scrollIntoView({ behavior: 'smooth' });
@@ -64,7 +64,7 @@ export default function Donate() {
         const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
 
         if (!res) {
-            alert('Payment gateway failed to load. Please use the Manual Transfer Protocol below.');
+            alert('Payment gateway failed to load. Please use the Manual Bank Transfer below.');
             setIsLoading(false);
             const manualSection = document.getElementById('manual-transfer');
             if (manualSection) manualSection.scrollIntoView({ behavior: 'smooth' });
@@ -81,7 +81,7 @@ export default function Donate() {
             });
             
             if (!orderRes.ok) {
-                alert("Online payment server is unreachable. Please use the Manual Transfer Protocol below.");
+                alert("Online payment server is unreachable. Please use the Manual Bank Transfer below.");
                 setIsLoading(false);
                 const manualSection = document.getElementById('manual-transfer');
                 if (manualSection) manualSection.scrollIntoView({ behavior: 'smooth' });
@@ -202,10 +202,10 @@ export default function Donate() {
                         </div>
 
                         <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tighter italic">
-                            Protocol <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-orange-600 font-black not-italic uppercase">Successful.</span>
+                            Payment <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-orange-600 font-black not-italic uppercase">Successful.</span>
                         </h1>
                         <p className="text-slate-500 font-bold text-lg mb-12 max-w-md mx-auto leading-relaxed">
-                            Your legacy contribution has been securely processed and integrated into the global network.
+                            Thank you — your contribution has been received and recorded.
                         </p>
 
                         <div className="bg-slate-50 rounded-3xl p-8 mb-12 border border-slate-100 space-y-6 text-left relative overflow-hidden group">
@@ -224,7 +224,7 @@ export default function Donate() {
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                                    <span className="flex items-center gap-2"><Building size={10} className="text-purple-500" /> Network Node</span>
+                                    <span className="flex items-center gap-2"><Building size={10} className="text-indigo-500" /> Network Node</span>
                                     <span className="text-slate-900 font-black">{name}</span>
                                 </div>
                             </div>
@@ -308,7 +308,7 @@ export default function Donate() {
                         icon={Zap}
                         title="Quantum Infrastructure"
                         description="Revolutionizing campus facilities with state-of-the-art research ecosystems."
-                        color="bg-purple-600"
+                        color="bg-indigo-600"
                         accent="purple"
                     />
                     <DonationImpactCard
@@ -354,7 +354,7 @@ export default function Donate() {
                                 </h2>
                                 <div className="flex items-center justify-center gap-4 text-slate-500 font-black uppercase tracking-[0.3em] text-[10px]">
                                     <span className="w-1.5 h-1.5 rounded-full bg-slate-700 animate-pulse"></span>
-                                    Contribution Protocol v5.0.4
+                                    Support Our Mission
                                     <span className="w-1.5 h-1.5 rounded-full bg-slate-700 animate-pulse"></span>
                                 </div>
                             </div>
@@ -458,10 +458,10 @@ export default function Donate() {
                         <Building size={40} />
                     </div>
                     <div>
-                        <h3 className="font-black text-slate-900 text-2xl tracking-tighter mb-2">Manual Transfer Protocol</h3>
+                        <h3 className="font-black text-slate-900 text-2xl tracking-tighter mb-2">Manual Bank Transfer</h3>
                         <p className="text-slate-500 font-bold mb-6">For direct legacy investment, utilize the following parameters:</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4 font-black uppercase tracking-widest text-[10px] text-blue-900">
-                            <p className="flex justify-between border-b border-blue-100 pb-2">Label: <span>Association Governance</span></p>
+                            <p className="flex justify-between border-b border-blue-100 pb-2">Label: <span>Bytecore Computer Centre</span></p>
                             <p className="flex justify-between border-b border-blue-100 pb-2">UID: <span>123 456 7890</span></p>
                             <p className="flex justify-between border-b border-blue-100 pb-2">C-Code: <span>HDFC0001234</span></p>
                             <p className="flex justify-between border-b border-blue-100 pb-2">Sector: <span>University Hub</span></p>
@@ -476,7 +476,7 @@ export default function Donate() {
 function DonationImpactCard({ icon: Icon, title, description, color, accent }) {
     const accents = {
         blue: "shadow-blue-200/50 group-hover:shadow-blue-300/50 hover:bg-blue-50/10",
-        purple: "shadow-purple-200/50 group-hover:shadow-purple-300/50 hover:bg-purple-50/10",
+        purple: "shadow-indigo-200/50 group-hover:shadow-indigo-300/50 hover:bg-indigo-50/10",
         emerald: "shadow-emerald-200/50 group-hover:shadow-emerald-300/50 hover:bg-emerald-50/10"
     };
 

@@ -138,7 +138,7 @@ export default function CertificateList() {
                                             </div>
                                             <div>
                                                 <p className="text-sm text-slate-600">Division</p>
-                                                <p className="font-semibold text-purple-600">{cert.division}</p>
+                                                <p className="font-semibold text-indigo-600">{cert.division}</p>
                                             </div>
                                         </div>
 
