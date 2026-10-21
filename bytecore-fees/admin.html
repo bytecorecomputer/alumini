@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>Bytecore · Admin</title><style>
+:root{--ink:#0f2a43;--muted:#5b6b7b;--line:#dfe5ea;--bg:#f3f6f8;--card:#fff;--paid:#17794d;--due:#b4540a;--brand:#0e6f8a}
+@media(prefers-color-scheme:dark){:root{--ink:#e8eef3;--muted:#93a4b3;--line:#27384a;--bg:#0b1722;--card:#132434;--paid:#4cc38a;--due:#f0a05a;--brand:#5cc3df}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+main{max-width:1000px;margin:0 auto;padding:16px}h1{font-size:1.3rem;margin:8px 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+.grid span{color:var(--muted);font-size:.8rem;display:block}.grid b{font-size:1.25rem}.paid{color:var(--paid)}.due{color:var(--due)}
+input,select,button{font:inherit;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink)}button{background:var(--brand);color:#fff;border:0;font-weight:600;cursor:pointer}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.bar input{flex:1;min-width:160px}
+.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{color:var(--muted);font-size:.78rem;cursor:pointer}th:nth-child(-n+4),td:nth-child(-n+4){text-align:left}a{color:var(--brand)}.err{color:var(--due);font-weight:600}.m{color:var(--muted)}
+</style></head><body><main id="a"></main><script>
+const A=document.getElementById('a'),K='bc_admin',inr=n=>'₹'+n.toLocaleString('en-IN');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let D=[],sort='due',dir=-1,shown=100;
+async function get(o){const r=await fetch('/api/admin',o),j=await r.json().catch(()=>({}));if(!r.ok)throw Object.assign(new Error(j.error||'Error'),{s:r.status});return j}
+function login(m=''){A.innerHTML=`<h1>Admin</h1><form class="card" id="f"><input id="p" type="password" placeholder="Password" autofocus> <button>Log in</button><p class="err">${esc(m)}</p></form>`;
+ f.onsubmit=async e=>{e.preventDefault();try{localStorage.setItem(K,(await get({method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:p.value})})).token);boot()}catch(x){login(x.message)}}}
+async function boot(){try{D=(await get({headers:{Authorization:'Bearer '+localStorage.getItem(K)}})).students;view()}catch(e){if(e.s===401)localStorage.removeItem(K);login(e.s===401?'':e.message)}}
+const sum=(l,k)=>l.reduce((a,s)=>a+s[k],0);
+function view(){
+ const cs=[...new Set(D.map(s=>s.centre))];
+ A.innerHTML=`<h1>Fee overview</h1><div class="grid" id="g"></div><div class="card"><div class="bar"><input id="q" placeholder="Search name, roll, mobile, course"><select id="c"><option value="">All centres</option>${cs.map(c=>`<option>${esc(c)}</option>`)}</select>
+ <select id="f"><option value="">All students</option><option value="due">Has dues</option><option value="over">Paid more than total</option><option value="nt">Total fee missing</option><option value="nm">Mobile missing</option></select><button id="x">Refresh</button><button id="o" style="background:none;color:var(--brand);border:1.5px solid var(--line)">Log out</button></div><div class="wrap"><table><thead><tr>
+ ${[['roll','Roll'],['name','Name'],['course','Course'],['centre','Centre'],['total','Total'],['paid','Paid'],['due','Due'],['last','Last paid']].map(([k,t])=>`<th data-k="${k}">${t}</th>`).join('')}<th>Mobile</th></tr></thead><tbody id="t"></tbody></table></div><p class="m" id="n"></p><button id="more">Show more</button></div>`;
+ for(const e of['q','c','f'])document.getElementById(e).oninput=()=>{shown=100;rows()};more.onclick=()=>{shown+=200;rows()};x.onclick=boot;o.onclick=()=>{localStorage.removeItem(K);login()};
+ document.querySelectorAll('th[data-k]').forEach(h=>h.onclick=()=>{dir=sort===h.dataset.k?-dir:-1;sort=h.dataset.k;rows()});rows()}
+function rows(){
+ const t=q.value.toLowerCase().trim(),fl=f.value;
+ const L=D.filter(s=>(!c.value||s.centre===c.value)&&(!t||(s.name+' '+s.roll+' '+s.mobile+' '+s.course).toLowerCase().includes(t))&&
+  (!fl||(fl==='due'&&s.due)||(fl==='over'&&s.total&&s.paid>s.total)||(fl==='nt'&&!s.total)||(fl==='nm'&&!s.mobile)));
+ g.innerHTML=[['Students',L.length],['Total fees',inr(sum(L,'total'))],['Collected',`<span class="paid">${inr(sum(L,'paid'))}</span>`],['Pending',`<span class="due">${inr(sum(L,'due'))}</span>`],['Collected %',(sum(L,'total')?Math.round(sum(L,'paid')/sum(L,'total')*100):0)+'%']].map(([a,b])=>`<div class="card"><span>${a}</span><b>${b}</b></div>`).join('');
+ L.sort((a,b)=>(typeof a[sort]==='number'?a[sort]-b[sort]:String(a[sort]).localeCompare(String(b[sort]),undefined,{numeric:true}))*dir);
+ tbody=document.getElementById('t');tbody.innerHTML=L.slice(0,shown).map(s=>`<tr><td>${esc(s.roll)}</td><td>${esc(s.name)}</td><td>${esc(s.course)}</td><td>${esc(s.centre)}</td><td>${inr(s.total)}</td><td class="paid">${inr(s.paid)}</td><td class="${s.due?'due':''}">${inr(s.due)}</td><td>${esc(s.last)||'—'}</td><td>${s.mobile?`<a href="tel:${s.mobile}">${s.mobile}</a>`:'—'}</td></tr>`).join('');
+ n.textContent=`Showing ${Math.min(shown,L.length)} of ${L.length}`;more.style.display=L.length>shown?'':'none'}
+localStorage.getItem(K)?boot():login();
+</script></body></html>
