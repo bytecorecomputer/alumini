@@ -1,7 +1,22 @@
-import { render } from 'preact';
-import { lazy, Suspense } from 'preact/compat';
-import './style.css';
-import Student from './Student.jsx';
-const Admin = lazy(() => import('./Admin.jsx')); // students never download admin code
-const root = document.getElementById('root'); root.textContent = '';
-render(location.pathname.startsWith('/admin') ? <Suspense fallback={<main><p className="muted">Loading…</p></main>}><Admin /></Suspense> : <Student />, root);
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { HelmetProvider } from 'react-helmet-async'
+import './index.css'
+import App from './App.jsx'
+import { registerSW } from 'virtual:pwa-register'
+
+import { store } from './app/store'
+import { Provider } from 'react-redux'
+
+// Register service worker
+registerSW({ immediate: true })
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <HelmetProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </HelmetProvider>
+  </StrictMode>,
+)

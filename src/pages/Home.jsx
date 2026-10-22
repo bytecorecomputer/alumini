@@ -1,0 +1,194 @@
+import React, { useState } from 'react';
+import SEO from '../components/common/SEO';
+import { motion } from 'framer-motion';
+import { Building, ArrowRight, Star } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../app/common/AuthContext';
+
+import HeroSection from '../components/home/HeroSection';
+import CourseCarousel from '../components/home/CourseCarousel';
+import LabGalleryPreview from '../components/home/LabGalleryPreview';
+import StudentGraduatesShowcase from '../components/home/StudentGraduatesShowcase';
+
+export default function Home() {
+    const { user, role } = useAuth();
+    const navigate = useNavigate();
+
+    return (
+        <div className="bg-white overflow-hidden selection:bg-blue-100 selection:text-blue-900 font-sans">
+            <SEO
+                title="#1 Offline Tech & Computer Centre in Bareilly"
+                description="ByteCore Computer Centre is the BEST offline IT lab in Nariyawal, Bareilly. We offer O Level, ADCA, Python, Web Development, Full Stack, and Tally Prime with 100% practical training."
+                keywords="bytecore computer centre, best computer center in bareilly, o level institute in bareilly, adca coaching in nariyawal, python programming classes bareilly, tally prime course, web design training bareilly, best it lab bareilly"
+                schema={{
+                    "@context": "https://schema.org",
+                    "@type": ["EducationalOrganization", "LocalBusiness"],
+                    "name": "ByteCore Computer Centre",
+                    "description": "Premium offline computer centre offering advanced IT, coding, and professional courses.",
+                    "url": "https://bytecores.in",
+                    "logo": "https://bytecores.in/logo.png",
+                    "image": "https://bytecores.in/banner-og.png",
+                    "telephone": "+91-8859942426",
+                    "address": {
+                        "@type": "PostalAddress",
+                        "streetAddress": "Nariyawal",
+                        "addressLocality": "Bareilly",
+                        "addressRegion": "Uttar Pradesh",
+                        "postalCode": "243001",
+                        "addressCountry": "IN"
+                    },
+                    "sameAs": [
+                        "https://bytecores.in/"
+                    ]
+                }}
+            />
+
+            <HeroSection />
+
+            {/* --- TECH MARQUEE (Modern Feature) --- */}
+            <div className="py-12 bg-white border-y border-slate-100 overflow-hidden relative">
+                <div className="flex whitespace-nowrap animate-scroll gap-20 items-center">
+                    {[
+                        "REACT JS", "PYTHON", "JAVA", "WEB DESIGN", "ADCA",
+                        "FULL STACK", "TALLY PRIME", "CCC", "O LEVEL", "DIGITAL MARKETING",
+                        "REACT JS", "PYTHON", "JAVA", "WEB DESIGN", "ADCA",
+                        "FULL STACK", "TALLY PRIME", "CCC", "O LEVEL", "DIGITAL MARKETING"
+                    ].map((tech, i) => (
+                        <div key={i} className="text-slate-300 font-black text-2xl md:text-4xl tracking-tighter hover:text-blue-600 transition-colors cursor-default select-none">
+                            {tech}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="py-24 bg-slate-50">
+                <CourseCarousel />
+            </div>
+
+            {/* --- STUDENT LAB GALLERY (Bento Grid) --- */}
+            <div className="py-32 bg-slate-950 border-t border-slate-900 relative overflow-hidden">
+                <div className="absolute top-0 left-1/2 w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[200px] -z-10 transform -translate-x-1/2"></div>
+                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-600/5 rounded-full blur-[150px] -z-10"></div>
+
+                <div className="max-w-7xl mx-auto text-center z-10 relative mb-16 px-6">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                            Authentic Environment
+                        </span>
+                        <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter mb-8 italic">
+                            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-200 to-indigo-400">ByteCore Lab</span> Experience
+                        </h2>
+                        <p className="text-slate-400 font-medium max-w-2xl mx-auto text-lg leading-relaxed">
+                            Step inside our state-of-the-art computer labs. This is where theory meets practice, and students transform into industry-ready professionals.
+                        </p>
+                    </motion.div>
+                </div>
+
+                <LabGalleryPreview />
+
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="flex justify-center mt-16 px-6"
+                >
+                    <Link
+                        to="/gallery"
+                        className="group relative inline-flex items-center gap-4 px-10 py-5 bg-white text-slate-950 rounded-[2rem] font-black uppercase text-xs tracking-[0.2em] shadow-2xl hover:shadow-blue-500/20 transition-all active:scale-95 border border-white/10"
+                    >
+                        Explore Full Gallery
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        <div className="absolute inset-x-10 bottom-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
+                    </Link>
+                </motion.div>
+            </div>
+
+            {/* --- STAR GRADUATES SHOWCASE --- */}
+            <StudentGraduatesShowcase />
+
+            {/* --- CODERAFROJ ARENA BANNER --- */}
+            <div className="py-20 px-6 bg-slate-950 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] -z-10"></div>
+                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] -z-10"></div>
+                
+                <div className="max-w-5xl mx-auto">
+                    <div className="relative rounded-[3rem] bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 overflow-hidden p-10 md:p-16 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-10">
+                        <div className="relative z-10 md:w-1/2 text-center md:text-left">
+                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-900/30 border border-blue-800/50 text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-6">
+                                <Star className="w-3 h-3 text-yellow-400" />
+                                Exclusive Platform
+                            </span>
+                            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-4">
+                                CoderAfroj <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Arena</span>
+                            </h2>
+                            <p className="text-slate-400 font-medium text-lg leading-relaxed mb-8">
+                                Master your coding skills with our advanced IDE platform. Practice 1000+ problems, compile code in real-time, and prepare for top tech interviews.
+                            </p>
+                            <a 
+                                href="https://coderafroj.bytecores.in" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex px-8 py-4 rounded-xl bg-blue-600 text-white font-black uppercase tracking-widest text-xs shadow-[0_0_40px_-10px_rgba(37,99,235,0.5)] hover:bg-blue-500 hover:-translate-y-1 transition-all items-center justify-center gap-2"
+                            >
+                                Enter The Arena <ArrowRight size={16} />
+                            </a>
+                        </div>
+                        <div className="relative z-10 md:w-1/2 flex justify-center">
+                            <div className="w-full max-w-sm aspect-square bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                                {/* Decorative code editor mockup */}
+                                <div className="flex gap-2 mb-4">
+                                    <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
+                                </div>
+                                <div className="space-y-3 font-mono text-sm opacity-70">
+                                    <div className="text-blue-400">function <span className="text-yellow-200">solveProblem</span>() {'{'}</div>
+                                    <div className="pl-4 text-emerald-400">// Master data structures</div>
+                                    <div className="pl-4 text-emerald-400">// Ace technical interviews</div>
+                                    <div className="pl-4 text-indigo-400">return <span className="text-orange-300">"Success"</span>;</div>
+                                    <div className="text-blue-400">{'}'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* --- CTA BANNER --- */}
+            < div className="py-20 px-6 bg-slate-50" >
+                <div className="max-w-5xl mx-auto">
+                    <div className="relative rounded-[3rem] bg-slate-900 overflow-hidden p-12 md:p-20 text-center shadow-2xl">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-indigo-600/20 to-transparent opacity-50"></div>
+                        <div className="absolute top-0 right-0 p-8 opacity-10">
+                            <Building className="w-64 h-64 text-white" />
+                        </div>
+                        <div className="relative z-10">
+                            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-6">Start Your Tech Journey Offline.</h2>
+                            <p className="text-slate-400 font-bold text-lg mb-10 max-w-xl mx-auto">Visit our Nariyawal Campus for direct counseling, or register your profile online to view your course dashboard instantly.</p>
+                            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                <Link to="/register" className="px-10 py-4 rounded-xl bg-white text-slate-900 font-black uppercase tracking-widest text-xs shadow-xl shadow-slate-900/50 hover:bg-blue-50 transition-all flex items-center justify-center gap-2 active:scale-95">
+                                    Register Online <ArrowRight size={16} />
+                                </Link>
+                                <Link to="/about" className="px-10 py-4 rounded-xl bg-slate-800 text-white border border-slate-700 font-black uppercase tracking-widest text-xs hover:bg-slate-700 transition-all flex items-center justify-center gap-2 active:scale-95">
+                                    Location & Contact
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div >
+
+            {/* Legacy one-time CSV migration tool removed: student data now
+                syncs exclusively from the live Google Sheets (see Admin >
+                Coaching > "Sync From Google Sheets"). Keeping this around
+                meant a real student-data CSV had to be publicly hosted in
+                /public, which was a data leak regardless of this button's
+                visibility. */}
+        </div >
+    );
+}
