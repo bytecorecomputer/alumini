@@ -1,4 +1,0 @@
-{ "name": "bytecore-fees", "private": true, "type": "module", "engines": { "node": ">=18" },
-  "scripts": { "dev": "vercel dev", "build": "vite build", "analyze": "node scripts/analyze.mjs" },
-  "dependencies": { "preact": "10.24.3" },
-  "devDependencies": { "@preact/preset-vite": "2.9.1", "vite": "5.4.11" } }
