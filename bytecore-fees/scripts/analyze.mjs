@@ -4,7 +4,8 @@ import { parseSheet } from '../lib/sheet.js';
 const inr = n => '₹' + n.toLocaleString('en-IN');
 let all = [], warn = [];
 for (const f of process.argv.slice(2)) {
-  const { students, warnings } = parseSheet(readFileSync(f, 'utf8'), f.toLowerCase().includes('thiriya') ? 'Thiriya' : 'Nariyawal');
+  const { students, warnings, meta } = parseSheet(readFileSync(f, 'utf8'), f.toLowerCase().includes('thiriya') ? 'Thiriya' : 'Nariyawal');
+  console.log(`\n${f}: mobile column = ${meta?.mobileColumn ? JSON.stringify(meta.mobileColumn) + ' (found by ' + meta.foundBy + ')' : 'NOT FOUND'} | students with mobile ${meta?.withMobile}/${meta?.students}`);
   all.push(...students); warn.push(...warnings);
   const t = students.reduce((a, s) => a + s.total, 0), p = students.reduce((a, s) => a + s.paid, 0);
   console.log(`\n${f}\n  students ${students.length} | total ${inr(t)} | collected ${inr(p)} | due ${inr(students.reduce((a, s) => a + s.due, 0))}`);
