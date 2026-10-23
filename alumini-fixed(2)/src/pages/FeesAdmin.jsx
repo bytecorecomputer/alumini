@@ -24,7 +24,7 @@ function merge(prev, next) { // keep the SAME object for unchanged students -> m
 }
 
 const Row = memo(function Row({ s, top }) {
-  return <div className="vr" style={{ transform: `translateY(${top}px)` }}><span>{s.roll}</span><span>{s.name}</span><span>{s.course}</span><span>{s.centre}</span>
+  return <div className="vr" style={{ transform: `translateY(${top}px)` }}><span>{s.roll}</span><span>{s.name}{s.status === 'cancel' && <em className="chip">Cancelled</em>}</span><span>{s.course}</span><span>{s.centre}</span>
     <span className="n">{inr(s.total)}</span><span className="n paid">{inr(s.paid)}</span><span className={'n ' + (s.due ? 'due' : '')}>{inr(s.due)}</span>
     <span>{s.last || '—'}</span><span>{s.mobile ? <a href={'tel:' + s.mobile}>{s.mobile}</a> : '—'}</span></div>;
 });
@@ -56,7 +56,7 @@ export default function FeesAdmin() {
   const centres = useMemo(() => [...new Set((D || []).map(s => s.centre))], [D]);
   const rows = useMemo(() => {
     const L = (D || []).filter(s => (!centre || s.centre === centre) && (!dq || s.hay.includes(dq)) &&
-      (!flt || (flt === 'due' && s.due) || (flt === 'over' && s.total && s.paid > s.total) || (flt === 'nt' && !s.total) || (flt === 'nm' && !s.mobile)));
+      (!flt || (flt === 'due' && s.due) || (flt === 'over' && s.total && s.paid > s.total) || (flt === 'nt' && !s.total) || (flt === 'nm' && !s.mobile) || (flt === 'cancel' && s.status === 'cancel')));
     return L.sort((a, b) => (typeof a[sort] === 'number' ? a[sort] - b[sort] : String(a[sort]).localeCompare(String(b[sort]), undefined, { numeric: true })) * dir);
   }, [D, centre, dq, flt, sort, dir]);
   useEffect(() => { if (box.current) box.current.scrollTop = 0; }, [centre, dq, flt, sort, dir]);
@@ -74,7 +74,7 @@ export default function FeesAdmin() {
       <div className="card"><div className="tools">
         <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search name, roll, mobile, course" />
         <select value={centre} onChange={e => setCentre(e.target.value)}><option value="">All centres</option>{centres.map(c => <option key={c}>{c}</option>)}</select>
-        <select value={flt} onChange={e => setFlt(e.target.value)}><option value="">All students</option><option value="due">Has dues</option><option value="over">Paid more than total</option><option value="nt">Total fee missing</option><option value="nm">Mobile missing</option></select>
+        <select value={flt} onChange={e => setFlt(e.target.value)}><option value="">All students</option><option value="due">Has dues</option><option value="over">Paid more than total</option><option value="nt">Total fee missing</option><option value="nm">Mobile missing</option><option value="cancel">Cancelled</option></select>
         <button className="ghost" onClick={pushNow}>Sync to app now</button></div>
         <div className="wrap"><div className="vt"><div className="vh">{COLS.map(([k, t, n]) => <span key={k} className={n ? 'n' : ''} onClick={() => { setDir(sort === k ? -dir : -1); setSort(k); }}>{t}{sort === k ? (dir > 0 ? ' ↑' : ' ↓') : ''}</span>)}</div>
           <div className="vs" ref={box} onScroll={e => { const y = e.currentTarget.scrollTop; cancelAnimationFrame(raf.current); raf.current = requestAnimationFrame(() => setTop(y)); }}>

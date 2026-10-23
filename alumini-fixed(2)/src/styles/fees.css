@@ -48,3 +48,4 @@
 .bcf .vh .n,.bcf .vr .n{text-align:right}
 .bcf .live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--paid);margin-right:6px}
 .bcf{min-height:100vh}
+.bcf .chip{font-style:normal;font-size:.7rem;font-weight:700;margin-left:6px;padding:2px 7px;border-radius:99px;background:color-mix(in srgb,var(--due) 15%,transparent);color:var(--due)}

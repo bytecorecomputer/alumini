@@ -41,6 +41,8 @@ function paymentsFromText(cell) {
 // Any Indian mobile in a cell: handles "+91 98765-43210", "09876543210" and two numbers in one cell.
 const MOB = /(?:\+?91|0)?([6-9]\d{9})/g;
 const mobilesOf = cell => [...String(cell || '').replace(/[\s\-().]/g, '').matchAll(MOB)].map(m => m[1]);
+// Sheet status text -> pass | paid | cancel | unpaid  ("unPaid" must NOT count as paid)
+const normStatus = v => { const t = String(v || '').toLowerCase(); return /pass|paas|complete/.test(t) ? 'pass' : /cancel/.test(t) ? 'cancel' : /\bpaid\b/.test(t) ? 'paid' : 'unpaid'; };
 const find = (h, re) => h.findIndex(x => re.test(x));
 const ROLL = /^(registration|roll)(\s*no\.?)?$/;
 
@@ -86,14 +88,14 @@ export function parseSheet(csv, centre) {
     }
     const rolls = rollRaw.split(/[+,/&]/).map(s => s.trim()).filter(Boolean);
     const total = num(r[c.total]), paid = payments.reduce((a, p) => a + p.amount, 0);
-    const mobiles = mobilesOf(r[c.mobile]);
+    const mobiles = mobilesOf(r[c.mobile]), status = normStatus(r[c.status]);
     let id = `${centre}:${rolls[0]}`;
     for (let k = 2; students.some(x => x.id === id); k++) { id = `${centre}:${rolls[0]}#${k}`; warnings.push(`${centre}: duplicate roll ${rolls[0]}`); }
     students.push({
       id, centre, rolls, name, course: r[c.course] || '',
       father: r[c.father] || '', address: r[c.addr] || '', mobile: mobiles[0] || '', mobiles,
-      admission: isoDate(r[c.adm]), regFee: c.reg >= 0 ? num(r[c.reg]) : 0, status: r[c.status] || '',
-      total, paid, due: Math.max(0, total - paid), payments,
+      admission: isoDate(r[c.adm]), regFee: c.reg >= 0 ? num(r[c.reg]) : 0, status,
+      total, paid, due: status === 'cancel' ? 0 : Math.max(0, total - paid), payments, // cancelled admissions owe nothing
     });
   }
   const meta = { students: students.length, withMobile: students.filter(x => x.mobile).length, mobileColumn: c.mobile >= 0 ? (rows[hi][c.mobile] || '(no header)') : null, foundBy: by };
@@ -116,7 +118,7 @@ function refresh() {
         const text = await r.text(), h = sha(text), prev = cache.sheets[s.centre];
         if (prev && prev.h === h) return prev.students; // sheet text identical: skip parse + hashing entirely
         const parsed = parseSheet(text, s.centre), students = parsed.students;
-        for (const st of students) st.h = sha(JSON.stringify([st.name, st.course, st.mobile, st.total, st.regFee, st.payments])); // per-row fingerprint
+        for (const st of students) st.h = sha(JSON.stringify([st.name, st.course, st.mobile, st.total, st.regFee, st.status, st.payments, 'v2'])); // per-row fingerprint
         cache.sheets[s.centre] = { h, students, meta: parsed.meta };
         return students;
       }));
@@ -164,12 +166,12 @@ export function toDoc(st) {
   const fallback = st.admission || '';
   const installments = st.payments.map(p => ({ amount: p.amount, date: p.date || fallback, dateDisplay: p.date || fallback, receipt: p.receipt || '', status: 'paid' }))
     .sort((a, b) => a.date.localeCompare(b.date)).map((p, i) => ({ ...p, installmentNo: i + 1 }));
-  const paid = Math.min(st.paid, st.total), t = String(st.status || '').toLowerCase();
+  const paid = Math.min(st.paid, st.total);
   return {
     registration: st.docId, regNo: st.docId, fullName: st.name, name: st.name,
-    status: /pass|paas|complete/.test(t) ? 'pass' : /cancel/.test(t) ? 'cancel' : /paid/.test(t) ? 'paid' : 'unpaid',
-    course: st.course || 'N/A', trade: st.course || 'N/A', fatherName: st.father, mobile: st.mobile, mob: st.mobile, address: st.address, center: st.centre,
+    status: st.status || 'unpaid',
+    course: st.course || 'N/A', trade: st.course || 'N/A', fatherName: st.father, mobile: st.mobile, mob: st.mobile, mobiles: st.mobiles, address: st.address, center: st.centre,
     admissionDate: st.admission, admissionFee: st.regFee, registrationFee: st.regFee, totalFees: st.total, totalFee: st.total,
-    installments, paidFees: paid, totalPaid: paid, balanceDue: Math.max(0, st.total - paid), sheetHash: st.h, updatedAt: Date.now(),
+    installments, paidFees: paid, totalPaid: paid, balanceDue: st.due, sheetHash: st.h, updatedAt: Date.now(),
   };
 }

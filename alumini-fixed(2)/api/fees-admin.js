@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     const list = await loadStudents();
     if (req.query?.h === list.hash) return res.status(200).json({ same: true });
     return res.status(200).json({ hash: list.hash, students: list.map(s => ({
-      id: s.id, h: s.h, centre: s.centre, roll: s.rolls.join(' + '), name: s.name, course: s.course, mobile: s.mobile,
+      id: s.id, h: s.h, centre: s.centre, roll: s.rolls.join(' + '), name: s.name, course: s.course, mobile: s.mobile, status: s.status,
       total: s.total, paid: s.paid, due: s.due, last: s.payments.map(p => p.date).sort().pop() || '' })) });
   } catch (e) { console.error(e); return res.status(502).json({ error: 'Fee sheet is unavailable right now.' }); }
 }

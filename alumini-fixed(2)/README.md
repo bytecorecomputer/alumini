@@ -48,3 +48,7 @@ api/              Vercel serverless functions (Razorpay order + verification, st
 - `/admin/fees`: fast live fee table (admin's existing Firebase login). Button "Sync to app now" pushes changed students to Firestore.
 - `/api/sync` (optional, see `apps-script/Code.gs` + `SYNC_SECRET`): sheet edit -> only changed students written to Firestore -> StudentPortal updates live.
 - Needs the same Firebase Admin env the project already uses (`FIREBASE_SERVICE_ACCOUNT` or `VITE_FIREBASE_*`).
+
+## If login ever fails
+Open `https://YOUR-SITE/api/health` — it tests library loading, Firebase Admin credentials, Firestore, login-token creation and both Google Sheets, and shows which step failed.
+Every login error is JSON with a `code` (shown small under the error on the login page).
