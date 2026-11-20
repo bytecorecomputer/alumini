@@ -1,0 +1,1211 @@
+import React, { useState, useEffect } from 'react';
+import { collection, query, getDocs, doc, updateDoc, arrayUnion, orderBy, setDoc, deleteDoc, onSnapshot, getDoc, writeBatch } from 'firebase/firestore';
+import { db } from '../firebase/firestore';
+import { useAuth } from '../app/common/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import {
+    Search, Plus, User, CreditCard, Calendar, MapPin, Phone,
+    Filter, Download, ChevronRight, X, Check, AlertCircle,
+    TrendingUp, Users, Wallet, Loader2, Edit3, Trash2, Database,
+    BookOpen, Settings, BarChart3, ArrowUpRight, GraduationCap, CheckCircle, Bell
+} from 'lucide-react';
+import { cn } from '../lib/utils';
+import { uploadToSupabase } from '../lib/supabase';
+import { compressImage } from '../lib/imageCompression';
+import { syncAggregateStats } from '../lib/migrateStudents';
+import { syncFromGoogleSheet, parseRawSheetText } from '../lib/syncGoogleSheet';
+import { checkMonthlyFeeReminders, sanitizeStudentData } from '../lib/feeAutomation';
+import { syncAllCentres } from '../services/studentLookup';
+import AdminFeeOverview from '../components/AdminFeeOverview';
+import { limit, startAfter } from 'firebase/firestore';
+import { parseDateToYYYYMM } from '../lib/utils';
+
+// Pure helper — lives outside the component so memoized rows can call it
+// directly without needing a fresh prop (and fresh object reference) on
+// every parent re-render.
+function calculateCourseExpiry(student) {
+    if (!student.admissionDate || !student.course) return null;
+
+    let durationMonths = 6; // Default fallback
+    const course = student.course.toUpperCase();
+    const totalFees = student.totalFees || 0;
+
+    if (course.includes('DCST') || course.includes('CCC')) {
+        durationMonths = 3;
+    } else if (course.includes('ACCOUNTING') || course.includes('DFA') || course === 'DCA' || course.includes('GRAPHIC')) {
+        durationMonths = 6;
+    } else if (course.includes('O LEVEL')) {
+        durationMonths = 12;
+    } else if (course.includes('ADCA') || course.includes('MDCA')) {
+        durationMonths = 12; // Default 1 year
+        // Smart Expiry: If any installment is >= 1000, consider it a 6-month fast-track
+        const hasHighInstallments = student.installments && student.installments.some(inst => Number(inst.amount) >= 1000);
+        if (hasHighInstallments || totalFees < 4500) {
+            durationMonths = 6;
+        }
+    }
+
+    const admission = new Date(student.admissionDate);
+    if (isNaN(admission.getTime())) return null;
+
+    const expiryDate = new Date(admission);
+    expiryDate.setMonth(expiryDate.getMonth() + durationMonths);
+
+    const isCompleted = new Date() > expiryDate;
+
+    return {
+        duration: durationMonths,
+        expiryDate: expiryDate.toLocaleDateString(),
+        isCompleted: isCompleted
+    };
+}
+
+export default function CoachingAdmin() {
+    const { user, role } = useAuth();
+    const navigate = useNavigate();
+    const [students, setStudents] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterStatus, setFilterStatus] = useState('all');
+    const [centerFilter, setCenterFilter] = useState('all');
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [globalStats, setGlobalStats] = useState(null);
+    const [lastDoc, setLastDoc] = useState(null);
+    const [hasMore, setHasMore] = useState(true);
+    const PAGE_SIZE = 50;
+
+    // Raw Sheet Paste Modal State
+    const [isRawPasteModalOpen, setIsRawPasteModalOpen] = useState(false);
+    const [rawPasteText, setRawPasteText] = useState('');
+    const [rawPasteCenter, setRawPasteCenter] = useState('Thiriya');
+    const [parsedPreview, setParsedPreview] = useState(null);
+
+    // Course Management States
+    const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
+    const [courseForm, setCourseForm] = useState({ name: '', fee: '' });
+
+    // Add/Edit Student States
+    const [isAddEditModalOpen, setIsAddEditModalOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [studentForm, setStudentForm] = useState({
+        registration: '', fullName: '', course: '', mobile: '',
+        status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toISOString().split('T')[0],
+        fatherName: '', address: '', photoUrl: '', center: 'Thiriya', admissionFee: ''
+    });
+
+    // Telegram Settings Modal State
+    const [isTelegramModalOpen, setIsTelegramModalOpen] = useState(false);
+    const [telegramToken, setTelegramToken] = useState('');
+    const [telegramChatId, setTelegramChatId] = useState('');
+
+    const isOwner = role === 'admin' || role === 'super_admin';
+
+    useEffect(() => {
+        if (!isOwner) return;
+
+        // Instant Global Stats fetch (single small doc — cheap to keep live)
+        const unsubStats = onSnapshot(doc(db, "metadata", "coaching_stats"), (snap) => {
+            if (snap.exists()) setGlobalStats(snap.data());
+        });
+
+        // Students: one-time load instead of a live listener.
+        // A live listener on the whole collection re-downloads and
+        // re-renders EVERY student on EVERY write (including your own
+        // saves/imports), which is what was making this page feel slow.
+        // We load once here and update local state directly after any
+        // add/edit/import, so the UI stays instant without needing a
+        // full round trip to Firestore every time.
+        let cancelled = false;
+        const q = query(collection(db, "students"), orderBy("updatedAt", "desc"));
+        getDocs(q).then((snap) => {
+            if (cancelled) return;
+            const results = snap.docs.map(doc => sanitizeStudentData({ id: doc.id, ...doc.data() }));
+            setStudents(results);
+            setLoading(false);
+        }).catch((err) => {
+            console.error("Failed to load students:", err);
+            setLoading(false);
+        });
+
+        // Real-time courses listener (small collection — cheap to keep live)
+        const unsubCourses = onSnapshot(collection(db, "courses"), (snap) => {
+            setCourses(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        });
+
+        return () => {
+            cancelled = true;
+            unsubStats();
+            unsubCourses();
+        };
+    }, [isOwner]);
+
+    // Manually re-pull the student list from Firestore (used after bulk
+    // imports, where merging hundreds of rows by hand isn't worth it).
+    const refreshStudents = async () => {
+        try {
+            const q = query(collection(db, "students"), orderBy("updatedAt", "desc"));
+            const snap = await getDocs(q);
+            setStudents(snap.docs.map(doc => sanitizeStudentData({ id: doc.id, ...doc.data() })));
+        } catch (err) {
+            console.error("Failed to refresh students:", err);
+        }
+    };
+
+
+    const loadMoreStudents = async () => {
+        if (!lastDoc || !hasMore || isUpdating) return;
+        setIsUpdating(true);
+        try {
+            const q = query(collection(db, "students"), orderBy("updatedAt", "desc"), startAfter(lastDoc), limit(PAGE_SIZE));
+            const snap = await getDocs(q);
+            const moreStudents = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setStudents(prev => [...prev, ...moreStudents]);
+            setLastDoc(snap.docs[snap.docs.length - 1]);
+            setHasMore(snap.docs.length === PAGE_SIZE);
+        } catch (err) {
+            console.error("Load More Error:", err);
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    const handleSaveStudent = async (e) => {
+        e.preventDefault();
+        setIsUpdating(true);
+        try {
+            const trimmedReg = studentForm.registration.trim();
+            if (!trimmedReg) {
+                alert("Registration Number is required!");
+                setIsUpdating(false);
+                return;
+            }
+
+            const studentRef = doc(db, "students", trimmedReg);
+
+            // CHECK FOR DUPLICATES IF THIS IS A NEW ENTRY
+            if (!isEditing) {
+                const docSnap = await getDoc(studentRef);
+                if (docSnap.exists()) {
+                    alert(`DUPLICATE WARNING: A student with Registration ID "${trimmedReg}" already exists!\nPlease use a unique ID.`);
+                    setIsUpdating(false);
+                    return;
+                }
+            }
+
+            const data = {
+                ...studentForm,
+                registration: trimmedReg,
+                updatedAt: Date.now(),
+                totalFees: parseInt(studentForm.totalFees) || 0,
+                oldPaidFees: parseInt(studentForm.oldPaidFees) || 0,
+            };
+
+            if (!isEditing) {
+                // Initialize default fields for new students
+                data.paidFees = 0;
+                data.installments = [];
+            }
+
+            await setDoc(studentRef, data, { merge: true });
+
+            // Update the on-screen list immediately instead of waiting on
+            // a network round trip — this is what makes the save feel instant.
+            setStudents(prev => {
+                const existing = prev.find(s => s.id === trimmedReg);
+                const merged = existing
+                    ? { ...existing, ...data, id: trimmedReg }
+                    : { ...data, id: trimmedReg, paidFees: 0, installments: [] };
+                const rest = prev.filter(s => s.id !== trimmedReg);
+                return [merged, ...rest];
+            });
+
+            // Stats recalculation runs in the background so the admin isn't
+            // stuck waiting on a full-collection scan after every save.
+            syncAggregateStats().catch(err => console.error("Stats sync failed:", err));
+
+            setIsAddEditModalOpen(false);
+            setStudentForm({
+                registration: '', fullName: '', course: '', mobile: '',
+                status: 'unpaid', totalFees: '', oldPaidFees: '',
+                admissionDate: new Date().toISOString().split('T')[0],
+                fatherName: '', address: '', photoUrl: '', center: 'Nariyawal'
+            });
+            alert("Student saved successfully!");
+
+        } catch (err) {
+            console.error("Save Error:", err);
+            alert("Failed to save student data! " + err.message);
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    const handleSaveCourse = async (e) => {
+        e.preventDefault();
+        if (!courseForm.name || !courseForm.fee) return;
+        setIsUpdating(true);
+        try {
+            await setDoc(doc(db, "courses", courseForm.name), {
+                name: courseForm.name,
+                fee: parseInt(courseForm.fee),
+                updatedAt: Date.now()
+            });
+            setCourseForm({ name: '', fee: '' });
+        } catch (err) {
+            alert("Failed to save course.");
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    const handleDeleteCourse = async (id) => {
+        if (!window.confirm("Delete this course?")) return;
+        try {
+            await deleteDoc(doc(db, "courses", id));
+        } catch (err) {
+            alert("Delete failed.");
+        }
+    };
+
+    const handleExportCSV = async () => {
+        setIsUpdating(true);
+        try {
+            const q = query(collection(db, "students"));
+            const snap = await getDocs(q);
+            const allStudents = snap.docs.map(doc => doc.data());
+
+            if (!allStudents.length) {
+                alert("No data to export.");
+                return;
+            }
+
+            const headers = ["Registration", "Full Name", "Course", "Mobile", "Status", "Admission Date", "Father Name", "Address", "Total Fees", "Old Paid Fees", "New Paid Fees", "Total Paid", "Balance"];
+
+            const csvRows = [
+                headers.join(','),
+                ...allStudents.map(s => {
+                    const totalPaid = (s.paidFees || 0) + (s.oldPaidFees || 0);
+                    const balance = (s.totalFees || 0) - totalPaid;
+
+                    return [
+                        s.registration || '',
+                        `"${s.fullName || ''}"`, // Wrap in quotes to handle commas in names
+                        s.course || '',
+                        s.mobile || '',
+                        s.status || 'unpaid',
+                        s.admissionDate || '',
+                        `"${s.fatherName || ''}"`,
+                        `"${s.address || ''}"`,
+                        s.totalFees || 0,
+                        s.oldPaidFees || 0,
+                        s.paidFees || 0,
+                        totalPaid,
+                        balance
+                    ].join(',');
+                })
+            ];
+
+            const csvString = csvRows.join('\n');
+            const blob = new Blob([csvString], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bytecore_students_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error("Export Error:", err);
+            alert("Failed to export data.");
+        } finally {
+            setIsUpdating(false);
+        }
+    };
+
+    const openAddModal = () => {
+        setIsEditing(false);
+        const nextId = students.length > 0 ? (Math.max(...students.map(s => parseInt(s.registration) || 0)) + 1).toString() : "1001";
+        setStudentForm({
+            registration: nextId, fullName: '', course: '', mobile: '',
+            status: 'unpaid', totalFees: '', oldPaidFees: '', admissionDate: new Date().toISOString().split('T')[0],
+            fatherName: '', address: '', photoUrl: '', center: 'Nariyawal'
+        });
+        setIsAddEditModalOpen(true);
+    };
+
+    const onCourseChange = (courseName) => {
+        const selected = courses.find(c => c.name === courseName);
+        setStudentForm({
+            ...studentForm,
+            course: courseName,
+            totalFees: selected ? selected.fee : studentForm.totalFees
+        });
+    };
+
+    const filteredStudents = React.useMemo(() => {
+        if (!searchTerm && filterStatus === 'all' && centerFilter === 'all') {
+            return students;
+        }
+
+        const query = searchTerm.toLowerCase().trim();
+        const centerQuery = centerFilter.toLowerCase();
+
+        return students.filter(s => {
+            // 1. Center filter match
+            if (centerFilter !== 'all') {
+                const sCenter = (s.center || '').toLowerCase();
+                const sAddr = (s.address || '').toLowerCase();
+                if (sCenter !== centerQuery && !sAddr.includes(centerQuery)) return false;
+            }
+
+            // 2. Status filter match
+            if (filterStatus !== 'all' && s.status !== filterStatus) return false;
+
+            // 3. Search query match
+            if (!query) return true;
+
+            const reg = (s.registration || '').toLowerCase();
+            const name = (s.fullName || '').toLowerCase();
+            const father = (s.fatherName || '').toLowerCase();
+            const mob = (s.mobile || '').toLowerCase();
+            const course = (s.course || '').toLowerCase();
+            const addr = (s.address || '').toLowerCase();
+
+            return reg.includes(query) || name.includes(query) || father.includes(query) || mob.includes(query) || course.includes(query) || addr.includes(query);
+        });
+    }, [students, searchTerm, filterStatus, centerFilter]);
+
+    const goToStudent = React.useCallback((id) => navigate(`/admin/coaching/student/${id}`), [navigate]);
+
+    const stats = React.useMemo(() => {
+        const isFiltered = searchTerm || centerFilter !== 'all' || filterStatus !== 'all';
+        
+        if (!isFiltered && globalStats) {
+            return {
+                thiriya: globalStats.thiriyaCount || 0,
+                nariyawal: globalStats.nariyawalCount || 0,
+                collected: globalStats.totalRevenue || 0,
+                pending: globalStats.totalArrears || 0,
+                total: globalStats.totalEnrollments || 0,
+                registrationFees: 0,
+                courseData: []
+            };
+        }
+
+        let thiriya = 0;
+        let nariyawal = 0;
+        let collected = 0;
+        let pending = 0;
+        let registrationFees = 0;
+        let total = filteredStudents.length;
+        const courseCount = {};
+
+        filteredStudents.forEach(s => {
+            if (s.center === 'Thiriya') thiriya++;
+            else nariyawal++; 
+            
+            // Safe Number Casting for absolute accuracy
+            const nPaidFees = Number(s.paidFees) || 0;
+            const nOldPaidFees = Number(s.oldPaidFees) || 0;
+            const nTotalFees = Number(s.totalFees) || 0;
+
+            const totalPaid = nPaidFees + nOldPaidFees;
+            collected += totalPaid;
+            pending += Math.max(0, nTotalFees - totalPaid);
+            registrationFees += nOldPaidFees;
+
+            if (s.course) {
+                const c = String(s.course).toUpperCase().trim();
+                if (!courseCount[c]) courseCount[c] = 0;
+                courseCount[c]++;
+            }
+        });
+
+        const courseData = Object.keys(courseCount).map(c => ({
+            name: c,
+            value: courseCount[c]
+        })).sort((a,b) => b.value - a.value);
+
+        return { thiriya, nariyawal, collected, pending, total, registrationFees, courseData };
+    }, [filteredStudents, globalStats, searchTerm, centerFilter, filterStatus]);
+
+    const monthWiseData = React.useMemo(() => {
+        const trends = {};
+        filteredStudents.forEach(s => {
+            if (s.installments && s.installments.length > 0) {
+                s.installments.forEach(inst => {
+                    const month = parseDateToYYYYMM(inst.date); // Use robust parsing
+                    if (month) {
+                        if (!trends[month]) trends[month] = 0;
+                        trends[month] += (Number(inst.amount) || 0);
+                    }
+                });
+            } else if (s.admissionDate && s.oldPaidFees > 0) {
+                // Approximate for old students without installments
+                const month = parseDateToYYYYMM(s.admissionDate);
+                if (month) {
+                    if (!trends[month]) trends[month] = 0;
+                    trends[month] += (Number(s.oldPaidFees) || 0);
+                }
+            }
+        });
+        
+        return Object.keys(trends)
+            .sort((a,b) => a.localeCompare(b))
+            .slice(-12) // Last 12 months with data
+            .map(k => ({ month: k, revenue: trends[k] }));
+    }, [filteredStudents]);
+
+    if (!isOwner) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-slate-50">
+                <AlertCircle size={60} className="text-red-500 mb-6" />
+                <h1 className="text-2xl font-black uppercase tracking-tighter text-slate-900">Access Denied</h1>
+                <p className="text-slate-500 font-bold mt-2">Administrative privileges required for deep access.</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-[#fcfdfe] pt-28 pb-20 px-4 md:px-8 font-inter">
+            <div className="max-w-7xl mx-auto">
+
+                {/* Advanced Header & Stats */}
+                <div className="flex flex-col gap-8 mb-12">
+                    <div className="flex justify-between items-end">
+                        <div>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="p-3 bg-slate-900 rounded-2xl text-white shadow-xl">
+                                    <TrendingUp size={24} />
+                                </div>
+                                <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Bytecore <span className="text-blue-600">Coaching</span></h1>
+                            </div>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] ml-1">Advanced Administration Suite</p>
+                        </div>
+                        <button
+                            onClick={async () => {
+                                setIsUpdating(true);
+                                await syncAggregateStats();
+                                setIsUpdating(false);
+                            }}
+                            className="p-3 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-blue-600 hover:border-blue-100 transition-all shadow-sm"
+                            title="Recalculate Global Stats"
+                        >
+                            <Loader2 size={16} className={cn(isUpdating && "animate-spin")} />
+                        </button>
+                        <button
+                            onClick={async () => {
+                                setIsUpdating(true);
+                                try {
+                                    const configSnap = await getDoc(doc(db, "metadata", "telegram_config"));
+                                    const hasEnv = import.meta.env.VITE_TELEGRAM_BOT_TOKEN && import.meta.env.VITE_TELEGRAM_CHAT_ID;
+                                    if (!configSnap.exists() && !hasEnv) {
+                                        setIsTelegramModalOpen(true);
+                                        setIsUpdating(false);
+                                        return;
+                                    }
+                                    await checkMonthlyFeeReminders(null, true);
+                                    alert("Monthly Fee Audit Report sent to Telegram successfully!");
+                                } catch(e) {
+                                    console.error(e);
+                                    alert("Fee audit completed. Check Telegram group for updates.");
+                                } finally {
+                                    setIsUpdating(false);
+                                }
+                            }}
+                            disabled={isUpdating}
+                            className="px-5 py-3 bg-amber-500 text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20 flex items-center gap-2 disabled:opacity-50"
+                            title="Send Monthly Fee Audit Report directly to Telegram"
+                        >
+                            <Bell size={16} className={cn(isUpdating && "animate-spin")} />
+                            <span>{isUpdating ? "Auditing & Sending..." : "Send Telegram Report"}</span>
+                        </button>
+                        <button
+                            onClick={() => setIsTelegramModalOpen(true)}
+                            className="p-3 bg-slate-100 text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-200 hover:text-slate-900 transition-all shadow-sm"
+                            title="Configure Telegram Bot Token & Chat ID"
+                        >
+                            <Settings size={16} />
+                        </button>
+                    </div>
+
+                    {/* Dashboard Metrics Removed - Moved to Analytics Dashboard */}
+                    
+                    {/* Charts Removed - Moved to Analytics Dashboard */}
+                </div>
+
+                {/* Actions Toolbar */}
+                <div className="flex flex-col md:flex-row gap-6 mb-10 items-center justify-between">
+                    <div className="flex flex-wrap gap-4 w-full md:w-auto">
+                        <button
+                            onClick={openAddModal}
+                            className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-slate-200 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
+                        >
+                            <Plus size={18} /> New Admission
+                        </button>
+                        <button
+                            onClick={() => {
+                                setRawPasteText('');
+                                setParsedPreview(null);
+                                setIsRawPasteModalOpen(true);
+                            }}
+                            className="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-200 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
+                        >
+                            <Database size={18} /> Paste Sheet Data
+                        </button>
+                        <button
+                            onClick={() => navigate('/admin/certificates')}
+                            className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-blue-200 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
+                        >
+                            <GraduationCap size={18} /> Generate Certificate
+                        </button>
+                        <button
+                            onClick={() => setIsCourseModalOpen(true)}
+                            className="bg-white text-slate-900 border border-slate-100 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-slate-100 flex items-center gap-3 hover:bg-slate-50 transition-all"
+                        >
+                            <Settings size={18} /> Course Config
+                        </button>
+                        <button
+                            onClick={handleExportCSV}
+                            className="bg-emerald-50 text-emerald-600 border border-emerald-100 px-6 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-50 flex items-center gap-3 hover:bg-emerald-100 transition-all"
+                        >
+                            <Download size={18} /> Export CSV
+                        </button>
+                    </div>
+
+                    <div className="flex flex-wrap gap-4 w-full md:w-auto">
+                        <button
+                            onClick={async () => {
+                                if (!window.confirm("Sync all student data from the live Nariyawal & Thiriya Google Sheets?\nThis is the single source of truth — nothing else will overwrite it.")) return;
+                                setIsUpdating(true);
+                                try {
+                                    const results = await syncAllCentres(db);
+                                    const totalWritten = Object.values(results).reduce((sum, r) => sum + r.totalWritten, 0);
+                                    alert(`Google Sheets Sync Complete!\nSuccessfully updated ${totalWritten} students from Nariyawal & Thiriya Google Sheets.`);
+                                    window.location.reload();
+                                } catch (err) {
+                                    console.error(err);
+                                    alert(`Fee Sync failed: ${err.message}`);
+                                } finally {
+                                    setIsUpdating(false);
+                                }
+                            }}
+                            disabled={isUpdating}
+                            className={cn(
+                                "flex p-4 rounded-2xl transition-all shadow-sm items-center gap-2",
+                                isUpdating ? "bg-emerald-100 text-emerald-400 cursor-not-allowed" : "bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white"
+                            )}
+                            title="Sync Both Centres from Live Google Sheets"
+                        >
+                            {isUpdating ? <Loader2 size={20} className="animate-spin" /> : <Database size={20} />}
+                            <span className="font-black text-[10px] uppercase">Sync From Google Sheets</span>
+                        </button>
+                        <div className="flex gap-2">
+                            <select
+                                value={centerFilter}
+                                onChange={e => setCenterFilter(e.target.value)}
+                                className="bg-slate-50 border-none rounded-2xl py-4 px-6 font-bold text-slate-700 outline-none focus:ring-4 ring-blue-50 focus:bg-white transition-all appearance-none cursor-pointer"
+                            >
+                                <option value="all">All Centers</option>
+                                <option value="Thiriya">Thiriya Center</option>
+                                <option value="Nariyawal">Nariyawal Center</option>
+                                <option value="Manpuriya">Manpuriya Center</option>
+                                <option value="Mohanpur">Mohanpur Center</option>
+                                <option value="Harharpur">Harharpur Center</option>
+                                <option value="Parsona">Parsona Center</option>
+                            </select>
+                        </div>
+                        <div className="relative flex-grow md:w-80 group">
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-600 transition-colors" size={20} />
+                            <input
+                                type="text"
+                                placeholder="Search identity..."
+                                className="w-full bg-slate-50 border-none rounded-2xl py-4 pl-16 pr-12 font-bold text-slate-700 outline-none focus:ring-4 ring-blue-50 focus:bg-white transition-all"
+                                value={searchTerm}
+                                onChange={e => setSearchTerm(e.target.value)}
+                            />
+                            {searchTerm && (
+                                <button
+                                    onClick={() => setSearchTerm('')}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 hover:bg-slate-100 rounded-full text-slate-400 hover:text-red-500 transition-all"
+                                >
+                                    <X size={16} />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Responsive Data View: Cards on Mobile, Table on Desktop */}
+                <div className="premium-card bg-white border border-slate-100 shadow-2xl shadow-slate-200/40 overflow-hidden">
+                    
+                    {/* Mobile Card View */}
+                    <div className="md:hidden flex flex-col divide-y divide-slate-50">
+                        {loading ? (
+                            <div className="py-24 text-center"><Loader2 size={40} className="animate-spin mx-auto text-blue-200" /></div>
+                        ) : filteredStudents.map(student => (
+                            <StudentCardMobile
+                                key={student.id}
+                                student={student}
+                                onGoToStudent={goToStudent}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Desktop Table View */}
+                    <div className="hidden md:block overflow-x-auto">
+                        <table className="w-full text-left">
+                            <thead className="bg-slate-50/50 border-b border-slate-100">
+                                <tr>
+                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Student Identity</th>
+                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Course & Progression</th>
+                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">Financial Status</th>
+                                    <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-50">
+                                {loading ? (
+                                    <tr><td colSpan="4" className="py-24 text-center"><Loader2 size={40} className="animate-spin mx-auto text-blue-200" /></td></tr>
+                                ) : filteredStudents.map(student => (
+                                    <StudentRowDesktop
+                                        key={student.id}
+                                        student={student}
+                                        onGoToStudent={goToStudent}
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {/* Load More Button */}
+                {hasMore && (
+                    <div className="mt-10 flex justify-center">
+                        <button
+                            onClick={loadMoreStudents}
+                            disabled={isUpdating}
+                            className="bg-white text-slate-900 border border-slate-200 px-10 py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-slate-50 transition-all flex items-center gap-3 disabled:opacity-50"
+                        >
+                            {isUpdating ? <Loader2 size={18} className="animate-spin" /> : <ChevronRight size={18} className="rotate-90" />}
+                            {isUpdating ? "Loading Intelligence..." : "Load More Students"}
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            {/* Course Config Modal */}
+            <AnimatePresence>
+                {isCourseModalOpen && (
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" onClick={() => setIsCourseModalOpen(false)} />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="bg-white w-full max-w-2xl p-10 rounded-[3rem] shadow-2xl relative z-10 m-auto"
+                        >
+                            <div className="flex justify-between items-center mb-10">
+                                <h3 className="text-3xl font-black text-slate-900 tracking-tighter uppercase">Course <span className="text-blue-600">Database</span></h3>
+                                <button onClick={() => setIsCourseModalOpen(false)} className="p-3 text-slate-400 hover:text-slate-950 transition-colors"><X size={24} /></button>
+                            </div>
+
+                            <form onSubmit={handleSaveCourse} className="flex gap-4 mb-10 bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
+                                <input placeholder="Course Name" className="flex-1 bg-white border border-slate-100 rounded-xl px-6 py-4 font-bold outline-none ring-blue-50 focus:ring-4 transition-all" value={courseForm.name} onChange={e => setCourseForm({ ...courseForm, name: e.target.value })} />
+                                <input placeholder="Default Fee" type="number" className="w-40 bg-white border border-slate-100 rounded-xl px-6 py-4 font-bold outline-none ring-blue-50 focus:ring-4 transition-all" value={courseForm.fee} onChange={e => setCourseForm({ ...courseForm, fee: e.target.value })} />
+                                <button type="submit" disabled={isUpdating} className="p-4 bg-slate-900 text-white rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all"><Plus size={24} /></button>
+                            </form>
+
+                            <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                {courses.map(course => (
+                                    <div key={course.id} className="flex justify-between items-center p-5 border border-slate-50 rounded-2xl hover:bg-slate-50 transition-colors">
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-black text-xs">A</div>
+                                            <div>
+                                                <p className="font-black text-slate-900">{course.name}</p>
+                                                <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest text-center mt-6">Bytecore Management System x CoderAfroj</p>
+                                            </div>
+                                        </div>
+                                        <button onClick={() => handleDeleteCourse(course.id)} className="p-2 text-red-200 hover:text-red-500 transition-colors"><Trash2 size={18} /></button>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Add Student Modal */}
+            <AnimatePresence>
+                {isAddEditModalOpen && (
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsAddEditModalOpen(false)} />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            className="bg-white w-full max-w-2xl p-8 md:p-14 rounded-[3rem] md:rounded-[4rem] shadow-2xl relative z-10 m-auto max-h-[90vh] overflow-y-auto custom-scrollbar"
+                        >
+                            <div className="flex justify-between items-center mb-12">
+                                <h3 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">New <span className="text-blue-600">Enrolment</span></h3>
+                                <button onClick={() => setIsAddEditModalOpen(false)} className="p-4 bg-slate-50 text-slate-400 rounded-3xl"><X size={28} /></button>
+                            </div>
+
+                            <form onSubmit={handleSaveStudent} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <Input
+                                    label="Registration"
+                                    value={studentForm.registration}
+                                    onChange={v => setStudentForm({ ...studentForm, registration: v })}
+                                />
+                                <Input label="Full Name" value={studentForm.fullName} onChange={v => setStudentForm({ ...studentForm, fullName: v })} />
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Academic Course</label>
+                                    <select
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-5 px-8 font-bold text-slate-800 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all appearance-none shadow-sm"
+                                        value={studentForm.course}
+                                        onChange={e => onCourseChange(e.target.value)}
+                                    >
+                                        <option value="">Select a course...</option>
+                                        {courses.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                                    </select>
+                                </div>
+
+                                <Input label="Contact Mobile" value={studentForm.mobile} onChange={v => setStudentForm({ ...studentForm, mobile: v })} />
+                                <Input label="Admission Date" type="date" value={studentForm.admissionDate} onChange={v => setStudentForm({ ...studentForm, admissionDate: v })} />
+                                <Input label="Invested Course Fee (₹)" type="number" value={studentForm.totalFees} onChange={v => setStudentForm({ ...studentForm, totalFees: v })} />
+                                <Input label="Old Paid Fees (Subtracted)" type="number" value={studentForm.oldPaidFees} onChange={v => setStudentForm({ ...studentForm, oldPaidFees: v })} />
+
+                                <Input label="Father's Name" value={studentForm.fatherName} onChange={v => setStudentForm({ ...studentForm, fatherName: v })} />
+
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Learning Center</label>
+                                    <select
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-5 px-8 font-bold text-slate-800 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all appearance-none shadow-sm"
+                                        value={studentForm.center}
+                                        onChange={e => setStudentForm({ ...studentForm, center: e.target.value })}
+                                    >
+                                        <option value="Nariyawal">Nariyawal Center</option>
+                                        <option value="Thiriya">Thiriya Center</option>
+                                    </select>
+                                </div>
+
+                                <div className="md:col-span-2 space-y-2">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Student Portrait</label>
+                                    <div className="flex items-center gap-6 p-6 bg-slate-50 border border-slate-200 rounded-[2rem]">
+                                        <div className="h-20 w-20 bg-white rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
+                                            {studentForm.photoUrl ? (
+                                                <img src={studentForm.photoUrl} alt="" className="w-full h-full object-cover" />
+                                            ) : (
+                                                <User className="text-slate-200" size={32} />
+                                            )}
+                                        </div>
+                                        <div className="flex-1 space-y-3">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                id="student-photo"
+                                                className="hidden"
+                                                onChange={async (e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (!file) return;
+                                                    setIsUpdating(true);
+                                                    try {
+                                                        const compressed = await compressImage(file, 50); // Target 50KB
+                                                        const { publicUrl: url } = await uploadToSupabase(compressed, studentForm.registration, 'student-photos');
+                                                        setStudentForm({ ...studentForm, photoUrl: url });
+                                                    } catch (err) {
+                                                        alert("Photo upload failed: " + err.message);
+                                                    } finally {
+                                                        setIsUpdating(false);
+                                                    }
+                                                }}
+                                            />
+                                            <label
+                                                htmlFor="student-photo"
+                                                className="inline-flex py-3 px-6 bg-white border border-slate-200 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-600 hover:bg-slate-900 hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                                            >
+                                                Select Identity Graphic
+                                            </label>
+                                            <p className="text-[9px] font-bold text-slate-400">Target Weight: 50KB (Auto-optimized)</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Input label="Home Address" value={studentForm.address} onChange={v => setStudentForm({ ...studentForm, address: v })} />
+
+                                <div className="md:col-span-2 pt-6">
+                                    <button
+                                        disabled={isUpdating}
+                                        className="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.4em] text-sm shadow-2xl shadow-slate-300 flex items-center justify-center gap-4 active:scale-98 disabled:opacity-50"
+                                    >
+                                        {isUpdating ? <Loader2 className="animate-spin" size={20} /> : <CheckCircle size={24} />}
+                                        Complete Entry
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+
+                {/* Telegram Settings Modal */}
+                {isTelegramModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+                        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white rounded-[2.5rem] p-8 max-w-lg w-full shadow-2xl border border-slate-100 relative">
+                            <button onClick={() => setIsTelegramModalOpen(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-900 bg-slate-100 rounded-full transition-colors">
+                                <X size={18} />
+                            </button>
+                            
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-3 bg-amber-50 rounded-2xl text-amber-600">
+                                    <Bell size={24} />
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight">Telegram Bot Config</h2>
+                                    <p className="text-xs text-slate-500 font-bold">Connect your Telegram channel or group for instant fee reports.</p>
+                                </div>
+                            </div>
+
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                if (!telegramToken || !telegramChatId) {
+                                    alert("Please enter both Bot Token and Chat ID.");
+                                    return;
+                                }
+                                try {
+                                    setIsUpdating(true);
+                                    await setDoc(doc(db, "metadata", "telegram_config"), {
+                                        botToken: telegramToken.trim(),
+                                        chatId: telegramChatId.trim(),
+                                        updatedAt: Date.now()
+                                    });
+                                    setIsTelegramModalOpen(false);
+                                    alert("Telegram credentials saved to Firestore! Reports will now be sent directly to Telegram.");
+                                } catch(err) {
+                                    console.error(err);
+                                    alert("Failed to save credentials.");
+                                } finally {
+                                    setIsUpdating(false);
+                                }
+                            }} className="space-y-6">
+                                <Input label="Telegram Bot Token" value={telegramToken} onChange={setTelegramToken} placeholder="e.g. 712345678:AAFg..." />
+                                <Input label="Telegram Chat ID / Channel ID" value={telegramChatId} onChange={setTelegramChatId} placeholder="e.g. -100123456789 or @channelname" />
+                                
+                                <button
+                                    disabled={isUpdating}
+                                    className="w-full py-4 bg-amber-500 text-white rounded-2xl font-black uppercase tracking-wider text-xs shadow-lg shadow-amber-500/30 flex items-center justify-center gap-2 hover:bg-amber-600 active:scale-95 transition-all disabled:opacity-50"
+                                >
+                                    {isUpdating ? <Loader2 className="animate-spin" size={18} /> : <CheckCircle size={18} />}
+                                    Save & Connect Telegram
+                                </button>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+
+                {/* Raw Google Sheet Direct Paste Modal */}
+                {isRawPasteModalOpen && (
+                    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setIsRawPasteModalOpen(false)} />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="bg-white w-full max-w-4xl p-8 md:p-12 rounded-[3rem] shadow-2xl relative z-10 m-auto max-h-[90vh] overflow-y-auto custom-scrollbar"
+                        >
+                            <div className="flex justify-between items-center mb-8">
+                                <div>
+                                    <h3 className="text-3xl font-black text-slate-900 tracking-tighter uppercase leading-none">Import Raw <span className="text-indigo-600">Sheet Data</span></h3>
+                                    <p className="text-xs text-slate-400 font-bold mt-1">Paste tabular rows directly from Google Sheet / Excel (Thiriya, Nariyawal, Manpuriya, etc.)</p>
+                                </div>
+                                <button onClick={() => setIsRawPasteModalOpen(false)} className="p-3 bg-slate-50 text-slate-400 rounded-2xl hover:text-slate-900"><X size={20} /></button>
+                            </div>
+
+                            <div className="space-y-6">
+                                <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                    <div className="flex items-center gap-3">
+                                        <label className="text-xs font-black uppercase text-slate-500">Default Center:</label>
+                                        <select
+                                            value={rawPasteCenter}
+                                            onChange={e => setRawPasteCenter(e.target.value)}
+                                            className="bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs font-bold outline-none"
+                                        >
+                                            <option value="Thiriya">Thiriya</option>
+                                            <option value="Nariyawal">Nariyawal</option>
+                                            <option value="Manpuriya">Manpuriya</option>
+                                            <option value="Mohanpur">Mohanpur</option>
+                                            <option value="Harharpur">Harharpur</option>
+                                            <option value="Parsona">Parsona</option>
+                                        </select>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            if (!rawPasteText.trim()) {
+                                                alert("Please paste data from your sheet first!");
+                                                return;
+                                            }
+                                            const parsed = parseRawSheetText(rawPasteText, rawPasteCenter);
+                                            setParsedPreview(parsed);
+                                        }}
+                                        className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 shadow-md shadow-indigo-200 transition-all"
+                                    >
+                                        Extract & Analyze Data
+                                    </button>
+                                </div>
+
+                                <textarea
+                                    rows={8}
+                                    value={rawPasteText}
+                                    onChange={e => {
+                                        setRawPasteText(e.target.value);
+                                        setParsedPreview(null);
+                                    }}
+                                    placeholder="Paste sheet rows here (e.g. 1  2001  Mohd Tauseef  Unpaid  ADCA  Ahmad Miya  9548277241  Thiriya  02-09-2025  6000  1000 (13-09-2025)...)"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-6 font-mono text-xs text-slate-800 outline-none focus:bg-white focus:ring-4 ring-indigo-50 transition-all custom-scrollbar"
+                                />
+
+                                {parsedPreview && (
+                                    <div className="space-y-4 bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100">
+                                        <div className="flex flex-wrap justify-between items-center">
+                                            <div>
+                                                <h4 className="font-black text-slate-900 text-lg uppercase">Extraction Analysis</h4>
+                                                <p className="text-xs font-bold text-indigo-600">
+                                                    Extracted {parsedPreview.length} Students | Total Paid Fees: ₹{parsedPreview.reduce((sum, s) => sum + (s.paidFees || 0), 0)}
+                                                </p>
+                                            </div>
+                                            <button
+                                                disabled={isUpdating || parsedPreview.length === 0}
+                                                onClick={async () => {
+                                                    setIsUpdating(true);
+                                                    try {
+                                                        let batch = writeBatch(db);
+                                                        let count = 0;
+                                                        const { doc, setDoc } = await import('firebase/firestore');
+
+                                                        for (const student of parsedPreview) {
+                                                            const docRef = doc(db, "students", student.registration);
+                                                            batch.set(docRef, student, { merge: true });
+                                                            count++;
+                                                            if (count % 400 === 0) {
+                                                                await batch.commit();
+                                                                batch = writeBatch(db);
+                                                            }
+                                                        }
+                                                        if (count % 400 !== 0) {
+                                                            await batch.commit();
+                                                        }
+
+                                                        syncAggregateStats().catch(err => console.error("Stats sync failed:", err));
+                                                        await refreshStudents();
+                                                        alert(`Success! Imported ${parsedPreview.length} students to Firestore database.`);
+                                                        setIsRawPasteModalOpen(false);
+                                                        setRawPasteText('');
+                                                        setParsedPreview(null);
+                                                    } catch (err) {
+                                                        console.error(err);
+                                                        alert("Import failed: " + err.message);
+                                                    } finally {
+                                                        setIsUpdating(false);
+                                                    }
+                                                }}
+                                                className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-emerald-600 transition-all flex items-center gap-2"
+                                            >
+                                                {isUpdating ? <Loader2 className="animate-spin" size={16} /> : <CheckCircle size={16} />}
+                                                Save All to Database
+                                            </button>
+                                        </div>
+
+                                        <div className="max-h-60 overflow-y-auto rounded-2xl border border-indigo-100 bg-white p-4 custom-scrollbar space-y-2">
+                                            {parsedPreview.map((s, idx) => (
+                                                <div key={idx} className="flex justify-between items-center text-xs p-2 hover:bg-slate-50 rounded-xl border-b border-slate-50">
+                                                    <div>
+                                                        <span className="font-black text-slate-900">{s.fullName}</span>
+                                                        <span className="text-[10px] text-slate-400 font-bold ml-2">(Roll: {s.registration} | Center: {s.center})</span>
+                                                    </div>
+                                                    <div className="text-right font-mono text-[11px]">
+                                                        <span className="text-emerald-600 font-black">Paid: ₹{s.paidFees}</span>
+                                                        <span className="text-slate-400 ml-2">/ Total: ₹{s.totalFees}</span>
+                                                        <span className="text-blue-600 ml-2 font-bold">({s.installments?.length || 0} Inst.)</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+        </div >
+    );
+}
+
+// Memoized so typing in the search box or paginating doesn't force every
+// row to re-render — only rows whose underlying student data changed do.
+const StudentCardMobile = React.memo(function StudentCardMobile({ student, onGoToStudent }) {
+    const expiryInfo = calculateCourseExpiry(student);
+    const totalPaid = (student.paidFees || 0) + (student.oldPaidFees || 0);
+    return (
+        <div
+            onClick={() => onGoToStudent(student.id)}
+            className="p-5 hover:bg-blue-50/30 active:bg-blue-50 transition-all cursor-pointer"
+        >
+            <div className="flex items-center gap-4 mb-4">
+                <div className="h-12 w-12 bg-slate-900 text-white rounded-xl flex items-center justify-center font-black text-xs shadow-lg shrink-0 overflow-hidden border-2 border-white">
+                    {student.photoUrl ? <img src={student.photoUrl} alt="" className="w-full h-full object-cover" /> : student.registration}
+                </div>
+                <div className="min-w-0 flex-1">
+                    <h4 className="font-black text-slate-900 text-base tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
+                    <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[9px] font-black text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded-md tracking-wider">#{student.registration}</span>
+                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
+                        <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
+                    </div>
+                </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="bg-slate-50 rounded-xl p-3">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Course</p>
+                    <div className="flex items-center gap-1.5">
+                        <BookOpen size={12} className="text-blue-500" />
+                        <span className="text-[10px] font-black text-slate-700 truncate">{student.course}</span>
+                    </div>
+                </div>
+                <div className="bg-slate-50 rounded-xl p-3">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                    <div className="flex items-center gap-1.5">
+                        {expiryInfo?.isCompleted ? <span className="text-[9px] font-black text-red-600">FINISHED</span> : <span className="text-[9px] font-black text-emerald-600">ACTIVE</span>}
+                    </div>
+                </div>
+            </div>
+            <div className="space-y-2">
+                <div className="flex justify-between text-[10px] font-black text-slate-500">
+                    <span>₹{totalPaid}</span>
+                    <span className="opacity-40">/ {student.totalFees || 0}</span>
+                </div>
+                <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
+                    <div
+                        style={{ width: `${Math.min(100, (totalPaid / (student.totalFees || 1)) * 100)}%` }}
+                        className="h-full bg-blue-500 rounded-full transition-[width] duration-300"
+                    />
+                </div>
+            </div>
+        </div>
+    );
+});
+
+const StudentRowDesktop = React.memo(function StudentRowDesktop({ student, onGoToStudent }) {
+    const expiryInfo = calculateCourseExpiry(student);
+    const totalPaid = (student.paidFees || 0) + (student.oldPaidFees || 0);
+    return (
+        <tr className="hover:bg-blue-50/30 transition-all group cursor-pointer" onClick={() => onGoToStudent(student.id)}>
+            <td className="px-10 py-6">
+                <div className="flex items-center gap-5">
+                    <div className="h-14 w-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-black text-xs shadow-lg group-hover:scale-110 transition-transform shrink-0 overflow-hidden border-2 border-white">
+                        {student.photoUrl ? <img src={student.photoUrl} alt="" className="w-full h-full object-cover" /> : student.registration}
+                    </div>
+                    <div className="min-w-0">
+                        <h4 className="font-black text-slate-900 text-lg tracking-tight mb-0.5 truncate capitalize">{student.fullName}</h4>
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md tracking-wider">#{student.registration}</span>
+                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{student.mobile}</p>
+                            <span className={cn("text-[8px] font-black uppercase px-2 py-0.5 rounded-full border", student.center === 'Thiriya' ? "bg-amber-50 text-amber-600 border-amber-100" : "bg-emerald-50 text-emerald-600 border-emerald-100")}>{student.center || 'Nariyawal'}</span>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td className="px-10 py-6">
+                <div className="flex flex-col gap-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-100 rounded-xl w-fit">
+                        <BookOpen size={12} className="text-blue-500" />
+                        <span className="text-xs font-black text-slate-700">{student.course}</span>
+                        {expiryInfo && <span className="text-[9px] text-slate-400 font-bold ml-1">({expiryInfo.duration}m)</span>}
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className={cn("text-[9px] font-black uppercase tracking-widest px-2 rounded-full", student.status === 'pass' ? "text-emerald-500 bg-emerald-50" : "text-amber-500 bg-amber-50")}>{student.status}</span>
+                        {expiryInfo?.isCompleted && <span className="flex items-center gap-1 text-[9px] font-black text-red-600 bg-red-50 px-2 py-0.5 rounded border border-red-100"><AlertCircle size={10} /> FINISHED</span>}
+                        {expiryInfo && !expiryInfo.isCompleted && <span className="flex items-center gap-1 text-[9px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100"><CheckCircle size={10} /> ACTIVE</span>}
+                    </div>
+                </div>
+            </td>
+            <td className="px-10 py-6">
+                <div className="space-y-2 min-w-[100px]">
+                    <div className="flex justify-between text-[10px] font-black text-slate-500">
+                        <span>₹{totalPaid}</span>
+                        <span className="opacity-40">/ {student.totalFees || 0}</span>
+                    </div>
+                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-50">
+                        <div
+                            style={{ width: `${Math.min(100, (totalPaid / (student.totalFees || 1)) * 100)}%` }}
+                            className="h-full bg-blue-500 rounded-full transition-[width] duration-300"
+                        />
+                    </div>
+                    {student.installments?.length > 0 && (
+                        <p className="text-[9px] font-bold text-slate-400">
+                            {student.installments.length} installment{student.installments.length > 1 ? 's' : ''} · last {student.installments[student.installments.length - 1]?.date || '-'}
+                        </p>
+                    )}
+                </div>
+            </td>
+            <td className="px-10 py-6 text-right">
+                <div className="flex justify-end gap-2">
+                    <button className="p-3 bg-white text-slate-400 group-hover:text-blue-600 border border-slate-100 rounded-xl transition-all shadow-sm"><ChevronRight size={16} /></button>
+                </div>
+            </td>
+        </tr>
+    );
+});
+
+function StatCard({ label, value, icon, color, delay = 0 }) {
+    const colors = {
+        blue: "bg-blue-50 text-blue-700 border-blue-200 shadow-blue-100/50",
+        emerald: "bg-emerald-50 text-emerald-700 border-emerald-200 shadow-emerald-100/50",
+        amber: "bg-amber-50 text-amber-700 border-amber-200 shadow-amber-100/50",
+        indigo: "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-indigo-100/50",
+        red: "bg-red-50 text-red-700 border-red-200 shadow-red-100/50"
+    };
+    return (
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: delay }}
+            whileHover={{ y: -5, scale: 1.02 }}
+            className={cn("p-5 md:p-6 rounded-[2rem] border shadow-sm hover:shadow-xl transition-all flex flex-col justify-between h-full", colors[color])}
+        >
+            <div className="flex justify-between items-center mb-4">
+                <div className="opacity-40 scale-125 origin-left">{icon}</div>
+            </div>
+            <div>
+                <div className="text-xl md:text-2xl xl:text-3xl font-black tracking-tighter leading-none mb-1 break-all" title={value}>
+                    {value}
+                </div>
+                <div className="text-[9px] font-black uppercase tracking-widest opacity-60 leading-tight truncate">{label}</div>
+            </div>
+        </motion.div>
+    );
+}
+
+function Input({ label, value, onChange, type = "text", disabled }) {
+    return (
+        <div className="space-y-2">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">{label}</label>
+            <input
+                type={type}
+                value={value}
+                disabled={disabled}
+                onChange={e => onChange?.(e.target.value)}
+                className={cn(
+                    "w-full bg-slate-50 border border-slate-200 rounded-2xl py-5 px-8 font-bold text-slate-800 outline-none focus:bg-white focus:ring-4 ring-blue-50 transition-all placeholder:text-slate-300 disabled:opacity-50",
+                    type === 'date' && "text-blue-600 cursor-pointer"
+                )}
+                placeholder="..."
+            />
+        </div>
+    );
+}

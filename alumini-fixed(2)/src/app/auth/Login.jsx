@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword, sendPasswordResetEmail, signInWithCustomToken, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail, signInWithCustomToken, signInAnonymously, signOut } from "firebase/auth";
 import { auth } from "../../firebase/auth";
 import { doc, getDoc, query, collection, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firestore";
@@ -10,6 +10,7 @@ import { cn } from "../../lib/utils";
 import { sendTelegramNotification } from "../../lib/telegram";
 import { checkMonthlyFeeReminders } from "../../lib/feeAutomation";
 import { useAuth } from "../../app/common/AuthContext";
+import { clientLoginLookup } from "../../services/clientSheetLogin";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -84,48 +85,71 @@ export default function Login() {
       }
     } else {
       // Student Login Mode
-      if (!studentReg || !studentMobile) {
-        setError("Registration and Mobile number required.");
+      const studentRegClean = String(studentReg || '').trim();
+      const studentMobileClean = String(studentMobile || '').trim();
+
+      if (!studentRegClean && !studentMobileClean) {
+        setError("Please enter your Roll / Registration Number and Mobile Number.");
         setLoading(false);
         return;
       }
 
       try {
-        const studentRegClean = String(studentReg).trim();
-        const studentMobileClean = String(studentMobile).trim();
-        
-        const response = await fetch('/api/student-login', {
+        let studentData = null;
+        let token = null;
+
+        // 1. Try server-side API
+        try {
+          const response = await fetch('/api/student-login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ registration: studentRegClean, mobile: studentMobileClean })
-        });
+            body: JSON.stringify({ registration: studentRegClean, roll: studentRegClean, mobile: studentMobileClean })
+          });
 
-        const contentType = response.headers.get("content-type");
-        const data = contentType && contentType.includes("application/json")
-            ? await response.json()
-            : null;
+          const contentType = response.headers.get("content-type");
+          const data = contentType && contentType.includes("application/json") ? await response.json() : null;
 
-        if (!response.ok || !data?.token) {
+          if (response.ok && data?.studentData) {
+            studentData = data.studentData;
+            token = data.token;
+          } else if (response.status === 401) {
             setError(data?.error || 'Invalid Registration ID or Mobile Number.');
             setLoading(false);
             return;
+          }
+        } catch (apiErr) {
+          console.warn('[Login] API call notice, switching to direct sheet fallback:', apiErr.message);
         }
 
-        await signInWithCustomToken(auth, data.token);
+        // 2. Direct client fallback if API failed or returned 500
+        if (!studentData) {
+          const result = await clientLoginLookup(studentRegClean, studentMobileClean);
+          if (result?.student) {
+            studentData = result.student;
+          } else {
+            throw new Error(result?.error || 'No matching student record found.');
+          }
+        }
 
-        loginStudent(data.studentData);
+        if (token) {
+          await signInWithCustomToken(auth, token).catch(() => {});
+        } else {
+          await signInAnonymously(auth).catch(() => {});
+        }
+
+        loginStudent(studentData);
 
         sendTelegramNotification('login', {
-          displayName: data.studentData.fullName || studentRegClean,
-          email: `Reg: ${data.studentData.registration}`,
+          displayName: studentData.fullName || studentRegClean,
+          email: `Reg: ${studentData.registration}`,
           role: 'student_portal'
-        });
+        }).catch(() => {});
 
-        checkMonthlyFeeReminders(data.studentData.registration);
+        checkMonthlyFeeReminders(studentData.registration);
 
       } catch (err) {
         console.error("Student Login Error:", err);
-        setError(err.message || 'Something went wrong. Please try again.');
+        setError(err.message || 'Login failed. Please check your Roll No. and Mobile Number.');
       } finally {
         setLoading(false);
       }

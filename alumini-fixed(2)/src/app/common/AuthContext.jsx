@@ -18,33 +18,54 @@ export function AuthProvider({ children }) {
   // Sync Student Firestore for Real-time updates if student is logged in
   useEffect(() => {
     if (!student?.registration) return;
-    const studentRef = doc(db, "students", student.registration);
-    const unsub = onSnapshot(studentRef, (snap) => {
-      if (snap.exists()) {
-        const data = snap.data();
-        setStudent(prev => ({ ...prev, ...data }));
-      }
-    });
-    return () => unsub();
+    try {
+      const studentRef = doc(db, "students", student.registration);
+      const unsub = onSnapshot(studentRef, (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          setStudent(prev => ({ ...prev, ...data }));
+        }
+      }, (err) => {
+        console.warn('[AuthContext] Student live snapshot listener notice:', err.message);
+      });
+      return () => unsub();
+    } catch (e) {
+      console.warn('[AuthContext] Snapshot init notice:', e.message);
+    }
   }, [student?.registration]);
 
   const loginStudent = (studentData) => {
-    setStudent(studentData);
+    if (!studentData) return;
+    const safeData = {
+      ...studentData,
+      registration: studentData.registration || studentData.id || studentData.regNo,
+      fullName: studentData.fullName || studentData.name || 'Student'
+    };
+    setStudent(safeData);
     setUser(null);
     setUserData(null);
     setRole('student');
-    // Store in local storage to persist student session
-    localStorage.setItem('studentSession', JSON.stringify({ registration: studentData.registration }));
+    // Store in local storage to persist complete student session
+    try {
+      localStorage.setItem('studentSession', JSON.stringify({
+        registration: safeData.registration,
+        studentData: safeData,
+        savedAt: Date.now()
+      }));
+    } catch (err) {
+      console.warn('[AuthContext] localStorage save warning:', err);
+    }
   };
 
   const logoutStudent = async () => {
-    await signOut(auth);
+    try { await signOut(auth); } catch (_) {}
     setStudent(null);
-    localStorage.removeItem('studentSession');
+    setRole(null);
+    try { localStorage.removeItem('studentSession'); } catch (_) {}
   };
 
   const logoutUser = async () => {
-    await signOut(auth);
+    try { await signOut(auth); } catch (_) {}
     setUser(null);
     setUserData(null);
     setRole(null);
@@ -67,14 +88,29 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
+    // 1. Immediately hydrate student session from localStorage (instant, 0ms latency)
+    try {
+      const storedSession = localStorage.getItem('studentSession');
+      if (storedSession) {
+        const parsed = JSON.parse(storedSession);
+        if (parsed?.studentData) {
+          setStudent(parsed.studentData);
+          setRole('student');
+          setLoading(false);
+        }
+      }
+    } catch (e) {
+      console.warn('[AuthContext] Initial session check notice:', e);
+    }
+
+    // 2. Firebase Auth observer
     const unsub = onAuthStateChanged(auth, async (u) => {
-      setLoading(true);
       try {
         if (u) {
           try {
             const userRef = doc(db, "users", u.uid);
             let snap = await getDoc(userRef);
-            
+
             if (snap.exists()) {
               let data = snap.data();
               setRole(data?.role);
@@ -86,50 +122,68 @@ export function AuthProvider({ children }) {
                 checkMonthlyFeeReminders();
               }
             } else {
-              // Might be a student logged in via Custom Token
+              // Might be a student logged in via Custom Token or Anonymous
               const studentRef = doc(db, "students", u.uid);
-              const studentSnap = await getDoc(studentRef);
-              
-              if (studentSnap.exists()) {
-                setStudent(studentSnap.data());
-                setUser(null);
-                setUserData(null);
-                setRole('student');
-              } else {
-                setUser(u);
-                setUserData({});
+              try {
+                const studentSnap = await getDoc(studentRef);
+                if (studentSnap.exists()) {
+                  const data = studentSnap.data();
+                  setStudent(prev => ({ ...(prev || {}), ...data }));
+                  setUser(null);
+                  setUserData(null);
+                  setRole('student');
+                } else {
+                  // Check localStorage student session
+                  const stored = localStorage.getItem('studentSession');
+                  if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (parsed?.studentData) {
+                      setStudent(parsed.studentData);
+                      setRole('student');
+                    }
+                  } else {
+                    setUser(u);
+                    setUserData({});
+                  }
+                }
+              } catch (_) {
+                // If student doc read was blocked by rules, check cached session
+                const stored = localStorage.getItem('studentSession');
+                if (stored) {
+                  const parsed = JSON.parse(stored);
+                  if (parsed?.studentData) {
+                    setStudent(parsed.studentData);
+                    setRole('student');
+                  }
+                }
               }
             }
           } catch (error) {
-            console.error("Error fetching user data:", error);
-            setUserData({});
+            console.warn("Error fetching user doc:", error);
           }
         } else {
           setUser(null);
-          setRole(null);
           setUserData(null);
-          
-          // Check for persisted student session
+
+          // Check for persisted student session if no Firebase user
           const storedSession = localStorage.getItem('studentSession');
           if (storedSession) {
             try {
-              const { registration } = JSON.parse(storedSession);
-              if (registration) {
-                const studentRef = doc(db, "students", registration);
+              const parsed = JSON.parse(storedSession);
+              if (parsed?.studentData) {
+                setStudent(parsed.studentData);
+                setRole('student');
+              } else if (parsed?.registration) {
+                const studentRef = doc(db, "students", parsed.registration);
                 const studentSnap = await getDoc(studentRef);
                 if (studentSnap.exists()) {
                   setStudent(studentSnap.data());
                   setRole('student');
-                } else {
-                  setStudent(null);
-                  localStorage.removeItem('studentSession');
                 }
               }
-            } catch(err) {
-               console.error("Error recovering student session", err);
+            } catch (err) {
+              console.warn("Error recovering student session:", err);
             }
-          } else {
-             setStudent(null);
           }
         }
       } finally {

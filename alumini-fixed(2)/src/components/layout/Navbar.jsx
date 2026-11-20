@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, LogOut, Shield, Database, User, Zap, ArrowUpRight } from 'lucide-react';
+import { Menu, X, LogOut, Shield, Database, User, Zap, ArrowUpRight, GraduationCap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../app/common/AuthContext';
@@ -146,16 +146,23 @@ export default function Navbar() {
                                 </button>
                             </div>
                         ) : (
-                            <div className="flex items-center gap-1.5 md:gap-3">
+                            <div className="flex items-center gap-1.5 md:gap-2.5">
+                                <Link
+                                    to="/student-login"
+                                    className="px-3.5 md:px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-[9px] md:text-[10px] uppercase tracking-widest rounded-full transition-all flex items-center gap-1.5 shadow-md shadow-blue-500/20 active:scale-95"
+                                >
+                                    <GraduationCap size={14} />
+                                    <span>Student Portal</span>
+                                </Link>
                                 <Link
                                     to="/login"
-                                    className="px-4 md:px-6 py-2.5 text-slate-500 hover:text-slate-900 font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-colors"
+                                    className="px-3 md:px-4 py-2 text-slate-600 hover:text-slate-900 font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-colors"
                                 >
-                                    Login
+                                    Staff
                                 </Link>
                                 <Link
                                     to="/register"
-                                    className="btn-premium px-5 md:px-8 py-2.5 md:py-3.5 bg-slate-900 text-white shadow-lg shadow-slate-200 text-[9px] md:text-[10px] font-black uppercase tracking-widest rounded-full whitespace-nowrap"
+                                    className="px-3 md:px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[9px] md:text-[10px] font-black uppercase tracking-widest rounded-full whitespace-nowrap transition-colors"
                                 >
                                     Join
                                 </Link>
@@ -249,10 +256,13 @@ export default function Navbar() {
                                         </button>
                                     ) : (
                                         <>
-                                            <Link to="/login" onClick={() => setIsOpen(false)} className="block w-full py-4 text-center border border-slate-200 rounded-2xl font-black uppercase text-[10px] tracking-widest text-slate-700">
-                                                Login Account
+                                            <Link to="/student-login" onClick={() => setIsOpen(false)} className="block w-full py-4 text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-blue-500/20">
+                                                🎓 Student Portal Login
                                             </Link>
-                                            <Link to="/register" onClick={() => setIsOpen(false)} className="block w-full py-4 text-center bg-slate-900 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-slate-200">
+                                            <Link to="/login" onClick={() => setIsOpen(false)} className="block w-full py-3.5 text-center border border-slate-200 rounded-2xl font-black uppercase text-[10px] tracking-widest text-slate-700">
+                                                Staff / Admin Login
+                                            </Link>
+                                            <Link to="/register" onClick={() => setIsOpen(false)} className="block w-full py-3.5 text-center bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-2xl font-black uppercase text-[10px] tracking-widest">
                                                 Register Profile
                                             </Link>
                                         </>

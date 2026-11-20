@@ -171,9 +171,16 @@ export default function StudentPortal() {
                     <div className="h-16 w-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                         <ShieldCheck size={32} />
                     </div>
-                    <h2 className="text-2xl font-black text-slate-900 mb-2">Unauthorized Access</h2>
-                    <p className="text-slate-500 font-bold mb-8">Please login with your credentials to access the portal.</p>
-                    <a href="/login" className="block w-full py-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-transform active:scale-95">Back to Login</a>
+                    <h2 className="text-2xl font-black text-slate-900 mb-2">Student Session Required</h2>
+                    <p className="text-slate-500 font-bold mb-8">Please enter your Roll No. and registered Mobile Number to access your student portal.</p>
+                    <div className="space-y-3">
+                        <a href="/student-login" className="block w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-transform active:scale-95 shadow-lg shadow-blue-500/25">
+                            Student Login
+                        </a>
+                        <a href="/login" className="block w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-black uppercase tracking-widest text-xs transition-transform active:scale-95">
+                            Staff / Admin Login
+                        </a>
+                    </div>
                 </div>
             </div>
         );

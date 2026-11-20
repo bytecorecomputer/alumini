@@ -6,6 +6,39 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig({
   plugins: [
     react(),
+    {
+      name: 'api-dev-middleware',
+      configureServer(server) {
+        server.middlewares.use(async (req, res, next) => {
+          const url = req.url || '';
+          if (url.startsWith('/api/student-login')) {
+            try {
+              let body = '';
+              req.on('data', chunk => { body += chunk; });
+              req.on('end', async () => {
+                try { req.body = body ? JSON.parse(body) : {}; } catch { req.body = {}; }
+                const { default: handler } = await import('./api/student-login.js');
+                res.status = function(code) { this.statusCode = code; return this; };
+                res.json = function(data) {
+                  this.setHeader('Content-Type', 'application/json');
+                  this.end(JSON.stringify(data));
+                  return this;
+                };
+                await handler(req, res);
+              });
+              return;
+            } catch (err) {
+              console.error('[vite-api] Student login error:', err);
+              res.statusCode = 500;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ error: err.message, code: 'DEV_SERVER_ERROR' }));
+              return;
+            }
+          }
+          next();
+        });
+      }
+    },
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
