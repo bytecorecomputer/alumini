@@ -76,7 +76,7 @@ export default function CertificateList() {
                                 Back to Admin
                             </button>
                             <button
-                                onClick={() => navigate('/certificate-generator')}
+                                onClick={() => navigate('/admin/certificates')}
                                 className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200"
                             >
                                 Generate New
@@ -94,7 +94,7 @@ export default function CertificateList() {
                         <h3 className="text-2xl font-bold text-slate-800 mb-2">No Certificates Yet</h3>
                         <p className="text-slate-600 mb-6">Generate your first certificate to get started</p>
                         <button
-                            onClick={() => navigate('/certificate-generator')}
+                            onClick={() => navigate('/admin/certificates')}
                             className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200"
                         >
                             Generate Certificate

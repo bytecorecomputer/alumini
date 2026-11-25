@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getMessaging } from "firebase/messaging";
+import { getMessaging, isSupported } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyAFnFqw6iD1YhQ5xwhSnd2rIKUJeR17wkU",
@@ -11,4 +11,24 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const messaging = getMessaging(app);
+
+let messagingInstance = null;
+
+/**
+ * Safely resolves Firebase Cloud Messaging only when supported by the browser.
+ * Prevents crashes on iOS Safari, private windows, or QR scanner WebViews.
+ */
+export async function getMessagingSafe() {
+  if (messagingInstance) return messagingInstance;
+  try {
+    if (typeof window === "undefined") return null;
+    const supported = await isSupported();
+    if (!supported) return null;
+    messagingInstance = getMessaging(app);
+    return messagingInstance;
+  } catch {
+    return null;
+  }
+}
+
+export const messaging = null;

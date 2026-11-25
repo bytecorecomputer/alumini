@@ -44,8 +44,43 @@ export default defineConfig({
       injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'logo.png'],
       workbox: {
-        maximumFileSizeToCacheInBytes: 6000000,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,jpg,jpeg}'],
+        maximumFileSizeToCacheInBytes: 2500000,
+        globPatterns: ['**/*.{js,css,html,ico,svg,webmanifest}'],
+        globIgnores: [
+          '**/Trophy3D*',
+          '**/jspdf*',
+          '**/html2canvas*',
+          '**/hindiQuizData*',
+          '**/CartesianChart*',
+          'images/**',
+          'assets/img/**',
+          '**/*.pdf',
+          '**/*.mp4'
+        ],
+        runtimeCaching: [
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|webp|gif|ico)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'bytecore-images',
+              expiration: {
+                maxEntries: 120,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/fonts\.(?:googleapis|gstatic)\.com\/.*/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'google-fonts',
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+            },
+          },
+        ],
       },
       manifest: {
         name: 'ByteCore Computer Centre',

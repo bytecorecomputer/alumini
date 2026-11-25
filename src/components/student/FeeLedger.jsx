@@ -13,10 +13,14 @@ export default function FeeLedger({ student: s }) {
     const total = Number(s.totalFees || 0), reg = Number(s.registrationFee || 0);
     const cancelled = s.status === 'cancel';
     const rows = useMemo(() => {
-        let run = 0;
-        return (Array.isArray(s.installments) ? [...s.installments] : [])
-            .sort((a, b) => (a.date || '').localeCompare(b.date || ''))
-            .map((p, i) => { run += Number(p.amount) || 0; return { ...p, no: i + 1, bal: Math.max(0, total - run) }; });
+        const sorted = (Array.isArray(s.installments) ? [...s.installments] : [])
+            .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+        return sorted.reduce((acc, p, i) => {
+            const prevRun = i > 0 ? acc[i - 1]._run : 0;
+            const nextRun = prevRun + (Number(p.amount) || 0);
+            acc.push({ ...p, no: i + 1, bal: Math.max(0, total - nextRun), _run: nextRun });
+            return acc;
+        }, []);
     }, [s.installments, total]);
     const paid = rows.reduce((a, p) => a + (Number(p.amount) || 0), 0) + Number(s.oldPaidFees || 0);
     const due = cancelled ? 0 : Math.max(0, total - paid), extra = Math.max(0, paid - total);

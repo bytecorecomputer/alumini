@@ -58,14 +58,14 @@ export function AuthProvider({ children }) {
   };
 
   const logoutStudent = async () => {
-    try { await signOut(auth); } catch (_) {}
+    try { await signOut(auth); } catch { /* ignore signOut error */ }
     setStudent(null);
     setRole(null);
-    try { localStorage.removeItem('studentSession'); } catch (_) {}
+    try { localStorage.removeItem('studentSession'); } catch { /* ignore storage error */ }
   };
 
   const logoutUser = async () => {
-    try { await signOut(auth); } catch (_) {}
+    try { await signOut(auth); } catch { /* ignore signOut error */ }
     setUser(null);
     setUserData(null);
     setRole(null);

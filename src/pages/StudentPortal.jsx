@@ -52,7 +52,8 @@ export default function StudentPortal() {
     
     // REDUX SETUP
     const dispatch = useDispatch();
-    const courseModules = useSelector(selectActiveCourseModules) || [];
+    const rawCourseModules = useSelector(selectActiveCourseModules);
+    const courseModules = useMemo(() => rawCourseModules || [], [rawCourseModules]);
 
     useEffect(() => {
         if (student?.course) {

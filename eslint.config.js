@@ -6,10 +6,22 @@ import { defineConfig } from 'eslint/config'
 
 export default defineConfig([
   {
-    ignores: ['dist', 'api/**', 'public/**', 'find_csv_duplicates.js', 'injectData.js', 'scripts/**', 'src/data/**'],
+    ignores: ['dist', 'api', 'public', 'alumini-fixed(2)', 'find_csv_duplicates.js', 'injectData.js', 'scripts', 'src/data'],
   },
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['lib/**/*.js'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      globals: globals.node,
+      sourceType: 'module',
+    },
+    rules: {
+      'no-unused-vars': 'off',
+    },
+  },
+  {
+    files: ['src/**/*.{js,jsx}'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,

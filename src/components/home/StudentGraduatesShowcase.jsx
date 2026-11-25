@@ -7,6 +7,7 @@ import { cn } from '../../lib/utils';
 export default function StudentGraduatesShowcase() {
   const [search, setSearch] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('ALL');
+  const [visibleCount, setVisibleCount] = useState(12);
 
   const coursesList = useMemo(() => {
     const set = new Set(STUDENT_GRADUATES.map((s) => s.course));
@@ -14,15 +15,21 @@ export default function StudentGraduatesShowcase() {
   }, []);
 
   const filteredStudents = useMemo(() => {
+    const term = search.trim().toLowerCase();
     return STUDENT_GRADUATES.filter((s) => {
       const courseMatch = selectedCourse === 'ALL' || s.course === selectedCourse;
       const searchMatch =
-        !search ||
-        s.name.toLowerCase().includes(search.toLowerCase()) ||
-        s.course.toLowerCase().includes(search.toLowerCase());
+        !term ||
+        s.name.toLowerCase().includes(term) ||
+        s.course.toLowerCase().includes(term);
       return courseMatch && searchMatch;
     });
   }, [search, selectedCourse]);
+
+  const displayedStudents = useMemo(
+    () => filteredStudents.slice(0, visibleCount),
+    [filteredStudents, visibleCount]
+  );
 
   return (
     <section className="py-20 bg-slate-950 text-white relative overflow-hidden font-sans border-t border-slate-900">
@@ -64,7 +71,10 @@ export default function StudentGraduatesShowcase() {
             {coursesList.map((course) => (
               <button
                 key={course}
-                onClick={() => setSelectedCourse(course)}
+                onClick={() => {
+                  setSelectedCourse(course);
+                  setVisibleCount(12);
+                }}
                 className={cn(
                   'px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300',
                   selectedCourse === course
@@ -84,7 +94,10 @@ export default function StudentGraduatesShowcase() {
               type="text"
               placeholder="Search graduate by name or course..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setVisibleCount(12);
+              }}
               className="w-full pl-11 pr-4 py-3 bg-black/40 border border-white/10 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-500 transition-colors placeholder:text-slate-500"
             />
           </div>
@@ -92,23 +105,18 @@ export default function StudentGraduatesShowcase() {
 
         {/* Graduates Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-          <AnimatePresence mode="popLayout">
-            {filteredStudents.map((student, idx) => (
-              <motion.div
+            {displayedStudents.map((student) => (
+              <div
                 key={student.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.3, delay: Math.min(idx * 0.02, 0.3) }}
-                className="group relative bg-slate-900 border border-white/10 rounded-[2rem] overflow-hidden shadow-xl hover:border-blue-500/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-500"
+                className="group relative bg-slate-900 border border-white/10 rounded-[2rem] overflow-hidden shadow-xl hover:border-blue-500/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-300"
               >
                 <div className="aspect-[3/4] w-full overflow-hidden bg-slate-950 relative">
                   <img
                     src={student.src}
                     alt={student.displayName}
                     loading="lazy"
-                    className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                    decoding="async"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
                   
@@ -126,10 +134,20 @@ export default function StudentGraduatesShowcase() {
                     ({student.course})
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </AnimatePresence>
         </div>
+
+        {filteredStudents.length > visibleCount && (
+          <div className="mt-10 flex justify-center">
+            <button
+              onClick={() => setVisibleCount((prev) => prev + 18)}
+              className="px-8 py-4 rounded-2xl bg-white/10 hover:bg-blue-600 text-white font-black uppercase tracking-widest text-xs border border-white/15 transition-all shadow-lg active:scale-95"
+            >
+              Show More Graduates ({filteredStudents.length - visibleCount} remaining)
+            </button>
+          </div>
+        )}
 
         {filteredStudents.length === 0 && (
           <div className="text-center py-20 bg-white/5 rounded-[3rem] border border-white/10">

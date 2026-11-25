@@ -194,17 +194,18 @@ export default function StudentLiveQuiz() {
     }, [joined, roomId, student, navigate]);
 
     // Audio effects for results
+    const liveStatus = liveData?.status;
     useEffect(() => {
-        if (!liveData) return;
+        if (!liveStatus) return;
 
-        if (liveData.status === 'result') {
+        if (liveStatus === 'result') {
             if (myState?.lastPoints > 0) {
                 playSuccess();
             } else {
                 playError();
             }
         }
-    }, [liveData?.status, myState?.lastPoints]);
+    }, [liveStatus, myState?.lastPoints]);
 
     const handleAnswer = async (index) => {
         if (hasAnswered || liveData?.status !== 'active' || liveData?.isPaused) return;

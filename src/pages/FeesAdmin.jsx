@@ -47,10 +47,12 @@ export default function FeesAdmin() {
     } catch (e) { setErr(e.message); }
   }, []);
   useEffect(() => {
-    sync();
-    const id = setInterval(() => !document.hidden && sync(), 8000), vis = () => !document.hidden && sync();
+    let active = true;
+    const run = () => { if (active) sync(); };
+    Promise.resolve().then(run);
+    const id = setInterval(() => !document.hidden && run(), 8000), vis = () => !document.hidden && run();
     document.addEventListener('visibilitychange', vis);
-    return () => { clearInterval(id); document.removeEventListener('visibilitychange', vis); };
+    return () => { active = false; clearInterval(id); document.removeEventListener('visibilitychange', vis); };
   }, [sync]);
 
   const centres = useMemo(() => [...new Set((D || []).map(s => s.centre))], [D]);

@@ -37,7 +37,7 @@ export default function StudentLogin() {
       const savedMob = localStorage.getItem('bytecore_saved_mobile');
       if (savedRoll) setRoll(savedRoll);
       if (savedMob) setMobile(savedMob);
-    } catch (_) {}
+    } catch { /* ignore storage error */ }
   }, []);
 
   const handleMobileChange = (e) => {
@@ -76,7 +76,7 @@ export default function StudentLogin() {
         localStorage.removeItem('bytecore_saved_roll');
         localStorage.removeItem('bytecore_saved_mobile');
       }
-    } catch (_) {}
+    } catch { /* ignore storage error */ }
 
     toast.success(`Welcome back, ${studentData.fullName || studentData.name || 'Student'}! 🎉`);
 

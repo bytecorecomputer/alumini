@@ -236,10 +236,14 @@ export default function CertificateGenerator() {
 
             // Save certificate data to Firestore
             const totals = calculateTotals();
+            const rollValue = (formData.marksheetNumber || formData.certificateNumber || '').trim();
             await saveCertificate({
                 ...formData,
+                roll: rollValue,
+                rollNormalized: rollValue.toUpperCase(),
                 studentPhoto,
                 pdfUrl,
+                link: pdfUrl || '',
                 ...totals,
             });
 

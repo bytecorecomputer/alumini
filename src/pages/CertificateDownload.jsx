@@ -215,14 +215,14 @@ export default function CertificateDownload() {
                     </p>
                 </motion.div>
 
-                <div className="w-full grid md:grid-cols-[1fr_1.2fr] gap-8 items-start">
+                <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
 
                     {/* Search Form Card */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                        className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden"
+                        className="md:col-span-5 min-w-0 bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-2xl relative overflow-hidden"
                     >
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-cyan-400" />
 
@@ -294,7 +294,7 @@ export default function CertificateDownload() {
                     </motion.div>
 
                     {/* Results / Empty State Area */}
-                    <div className="w-full h-full min-h-[400px]">
+                    <div className="md:col-span-7 min-w-0 w-full h-full min-h-[400px]">
                         <AnimatePresence mode="wait">
                             {!result && !isSearching ? (
                                 <motion.div

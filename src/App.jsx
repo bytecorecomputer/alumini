@@ -78,9 +78,9 @@ export default function App() {
       <BrowserRouter>
         <Layout>
           <Toaster position="top-right" toastOptions={{ duration: 4000, style: { background: '#333', color: '#fff' } }} />
-          <InstallPWA />
-          <NotificationHandler />
           <ErrorBoundary>
+            <InstallPWA />
+            <NotificationHandler />
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -97,6 +97,7 @@ export default function App() {
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/verify/:certId" element={<CertificateVerification />} />
+              <Route path="/verify/*" element={<CertificateVerification />} />
 
               {/* Protected Routes */}
               <Route path="/directory" element={

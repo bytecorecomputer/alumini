@@ -72,26 +72,26 @@ export default function Navbar() {
 
     return (
         <nav className={cn(
-            "fixed top-0 w-full z-[100] transition-all duration-700 px-4 md:px-8 py-6",
-            scrolled ? "py-3" : "py-6"
+            "fixed top-0 w-full z-[100] transition-all duration-500 px-3 sm:px-4 md:px-8",
+            scrolled ? "py-2.5 sm:py-3" : "py-3 sm:py-5"
         )}>
             <div className="max-w-7xl mx-auto flex justify-center">
                 <div className={cn(
-                    "glass px-6 h-20 flex justify-between items-center relative z-20 transition-all duration-700",
+                    "glass flex justify-between items-center relative z-20 transition-all duration-500 w-full",
                     scrolled
-                        ? "rounded-full shadow-2xl shadow-blue-900/10 border-white/40 h-16 w-full max-w-5xl bg-white/70 backdrop-blur-2xl px-1.5"
-                        : "rounded-[2.5rem] shadow-none border-transparent h-20 w-full bg-transparent px-6"
+                        ? "rounded-full shadow-2xl shadow-blue-900/10 border border-white/60 h-14 sm:h-16 max-w-5xl bg-white/85 backdrop-blur-2xl px-2.5 sm:px-4"
+                        : "rounded-full sm:rounded-[2rem] shadow-lg shadow-slate-900/5 border border-white/70 h-14 sm:h-18 bg-white/85 backdrop-blur-xl px-3 sm:px-6"
                 )}>
                     {/* Logo Area */}
-                    <Link to="/" className="flex items-center gap-3 group ml-2">
-                        <div className="h-10 w-10 group-hover:scale-110 transition-all duration-500 rounded-xl overflow-hidden flex items-center justify-center bg-white shadow-sm border border-slate-100 p-1">
+                    <Link to="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
+                        <div className="h-9 w-9 sm:h-10 sm:w-10 group-hover:scale-105 transition-all duration-300 rounded-xl overflow-hidden flex items-center justify-center bg-white shadow-sm border border-slate-100 p-1">
                             <img src="/logo.png" alt="ByteCore Logo" className="h-full w-full object-contain" />
                         </div>
                         <div className="flex flex-col">
                             <span className="font-black text-xl text-slate-900 tracking-tighter leading-none hidden lg:block italic">
                                 ByteCore <span className="text-blue-600">Computer Centre</span>
                             </span>
-                            <span className="font-black text-xl text-slate-900 tracking-tighter leading-none lg:hidden italic">
+                            <span className="font-black text-base sm:text-xl text-slate-900 tracking-tighter leading-none lg:hidden italic">
                                 ByteCore
                             </span>
                         </div>
@@ -113,10 +113,10 @@ export default function Navbar() {
                     </div>
 
                     {/* Actions (Responsive) */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                         {user || isStudent ? (
                             <div className="flex items-center gap-2">
-                                <Link to={isStudent ? "/student-portal" : "/profile"} className="flex items-center gap-1.5 p-1 pr-3 md:pr-4 bg-white/80 hover:bg-white border border-slate-200 rounded-full transition-all group shadow-sm">
+                                <Link to={isStudent ? "/student-portal" : "/profile"} className="flex items-center gap-1.5 p-1 pr-2.5 sm:pr-4 bg-white/80 hover:bg-white border border-slate-200 rounded-full transition-all group shadow-sm">
                                     <div className="h-8 w-8 md:h-9 md:w-9 rounded-full bg-slate-200 overflow-hidden border-2 border-white shadow-sm">
                                         {isStudent ? (
                                             student.photoUrl ? (
@@ -149,20 +149,20 @@ export default function Navbar() {
                             <div className="flex items-center gap-1.5 md:gap-2.5">
                                 <Link
                                     to="/student-login"
-                                    className="px-3.5 md:px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-[9px] md:text-[10px] uppercase tracking-widest rounded-full transition-all flex items-center gap-1.5 shadow-md shadow-blue-500/20 active:scale-95"
+                                    className="px-3 sm:px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-[9px] md:text-[10px] uppercase tracking-wider sm:tracking-widest rounded-full transition-all flex items-center gap-1.5 shadow-md shadow-blue-500/20 active:scale-95 whitespace-nowrap"
                                 >
                                     <GraduationCap size={14} />
-                                    <span>Student Portal</span>
+                                    <span>Portal</span>
                                 </Link>
                                 <Link
                                     to="/login"
-                                    className="px-3 md:px-4 py-2 text-slate-600 hover:text-slate-900 font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-colors"
+                                    className="hidden sm:inline-flex px-3 md:px-4 py-2 text-slate-600 hover:text-slate-900 font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-colors"
                                 >
                                     Staff
                                 </Link>
                                 <Link
                                     to="/register"
-                                    className="px-3 md:px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[9px] md:text-[10px] font-black uppercase tracking-widest rounded-full whitespace-nowrap transition-colors"
+                                    className="hidden sm:inline-flex px-3 md:px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[9px] md:text-[10px] font-black uppercase tracking-widest rounded-full whitespace-nowrap transition-colors"
                                 >
                                     Join
                                 </Link>
@@ -173,9 +173,10 @@ export default function Navbar() {
                         <div className="lg:hidden">
                             <button
                                 onClick={() => setIsOpen(!isOpen)}
-                                className="p-3 text-slate-900 bg-slate-100 hover:bg-white rounded-2xl transition-all border border-transparent shadow-sm active:scale-95"
+                                aria-label="Toggle Menu"
+                                className="p-2.5 text-slate-900 bg-slate-100 hover:bg-white rounded-full transition-all border border-slate-200/70 shadow-sm active:scale-95"
                             >
-                                {isOpen ? <X size={24} /> : <Menu size={24} />}
+                                {isOpen ? <X size={20} /> : <Menu size={20} />}
                             </button>
                         </div>
                     </div>

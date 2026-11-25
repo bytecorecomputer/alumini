@@ -16,6 +16,9 @@ export default function NotificationHandler() {
     const userId = user?.uid || student?.registration;
 
     useEffect(() => {
+        if (typeof window === 'undefined' || typeof Notification === 'undefined') {
+            return;
+        }
 
         // 1. Check permission status
         if (Notification.permission === 'default') {

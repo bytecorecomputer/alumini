@@ -1,4 +1,4 @@
-import { messaging } from "../firebase/firebase";
+import { getMessagingSafe } from "../firebase/firebase";
 import { getToken, onMessage } from "firebase/messaging";
 import { doc, updateDoc, arrayUnion, addDoc, collection, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../firebase/firestore";
@@ -10,19 +10,22 @@ const VAPID_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
  */
 export const requestNotificationPermission = async (userId) => {
     try {
+        if (typeof window === "undefined" || typeof Notification === "undefined") {
+            return null;
+        }
+        const messaging = await getMessagingSafe();
+        if (!messaging) return null;
+
         const permission = await Notification.requestPermission();
         if (permission === "granted") {
             const token = await getToken(messaging, { vapidKey: VAPID_KEY });
             if (token) {
-                console.log("FCM Token cached:", token);
                 await saveTokenToFirestore(userId, token);
                 return token;
             }
-        } else {
-            console.warn("Notification permission denied.");
         }
     } catch (error) {
-        console.error("Error requesting notification permission:", error);
+        console.warn("Notification permission skipped:", error?.message);
     }
     return null;
 };
@@ -33,7 +36,6 @@ export const requestNotificationPermission = async (userId) => {
 const saveTokenToFirestore = async (userId, token) => {
     if (!userId) {
         try {
-            // Save to guest_subscribers if no userId is provided
             const guestRef = doc(db, "guest_subscribers", token);
             await setDoc(guestRef, {
                 token: token,
@@ -47,15 +49,13 @@ const saveTokenToFirestore = async (userId, token) => {
     }
 
     try {
-        // We add the token to an array of fcmTokens so one user can have multiple devices
         const userRef = doc(db, "users", userId);
         await updateDoc(userRef, {
             fcmTokens: arrayUnion(token),
             notificationsEnabled: true,
             updatedAt: Date.now()
         });
-    } catch (error) {
-        // Fallback for students collection if user is not in 'users'
+    } catch {
         try {
             const studentRef = doc(db, "students", userId);
             await updateDoc(studentRef, {
@@ -70,13 +70,15 @@ const saveTokenToFirestore = async (userId, token) => {
 };
 
 /**
- * Sets up the foreground message listener.
+ * Sets up the foreground message listener safely when FCM is supported.
  */
 export const onMessageListener = () =>
     new Promise((resolve) => {
-        onMessage(messaging, (payload) => {
-            console.log("Foreground message received:", payload);
-            resolve(payload);
+        getMessagingSafe().then((messaging) => {
+            if (!messaging) return;
+            onMessage(messaging, (payload) => {
+                resolve(payload);
+            });
         });
     });
 

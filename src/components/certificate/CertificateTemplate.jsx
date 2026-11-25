@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import defaultLogo from '../../assets/format/logo.png';
+import { buildVerifyUrl } from '../../lib/certificateVerificationUtils';
 
 const CertificateTemplate = forwardRef(({ data, branding }, ref) => {
     const {
@@ -537,7 +538,7 @@ const CertificateTemplate = forwardRef(({ data, branding }, ref) => {
                                 border: '1px solid #cbd5e1',
                             }}>
                                 <QRCodeCanvas
-                                    value={`${window.location.origin}/verify/${data.roll || certificateNumber}${data.verificationToken ? '?t=' + data.verificationToken : ''}`}
+                                    value={buildVerifyUrl(data.roll || marksheetNumber || certificateNumber, data.verificationToken)}
                                     size={80}
                                     level="M"
                                 />
