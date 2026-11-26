@@ -17,18 +17,25 @@ const FULL_BLEED_PREFIXES = [
 
 export default function Layout({ children }) {
     const location = useLocation();
+    const isVerifyRoute = location.pathname.startsWith('/verify');
     const isFullBleed = FULL_BLEED_PREFIXES.some((prefix) =>
         location.pathname.startsWith(prefix)
     );
 
     return (
-        <div className="min-h-screen flex flex-col bg-gray-50 overflow-x-hidden md:pb-0 pb-[80px]">
-            <Navbar />
+        <div
+            className={
+                isVerifyRoute
+                    ? 'min-h-[100dvh] flex flex-col bg-slate-950 overflow-x-hidden'
+                    : 'min-h-screen flex flex-col bg-gray-50 overflow-x-hidden md:pb-0 pb-[80px]'
+            }
+        >
+            {!isVerifyRoute && <Navbar />}
             <main className={isFullBleed ? 'flex-grow' : 'flex-grow pt-32'}>
                 {children}
             </main>
-            <Footer />
-            <AdminBottomNav />
+            {!isVerifyRoute && <Footer />}
+            {!isVerifyRoute && <AdminBottomNav />}
         </div>
     );
 }

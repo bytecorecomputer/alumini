@@ -475,7 +475,7 @@ const CertificateTemplate = forwardRef(({ data, branding }, ref) => {
                                 marginLeft: '8px',
                                 color: '#1e3a8a',
                                 fontWeight: '900'
-                            }}>{percentage.toFixed(2)}%</span>
+                            }}>{(Number.isFinite(percentage) ? percentage : 0).toFixed(2)}%</span>
                         </div>
                     </div>
 

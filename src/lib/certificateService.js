@@ -1,7 +1,8 @@
-import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc, query, orderBy, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db } from '../firebase/firestore';
 import { storage } from '../firebase/storage';
+import { findCertificateDoc, normalizeIdentifier } from './certificateVerificationUtils';
 
 /**
  * Generate a unique certificate number
@@ -24,14 +25,52 @@ export const generateMarksheetNumber = () => {
 };
 
 /**
- * Save certificate data to Firestore
+ * Save or update certificate data in Firestore without creating duplicate records
+ * or breaking previously issued QR verification tokens.
  */
-export const saveCertificate = async (certificateData) => {
+export const saveCertificate = async (certificateData, existingId = null) => {
     try {
+        const sanitized = { ...certificateData };
+        // Never write oversized raw base64 photos into Firestore (1MB document limit)
+        if (typeof sanitized.studentPhoto === 'string' && sanitized.studentPhoto.startsWith('data:')) {
+            if (!sanitized.studentPhotoUrl && sanitized.studentPhoto.length < 80000) {
+                sanitized.studentPhotoUrl = sanitized.studentPhoto;
+            }
+            delete sanitized.studentPhoto;
+        }
+
+        const rollKey = normalizeIdentifier(
+            sanitized.roll || sanitized.marksheetNumber || sanitized.certificateNumber
+        );
+
+        let targetId = existingId || null;
+        let existingData = null;
+
+        if (!targetId && rollKey) {
+            const existing = await findCertificateDoc(db, rollKey, sanitized.verificationToken || '');
+            if (existing) {
+                targetId = existing.id;
+                existingData = existing.data;
+            }
+        }
+
+        if (targetId) {
+            const lockedToken = existingData?.verificationToken || sanitized.verificationToken;
+            await updateDoc(doc(db, 'certificates', targetId), {
+                ...sanitized,
+                ...(lockedToken ? { verificationToken: lockedToken } : {}),
+                pdfUrl: sanitized.pdfUrl || existingData?.pdfUrl || '',
+                link: sanitized.link || existingData?.link || '',
+                updatedAt: serverTimestamp(),
+            });
+            return targetId;
+        }
+
         const certificatesRef = collection(db, 'certificates');
         const docRef = await addDoc(certificatesRef, {
-            ...certificateData,
+            ...sanitized,
             createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
         });
         return docRef.id;
     } catch (error) {

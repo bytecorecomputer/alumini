@@ -88,7 +88,10 @@ export default function AdminQRGenerator() {
 
                 if (certHit) {
                     const data = certHit.data;
-                    const token = data.verificationToken || generateVerificationToken();
+                    const token =
+                        data.verificationToken ||
+                        studentHit?.data?.verificationToken ||
+                        generateVerificationToken();
                     const patch = {};
                     if (!data.verificationToken) patch.verificationToken = token;
                     if (!data.rollNormalized) patch.rollNormalized = cleanRoll.toUpperCase();
@@ -106,6 +109,9 @@ export default function AdminQRGenerator() {
                         }
                         if (!data.studentPhotoUrl && studentHit.data.photoUrl) {
                             patch.studentPhotoUrl = studentHit.data.photoUrl;
+                        }
+                        if (!studentHit.data.verificationToken) {
+                            await updateDoc(studentHit.ref, { verificationToken: token }).catch(() => {});
                         }
                     }
 

@@ -10,9 +10,16 @@ import {
     calculateDivision,
 } from '../lib/certificateService';
 import { uploadToSupabase } from '../lib/supabase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/firestore';
-import { Search, Loader2, User, Users, BookOpen, Calendar, GraduationCap } from 'lucide-react';
+import {
+    findCertificateDoc,
+    findStudentDoc,
+    generateVerificationToken,
+    normalizeIdentifier,
+} from '../lib/certificateVerificationUtils';
+import toast from 'react-hot-toast';
+import { Search, Loader2, User, Users, BookOpen, Calendar, GraduationCap, Lock } from 'lucide-react';
 
 const COURSE_TEMPLATES = {
     'MDCA': [
@@ -53,6 +60,8 @@ export default function CertificateGenerator() {
     const [studentPhoto, setStudentPhoto] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [searching, setSearching] = useState(false);
+    const [lockedCertId, setLockedCertId] = useState(null);
+    const [qrLockedNotice, setQrLockedNotice] = useState(false);
 
     // Live logo/signature/signatory settings (Admin > Certificate Branding).
     // Subscribing here means the moment an admin updates the branding, the
@@ -73,11 +82,15 @@ export default function CertificateGenerator() {
         certificateNumber: generateCertificateNumber(),
         issueDate: new Date().getFullYear().toString(),
         subjects: COURSE_TEMPLATES['MDCA'],
-        verificationToken: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+        verificationToken: generateVerificationToken(),
     });
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        if (name === 'marksheetNumber') {
+            setLockedCertId(null);
+            setQrLockedNotice(false);
+        }
         setFormData(prev => ({
             ...prev,
             [name]: value,
@@ -135,42 +148,65 @@ export default function CertificateGenerator() {
     };
 
     const handleSearch = async () => {
-        if (!searchQuery.trim()) return;
+        const cleanQuery = normalizeIdentifier(searchQuery);
+        if (!cleanQuery) return;
         setSearching(true);
         try {
-            // Search by Registration Number (Roll Number)
-            const studentRef = doc(db, "students", searchQuery.trim());
-            const studentSnap = await getDoc(studentRef);
+            const [studentHit, certHit] = await Promise.all([
+                findStudentDoc(db, cleanQuery),
+                findCertificateDoc(db, cleanQuery),
+            ]);
 
-            if (studentSnap.exists()) {
-                const data = studentSnap.data();
+            if (studentHit?.data || certHit?.data) {
+                const s = studentHit?.data || {};
+                const c = certHit?.data || {};
+                const lockedToken =
+                    c.verificationToken || s.verificationToken || generateVerificationToken();
+
+                setLockedCertId(certHit?.id || null);
+                setQrLockedNotice(Boolean(c.verificationToken || s.verificationToken));
+
                 setFormData(prev => ({
                     ...prev,
-                    studentName: data.fullName || '',
-                    fatherName: data.fatherName || '',
-                    courseName: data.course || prev.courseName,
-                    marksheetNumber: data.registration || prev.marksheetNumber, // Roll Number is Registration
-                    // Keep other fields or defaults
+                    studentName: c.studentName || s.fullName || s.name || prev.studentName,
+                    fatherName: c.fatherName || s.fatherName || s.father || prev.fatherName,
+                    motherName: c.motherName || s.motherName || prev.motherName,
+                    courseName: c.courseName || s.course || s.trade || prev.courseName,
+                    duration: c.duration || prev.duration,
+                    marksheetNumber: c.marksheetNumber || c.roll || s.registration || s.regNo || cleanQuery,
+                    certificateNumber: c.certificateNumber || prev.certificateNumber,
+                    issueDate: c.issueDate || prev.issueDate,
+                    subjects: Array.isArray(c.subjects) && c.subjects.length > 0 ? c.subjects : prev.subjects,
+                    verificationToken: lockedToken,
                 }));
-                if (data.photoUrl) {
-                    setStudentPhoto(data.photoUrl);
+
+                const photo = c.studentPhotoUrl || c.studentPhoto || s.photoUrl;
+                if (photo) {
+                    setStudentPhoto(photo);
                 }
-                alert("Student data found and autofilled!");
+
+                toast.success(
+                    certHit?.data
+                        ? 'Existing certificate loaded — permanent QR preserved!'
+                        : 'Student data found and autofilled!'
+                );
             } else {
-                alert("Student not found with this Registration ID.");
+                setLockedCertId(null);
+                setQrLockedNotice(false);
+                toast.error('Student not found with this Registration / Roll Number.');
             }
         } catch (error) {
-            console.error("Search error:", error);
-            alert("Error searching for student.");
+            console.error('Search error:', error);
+            toast.error('Error searching for student.');
         } finally {
             setSearching(false);
         }
     };
 
     const calculateTotals = () => {
-        const totalMarks = formData.subjects.reduce((sum, subj) => sum + subj.maxMarks, 0);
-        const obtainedMarks = formData.subjects.reduce((sum, subj) => sum + subj.obtained, 0);
-        const percentage = (obtainedMarks / totalMarks) * 100;
+        const totalMarks = formData.subjects.reduce((sum, subj) => sum + (Number(subj.maxMarks) || 0), 0);
+        const obtainedMarks = formData.subjects.reduce((sum, subj) => sum + (Number(subj.obtained) || 0), 0);
+        const percentage = totalMarks > 0 ? (obtainedMarks / totalMarks) * 100 : 0;
         const grade = calculateGrade(percentage, formData.subjects);
         const division = calculateDivision(percentage, formData.subjects);
 
@@ -184,8 +220,43 @@ export default function CertificateGenerator() {
     const handleGeneratePDF = async () => {
         setLoading(true);
         try {
-            // Wait briefly to ensure images/fonts are fully rendered in the DOM
-            await new Promise(resolve => setTimeout(resolve, 800));
+            const rollValue = normalizeIdentifier(
+                formData.marksheetNumber || formData.certificateNumber
+            );
+
+            // Lock onto existing QR verificationToken if this roll already has a certificate/student record
+            const [existingCert, existingStudent] = rollValue
+                ? await Promise.all([
+                      findCertificateDoc(db, rollValue, formData.verificationToken),
+                      findStudentDoc(db, rollValue),
+                  ])
+                : [null, null];
+
+            const lockedToken =
+                existingCert?.data?.verificationToken ||
+                existingStudent?.data?.verificationToken ||
+                formData.verificationToken ||
+                generateVerificationToken();
+            const lockedCertNumber =
+                existingCert?.data?.certificateNumber || formData.certificateNumber;
+
+            if (
+                lockedToken !== formData.verificationToken ||
+                lockedCertNumber !== formData.certificateNumber
+            ) {
+                setFormData(prev => ({
+                    ...prev,
+                    verificationToken: lockedToken,
+                    certificateNumber: lockedCertNumber,
+                }));
+            }
+            if (existingCert?.id) {
+                setLockedCertId(existingCert.id);
+                setQrLockedNotice(true);
+            }
+
+            // Wait briefly to ensure QR canvas, images, and fonts are fully rendered in the DOM
+            await new Promise(resolve => setTimeout(resolve, 900));
             const element = printRef.current;
 
             const [html2canvas, { default: jsPDF }] = await Promise.all([
@@ -195,7 +266,7 @@ export default function CertificateGenerator() {
 
             // Generate high-quality canvas (scale 2 is optimal, scale 3 often causes memory/black screen issues)
             const canvas = await html2canvas(element, {
-                scale: 2, 
+                scale: 2,
                 useCORS: true,
                 logging: false,
                 backgroundColor: '#ffffff',
@@ -218,65 +289,71 @@ export default function CertificateGenerator() {
 
             // Get PDF as blob
             const pdfBlob = pdf.output('blob');
-            const filename = `certificate_${formData.certificateNumber.replace(/\//g, '_')}.pdf`;
+            const safeCertName = (lockedCertNumber || rollValue || 'cert').replace(/[^a-zA-Z0-9_-]/g, '_');
+            const filename = `certificate_${safeCertName}.pdf`;
 
             // Download PDF IMMEDIATELY
             pdf.save(filename);
 
             // Upload to Supabase
-            let pdfUrl = '';
+            let pdfUrl = existingCert?.data?.pdfUrl || existingCert?.data?.link || '';
             try {
+                const safeReg = (rollValue || 'cert').replace(/[^a-zA-Z0-9_-]/g, '_');
                 const pdfFile = new File([pdfBlob], filename, { type: 'application/pdf' });
-                const result = await uploadToSupabase(pdfFile, formData.marksheetNumber || 'cert', 'certificates');
+                const result = await uploadToSupabase(pdfFile, safeReg, 'certificates');
                 pdfUrl = result.publicUrl;
             } catch (supabaseError) {
                 console.error("Supabase upload failed but PDF was downloaded:", supabaseError);
-                alert("Certificate downloaded, but cloud backup failed: " + supabaseError.message);
+                toast.error("PDF downloaded, but cloud backup failed: " + supabaseError.message);
             }
 
-            // Save certificate data to Firestore
+            // Upsert certificate data to Firestore (prevents duplicate docs & preserves permanent QR)
             const totals = calculateTotals();
-            const rollValue = (formData.marksheetNumber || formData.certificateNumber || '').trim();
-            await saveCertificate({
-                ...formData,
-                roll: rollValue,
-                rollNormalized: rollValue.toUpperCase(),
-                studentPhoto,
-                pdfUrl,
-                link: pdfUrl || '',
-                ...totals,
-            });
+            const photoUrlToSave =
+                typeof studentPhoto === 'string' && !studentPhoto.startsWith('data:')
+                    ? studentPhoto
+                    : existingStudent?.data?.photoUrl || existingCert?.data?.studentPhotoUrl || '';
 
-            // Link Certificate to Student Profile
-            if (formData.marksheetNumber) {
+            await saveCertificate(
+                {
+                    ...formData,
+                    certificateNumber: lockedCertNumber,
+                    verificationToken: lockedToken,
+                    roll: rollValue,
+                    rollNormalized: rollValue.toUpperCase(),
+                    studentPhotoUrl: photoUrlToSave,
+                    studentPhoto,
+                    pdfUrl,
+                    link: pdfUrl || '',
+                    status: 'verified',
+                    ...totals,
+                },
+                existingCert?.id || lockedCertId
+            );
+
+            // Link Certificate to Student Profile safely (supports roll numbers with '/')
+            if (existingStudent?.ref) {
                 try {
-                    const studentRef = doc(db, "students", formData.marksheetNumber);
-                    const studentSnap = await getDoc(studentRef);
-
-                    if (studentSnap.exists()) {
-                        await updateDoc(studentRef, {
-                            certificate: {
-                                url: pdfUrl,
-                                number: formData.certificateNumber,
-                                issueDate: formData.issueDate,
-                                course: formData.courseName
-                            },
-                            verificationToken: formData.verificationToken,
-                            status: 'pass' // Mark student as passed/alumni
-                        });
-                        console.log("Certificate linked to student profile");
-                    }
+                    await updateDoc(existingStudent.ref, {
+                        certificate: {
+                            url: pdfUrl,
+                            number: lockedCertNumber,
+                            issueDate: formData.issueDate,
+                            course: formData.courseName
+                        },
+                        verificationToken: lockedToken,
+                        status: 'pass'
+                    });
                 } catch (linkError) {
                     console.error("Failed to link certificate to student:", linkError);
-                    // Non-blocking error
                 }
             }
 
-            alert('Certificate generated and saved successfully!');
+            toast.success('Certificate generated and saved successfully!');
             navigate('/admin/coaching');
         } catch (error) {
             console.error('Error generating certificate:', error);
-            alert('Error generating certificate. Please try again.');
+            toast.error('Error generating certificate. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -331,6 +408,12 @@ export default function CertificateGenerator() {
                                     {searching ? <Loader2 className="animate-spin" size={20} /> : 'Search'}
                                 </button>
                             </div>
+                            {qrLockedNotice && (
+                                <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
+                                    <Lock size={12} className="text-emerald-600" />
+                                    Permanent QR Locked — Existing verification QR will stay unchanged
+                                </div>
+                            )}
                         </div>
 
                         <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-3">
@@ -608,6 +691,7 @@ export default function CertificateGenerator() {
                                         branding={branding}
                                         data={{
                                             ...formData,
+                                            roll: normalizeIdentifier(formData.marksheetNumber || formData.certificateNumber),
                                             studentPhoto,
                                             ...totals,
                                         }}
@@ -634,6 +718,7 @@ export default function CertificateGenerator() {
                         branding={branding}
                         data={{
                             ...formData,
+                            roll: normalizeIdentifier(formData.marksheetNumber || formData.certificateNumber),
                             studentPhoto,
                             ...totals,
                         }}

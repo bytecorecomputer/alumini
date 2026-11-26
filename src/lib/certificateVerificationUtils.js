@@ -145,8 +145,10 @@ export function findInDiplomaArchive(identifier) {
 /**
  * Searches Firestore `certificates` collection by roll, rollNormalized, marksheetNumber,
  * certificateNumber, or document ID using parallel queries for low latency.
+ * When multiple records exist for the same roll (e.g. legacy duplicates), prefers
+ * the record matching `preferredToken` (if provided) and richest metadata/file URL.
  */
-export async function findCertificateDoc(db, identifier) {
+export async function findCertificateDoc(db, identifier, preferredToken = '') {
     const raw = normalizeIdentifier(identifier);
     if (!raw) return null;
 
@@ -156,11 +158,11 @@ export async function findCertificateDoc(db, identifier) {
 
     const queries = [];
     for (const val of candidates) {
-        queries.push(getDocs(query(certsCol, where('roll', '==', val), limit(1))));
-        queries.push(getDocs(query(certsCol, where('marksheetNumber', '==', val), limit(1))));
-        queries.push(getDocs(query(certsCol, where('certificateNumber', '==', val), limit(1))));
+        queries.push(getDocs(query(certsCol, where('roll', '==', val), limit(10))));
+        queries.push(getDocs(query(certsCol, where('marksheetNumber', '==', val), limit(10))));
+        queries.push(getDocs(query(certsCol, where('certificateNumber', '==', val), limit(10))));
     }
-    queries.push(getDocs(query(certsCol, where('rollNormalized', '==', upper), limit(1))));
+    queries.push(getDocs(query(certsCol, where('rollNormalized', '==', upper), limit(10))));
 
     if (!raw.includes('/')) {
         queries.push(
@@ -175,13 +177,32 @@ export async function findCertificateDoc(db, identifier) {
 
     const results = await Promise.all(queries.map((p) => p.catch(() => ({ docs: [] }))));
 
+    const byId = new Map();
     for (const res of results) {
-        if (res?.docs && res.docs.length > 0) {
-            const snap = res.docs[0];
-            return { id: snap.id, ref: snap.ref, data: snap.data() };
+        if (!res?.docs) continue;
+        for (const snap of res.docs) {
+            if (!byId.has(snap.id)) {
+                byId.set(snap.id, { id: snap.id, ref: snap.ref, data: snap.data() });
+            }
         }
     }
-    return null;
+
+    const matches = Array.from(byId.values());
+    if (matches.length === 0) return null;
+
+    const scoreDoc = (entry) => {
+        const d = entry.data || {};
+        let score = 0;
+        if (preferredToken && d.verificationToken === preferredToken) score += 100;
+        if (d.link || d.pdfUrl) score += 20;
+        if (d.verificationToken) score += 10;
+        if (d.studentName) score += 5;
+        if (d.courseName) score += 3;
+        return score;
+    };
+
+    matches.sort((a, b) => scoreDoc(b) - scoreDoc(a));
+    return matches[0];
 }
 
 /**

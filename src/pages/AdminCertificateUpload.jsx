@@ -194,9 +194,7 @@ export default function AdminCertificateUpload() {
 
             const [existingCert, studentHit] = await Promise.all([
                 findCertificateDoc(db, cleanRoll),
-                !resolvedName || !resolvedCourse || !resolvedFather
-                    ? findStudentDoc(db, cleanRoll)
-                    : Promise.resolve(null),
+                findStudentDoc(db, cleanRoll),
             ]);
 
             if (studentHit?.data) {
@@ -207,7 +205,9 @@ export default function AdminCertificateUpload() {
             }
 
             const verificationToken =
-                existingCert?.data?.verificationToken || generateVerificationToken();
+                existingCert?.data?.verificationToken ||
+                studentHit?.data?.verificationToken ||
+                generateVerificationToken();
 
             const payload = {
                 roll: cleanRoll,
